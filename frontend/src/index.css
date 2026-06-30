@@ -6,5 +6,8 @@
 :root{
     --color-primary:#7c3aed;
     --color-secondary:#d0d5dd;
+    --color-gray-rgb:17 24 39;
+  --color-secondary-rgb: 75 85 99;
+  --color-primary-rgb: 124 58 237;
 }
 

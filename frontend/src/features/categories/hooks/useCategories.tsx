@@ -19,6 +19,15 @@ export const useCategoriesHooks=()=>{
                 }
             })
         },
+
+        useEditCategories:()=>{
+            return useMutation({
+                mutationFn:({data,id})=>categories.editCategory(id,data)
+                ,onSuccess:()=>{
+                  queryClient.invalidateQueries(["categories"])  
+                }
+            })
+        },
         useDeleteCategories:()=>{
             return useMutation({
                 mutationFn:(id:any)=>categories.deleteCategory(id)

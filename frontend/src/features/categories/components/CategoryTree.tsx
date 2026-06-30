@@ -29,20 +29,24 @@
 // };
 import React from "react";
 import { SelectItem } from "@/components/ui/select";
+import { CornerDownRight } from "lucide-react";
 
-const CategoryTree = ({
-  categories,
-  parentId = null,
-  level = 0,
-}) => {
+const CategoryTree = ({ categories, parentId = null, level = 0 }) => {
   const items = categories.filter(
-    (category) => category.parent_id === parentId
+    (category) => category.parent_id === parentId,
   );
 
   return items.map((category) => (
     <React.Fragment key={category.id}>
-      <SelectItem value={String(category.id)} className={`cursor-pointer rounded-none ${level===0?"bg-gray-300":level===1?"bg-gray-200 pl-5":"bg-gray-100 pl-10"}`}>       
-        {category.name}
+   <SelectItem
+  value={String(category.id)}
+  className="rounded-none w-full cursor-pointer hover:bg-[var(--color-secondary)] text-sm  border-b border-[var(--color-secondary)]"
+  style={{
+    paddingLeft: `${level * 20}px`,
+  }}
+>
+ {level > 0 && <CornerDownRight size={14} />}
+    {category.name}
       </SelectItem>
 
       <CategoryTree

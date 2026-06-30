@@ -31,7 +31,8 @@ const {setAuthData}=useAuthStore()
         toast.success(response?.message);
         navigate("/admin");
       },
-      onError: (e) => {},
+      onError: (e) => {
+toast.error(e?.message);},
     });
   };
   return (

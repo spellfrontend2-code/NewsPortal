@@ -9,7 +9,7 @@ export const authApi=()=>{
                 return response.data
             } catch (error: any) {
                 throw (
-                    new Error(error?.response?.data?.message) ||
+                    new Error(error?.message) ||
                     "Login Failed"
                 );
             }

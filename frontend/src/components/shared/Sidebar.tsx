@@ -3,9 +3,10 @@ import {
   BookOpen,
   Heart,
   House,
-  Map,
-  Mountain,
-  Pyramid,
+  Camera,
+ChartColumnStacked,
+Newspaper,
+
   Users,
 
 } from "lucide-react";
@@ -15,9 +16,9 @@ import Logo from "../../assets/hero.png"
 
 const navItems = [
   { label: "Dashboard", icon: House, path: "/admin" },
-  { label: "Categories", icon: Mountain, path: "/admin/categories" },
-  { label: "News", icon: Map, path: "/admin/news" },
-  { label: "Deals", icon: Pyramid, path: "/deals" },
+  { label: "Categories", icon: ChartColumnStacked, path: "/admin/categories" },
+  { label: "Articles", icon: Newspaper, path: "/admin/articles" },
+  { label: "Media Gallery", icon: Camera, path: "/admin/media" },
   { label: "Wishlist", icon: Heart, path: "/wishlist" },
   { label: "Bookings", icon: Book, path: "/bookings" },
   { label: "Blog", icon: BookOpen, path: "/blogs" },

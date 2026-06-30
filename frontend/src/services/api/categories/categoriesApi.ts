@@ -18,6 +18,18 @@ export const categoriesApi = () => {
         throw error?.response?.data;
       }
     },
+    editCategory: async (id: any, data: any) => {
+      try {
+        const response = await axiosInstance.put(
+          `/admin/category/${id}`,
+          data
+        );
+        return response.data;
+      } catch (error: any) {
+        console.log(error)
+        throw error?.response?.data;
+      }
+    },
     deleteCategory: async (id: any) => {
       try {
         const response = await axiosInstance.delete(`/admin/category/${id}`);

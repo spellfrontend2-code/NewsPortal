@@ -11,7 +11,7 @@ function DeleteDialogBox({deleteOpen, setDeleteOpen, selectedField, deleteField}
 {
 return(
     <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent>
+        <DialogContent className="bg-gray-100">
           <DialogHeader>
             <DialogTitle>Are you sure?</DialogTitle>
           </DialogHeader>

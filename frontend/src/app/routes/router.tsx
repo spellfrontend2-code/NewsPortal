@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "../../layout/AdminLayout";
 import Dashboard from "../../pages/Admin/Dashboard/Dashboard";
-import News from "../../pages/Admin/News/News";
+import Articles from "../../pages/Admin/Articles/Articles";
 import Categories from "../../pages/Admin/Categories/Categories";
 import AdminLogin from "../../pages/Admin/Auth/AdminLogin";
-import ProtectedRoute from "../protectedRoute/protectedRoute";
+import ProtectedRoute from "../protectedRoute/ProtectedRoute";
+import Media from "@/pages/Admin/Media/Media";
 
 export const router = createBrowserRouter([
   {
@@ -19,12 +20,16 @@ export const router = createBrowserRouter([
             element: <Dashboard />,
           },
           {
-            path: "news",
-            element: <News />,
+            path: "articles",
+            element: <Articles />,
           },
           {
             path: "categories",
             element: <Categories />,
+          },
+           {
+            path: "media",
+            element: <Media />,
           },
         ],
       },
@@ -34,4 +39,8 @@ export const router = createBrowserRouter([
     path: "/admin/login",
     element: <AdminLogin />,
   },
+  {
+    path:"/*",
+    element:<h1>Home</h1>
+  }
 ]);
