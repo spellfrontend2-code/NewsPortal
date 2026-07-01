@@ -20,7 +20,7 @@ import { toast } from "sonner";
 
 function UploadDialogBox({ openUpload, setOpenUpload }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {handleSubmit, setValue, watch, control } = useForm({
+  const {handleSubmit, setValue, watch, control, reset } = useForm({
     defaultValues: {
       category: "articles",
       files: [],
@@ -29,12 +29,19 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
   const useMedia=useMediaHooks()
   const addMedia=useMedia.useAddMedia()
   const onSubmit = (data) => {
-    console.log(data);
     addMedia.mutate(data,{onSuccess:()=>{
         setOpenUpload(false);
-        toast.success("Files uploaded successfully")}})
+        reset({
+          category: "articles",
+          files: []
+        })
+        toast.success("Files uploaded successfully")},
+        onError: (e) => {
+          toast.error(e?.message || "Something went wrong");
+        },})
   };
   const previewImages = watch("files");
+  console.log("previewImages", previewImages[0]?.type?.split("/")[0]);
 
   return (
     <Dialog open={openUpload} onOpenChange={setOpenUpload}>
@@ -95,7 +102,7 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
                 control={control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-gray-100 w-[150px]">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
 
@@ -108,16 +115,26 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
                   </Select>
                 )}
               />
-              <div className="flex gap-5 w-full overflow-x-auto">
+              <div className="grid grid-cols-3 gap-2 w-full overflow-x-auto m-3">
                 {previewImages.map((image) => (
-                  <div className="relative">
-                    <img
-                      src={URL.createObjectURL(image)}
-                      className=" border border-[var(--color-secondary)] h-[200px] w-[200px] object-cover rounded-2xl"
-                      alt=""
-                    />
+                  <div className="relative h-[200px] w-[200px]">
+                   {image?.type?.split("/")[0] === "video" ? (
+                      <video
+                        src={URL.createObjectURL(image)}
+                        className="border border-[var(--color-secondary)] h-full w-full object-cover rounded-2xl"
+                        
+                      />
+                    ) : (
+                      <img
+                        src={URL.createObjectURL(image)}
+                        className="border border-[var(--color-secondary)] h-full w-full object-cover rounded-2xl"
+                        alt=""
+                      />
+                    )}
+                    <div className="absolute top-0 left-0 w-full h-full bg-[rgb(var(--color-secondary-rgb)/0.3)] rounded-2xl"/>
                     <X
-                      className="absolute top-0 right-0 text-red-500 cursor-pointer"
+                    size={18}
+                      className="absolute top-1 right-1 text-red-800 hover:text-red-500 cursor-pointer"
                       onClick={() =>
                         setValue(
                           "files",
@@ -130,8 +147,8 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
               </div>
 
               <div className="flex justify-end">
-                <Button variant="submit" type="submit" className="w-[80px]">
-                  Submit
+                <Button variant="submit" type="submit" className="w-[100px]" disabled={addMedia?.isPending}>
+                  {addMedia?.isPending?"Uploading...":"Upload"}
                 </Button>
               </div>
             </div>

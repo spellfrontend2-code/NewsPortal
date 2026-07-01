@@ -8,6 +8,7 @@ ChartColumnStacked,
 Newspaper,
 
   Users,
+  Tags,
 
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -17,9 +18,10 @@ import Logo from "../../assets/hero.png"
 const navItems = [
   { label: "Dashboard", icon: House, path: "/admin" },
   { label: "Categories", icon: ChartColumnStacked, path: "/admin/categories" },
+    { label: "Tags", icon: Tags, path: "/admin/tags" },
+
   { label: "Articles", icon: Newspaper, path: "/admin/articles" },
   { label: "Media Gallery", icon: Camera, path: "/admin/media" },
-  { label: "Wishlist", icon: Heart, path: "/wishlist" },
   { label: "Bookings", icon: Book, path: "/bookings" },
   { label: "Blog", icon: BookOpen, path: "/blogs" },
   { label: "About", icon: Users, path: "/about" },

@@ -4,6 +4,7 @@ export const mediaApi = () => {
   return {
     addMedia: async (data: any) => {
       try {
+        console.log("apidata",data);
         const formData = new FormData();
 
         formData.append("category", data.category);
@@ -28,9 +29,24 @@ export const mediaApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchMedia: async () => {
+    fetchMedia: async ({ search ,page,per_page}: { search?: string; page?: number; per_page?: number }) => {
       try {
-        const response = await axiosInstance.get("/admin/media");
+           const response = await axiosInstance.get("/admin/media", {
+      params: {
+        search,
+        page,
+        per_page
+      }
+    });
+        console.log("fetchMediaResponse", response.data);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    deleteMedia: async (id: any) => {
+      try {
+        const response = await axiosInstance.delete(`/admin/media/${id}`);
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;

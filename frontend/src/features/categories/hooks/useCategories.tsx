@@ -5,10 +5,10 @@ const categories=categoriesApi()
 export const useCategoriesHooks=()=>{
     const queryClient=useQueryClient()
     return {
-        useFetchCategories:()=>{
+        useFetchCategories:({page,limit})=>{
             return useQuery({
-                queryKey:["categories"],
-                queryFn:()=>categories.fetchCategories()
+                queryKey:["categories",page,limit],
+                queryFn:()=>categories.fetchCategories({page,limit})
             })
         },
         useAddCategories:()=>{

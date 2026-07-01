@@ -2,11 +2,14 @@ import axiosInstance from "@/services/axios";
 
 export const categoriesApi = () => {
   return {
-    fetchCategories: async () => {
+    fetchCategories: async ({ page, limit }: { page: number; limit: number }) => {
       try {
-        const response = await axiosInstance.get("/admin/category");
+        const response = await axiosInstance.get("/admin/category", {
+          params: { page, limit }
+        });
         return response.data;
       } catch (error: any) {
+        console.log(error)
         throw error?.response?.data;
       }
     },

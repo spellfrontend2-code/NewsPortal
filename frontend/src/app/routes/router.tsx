@@ -6,6 +6,7 @@ import Categories from "../../pages/Admin/Categories/Categories";
 import AdminLogin from "../../pages/Admin/Auth/AdminLogin";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 import Media from "@/pages/Admin/Media/Media";
+import Tags from "@/pages/Admin/Tags/Tags";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,12 @@ export const router = createBrowserRouter([
             path: "media",
             element: <Media />,
           },
+          {
+            path:"tags",
+            element:<Tags/>
+          },
+          {
+          }
         ],
       },
     ],

@@ -12,16 +12,21 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 
-function DataTable({ data = [], columns }) {
+function DataTable({ data = [], columns, pagination, setPagination ,pageCount }) {
+  console.log(pagination)
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+  pagination,
+},
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    pageCount: pageCount,
   });
-
   return (
     <div className="w-full max-w-full overflow-x-auto scrollbar-thin">
-  
   <Table className="w-full min-w-[900px]">
         {/* HEADER */}
         <TableHeader>
@@ -65,7 +70,27 @@ function DataTable({ data = [], columns }) {
         </TableBody>
 
       </Table>
-    
+<div className="flex items-center justify-between mt-4">
+  <button
+    onClick={() => table.previousPage()}
+    disabled={!table.getCanPreviousPage()}
+    className="px-3 py-1 border rounded"
+  >
+    Prev
+  </button>
+
+  <span className="text-sm">
+    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+  </span>
+
+  <button
+    onClick={() => table.nextPage()}
+    disabled={!table.getCanNextPage()}
+    className="px-3 py-1 border rounded"
+  >
+    Next
+  </button>
+</div>
     </div>
   );
 }
