@@ -108,10 +108,9 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
                   </Select>
                 )}
               />
-              <div className="flex gap-5 overflow-x-auto">
-                {" "}
+              <div className="flex gap-5 w-full overflow-x-auto">
                 {previewImages.map((image) => (
-                  <div className="relative  ">
+                  <div className="relative">
                     <img
                       src={URL.createObjectURL(image)}
                       className=" border border-[var(--color-secondary)] h-[200px] w-[200px] object-cover rounded-2xl"
