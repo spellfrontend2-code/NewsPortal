@@ -2,10 +2,10 @@ import axiosInstance from "@/services/axios";
 
 export const categoriesApi = () => {
   return {
-    fetchCategories: async ({ page, limit }: { page: number; limit: number }) => {
+    fetchCategories: async ({ page, per_page }: { page: number; per_page: number }) => {
       try {
         const response = await axiosInstance.get("/admin/category", {
-          params: { page, limit }
+          params: { page, per_page }
         });
         return response.data;
       } catch (error: any) {

@@ -10,7 +10,14 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
-    createArticle: () => {},
+    createArticle:async () => {
+      try {
+        const response = await axiosInstance.post("/admin/articles");
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
     updateArticle: () => {},
     deleteArticle: async (id: any) => {
       try {

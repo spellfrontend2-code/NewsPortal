@@ -65,30 +65,49 @@ function Articles() {
     },
   );
   return (
-    <div className="w-full h-full p-20 flex flex-col gap-5">
+    <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
+    {
+  addOpen ? (
+    <AddArticle open={addOpen} setOpen={setAddOpen} />
+  ) : (
+    <>
       <div className="flex justify-between">
         <p className="text-4xl font-bold text-[var(--color-primary)] text-center">
           Articles
         </p>
-        <Button variant="submit" className="mt-5" onClick={() => {setAddOpen(true)}}>
+
+        <Button
+          variant="submit"
+          className="mt-5"
+          onClick={() => setAddOpen(true)}
+        >
           <Plus />
           Add Article
         </Button>
       </div>
+
       {isLoading ? (
         <DataTableSkeleton />
-      ) : (
-        articles.length > 0 ?<DataTable data={articles} columns={columns} pagination={pagination}
+      ) : articles.length > 0 ? (
+        <DataTable
+          data={articles}
+          columns={columns}
+          pagination={pagination}
           setPagination={setPagination}
-          pageCount={data?.pagination?.last_page}/>:<p>No Articles Found.</p>
+          pageCount={data?.pagination?.last_page}
+        />
+      ) : (
+        <p>No Articles Found.</p>
       )}
+    </>
+  )
+}
       <DeleteDialogBox
         deleteOpen={deleteOpen}
         setDeleteOpen={setDeleteOpen}
         selectedField={selectedArticle}
         deleteField={deleteArticle}
       />
-      <AddArticle open={addOpen} setOpen={setAddOpen}/>
     </div>
   );
 }

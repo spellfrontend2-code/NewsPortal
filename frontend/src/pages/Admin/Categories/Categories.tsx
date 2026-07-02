@@ -2,7 +2,7 @@ import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
 import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
-import CategoryInput from "@/features/categories/components/CategoryInput";
+import CategoryInputForm from "@/features/categories/components/CategoryInputForm";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
@@ -16,7 +16,7 @@ function Categories() {
   });
   const { data, isLoading } = categoriesHook.useFetchCategories({
     page: pagination.pageIndex + 1,
-    limit: pagination.pageSize,
+    per_page: pagination.pageSize,
   });
   const categories = data?.data ?? [];
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -85,7 +85,7 @@ function Categories() {
         <div>No categories found</div>
       )}
       {addCategory && (
-        <CategoryInput
+        <CategoryInputForm
           setAddCategory={setAddCategory}
           addCategory={addCategory}
           categories={categories}

@@ -12,33 +12,54 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UploadIcon,  Plus, X } from "lucide-react";
+import { UploadIcon, Plus, X } from "lucide-react";
 import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMediaHooks } from "../hooks/useMedia";
 import { toast } from "sonner";
 
-function UploadDialogBox({ openUpload, setOpenUpload }) {
+function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {handleSubmit, setValue, watch, control, reset } = useForm({
+  const { handleSubmit, setValue, watch, control, reset } = useForm({
     defaultValues: {
       category: "articles",
       files: [],
     },
   });
-  const useMedia=useMediaHooks()
+  const useMedia = useMediaHooks();
+  const addBulkMedia = useMedia.useAddBulkMedia();
   const addMedia=useMedia.useAddMedia()
-  const onSubmit = (data) => {
-    addMedia.mutate(data,{onSuccess:()=>{
+  const onSubmit = (data,e) => {
+        e.stopPropagation();
+
+    {quantity==="multiple" && addBulkMedia.mutate(data, {
+      onSuccess: (res) => {
         setOpenUpload(false);
         reset({
           category: "articles",
-          files: []
-        })
-        toast.success("Files uploaded successfully")},
+          files: [],
+        });
+        toast.success(res?.message || "Files uploaded successfully");
+      },
+      onError: (e) => {
+        toast.error(e?.message || "Something went wrong");
+      },
+    });}
+    {
+      quantity==="single" && addMedia.mutate(data, {
+        onSuccess: (res) => {
+          setOpenUpload(false);
+          reset({
+            category: "articles",
+            files: [],
+          });
+          toast.success(res?.message || "File uploaded successfully");
+        },
         onError: (e) => {
           toast.error(e?.message || "Something went wrong");
-        },})
+        },
+      });
+    }
   };
   const previewImages = watch("files");
   console.log("previewImages", previewImages[0]?.type?.split("/")[0]);
@@ -61,13 +82,13 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
         >
           <div className="flex flex-col items-center justify-center w-full">
             <p className="font-semibold text-xl flex items-center gap-2">
-              Upload Multiple Files
+              {quantity === "single" ? "Upload a File" : "Upload Multiple Files"}
             </p>
             <p className="text-sm text-[rgb(var(--color-gray-rgb)/0.5)]">
-              Drag and drop your files here, or click to browse
+              Drag and drop your {quantity === "single" ? "file" : "files"} here, or click to browse
             </p>
             <p className="text-[rgb(var(--color-gray-rgb)/0.5)]">
-              files, Documents, Videos, and more
+              {type === "image" ? "Images" : type === "video" ? "Videos" : "All"}
             </p>
           </div>
 
@@ -75,7 +96,14 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
             <input
               ref={fileInputRef}
               type="file"
-              multiple
+              accept={
+                type === "image"
+                  ? "image/*"
+                  : type === "video"
+                    ? "video/*"
+                    : "*/*"
+              }
+              multiple={quantity === "multiple"}
               className="hidden"
               onChange={(e) => {
                 const files = Array.from(e.target.files || []);
@@ -92,7 +120,7 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
               onClick={() => fileInputRef.current?.click()}
             >
               <Plus strokeWidth={3} />
-              Choose Files
+              Choose {quantity === "single" ? "File" : "Files"}
             </Button>
           </label>
           {previewImages.length > 0 && (
@@ -118,11 +146,10 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
               <div className="grid grid-cols-3 gap-2 w-full overflow-x-auto m-3">
                 {previewImages.map((image) => (
                   <div className="relative h-[200px] w-[200px]">
-                   {image?.type?.split("/")[0] === "video" ? (
+                    {image?.type?.split("/")[0] === "video" ? (
                       <video
                         src={URL.createObjectURL(image)}
                         className="border border-[var(--color-secondary)] h-full w-full object-cover rounded-2xl"
-                        
                       />
                     ) : (
                       <img
@@ -131,9 +158,9 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
                         alt=""
                       />
                     )}
-                    <div className="absolute top-0 left-0 w-full h-full bg-[rgb(var(--color-secondary-rgb)/0.3)] rounded-2xl"/>
+                    <div className="absolute top-0 left-0 w-full h-full bg-[rgb(var(--color-secondary-rgb)/0.3)] rounded-2xl" />
                     <X
-                    size={18}
+                      size={18}
                       className="absolute top-1 right-1 text-red-800 hover:text-red-500 cursor-pointer"
                       onClick={() =>
                         setValue(
@@ -147,8 +174,13 @@ function UploadDialogBox({ openUpload, setOpenUpload }) {
               </div>
 
               <div className="flex justify-end">
-                <Button variant="submit" type="submit" className="w-[100px]" disabled={addMedia?.isPending}>
-                  {addMedia?.isPending?"Uploading...":"Upload"}
+                <Button
+                  variant="submit"
+                  type="submit"
+                  className="w-[100px]"
+                  disabled={addMedia?.isPending}
+                >
+                  {addMedia?.isPending ? "Uploading..." : "Upload"}
                 </Button>
               </div>
             </div>

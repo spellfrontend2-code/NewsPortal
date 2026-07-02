@@ -224,7 +224,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <UploadDialogBox openUpload={openUpload} setOpenUpload={setOpenUpload} />
+      <UploadDialogBox openUpload={openUpload} setOpenUpload={setOpenUpload} quantity="multiple" />
       {deleteOpen && (
         <DeleteDialogBox
           deleteOpen={deleteOpen}

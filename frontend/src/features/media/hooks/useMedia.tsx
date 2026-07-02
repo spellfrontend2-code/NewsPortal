@@ -5,6 +5,14 @@ const media = mediaApi();
 export const useMediaHooks = () => {
   const queryCLient = useQueryClient();
   return {
+    useAddBulkMedia: () => {
+      return useMutation({
+        mutationFn: (data: any) => media.addBulkMedia(data),
+        onSuccess: () => {
+          queryCLient.invalidateQueries(["media"]);
+        },
+      });
+    },
     useAddMedia: () => {
       return useMutation({
         mutationFn: (data: any) => media.addMedia(data),

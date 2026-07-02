@@ -2,7 +2,7 @@ import axiosInstance from "@/services/axios";
 
 export const mediaApi = () => {
   return {
-    addMedia: async (data: any) => {
+    addBulkMedia: async (data: any) => {
       try {
         console.log("apidata",data);
         const formData = new FormData();
@@ -15,6 +15,33 @@ export const mediaApi = () => {
 
         const response = await axiosInstance.post(
           "/admin/media/bulk-upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        return response.data;
+      } catch (error: any) {
+        console.log(error.response);
+        throw error?.response?.data;
+      }
+    },
+    addMedia: async (data: any) => {
+        try {
+        console.log("apidata",data);
+        const formData = new FormData();
+
+        formData.append("category", data.category);
+
+        data.files.forEach((file: File) => {
+          formData.append("file", file);
+        });
+
+        const response = await axiosInstance.post(
+          "/admin/media/upload",
           formData,
           {
             headers: {

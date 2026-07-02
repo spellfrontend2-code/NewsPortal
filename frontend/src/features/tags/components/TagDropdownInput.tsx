@@ -8,9 +8,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-function InputTags() {
-  const { control } = useForm({
+import { useEffect, useState } from "react";
+function TagDropdownInput({ setSelectedTags}: any) {
+  const { control,watch } = useForm({
     defaultValues: {
       tags: [],
     },
@@ -20,6 +20,7 @@ function InputTags() {
   const tagsData = data?.data ?? [];
   const createTag = tagsHook.useCreateTag();
 const [createTagOpen, setCreateTagOpen] = useState(false);
+const tags=watch("tags");
 const handleCreateTag = () => {
   const newTagName = (document.getElementById("new-tag-input") as HTMLInputElement)?.value;
 
@@ -28,6 +29,13 @@ const handleCreateTag = () => {
     setCreateTagOpen(false);
   }
 };
+useEffect(()=>{
+const tagsSelected = tagsData.filter((tag: any) =>
+  tags.includes(tag.id)
+);
+
+setSelectedTags(tagsSelected);
+},[tags])
   return (
     <div className="">
       <Controller
@@ -42,12 +50,11 @@ const handleCreateTag = () => {
           role="combobox"
           className="w-full justify-between"
         >
-          {field.value?.length
-            ? tagsData
-                .filter((tag: any) => field.value.includes(tag.id))
-                .map((tag: any) => tag.name)
-                .join(", ")
-            : "Select tags"}
+           {field.value?.length
+  ? `${tagsData.filter((tag: any) =>
+      field.value.includes(tag.id)
+    ).length} Tags Selected`
+  : "Select Tags"}
 
           <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
@@ -98,4 +105,4 @@ const handleCreateTag = () => {
     </div>
   );
 }
-export default InputTags;
+export default TagDropdownInput;

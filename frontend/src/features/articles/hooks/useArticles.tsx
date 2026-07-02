@@ -11,6 +11,14 @@ return{
             queryFn:()=>articles.fetchArticles()
         })
     },
+    useCreateArticles:()=>{
+        return useMutation({
+            mutationFn:(data:any)=>articles.createArticle(data)
+            ,onSuccess:()=>{
+                queryClient.invalidateQueries(["articles"])
+            }
+        })
+    },
     useDeleteArticles:()=>{
         return useMutation({
             mutationFn:(id:any)=>articles.deleteArticle(id)
