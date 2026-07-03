@@ -7,6 +7,7 @@ import AdminLogin from "../../pages/Admin/Auth/AdminLogin";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 import Media from "@/pages/Admin/Media/Media";
 import Tags from "@/pages/Admin/Tags/Tags";
+import Advertisements from "@/pages/Admin/Advertisements/Advertisements";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,8 @@ export const router = createBrowserRouter([
             element:<Tags/>
           },
           {
+            path:"advertisements",
+            element:<Advertisements/>
           }
         ],
       },

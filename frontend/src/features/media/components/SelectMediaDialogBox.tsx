@@ -12,7 +12,7 @@ import { Plus } from "lucide-react";
 import UploadDialogBox from "./UploadDialogBox";
 import MediaCollage from "./MediaCollage";
 
-function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,}) {
+function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
   const mediaHook = useMediaHooks();
   const [articlePagination, setArticlePagination] = useState({
     pageIndex: 0,
@@ -27,11 +27,13 @@ function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,}) {
     search: "articles",
     page: articlePagination.pageIndex + 1,
     per_page: articlePagination.pageSize,
+    file_type
   });
   const { data: advertisementMediaData } = mediaHook.useFetchMedia({
     search: "advertisements",
     page: advertisementPagination.pageIndex + 1,
     per_page: advertisementPagination.pageSize,
+    file_type
   });
   const [articleMedia, setArticleMedia] = useState([]);
   const [advertisementMedia, setAdvertisementMedia] = useState([]);

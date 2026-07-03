@@ -21,10 +21,10 @@ export const useMediaHooks = () => {
         },
       });
     },
-    useFetchMedia: ({ search, page, per_page }: { search?: string; page?: number; per_page?: number }) => {
+    useFetchMedia: ({ search, page, per_page,file_type }: { search?: string; page?: number; per_page?: number,file_type?:string }) => {
       return useQuery({
-        queryFn: () => media.fetchMedia({ search, page, per_page }),
-        queryKey: ["media", search, page, per_page],
+        queryFn: () => media.fetchMedia({ search, page, per_page,file_type }),
+        queryKey: ["media", search, page, per_page,file_type],
       });
     },
     useDeleteMedia: () => {

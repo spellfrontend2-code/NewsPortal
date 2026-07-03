@@ -5,10 +5,10 @@ const tags=tagsApi();
 export const useTagsHooks=()=>{
     const queryClient=useQueryClient()
     return{
-        useFetchTags:({page,per_page}:{page:number,per_page:number})=>{
+        useFetchTags:({page,per_page,search}:{page:number,per_page:number,search?:string})=>{
             return useQuery({
-                queryKey:["tags",page,per_page],
-                queryFn:()=>tags.fetchTags({page,per_page})
+                queryKey:["tags",page,per_page,search],
+                queryFn:()=>tags.fetchTags({page,per_page,search})
             })
         },
         useCreateTag:()=>{

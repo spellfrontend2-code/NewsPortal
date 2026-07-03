@@ -4,7 +4,6 @@ export const mediaApi = () => {
   return {
     addBulkMedia: async (data: any) => {
       try {
-        console.log("apidata",data);
         const formData = new FormData();
 
         formData.append("category", data.category);
@@ -25,13 +24,11 @@ export const mediaApi = () => {
 
         return response.data;
       } catch (error: any) {
-        console.log(error.response);
         throw error?.response?.data;
       }
     },
     addMedia: async (data: any) => {
         try {
-        console.log("apidata",data);
         const formData = new FormData();
 
         formData.append("category", data.category);
@@ -52,20 +49,30 @@ export const mediaApi = () => {
 
         return response.data;
       } catch (error: any) {
-        console.log(error.response);
         throw error?.response?.data;
       }
     },
-    fetchMedia: async ({ search ,page,per_page}: { search?: string; page?: number; per_page?: number }) => {
+    updateMedia: async (id: any, data: any) => {
+      try {
+        const response = await axiosInstance.put(
+          `/admin/media/${id}`,
+          data
+        );
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    fetchMedia: async ({ search ,page,per_page,file_type}: { search?: string; page?: number; per_page?: number,file_type?:string }) => {
       try {
            const response = await axiosInstance.get("/admin/media", {
       params: {
         search,
         page,
-        per_page
+        per_page,
+        file_type
       }
     });
-        console.log("fetchMediaResponse", response.data);
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;

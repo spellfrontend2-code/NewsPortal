@@ -2,10 +2,10 @@ import axiosInstance from "@/services/axios";
 
 export const tagsApi = () => {
   return {
-    fetchTags: async ({ page, per_page }: { page: number; per_page: number }) => {
+    fetchTags: async ({ page, per_page,search }: { page: number; per_page: number,search?:string }) => {
       try {
         const response = await axiosInstance.get("/admin/tags", {
-          params: { page, per_page },
+          params: { page, per_page,search },
         });
         return response.data;
       } catch (error: any) {

@@ -5,7 +5,6 @@ export const authApi=()=>{
         AdminLogin:async (data:any)=>{
             try{
                 const response=await axiosInstance.post("/login",data);
-                console.log(response)
                 return response.data
             } catch (error: any) {
                 throw (

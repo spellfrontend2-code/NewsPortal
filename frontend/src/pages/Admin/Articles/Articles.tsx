@@ -2,24 +2,29 @@ import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
 import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import AddArticle from "@/features/articles/components/AddArticle";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { generateColumns } from "@/lib/generateColumns";
-import { Delete, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 function Articles() {
   const useArticlesHook = useArticlesHooks();
-  const { data, isLoading } = useArticlesHook.useFetchArticles();
+    const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const { data, isLoading,error } = useArticlesHook.useFetchArticles({  page: pagination.pageIndex + 1,
+    per_page: pagination.pageSize,search:""});
   const articles = data?.data ?? [];
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const deleteArticle = useArticlesHook.useDeleteArticles();
   const [addOpen, setAddOpen] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const [editOpen, setEditOpen] = useState(false);
+const [viewOpen, setViewOpen] = useState(false);
   const columns = generateColumns(
     articles,
     [
@@ -61,18 +66,41 @@ function Articles() {
         switch(action){
             case "delete":
                 setDeleteOpen(true)
+                break;
+            case "edit":
+                setEditOpen(true)
+                break
+            case "view":
+                setViewOpen(true)
+                break
         }
     },
   );
+  if (error) {
+ toast.error(error?.message);
+}
   return (
-    <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
-    {
+    
+   <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
+{
   addOpen ? (
-    <AddArticle open={addOpen} setOpen={setAddOpen} />
+    <AddArticle
+      open={addOpen}
+      setOpen={setAddOpen}
+      article={""}
+      type="add"
+    />
+  ) : editOpen ? (
+    <AddArticle
+      open={editOpen}
+      setOpen={setEditOpen}
+      article={selectedArticle}
+      type="edit"
+    />
   ) : (
     <>
       <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)] text-center">
+        <p className="text-4xl font-bold text-[var(--color-primary)]">
           Articles
         </p>
 
@@ -88,6 +116,8 @@ function Articles() {
 
       {isLoading ? (
         <DataTableSkeleton />
+      ) : error ? (
+        <p>No Articles Found.</p>
       ) : articles.length > 0 ? (
         <DataTable
           data={articles}
@@ -102,13 +132,24 @@ function Articles() {
     </>
   )
 }
-      <DeleteDialogBox
-        deleteOpen={deleteOpen}
-        setDeleteOpen={setDeleteOpen}
-        selectedField={selectedArticle}
-        deleteField={deleteArticle}
+
+  <Dialog open={viewOpen} onOpenChange={setViewOpen}>
+      <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[70vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
+      <AddArticle
+        setOpen={setViewOpen}
+        article={selectedArticle}
+        type="view"
       />
-    </div>
+    </DialogContent>
+  </Dialog>
+
+  <DeleteDialogBox
+    deleteOpen={deleteOpen}
+    setDeleteOpen={setDeleteOpen}
+    selectedField={selectedArticle}
+    deleteField={deleteArticle}
+  />
+</div>
   );
 }
 export default Articles;

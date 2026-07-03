@@ -22,9 +22,9 @@ const navItems = [
 
   { label: "Articles", icon: Newspaper, path: "/admin/articles" },
   { label: "Media Gallery", icon: Camera, path: "/admin/media" },
-  { label: "Bookings", icon: Book, path: "/bookings" },
-  { label: "Blog", icon: BookOpen, path: "/blogs" },
-  { label: "About", icon: Users, path: "/about" },
+  { label: "Advertisements", icon: Book, path: "/admin/advertisements" },
+  // { label: "Blog", icon: BookOpen, path: "/blogs" },
+  // { label: "About", icon: Users, path: "/about" },
 ];
 
 

@@ -8,92 +8,68 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useEffect } from "react";
-function CategoryDropdownInput({ setSelectedCategories}: any) {
-  const { control,watch } = useForm({
-    defaultValues: {
-      categories: [],
-    },
-  });
+import { useState } from "react";
+function CategoryDropdownInput({
+  selectedCategoryIds,
+  setSelectedCategoryIds,
+}: any) {
   const CategoriesHook = useCategoriesHooks();
-  const { data, isLoading } = CategoriesHook.useFetchCategories({ page: 1, per_page: 100 });
-  const CategoriesData = data?.data ?? [];
-  const categories=watch("categories");
-//   const createTag = CategoriesHook.useAddCategories();
-// const handleCreateTag = () => {
-//   const newTagName = (document.getElementById("new-category-input") as HTMLInputElement)?.value;
+    const [search, setSearch] = useState("");
 
-//   if (newTagName) {
-//     createTag.mutate({ name: newTagName });
-//     setCreateTagOpen(false);
-//   }
-// };
-useEffect(()=>{
-const categoriesSelected=CategoriesData.filter((category: any) =>
-      categories.includes(category.id))
-setSelectedCategories(categoriesSelected)
-},[categories])
+  const { data } = CategoriesHook.useFetchCategories({
+    page: 1,
+    per_page: 10,
+    search
+  });
+
+  const CategoriesData = data?.data ?? [];
+
+  const toggleCategory = (id: number) => {
+    if (selectedCategoryIds.includes(id)) {
+      setSelectedCategoryIds(
+        selectedCategoryIds.filter((c: number) => c !== id)
+      );
+    } else {
+      setSelectedCategoryIds([...selectedCategoryIds, id]);
+    }
+  };
+
   return (
-    <div className="">
-      <Controller
-  name="categories"
-  control={control}
-  defaultValue={[]}
-  render={({ field }) => (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          className="w-full justify-between"
-        >
-        {field.value?.length
-  ? `${CategoriesData.filter((category: any) =>
-      field.value.includes(category.id)
-    ).length} Categories Selected`
-  : "Select Categories"}
-          <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+        <Button variant="outline" className="w-full justify-between">
+          {selectedCategoryIds.length
+            ? `${selectedCategoryIds.length} Categories Selected`
+            : "Select Categories"}
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[300px] bg-white"   onWheel={(e) => e.stopPropagation()}
->
-        <Command className="max-h-[300px] h-[300px]">
-          <CommandInput placeholder="Search Categories..." />
-          <CommandEmpty>No Categories found.</CommandEmpty>
-           <CommandList className="max-h-[250px] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-secondary)]"> {CategoriesData.map((category: any) => {
-              const selected = field.value.includes(category.id);
+      <PopoverContent className="w-[300px] bg-white">
+        <Command>
+            <CommandInput
+  placeholder="Search Categories..."
+value={search}
+  onValueChange={setSearch}/>
+          <CommandList>
+            {CategoriesData.map((category: any) => {
+              const selected = selectedCategoryIds.includes(category.id);
 
               return (
                 <CommandItem
                   key={category.id}
-                  onSelect={() => {
-                    if (selected) {
-                      field.onChange(
-                        field.value.filter((id: number) => id !== category.id)
-                      );
-                    } else {
-                      field.onChange([...field.value, category.id]);
-                    }
-                  }}
+                  onSelect={() => toggleCategory(category.id)}
                 >
                   <Check
-                    className={`mr-2 h-4 w-4 ${
-                      selected ? "opacity-100" : "opacity-0"
-                    }`}
+                    className={selected ? "opacity-100" : "opacity-0"}
                   />
                   {category.name}
                 </CommandItem>
               );
             })}
-            </CommandList>
-        
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
-  )}
-/>
-    </div>
   );
 }
 export default CategoryDropdownInput;

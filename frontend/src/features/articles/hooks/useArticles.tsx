@@ -5,15 +5,23 @@ const articles=articleApi();
 export const useArticlesHooks=()=>{
     const queryClient=useQueryClient();
 return{
-    useFetchArticles:()=>{
+    useFetchArticles:({page,per_page,search})=>{
         return useQuery({
-            queryKey:["articles"],
-            queryFn:()=>articles.fetchArticles()
+            queryKey:["articles",page,per_page,search],
+            queryFn:()=>articles.fetchArticles({page,per_page,search})
         })
     },
     useCreateArticles:()=>{
         return useMutation({
             mutationFn:(data:any)=>articles.createArticle(data)
+            ,onSuccess:()=>{
+                queryClient.invalidateQueries(["articles"])
+            }
+        })
+    },
+    useUpdateArticles:()=>{
+        return useMutation({
+            mutationFn:({id,data}:{data:any,id:any})=>articles.updateArticle(id,data)
             ,onSuccess:()=>{
                 queryClient.invalidateQueries(["articles"])
             }
