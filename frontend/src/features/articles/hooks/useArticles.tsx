@@ -27,6 +27,14 @@ return{
             }
         })
     },
+    useStatusUpdateArticles:()=>{
+        return useMutation({
+            mutationFn:({id,data}:{data:any,id:any})=>articles.statusUpdateArticle(id,data)
+            ,onSuccess:()=>{
+                queryClient.invalidateQueries(["articles"])
+            }
+        })
+    },
     useDeleteArticles:()=>{
         return useMutation({
             mutationFn:(id:any)=>articles.deleteArticle(id)

@@ -12,7 +12,7 @@ export const categoriesApi = () => {
         throw error?.response?.data;
       }
     },
-    addCategory: async (data: any) => {
+    createCategory: async (data: any) => {
       try {
         const response = await axiosInstance.post("/admin/category", data);
         return response.data;
@@ -20,7 +20,7 @@ export const categoriesApi = () => {
         throw error?.response?.data;
       }
     },
-    editCategory: async (id: any, data: any) => {
+    updateCategory: async (id: any, data: any) => {
       try {
         const response = await axiosInstance.put(
           `/admin/category/${id}`,

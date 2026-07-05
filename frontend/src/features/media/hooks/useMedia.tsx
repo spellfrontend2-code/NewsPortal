@@ -13,9 +13,9 @@ export const useMediaHooks = () => {
         },
       });
     },
-    useAddMedia: () => {
+    useCreateMedia: () => {
       return useMutation({
-        mutationFn: (data: any) => media.addMedia(data),
+        mutationFn: (data: any) => media.createMedia(data),
         onSuccess: () => {
           queryCLient.invalidateQueries(["media"]);
         },

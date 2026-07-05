@@ -1,4 +1,4 @@
-import {  Edit, Eye, Trash } from "lucide-react";
+import {  Edit, Eye, Trash, View } from "lucide-react";
 
 export function generateColumns(data = [],hiddenColumns=[],  onAction?: (action: string, row: any) => void
 ) {
@@ -28,16 +28,18 @@ const dynamicColumns = Object.keys(sample)
 
       return (
         <div className="flex justify-center gap-3">
-          <div onClick={() => {onAction?.("view",original)}} className="cursor-pointer text-xs font-semibold text-[var(--primary-color)] hover:text-[rgb(var(--primary-rgb)/0.7)] flex gap-1 border-[1.5px] p-1 rounded-xl uppercase border-[var(--primary-color)]"><Eye className="" strokeWidth={1.5} size={15} />
-          view</div>
-          <div className="cursor-pointer text-xs font-semibold text-blue-300 hover:text-blue-500 flex gap-1 border-[1.5px] p-1 rounded-xl uppercase border-blue-300 hover:border-blue-500" onClick={() => {onAction?.("edit",original)}}>
+          {/* <div title={"View"} onClick={() => {onAction?.("view",original)}} className="cursor-pointer text-sm font-semibold text-[var(--color-secondary)] bg-[rgb(var(--color-secondary-rgb)/0.1)] hover:text-[var(--color-primary)] text-[var(--color-secondary)] flex gap-1 border-[1.5px] p-1 rounded-lg uppercase  border-[rgb(var(--color-secondary-rgb)/0.1)]"><Eye className="" strokeWidth={1.5} size={15} />
+          </div> */}
+          <div className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]" title={"View"} onClick={()=>{onAction?.("view",original)}}><Eye  strokeWidth={1.5} size={20} /></div>
+          <div className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-blue-500 hover:bg-blue-500/10 hover:border-blue-500" title={"Edit"} onClick={()=>{onAction?.("edit",original)}}><Edit  strokeWidth={1.5} size={20} /></div>
+          <div className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-500/10 hover:border-red-500" title={"Delete"} onClick={()=>{onAction?.("delete",original)}}><Trash  strokeWidth={1.5} size={20} /></div>
+
+          {/* <div title={"Edit"} className="cursor-pointer text-xs font-semibold text-blue-300 hover:text-blue-500 flex gap-1 border-[1.5px] p-1 rounded-lg uppercase border-blue-300 hover:border-blue-500" onClick={() => {onAction?.("edit",original)}}>
             <Edit  strokeWidth={1.5}  size={15} />
-          Edit
-          </div>
-          <div className="cursor-pointer text-xs font-semibold text-red-300 hover:text-red-500 flex gap-1 border-[1.5px] p-1 rounded-xl uppercase border-red-300 hover:border-red-500" onClick={() => {onAction?.("delete",original)}}><Trash  strokeWidth={1.5} size={15} />
-    Delete
+          </div> */}
+          {/* <div title={"Delete"} className="cursor-pointer text-xs font-semibold text-red-300 hover:text-red-500 flex gap-1 border-[1.5px] p-1 rounded-lg uppercase border-red-300 hover:border-red-500" onClick={() => {onAction?.("delete",original)}}><Trash  strokeWidth={1.5} size={15} /> */}
+    
     </div>
-        </div>
 
       );
     },

@@ -22,8 +22,8 @@ function CategoryInputForm({
   category,
 }: any) {
   const categoriesHook = useCategoriesHooks();
-  const addCategoryHook = categoriesHook.useAddCategories();
-  const editCategory = categoriesHook.useEditCategories();
+  const addCategoryHook = categoriesHook.useCreateCategories();
+  const editCategory = categoriesHook.useUpdateCategories();
   const { register, handleSubmit, control, reset } = useForm({
     defaultValues: {
       name: edit ? category?.name : "",

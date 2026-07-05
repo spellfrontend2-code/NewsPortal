@@ -1,8 +1,10 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { inputStyle } from "../../styles/inputStyle";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import WordSeparator from "@/components/shared/WordSeparator";
 function ArticleExtraInfo()
 {
+  const statuses = [{name:"Pending",value:"pending"},{name:"Published",value:"published"}];
   const {register,control} = useFormContext();
     return (
         <div>
@@ -18,10 +20,14 @@ function ArticleExtraInfo()
                           <SelectTrigger className={inputStyle}>
                             <SelectValue />
                           </SelectTrigger>
-          
                           <SelectContent className="bg-white">
-                            <SelectItem value="draft">Draft</SelectItem>
-                            <SelectItem value="published">Published</SelectItem>
+                            {
+                              statuses.map((status) => (
+                                <SelectItem key={status.value} value={status.value}>
+                                  {status.name}
+                                </SelectItem>
+                              ))
+                            }
                           </SelectContent>
                         </Select>
                       )}
@@ -56,19 +62,8 @@ function ArticleExtraInfo()
                      </div>
            
                      <div>
-                       <label>Target Countries (comma separated)</label>
-                       <input
-                         {...register("target_countries", {
-                           setValueAs: (value) => {
-                             if (typeof value === "string") {
-                               return value.split(",").map((v) => v.trim());
-                             }
-           
-                             return [];
-                           },
-                         })}
-                         className={inputStyle}
-                       />
+                    
+                       <WordSeparator  name={"target_countries"} label={"Target Countries"} register={register} />
                      </div>
                    </div> 
         </div>

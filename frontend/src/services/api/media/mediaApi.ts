@@ -27,7 +27,7 @@ export const mediaApi = () => {
         throw error?.response?.data;
       }
     },
-    addMedia: async (data: any) => {
+    createMedia: async (data: any) => {
         try {
         const formData = new FormData();
 

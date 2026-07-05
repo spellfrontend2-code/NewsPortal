@@ -9,13 +9,12 @@ export const articleApi = () => {
     });
     return response.data;
   } catch (error: any) {
+    console.log(error)
     if (error.response) {
-      // Backend responded with an error (404, 500, etc.)
       throw error.response.data;
     }
 
     if (error.request) {
-      // Backend is down or unreachable
       throw {
         message: "Unable to connect to the server. Please try again later.",
       };
@@ -40,6 +39,15 @@ export const articleApi = () => {
         const response = await axiosInstance.put(`/admin/articles/${id}`, data);
         return response.data;
       } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    statusUpdateArticle: async (id: any, data: any) => {
+      try{
+        const response = await axiosInstance.put(`/admin/articles/${id}/status}`, data);
+        return response.data;
+      }
+      catch (error: any) {
         throw error?.response?.data;
       }
     },

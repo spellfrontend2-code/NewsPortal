@@ -3,11 +3,10 @@ import DataTable from "@/components/Admin/table/DataTable";
 import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
 import AddAdvertisement from "@/features/advertisements/components/AddAdvertisement";
-import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisement";
+import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { set } from "react-hook-form";
 
 function Advertisements() {
   const advertisementHook = useAdvertisementHooks();
@@ -23,6 +22,7 @@ function Advertisements() {
   const deleteAdvertisement=advertisementHook.useDeleteAdvertisement()
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [selectedAdvertisement,setSelectedAdvertisement]=useState(null)
   const Advertisements = data?.data ?? [];
   const columns = generateColumns(
@@ -64,9 +64,12 @@ function Advertisements() {
           case "add":
             setAddOpen(true)
             break
-            case "delete":
-                setDeleteOpen(true)
-                break
+          case "edit":
+              setEditOpen(true)
+              break
+          case "delete":
+              setDeleteOpen(true)
+              break
         }
     },
   );
@@ -76,16 +79,18 @@ function Advertisements() {
 {
   addOpen ? (
     <AddAdvertisement open={addOpen} setOpen={setAddOpen} type="add" />
-  ) : (
+  ) :editOpen?(<AddAdvertisement open={editOpen} setOpen={setEditOpen} advertisement={selectedAdvertisement} type="edit" />): (
     <>
-      <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)]">
+             <div className="flex justify-between items-end rounded-xl ">
+        <div className="flex flex-col  text-gray-800 ">
+          <p className="text-3xl font-bold ">
           Advertisements
         </p>
-
+        <p className="text-gray-500">Manage your advertisements</p>
+        </div>
         <Button
           variant="submit"
-          className="mt-5"
+          className="h-10 flex items-center gap-2"
           onClick={() => setAddOpen(true)}
         >
           <Plus />

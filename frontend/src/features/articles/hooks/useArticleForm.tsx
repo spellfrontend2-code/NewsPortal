@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 
 export function useArticleForm({article,type}:any) {
+  console.log(article);
   const { register, handleSubmit, watch, control, setValue, reset } = useForm({
     disabled:type==="view",
     defaultValues: {

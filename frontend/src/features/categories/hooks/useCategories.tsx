@@ -11,18 +11,18 @@ export const useCategoriesHooks=()=>{
                 queryFn:()=>categories.fetchCategories({page,per_page ,search})
             })
         },
-        useAddCategories:()=>{
+        useCreateCategories:()=>{
             return useMutation({
-                mutationFn:(data:any)=>categories.addCategory(data)
+                mutationFn:(data:any)=>categories.createCategory(data)
                 ,onSuccess:()=>{
                   queryClient.invalidateQueries(["categories"])  
                 }
             })
         },
 
-        useEditCategories:()=>{
+        useUpdateCategories:()=>{
             return useMutation({
-                mutationFn:({data,id})=>categories.editCategory(id,data)
+                mutationFn:({data,id})=>categories.updateCategory(id,data)
                 ,onSuccess:()=>{
                   queryClient.invalidateQueries(["categories"])  
                 }

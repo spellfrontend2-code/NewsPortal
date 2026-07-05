@@ -28,7 +28,7 @@ function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
   });
   const useMedia = useMediaHooks();
   const addBulkMedia = useMedia.useAddBulkMedia();
-  const addMedia=useMedia.useAddMedia()
+  const addMedia=useMedia.useCreateMedia()
   const onSubmit = (data,e) => {
         e.stopPropagation();
 

@@ -1,14 +1,11 @@
 import {
   Book,
-  BookOpen,
-  Heart,
   House,
   Camera,
 ChartColumnStacked,
 Newspaper,
-
-  Users,
   Tags,
+  Settings,
 
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -23,6 +20,7 @@ const navItems = [
   { label: "Articles", icon: Newspaper, path: "/admin/articles" },
   { label: "Media Gallery", icon: Camera, path: "/admin/media" },
   { label: "Advertisements", icon: Book, path: "/admin/advertisements" },
+  {label:"Settings",icon:Settings,path:"/admin/settings"},
   // { label: "Blog", icon: BookOpen, path: "/blogs" },
   // { label: "About", icon: Users, path: "/about" },
 ];
@@ -46,7 +44,7 @@ function Sidebar() {
 //   }
   return (
     <div
-      className={`relative h-screen w-[250px] transition-all duration-300 border-r-2 border-gray-300`}
+      className={`relative h-screen w-[250px] transition-all duration-300 shadow-lg `}
     >
   
         <nav
@@ -72,12 +70,12 @@ function Sidebar() {
                   to={item.path} 
                 >
                   <div
-                    className={`w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 font-semibold group text-gray-500 ${isActive ? "bg-gray-400/10 text-gray-700" : "hover:bg-gray-200  hover:text-gray-900 "}`}
+                    className={`relative w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 font-semibold group  ${isActive ? "bg-gray-300/20 text-[var(--color-primary)]" : "hover:bg-gray-100/30 text-gray-500 hover:text-[var(--color-primary)] "}`}
                     title={item.label}
                   >
                     <item.icon
                       size={20}
-                      strokeWidth={isActive ? 2.5 : 2}
+                      strokeWidth={ 2.5}
                       className={`shrink-0  transition-colors`}
                     />
 
@@ -86,6 +84,9 @@ function Sidebar() {
                     >
                       {item.label}
                     </span>
+                    {isActive && (
+                      <div className="absolute inset-0 w-[5px] h-full rounded-l-full bg-[rgb(var(--color-primary-rgb)/0.8)]" />
+                    )}
                   </div>
                 </Link>
               );

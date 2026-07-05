@@ -51,13 +51,16 @@ function Categories() {
   const [addCategory, setAddCategory] = useState(false);
   return (
     <div className="w-full h-full p-20 flex flex-col gap-5">
-      <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)] text-center">
+      <div className="flex justify-between items-end rounded-xl">
+        <div className="flex flex-col  text-gray-800 ">
+          <p className="text-3xl font-bold ">
           Categories
         </p>
+        <p className="text-gray-500">Manage your categories</p>
+        </div>
         <Button
           variant="submit"
-          className="mt-5"
+          className="h-10 flex items-center gap-2"
           onClick={() => setAddCategory(true)}
         >
           <Plus />

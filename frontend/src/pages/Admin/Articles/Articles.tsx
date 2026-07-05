@@ -4,6 +4,7 @@ import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import AddArticle from "@/features/articles/components/AddArticle";
+import ArticleView from "@/features/articles/components/ArticleView";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
@@ -99,14 +100,16 @@ const [viewOpen, setViewOpen] = useState(false);
     />
   ) : (
     <>
-      <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)]">
+       <div className="flex justify-between items-end rounded-xl  ">
+        <div className="flex flex-col  text-gray-800 ">
+          <p className="text-3xl font-bold ">
           Articles
         </p>
-
+        <p className="text-gray-500">Manage your articles</p>
+        </div>
         <Button
           variant="submit"
-          className="mt-5"
+          className="h-10 flex items-center gap-2"
           onClick={() => setAddOpen(true)}
         >
           <Plus />
@@ -135,11 +138,7 @@ const [viewOpen, setViewOpen] = useState(false);
 
   <Dialog open={viewOpen} onOpenChange={setViewOpen}>
       <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[70vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
-      <AddArticle
-        setOpen={setViewOpen}
-        article={selectedArticle}
-        type="view"
-      />
+      <ArticleView article={selectedArticle} />
     </DialogContent>
   </Dialog>
 

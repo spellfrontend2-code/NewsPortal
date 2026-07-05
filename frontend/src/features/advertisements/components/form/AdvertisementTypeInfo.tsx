@@ -1,84 +1,52 @@
-import { useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Upload, X } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 import { inputStyle } from "../../styles/inputStyle";
+import { useState } from "react";
+import { Upload, X } from "lucide-react";
 import SelectMediaDialogBox from "@/features/media/components/SelectMediaDialogBox";
 
-function ArticleMediaSection() {
-  const { register, control, watch, setValue } = useFormContext();
+function AdvertisementTypeInfo()
+{
+    const { register,watch,setValue } = useFormContext();
+    const adType = watch("ad_type");
+    const imageUrl=watch("image_url");
+    const videoUrl=watch("video_url");
+    const videoThumbnail=watch("video_thumbnail");
+      const [mediaDialog, setMediaDialog] = useState<{
+        open: boolean;
+        fileType: "image" | "video";
+        field: "image_url" |"video_url" |"video_videoThumbnail"| null;
+      }>({
+        open: false,
+        fileType: "image",
+        field: null,
+      });
+    return (
+        <div>
 
-  const media_type = watch("media_type");
-  const featuredImage = watch("featured_image");
-  const thumbnail = watch("thumbnail");
-  const videoUrl = watch("video_url");
+        {/* AD TYPE */}
+        <div>
+          <label className="font-semibold text-gray-600">Ad Type</label>
+          <select {...register("ad_type")} className={inputStyle}>
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+            <option value="html">HTML</option>
+            <option value="text">Text</option>
+          </select>
+        </div>
 
-  const [mediaDialog, setMediaDialog] = useState<{
-    open: boolean;
-    fileType: "image" | "video";
-    field: "featured_image" | "thumbnail" | "video_url" | null;
-  }>({
-    open: false,
-    fileType: "image",
-    field: null,
-  });
-
-  return (
-    <div className="flex flex-col gap-5">
-      {/* Media Type */}
-      <div>
-        <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
-          Media Type
-        </label>
-
-        <Controller
-          control={control}
-          name="media_type"
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              onValueChange={(val) => {
-                field.onChange(val);
-                setValue("featured_image", "");
-                setValue("thumbnail", "");
-                setValue("video_url", "");
-                setValue("youtube_url", "");
-              }}
-            >
-              <SelectTrigger className={inputStyle}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="image">Image</SelectItem>
-                <SelectItem value="video">Video</SelectItem>
-                <SelectItem value="youtube">YouTube</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
-      </div>
-
-      {/* Media */}
-      <div className="grid grid-cols-2 gap-5">
-        {/* Featured Image */}
-        {media_type === "image" && (
+        {/* IMAGE */}
+        {adType === "image" && (
           <div>
             <label>Featured Image</label>
 
             <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center">
-              {featuredImage ? (
+              {imageUrl ? (
                 <div className="relative h-full w-full">
                   <img
                     src={
-                      typeof featuredImage === "string"
-                        ? featuredImage
-                        : featuredImage.file_url
+                      typeof imageUrl === "string"
+                        ? imageUrl
+                        : imageUrl.file_url
                     }
                     className="h-full w-full rounded-xl object-cover"
                   />
@@ -98,7 +66,7 @@ function ArticleMediaSection() {
                     setMediaDialog({
                       open: true,
                       fileType: "image",
-                      field: "featured_image",
+                      field: "image_url",
                     })
                   }
                 >
@@ -113,26 +81,25 @@ function ArticleMediaSection() {
           </div>
         )}
 
-        {/* Thumbnail */}
-        {(media_type === "video" || media_type === "youtube") && (
-          <div>
+       {adType === "video" &&
+       <>   <div>
             <label>Thumbnail</label>
 
             <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center">
-              {thumbnail ? (
+              {videoThumbnail ? (
                 <div className="relative h-full w-full">
                   <img
                     src={
-                      typeof thumbnail === "string"
-                        ? thumbnail
-                        : thumbnail.file_url
+                      typeof videoThumbnail === "string"
+                        ? videoThumbnail
+                        : videoThumbnail.file_url
                     }
                     className="h-full w-full rounded-xl object-cover"
                   />
 
                   <button
                     type="button"
-                    onClick={() => setValue("thumbnail", "")}
+                    onClick={() => setValue("video_thumbnail", "")}
                     className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
                   >
                     <X className="text-red-500" size={18} />
@@ -145,7 +112,7 @@ function ArticleMediaSection() {
                     setMediaDialog({
                       open: true,
                       fileType: "image",
-                      field: "thumbnail",
+                      field: "video_thumbnail",
                     })
                   }
                 >
@@ -157,20 +124,8 @@ function ArticleMediaSection() {
                 </div>
               )}
             </div>
-          </div>
-        )}
-
-        {/* YouTube */}
-        {media_type === "youtube" && (
-          <div>
-            <label>YouTube URL</label>
-
-            <input {...register("youtube_url")} className={inputStyle} />
-          </div>
-        )}
-
-        {/* Video */}
-        {media_type === "video" && (
+          </div></>}
+  {adType === "video" && (
           <div>
             <label>Video</label>
 
@@ -184,6 +139,7 @@ function ArticleMediaSection() {
                         : videoUrl.file_url
                     }
                     className="h-full w-full rounded-xl object-cover"
+                    
                   />
 
                   <button
@@ -215,16 +171,18 @@ function ArticleMediaSection() {
             </div>
           </div>
         )}
-      </div>
+        {/* HTML */}
+       {adType === "html" && <div>
+          <label className="font-semibold text-gray-600">HTML Code</label>
+          <textarea {...register("html_code")} className={inputStyle} />
+        </div>}
 
-      {/* Caption */}
-      <div>
-        <label>Media Caption</label>
-
-        <input {...register("media_caption")} className={inputStyle} />
-      </div>
-
-      {/* Single Media Dialog */}
+ {/* TEXT CONTENT */}
+        {adType === "text" && <div>
+          <label className="font-semibold text-gray-600">Text Content</label>
+          <textarea {...register("text_content")} className={inputStyle} />
+        </div>}
+           {/* Single Media Dialog */}
       <SelectMediaDialogBox
         open={mediaDialog.open}
         onOpenChange={(open) =>
@@ -246,8 +204,7 @@ function ArticleMediaSection() {
           });
         }}
       />
-    </div>
-  );
+        </div>
+    )
 }
-
-export default ArticleMediaSection;
+export default AdvertisementTypeInfo

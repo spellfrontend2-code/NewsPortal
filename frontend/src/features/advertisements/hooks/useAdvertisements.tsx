@@ -11,6 +11,23 @@ export const useAdvertisementHooks = () => {
             queryKey: ["advertisements"],
       });
     },
+    useCreateAdvertisement: () => {
+      return useMutation({
+        mutationFn: (data: any) => advertisements.createAdvertisement(data),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["advertisements"]);
+        },
+      });
+    },
+    useUpdateAdvertisement: () => {
+      return useMutation({
+        mutationFn: ({ id, data }: { id: any; data: any }) =>
+          advertisements.updateAdvertisement(id, data),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["advertisements"]);
+        },
+      });
+    },
     useDeleteAdvertisement: () => {
       return useMutation({
         mutationFn: (id: any) => advertisements.deleteAdvertisement(id),

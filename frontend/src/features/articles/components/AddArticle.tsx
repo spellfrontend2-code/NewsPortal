@@ -16,15 +16,13 @@ import ArticleMediaSection from "./forms/ArticleMediaSection";
 import { toast } from "sonner";
 
 function AddArticle({ setOpen, article, type }: any) {
-
-const methods = useArticleForm(article,type);
-
+const methods = useArticleForm({article,type});
   const articleHook = useArticlesHooks();
-  const addArticle = articleHook.useCreateArticles();
+  const createArticle = articleHook.useCreateArticles();
   const updateArticle = articleHook.useUpdateArticles();
 
   const isPending =
-    type === "edit" ? updateArticle.isPending : addArticle.isPending;
+    type === "edit" ? updateArticle.isPending : createArticle.isPending;
 
   const buttonText =
     type === "edit"
@@ -64,20 +62,21 @@ const methods = useArticleForm(article,type);
     });
   }, [article, methods.reset]);
   const onSubmit = (data: any) => {
-    const updatedData = {
+    const payload = {
       ...data,
-      thumbnail: data?.thumbnail?.file_path,
-      featured_image: data?.featured_image?.file_path,
-      video_url: data?.video_url?.file_path,
+      thumbnail:(data?.media_type==="video" || data?.media_type==="youtube")? data?.thumbnail?.file_path:null,
+      featured_image:data?.media_type==="image"? data?.featured_image?.file_path:null,
+      video_url:data?.media_type==="video"? data?.video_url?.file_path:null,
+      youtube_url:data?.media_type==="youtube"? data?.youtube_url:null,
       tags: (selectedTags ?? []).map((tag: any) => tag.id),
       categories: (selectedCategories ?? []).map(
         (category: any) => category.id,
       ),
     };
-    console.log(updatedData);
+    console.log(payload);
     if (type === "edit") {
       updateArticle.mutate(
-        { id: article?.id, data: updatedData },
+        { id: article?.id, data: payload },
         {
           onSuccess: (res) => {
             setOpen(false);
@@ -89,7 +88,7 @@ const methods = useArticleForm(article,type);
         },
       );
     } else {
-      addArticle.mutate(updatedData, {
+      createArticle.mutate(payload, {
         onSuccess: (res) => {
           setOpen(false);
           toast.success(res?.message || "Article added successfully");
