@@ -4,11 +4,11 @@ const advertisements=advertisementsApi();
 export const useAdvertisementHooks = () => {
     const queryClient = useQueryClient();
   return {
-    useFetchAdvertisements: ({ page, per_page,search }: { page: number; per_page: number,search?:string}) => {
+    useFetchAdvertisements: ({ page, per_page,search,status }: { page: number; per_page: number,search?:string,status?:string}) => {
       return useQuery({
         queryFn: () =>
-          advertisements.fetchAdvertisements({ page: 1, per_page: 10,search }),
-            queryKey: ["advertisements"],
+          advertisements.fetchAdvertisements({ page, per_page,search,status }),
+            queryKey: ["advertisements", page, per_page,search,status],
       });
     },
     useCreateAdvertisement: () => {
@@ -23,6 +23,15 @@ export const useAdvertisementHooks = () => {
       return useMutation({
         mutationFn: ({ id, data }: { id: any; data: any }) =>
           advertisements.updateAdvertisement(id, data),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["advertisements"]);
+        },
+      });
+    },
+    useUpdateAdvertisementStatus: () => {
+      return useMutation({
+        mutationFn: ({ id, data }: { id: any; data: any }) =>
+          advertisements.updateAdvertisementStatus(id, data),
         onSuccess: () => {
           queryClient.invalidateQueries(["advertisements"]);
         },

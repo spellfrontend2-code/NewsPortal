@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Upload, X } from "lucide-react";
-import { inputStyle } from "../../styles/inputStyle";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 import SelectMediaDialogBox from "@/features/media/components/SelectMediaDialogBox";
 
 function ArticleMediaSection() {
@@ -30,7 +30,7 @@ function ArticleMediaSection() {
   });
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-3 mt-3">
       {/* Media Type */}
       <div>
         <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">

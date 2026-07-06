@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { inputStyle } from "../../styles/inputStyle";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import WordSeparator from "@/components/shared/WordSeparator";
 function ArticleExtraInfo()
@@ -7,7 +7,7 @@ function ArticleExtraInfo()
   const statuses = [{name:"Pending",value:"pending"},{name:"Published",value:"published"}];
   const {register,control} = useFormContext();
     return (
-        <div>
+        <div className=" flex flex-col gap-3">
           
                   <div>
                     <label>Status</label>

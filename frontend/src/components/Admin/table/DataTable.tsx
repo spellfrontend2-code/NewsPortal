@@ -1,3 +1,4 @@
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 import {
   Table,
   TableBody,
@@ -7,44 +8,77 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
+    useReactTable,
+    getCoreRowModel,
+    getSortedRowModel,
+    flexRender,
 } from "@tanstack/react-table";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import DataTableSkeleton from "./DataTableSkeleton";
+import StatusDropdown from "@/components/shared/StatusDropdown";
 
-function DataTable({ data = [], columns, pagination, setPagination ,pageCount }) {
-  console.log(pagination)
+function DataTable({ data = [], columns, pagination, setPagination ,pageCount, sorting,
+    setSorting,search,setSearch,isLoading,placeholder,status,setStatus,statuses
+  }) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
   pagination,
+  sorting,
 },
+onSortingChange: setSorting,
     onPaginationChange: setPagination,
     manualPagination: true,
     pageCount: pageCount,
+
+    getSortedRowModel: getSortedRowModel(),
+
   });
   return (
     <><div className="w-full max-w-full overflow-x-auto rounded-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
-  <Table className="w-full min-w-[900px]">
+<div className=""><div className="flex justify-between max-w-[95%]">
+  <div className={`${inputStyle} flex items-center gap-2 max-w-[30%] m-3`}>
+  <Search strokeWidth={1.5} size={20}/>
+  <input
+  type="text"
+  value={search}
+  onChange={(e) => {
+    setSearch(e.target.value);
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: 0,
+    }));
+  }}
+  placeholder={`Search ${placeholder}...`}
+  className="bg-transparent outline-none focus:outline-none w-full "
+/>
+</div>
+<div>{statuses && <StatusDropdown statuses ={statuses} status={status} setStatus={setStatus}/>}</div>
+ </div> </div>
+{isLoading?<DataTableSkeleton/>:<Table className="w-full min-w-[900px]">
         {/* HEADER */}
         <TableHeader>
           {table.getHeaderGroups().map((hg) => (
             <TableRow key={hg.id} >
               {hg.headers.map((header) => (
                 <TableHead
+                    onClick={header.column.getToggleSortingHandler()}
+
                   key={header.id}
                   className="px-6 py-3 bg-gray-100/90 border-b border-[var(--color-secondary)]"
                 >
-                  <p className="text-center text-gray-400">
+                  <p className="cursor-pointer text-center text-gray-400 ">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
+                        )} {{
+            asc: "↑",
+            desc: "↓",
+        }[header.column.getIsSorted()] ?? "↕"}
                   </p>
                 </TableHead>
               ))}
@@ -53,7 +87,7 @@ function DataTable({ data = [], columns, pagination, setPagination ,pageCount })
         </TableHeader>
 
         {/* BODY */}
-        <TableBody>
+       {data.length>0? <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow key={row.id} className="hover:bg-gray-100/30">
               {row.getVisibleCells().map((cell) => (
@@ -68,9 +102,9 @@ function DataTable({ data = [], columns, pagination, setPagination ,pageCount })
               ))}
             </TableRow>
           ))}
-        </TableBody>
+        </TableBody>:<p>No {placeholder} found.</p>}
 
-      </Table>
+      </Table>}
 
     </div>
     <div className="flex items-center justify-between mt-4 w-full h-[40px]">

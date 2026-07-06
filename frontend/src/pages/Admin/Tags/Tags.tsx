@@ -7,15 +7,18 @@ import { useTagsHooks } from "@/features/tags/hooks/useTags"
 import { generateColumns } from "@/lib/generateColumns"
 import { Plus } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
 
 function Tags(){
     const tagsHook=useTagsHooks()
-    const {data,isLoading}=tagsHook.useFetchTags({page:1,per_page:10})
+        const [search,setSearch]=useState("")
+    const {data,isLoading,error}=tagsHook.useFetchTags({page:1,per_page:10,search})
     const tagsData=data?.data??[]
     const [selectedTag,setSelectedTag]=useState(null)
     const [deleteOpen,setDeleteOpen]=useState(false)
     const [addTag,setAddTag]=useState(false)
     const deleteTag=tagsHook.useDeleteTag()
+    const [sorting,setSorting]=useState([])
     const [pagination,setPagination]=useState({
         pageIndex:0,
         pageSize:10
@@ -32,6 +35,9 @@ function Tags(){
                     break;
             }
         })
+        if(error){
+          toast.error(error?.message)
+        }
       return (
     <div className="w-full h-full p-20 flex flex-col gap-5">
        <div className="flex justify-between items-end rounded-xl ">
@@ -57,18 +63,20 @@ function Tags(){
         deleteField={deleteTag}
       />
     {addTag && <AddTag open={addTag} setOpen={setAddTag} />}
-      {isLoading ? (
-        <DataTableSkeleton />
-      ) : tagsData?.length > 0 ? (
+      {error?<p>No tags found.</p>:(
         <DataTable
           data={tagsData}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
           pageCount={data?.pagination?.last_page}
+          sorting={sorting}
+          setSorting={setSorting}
+          isLoading={isLoading}
+          search={search}
+          setSearch={setSearch}
+          placeholder="Tags"
         />
-      ) : (
-        <div>No tags found</div>
       )}</div>)
 }
 

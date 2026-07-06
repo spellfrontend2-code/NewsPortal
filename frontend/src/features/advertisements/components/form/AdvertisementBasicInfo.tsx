@@ -1,9 +1,9 @@
 import { useFormContext } from "react-hook-form";
-import { inputStyle } from "../../styles/inputStyle";
+import { inputStyle } from "../../../../components/shared/styles/inputStyle";
 function AdvertisementBasicInfo()
 {
     const { register } = useFormContext();
-    return (
+    return ( 
         <div className="">
               {/* TITLE */}
         <div>

@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { inputStyle } from "../../styles/inputStyle";
+import { inputStyle } from "../../../../components/shared/styles/inputStyle";
 import {
   Select,
   SelectContent,

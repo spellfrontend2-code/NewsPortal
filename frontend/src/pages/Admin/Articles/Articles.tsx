@@ -1,6 +1,5 @@
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
-import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import AddArticle from "@/features/articles/components/AddArticle";
@@ -8,7 +7,7 @@ import ArticleView from "@/features/articles/components/ArticleView";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import {  useState } from "react";
 import { toast } from "sonner";
 
 function Articles() {
@@ -17,8 +16,11 @@ function Articles() {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [search,setSearch]=useState("")
+  const [status, setStatus] = useState(" ");
+
   const { data, isLoading,error } = useArticlesHook.useFetchArticles({  page: pagination.pageIndex + 1,
-    per_page: pagination.pageSize,search:""});
+    per_page: pagination.pageSize,search,status});
   const articles = data?.data ?? [];
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -26,6 +28,17 @@ function Articles() {
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
 const [viewOpen, setViewOpen] = useState(false);
+  const [sorting, setSorting] = useState([]);
+const statuses = [
+  {name:"All",value:""},
+  { name: "Draft", value: "draft" },
+  { name: "In Review", value: "review" },
+  { name: "Published", value: "published" },
+  { name: "Archived", value: "archived" },
+  { name: "Scheduled", value: "scheduled" },
+  { name: "Rejected", value: "rejected" },
+  { name: "Pending", value: "pending" },
+];
   const columns = generateColumns(
     articles,
     [
@@ -117,27 +130,32 @@ const [viewOpen, setViewOpen] = useState(false);
         </Button>
       </div>
 
-      {isLoading ? (
-        <DataTableSkeleton />
-      ) : error ? (
+      { error ? (
         <p>No Articles Found.</p>
-      ) : articles.length > 0 ? (
+      ) :
         <DataTable
           data={articles}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
           pageCount={data?.pagination?.last_page}
+          sorting={sorting}
+          setSorting={setSorting}
+          isLoading={isLoading}
+          search={search}
+          setSearch={setSearch}
+          placeholder="Articles"
+          statuses={statuses}
+          status={status}
+          setStatus={setStatus}
         />
-      ) : (
-        <p>No Articles Found.</p>
-      )}
+      }
     </>
   )
 }
 
   <Dialog open={viewOpen} onOpenChange={setViewOpen}>
-      <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[70vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
+      <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[50vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
       <ArticleView article={selectedArticle} />
     </DialogContent>
   </Dialog>

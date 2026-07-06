@@ -5,7 +5,7 @@ function ArticleContent()
 {
   const { control } = useFormContext();
 return (
-        <div>
+        <div className="mt-3">
           <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
             Content
           </label>

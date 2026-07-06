@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 function CategoryDropdownInput({
   selectedCategoryIds,
   setSelectedCategoryIds,
@@ -37,7 +38,7 @@ function CategoryDropdownInput({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
+        <Button variant="submit" className="w-full justify-between bg-white text-gray-800 font-semibold border-gray-400 hover:border-[var(--color-primary)]">
           {selectedCategoryIds.length
             ? `${selectedCategoryIds.length} Categories Selected`
             : "Select Categories"}
@@ -47,10 +48,12 @@ function CategoryDropdownInput({
       <PopoverContent className="w-[300px] bg-white">
         <Command>
             <CommandInput
+          
   placeholder="Search Categories..."
 value={search}
-  onValueChange={setSearch}/>
-          <CommandList>
+  onValueChange={setSearch}
+  />
+          <CommandList >
             {CategoriesData.map((category: any) => {
               const selected = selectedCategoryIds.includes(category.id);
 

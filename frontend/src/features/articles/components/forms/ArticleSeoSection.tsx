@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { inputStyle } from "../../styles/inputStyle"
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 
 function ArticleSeoSection(){
   const {register} = useFormContext();
   return(
-        <div>
+        <div className="mt-3 flex flex-col gap-3">
                {/* SEO */}
             
                     <div>

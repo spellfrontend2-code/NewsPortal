@@ -8,6 +8,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useTagsHooks } from "../hooks/useTags";
 import { toast } from "sonner";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 function AddTag({ open, setOpen }: any) {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -42,8 +43,7 @@ function AddTag({ open, setOpen }: any) {
           <input
             type="text"
             placeholder="Tag Name"
-            className="w-full px-3 py-2 rounded-md border border-gray-300
-            focus:outline-none"
+            className={inputStyle}
             {...register("name", { required: true })}
           />
           <Button variant="submit" type="submit" className="ml-2" disabled={addTag.isPending}>

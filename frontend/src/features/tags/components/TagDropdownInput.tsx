@@ -58,7 +58,7 @@ function TagDropdownInput({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
+        <Button variant="submit" className="w-full justify-between bg-white text-gray-800 font-semibold border-gray-400 hover:border-[var(--color-primary)]">
           {selectedTagIds.length
             ? `${selectedTagIds.length} Tags Selected`
             : "Select Tags"}

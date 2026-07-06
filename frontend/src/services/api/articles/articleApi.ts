@@ -2,14 +2,13 @@ import axiosInstance from "@/services/axios";
 
 export const articleApi = () => {
   return {
-  fetchArticles: async ({ page, per_page,search }: { page: number; per_page: number,search?:string }) => {
+  fetchArticles: async ({ page, per_page,search,status }: { page: number; per_page: number,search?:string,status?:string }) => {
   try {
     const response = await axiosInstance.get("/admin/articles",{
-      params: { page, per_page,search }
+      params: { page, per_page,search,status }
     });
     return response.data;
   } catch (error: any) {
-    console.log(error)
     if (error.response) {
       throw error.response.data;
     }
@@ -44,7 +43,7 @@ export const articleApi = () => {
     },
     statusUpdateArticle: async (id: any, data: any) => {
       try{
-        const response = await axiosInstance.put(`/admin/articles/${id}/status}`, data);
+        const response = await axiosInstance.put(`/admin/articles/${id}/status`, data);
         return response.data;
       }
       catch (error: any) {

@@ -1,37 +1,36 @@
-import { inputStyle } from "@/features/advertisements/styles/inputStyle";
 import { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 
 interface WordSeparatorProps {
-  name: string;
   label: string;
-  register: any;
+  value: string[];
+  onChange: (value: string[]) => void;
+  placeholder?: string;
 }
 
-export default function WordSeparator({ name, label, register }: WordSeparatorProps) {
-  const { setValue, watch } = useFormContext();
-  const words: string[] = watch(name) || [];
+export default function WordSeparator({
+  label,
+  value,
+  onChange,
+  placeholder = "Type and press Enter",
+}: WordSeparatorProps) {
   const [input, setInput] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
+    if (e.key !== "Enter") return;
 
-      const value = input.trim();
+    e.preventDefault();
 
-      if (value && !words.includes(value)) {
-        const updated = [...words, value];
-        setValue(name, updated);
-        setInput("");
-      }
+    const word = input.trim();
+
+    if (word && !value.includes(word)) {
+      onChange([...value, word]);
+      setInput("");
     }
   };
 
   const removeWord = (index: number) => {
-    setValue(
-      name,
-      words.filter((_, i) => i !== index)
-    );
+    onChange(value.filter((_, i) => i !== index));
   };
 
   return (
@@ -39,15 +38,15 @@ export default function WordSeparator({ name, label, register }: WordSeparatorPr
       <label className="font-semibold text-gray-600">{label}</label>
 
       <input
+        className={inputStyle}
         value={input}
+        placeholder={placeholder}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        className={inputStyle}
-        placeholder="Type and press Enter"
       />
 
       <div className="mt-3 flex flex-wrap gap-2">
-        {words?.map((word, index) => (
+        {value?.map((word, index) => (
           <div
             key={index}
             className="flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1"
@@ -57,6 +56,7 @@ export default function WordSeparator({ name, label, register }: WordSeparatorPr
             <button
               type="button"
               onClick={() => removeWord(index)}
+              className="text-red-500"
             >
               ×
             </button>

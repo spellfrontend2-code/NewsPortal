@@ -53,7 +53,7 @@ export default function AddAdvertisement({ advertisement,setOpen, type }: any) {
   };
   return (
     <div>
-      <div className="flex items-center gap-5 border border-[var(--color-secondary)] rounded-lg p-4 mb-6">
+      <div className="flex items-center gap-5  rounded-lg p-4 mb-6">
         <Button
           variant="ghost"
           className="h-8 w-8 cursor-pointer border border-[var(--color-secondary)] rounded-full text-[var(--color-primary)] hover:border-[var(--color-primary)] hover:shadow-md hover:shadow-[rgb(var(--color-primary-rgb)/0.3)]"
@@ -81,7 +81,7 @@ export default function AddAdvertisement({ advertisement,setOpen, type }: any) {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="space-y-6 border border-[var(--color-secondary)] rounded-lg p-4 overflow-y-auto"
+          className="space-y-6 shadow-lg rounded-lg p-4 overflow-y-auto"
         >
           <AdvertisementBasicInfo />
           <AdvertisementTypeInfo />

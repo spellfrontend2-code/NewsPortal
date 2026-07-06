@@ -9,7 +9,7 @@ import {
 
 function DataTableSkeleton({ columns=6, rows = 10 }) {
   return (
-    <div className="w-full max-w-full overflow-x-auto rounded-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
+    <div className="w-full max-w-full overflow-x-auto rounded-b-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
   
   <Table className="w-full min-w-[900px]">
         <TableHeader>

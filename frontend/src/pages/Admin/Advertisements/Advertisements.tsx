@@ -3,30 +3,43 @@ import DataTable from "@/components/Admin/table/DataTable";
 import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
 import AddAdvertisement from "@/features/advertisements/components/AddAdvertisement";
+import AdvertisementView from "@/features/advertisements/components/AdvertisementView";
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 function Advertisements() {
   const advertisementHook = useAdvertisementHooks();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
-  const { data, isLoading } = advertisementHook.useFetchAdvertisements({
+    const [sorting, setSorting] = useState([]);
+const [search,setSearch]=useState("")
+ const statuses = [
+  {name:"All",value:""},
+    { name: "Active", value: "active" },
+    { name: "Inactive", value: "inactive" },
+    { name: "Draft", value: "draft" },
+  ];
+  const [status,setStatus]=useState("")
+  const { data, isLoading,error } = advertisementHook.useFetchAdvertisements({
     page: pagination.pageIndex + 1,
     per_page: pagination.pageSize,
-    search: "",
+    search,
+    status
   });
   const deleteAdvertisement=advertisementHook.useDeleteAdvertisement()
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [viewOpen, setViewOpen] = useState(false);
   const [selectedAdvertisement,setSelectedAdvertisement]=useState(null)
-  const Advertisements = data?.data ?? [];
+  const advertisements = data?.data ?? [];
   const columns = generateColumns(
-    Advertisements,
+    advertisements,
     [
         "id",
       "image_url",
@@ -70,10 +83,14 @@ function Advertisements() {
           case "delete":
               setDeleteOpen(true)
               break
-        }
+          case "view":
+              setViewOpen(true)
+              break
+            }
     },
   );
-
+if(error)
+  toast.error(error?.message)
   return (
     <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
 {
@@ -98,22 +115,32 @@ function Advertisements() {
         </Button>
       </div>
 
-      {isLoading ? (
-        <DataTableSkeleton />
-      ) : Advertisements.length > 0 ? (
+      {error?<p>No Advertisements Found.</p> :
         <DataTable
           columns={columns}
-          data={Advertisements}
+          data={advertisements}
           pagination={pagination}
           setPagination={setPagination}
           pageCount={data?.pagination?.last_page}
+          sorting={sorting}
+          setSorting={setSorting}
+          isLoading={isLoading}
+          search={search}
+          setSearch={setSearch}
+          placeholder="Advertisements"
+          statuses={statuses}
+          status={status}
+          setStatus={setStatus}
         />
-      ) : (
-        <p>No Advertisements</p>
-      )}
+       }
     </>
   )
 }
+  <Dialog open={viewOpen} onOpenChange={setViewOpen}>
+      <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[50vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
+      <AdvertisementView advertisement={selectedAdvertisement} />
+    </DialogContent>
+  </Dialog>
       <DeleteDialogBox deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} selectedField={selectedAdvertisement} deleteField={deleteAdvertisement} />
     </div>
   );

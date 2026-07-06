@@ -102,11 +102,15 @@ const methods = useArticleForm({article,type});
 
   return (
     <div>
-      <div>
-        <Button variant="submit" onClick={() => setOpen(false)}>
+            <div className="flex items-center gap-5 rounded-lg p-4">
+        <Button
+          variant="ghost"
+          className="h-8 w-8 cursor-pointer border border-[var(--color-secondary)] rounded-full text-[var(--color-primary)] hover:border-[var(--color-primary)] hover:shadow-md hover:shadow-[rgb(var(--color-primary-rgb)/0.3)]"
+          onClick={() => setOpen(false)}
+        >
           <ArrowLeft />
         </Button>
-        <p className="text-2xl font-bold text-[var(--color-primary)]">
+        <div><p className="text-2xl font-bold text-[var(--color-primary)]">
           {type === "edit" ? "Edit Article":type==="view"?"View Article" : "Add Article"}
         </p>
         <p className="text-sm text-[rgb(var(--color-gray-rgb)/0.7)]">
@@ -114,9 +118,10 @@ const methods = useArticleForm({article,type});
             ? "Edit an existing article.":type==="view"?"View an existing article."
             : "Create a new article."}
         </p>
+        </div>
       </div>
       <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="shadow-lg p-10">
         <ArticleBasicInfo />
         <ArticleContent   />
         <ArticleMediaSection/>

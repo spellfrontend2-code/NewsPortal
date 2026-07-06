@@ -1,13 +1,13 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Controller, useFormContext } from "react-hook-form"
-import { inputStyle } from "../../styles/inputStyle"
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 
 function ArticleHeadlineSection() {
   const {register,watch,control} = useFormContext();
   const isHeadline = watch("is_headline_news");
     return (
-    <div className="grid grid-cols-3 gap-5">
-          <div className="flex items-center gap-2 mt-7">
+    <div className="grid grid-cols-3 gap-3 mt-3 h-[70px]">
+          <div className="flex items-center gap-2 ">
             <input type="checkbox" {...register("is_headline_news")} />
 
             <label>Headline News</label>

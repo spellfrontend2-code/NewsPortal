@@ -11,7 +11,7 @@ import CategoryTree from "./CategoryTree";
 import { useCategoriesHooks } from "../hooks/useCategories";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-const inputStyle = `border border-[var(--color-secondary)] px-2 py-1 rounded-md w-full focus:outline-none`;
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 
 function CategoryInputForm({
   setAddCategory,

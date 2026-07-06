@@ -19,15 +19,14 @@ function ArticleCategoriesTags({
   const { data: tagsList } = tagHook.useFetchTags({ page: 1, per_page: 100 });
   const TagsData = tagsList?.data ?? [];
   return (
-    <div>
+    <div className="mt-3">
       {/* Categories */}
 
-      <div className="mt-5 flex flex-col">
-        <div className="h-[35px] flex items-center gap-2 m-2">
+      <div className=" flex flex-col gap-3">
           <label>Categories</label>
           {selectedCategories.length > 0 && (
             <div
-              className="h-full w-full flex overflow-x-auto [&::-webkit-scrollbar]:hidden
+              className="h-full w-full flex flex-wrap  [&::-webkit-scrollbar]:hidden
                 [-ms-overflow-style:none] [scrollbar-width:none] gap-2">
               {selectedCategories.map((category) => (
                 <Button
@@ -41,7 +40,6 @@ function ArticleCategoriesTags({
               ))}
             </div>
           )}
-        </div>
         <CategoryDropdownInput
           selectedCategoryIds={selectedCategories.map((c) => c.id)}
           setSelectedCategoryIds={(ids) => {
@@ -53,12 +51,11 @@ function ArticleCategoriesTags({
 
       {/* Tags */}
 
-      <div className="mt-5 flex flex-col">
-        <div className="h-[35px] flex items-center gap-2 m-2">
+      <div className="mt-5 flex flex-col gap-3">
           <label>Tags</label>
           {selectedTags.length > 0 && (
             <div
-              className="h-full w-full flex overflow-x-auto [&::-webkit-scrollbar]:hidden
+              className="h-full w-full flex flex-wrap [&::-webkit-scrollbar]:hidden
                 [-ms-overflow-style:none]
                 [scrollbar-width:none] gap-2"
             >
@@ -74,7 +71,7 @@ function ArticleCategoriesTags({
               ))}
             </div>
           )}
-        </div>
+     
         <TagDropdownInput
           selectedTagIds={selectedTags.map((t) => t.id)}
           setSelectedTagIds={(ids) => {

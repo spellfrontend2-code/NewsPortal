@@ -9,8 +9,20 @@ export const tagsApi = () => {
         });
         return response.data;
       } catch (error: any) {
-        throw error?.response?.data;
-      }
+    if (error.response) {
+      throw error.response.data;
+    }
+
+    if (error.request) {
+      throw {
+        message: "Unable to connect to the server. Please try again later.",
+      };
+    }
+
+    throw {
+      message: error.message || "Something went wrong.",
+    };
+  }
     },
     createTag: async (data: any) => {
       try {

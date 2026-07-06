@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 
 function Media() {
   const { control, watch } = useForm({
@@ -85,16 +86,21 @@ function Media() {
       <div className="w-full h-full flex justify-center items-center">
         <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
           <div className="w-full flex justify-between items-center pb-3 mb-5 border-b border-[var(--color-secondary)]">
-            <div className="w-[45%] flex items-center gap-1 border border-[var(--color-secondary)] rounded-md px-2">
-              <Search size={20} color="gray" />
+            <div className={`${inputStyle} flex items-center gap-2 max-w-[30%] `}>
+              <Search strokeWidth={1.5} size={20}/>
               <input
-                type="text"
-                placeholder="Search media..."
-                className="focus:outline-none px-3 py-1 w-full"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPagination((prev) => ({
+                  ...prev,
+                  pageIndex: 0,
+                }));
+              }}
+              placeholder="Search Medias..."
+              className="bg-transparent outline-none focus:outline-none w-full "
+            /> </div> 
             <div className="w-[45%] flex justify-end">
               <Controller
                 name="category"
@@ -105,7 +111,7 @@ function Media() {
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
 
-                    <SelectContent className="bg-white w-[200px]">
+                    <SelectContent className={`${inputStyle} bg-white w-[200px]`}>
                       <SelectItem value="all">All</SelectItem>
                       <SelectItem value="advertisements">
                         Advertisement

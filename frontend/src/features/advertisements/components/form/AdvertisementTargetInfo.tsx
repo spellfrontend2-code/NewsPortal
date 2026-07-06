@@ -1,29 +1,41 @@
 import { useFormContext } from "react-hook-form";
-import { inputStyle } from "../../styles/inputStyle";
 import WordSeparator from "@/components/shared/WordSeparator";
 
-function AdvertisementTargetInfo()
-{
-    const {register}=useFormContext();
-    const targets=[
-      {
-        name:"target_countries",
-        label:"Countries"
-      },
+function AdvertisementTargetInfo() {
+  const { watch, setValue } = useFormContext();
+
+  const targets = [
     {
-      name:"target_devices",
-      label:"Devices"
+      name: "target_countries",
+      label: "Countries",
     },
     {
-      name:"target_audiences",
-      label:"Audiences"
-    }
-    ]
-    return (
-        <div>
-             {targets?.map((target)=><WordSeparator name={target.name} label={target.label} register={register}/>)}
-                    
-        </div>
-    )
+      name: "target_devices",
+      label: "Devices",
+    },
+    {
+      name: "target_audiences",
+      label: "Audiences",
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {targets.map((target) => (
+        <WordSeparator
+          key={target.name}
+          label={target.label}
+          value={watch(target.name) || []}
+          onChange={(value) =>
+            setValue(target.name, value, {
+              shouldDirty: true,
+              shouldValidate: true,
+            })
+          }
+        />
+      ))}
+    </div>
+  );
 }
-export default AdvertisementTargetInfo
+
+export default AdvertisementTargetInfo; 

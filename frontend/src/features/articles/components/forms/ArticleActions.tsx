@@ -12,7 +12,7 @@ function ArticleActions({
   onCancel,
 }: Props) {
   return (
-    <div className="flex justify-end gap-3">
+    <div className="flex justify-end gap-3 mt-3">
       <Button
         type="button"
         variant="outline"
