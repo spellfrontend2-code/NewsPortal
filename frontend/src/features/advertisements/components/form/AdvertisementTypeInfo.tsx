@@ -53,7 +53,7 @@ function AdvertisementTypeInfo()
 
                   <button
                     type="button"
-                    onClick={() => setValue("featured_image", "")}
+                    onClick={() => setValue("image_url", "")}
                     className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
                   >
                     <X className="text-red-500" size={18} />

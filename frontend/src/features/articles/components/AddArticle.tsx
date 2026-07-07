@@ -121,7 +121,7 @@ const methods = useArticleForm({article,type});
         </div>
       </div>
       <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="shadow-lg p-10">
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="shadow-lg rounded-xl p-10">
         <ArticleBasicInfo />
         <ArticleContent   />
         <ArticleMediaSection/>

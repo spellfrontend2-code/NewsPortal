@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Image as ImageIcon, Link} from "lucide-react";
 import SettingsForm from "@/features/settings/components/SettingsForm";
 import { useSettingHooks } from "@/features/settings/hooks/useSettings";
+import SettingsSkeleton from "@/features/settings/components/SettingSkeleton";
 
 function InfoRow({ label, value }: { label: string; value?: string | null }) {
   return (
@@ -65,9 +66,14 @@ function SocialLink({ label, href }: { label: string; href?: string }) {
 function Settings() {
   const [editOpen, setEditOpen] = useState(false);
     const settingsHook = useSettingHooks();
-const {data}=settingsHook.useFetchSettings()
+const {data,isLoading}=settingsHook.useFetchSettings()
     const settings=data?.data??[]
+
+  if (isLoading) {
+    return <SettingsSkeleton />;
+  }
   return (
+   
     <div className="w-full flex flex-col gap-5 p-15">
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col">

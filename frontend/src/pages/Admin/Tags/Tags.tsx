@@ -39,7 +39,7 @@ function Tags(){
           toast.error(error?.message)
         }
       return (
-    <div className="w-full h-full p-20 flex flex-col gap-5">
+    <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
        <div className="flex justify-between items-end rounded-xl ">
         <div className="flex flex-col  text-gray-800 ">
           <p className="text-3xl font-bold ">

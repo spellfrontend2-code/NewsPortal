@@ -46,9 +46,8 @@ export function useAdvertisementForm({ advertisement, type }: any) {
         daily_budget: advertisement?.daily_budget || "",
         total_budget: advertisement?.total_budget || "",
 
-priority: advertisement?.priority ?? null,
+        priority: advertisement?.priority ?? null,
         status: advertisement?.status || "active",
-        approved: advertisement?.approved || false,
       },
     });
 

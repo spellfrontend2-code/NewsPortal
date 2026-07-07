@@ -12,43 +12,48 @@ import AdvertisementPricingInfo from "./form/AdvertisementPricingInfo";
 import AdvertisementStatusInfo from "./form/AdvertisementSatusInfo";
 import { useAdvertisementHooks } from "../hooks/useAdvertisements";
 import { toast } from "sonner";
-export default function AddAdvertisement({ advertisement,setOpen, type }: any) {
-  console.log(advertisement);
+export default function AddAdvertisement({
+  advertisement,
+  setOpen,
+  type,
+}: any) {
   const methods = useAdvertisementForm({ advertisement, type });
-  const advertisementHook=useAdvertisementHooks();
-  const createAdvertisement=advertisementHook.useCreateAdvertisement();
-  const updateAdvertisement=advertisementHook.useUpdateAdvertisement();
+  const advertisementHook = useAdvertisementHooks();
+  const createAdvertisement = advertisementHook.useCreateAdvertisement();
+  const updateAdvertisement = advertisementHook.useUpdateAdvertisement();
 
   const onSubmit = (data: AdvertisementForm) => {
-    const updatedData = {...data,
-      image_url:data?.image_url?.file_path,
-      video_url:data?.video_url?.file_path,
-      video_thumbnail:data?.video_thumbnail?.file_path,
+    const updatedData = {
+      ...data,
+      image_url: data?.image_url?.file_path,
+      video_url: data?.video_url?.file_path,
+      video_thumbnail: data?.video_thumbnail?.file_path,
       daily_start_time: data.daily_start_time?.slice(0, 5),
-  daily_end_time: data.daily_end_time?.slice(0, 5),};
-    if(type==="add")
-    {
-      createAdvertisement.mutate(updatedData,{
-        onSuccess:(res)=>{
+      daily_end_time: data.daily_end_time?.slice(0, 5),
+    };
+    if (type === "add") {
+      createAdvertisement.mutate(updatedData, {
+        onSuccess: (res) => {
           setOpen(false);
-          toast.success(res?.message||"Advertisement added successfully");
+          toast.success(res?.message || "Advertisement added successfully");
         },
-        onError:(e)=>{
-          toast.error(e?.message||"Something went wrong");
-        }
+        onError: (e) => {
+          toast.error(e?.message || "Something went wrong");
+        },
       });
-
-    }
-    else{
-      updateAdvertisement.mutate({id:advertisement?.id,data:updatedData},{
-        onSuccess:(res)=>{
-          setOpen(false);
-          toast.success(res?.message||"Advertisement updated successfully");
+    } else {
+      updateAdvertisement.mutate(
+        { id: advertisement?.id, data: updatedData },
+        {
+          onSuccess: (res) => {
+            setOpen(false);
+            toast.success(res?.message || "Advertisement updated successfully");
+          },
+          onError: (e) => {
+            toast.error(e?.message || "Something went wrong");
+          },
         },
-        onError:(e)=>{
-          toast.error(e?.message||"Something went wrong");
-        }
-      })
+      );
     }
   };
   return (
@@ -81,7 +86,7 @@ export default function AddAdvertisement({ advertisement,setOpen, type }: any) {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="space-y-6 shadow-lg rounded-lg p-4 overflow-y-auto"
+          className="space-y-6 shadow-lg rounded-xl p-5 overflow-y-auto"
         >
           <AdvertisementBasicInfo />
           <AdvertisementTypeInfo />
@@ -89,14 +94,24 @@ export default function AddAdvertisement({ advertisement,setOpen, type }: any) {
           <AdvertisementTargetInfo />
           <AdvertisementScheduleInfo />
           <AdvertisementPricingInfo />
-         <AdvertisementStatusInfo/>
+          <AdvertisementStatusInfo />
 
-          <button
+          <Button
             type="submit"
-            className="bg-[var(--color-primary)] text-white px-4 py-2 rounded-md"
+            disabled={
+              createAdvertisement.isPending || updateAdvertisement.isPending
+            }
+            variant="submit"
+            className="disabled:cursor-not-allowed"
           >
-            Save Advertisement
-          </button>
+            {type === "edit"
+              ? updateAdvertisement.isPending
+                ? "Updating..."
+                : "Update Advertisement"
+              : createAdvertisement.isPending
+                ? "Creating..."
+                : "Create Advertisement"}
+          </Button>
         </form>
       </FormProvider>
     </div>

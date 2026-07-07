@@ -4,11 +4,11 @@ const advertisements=advertisementsApi();
 export const useAdvertisementHooks = () => {
     const queryClient = useQueryClient();
   return {
-    useFetchAdvertisements: ({ page, per_page,search,status }: { page: number; per_page: number,search?:string,status?:string}) => {
+    useFetchAdvertisements: ({ page, per_page,search,status,is_approved }: { page: number; per_page: number,search?:string,status?:string,is_approved?:boolean}) => {
       return useQuery({
         queryFn: () =>
-          advertisements.fetchAdvertisements({ page, per_page,search,status }),
-            queryKey: ["advertisements", page, per_page,search,status],
+           advertisements.fetchAdvertisements({ page, per_page,search,status,is_approved }),
+            queryKey: ["advertisements", page, per_page,search,status,is_approved],
       });
     },
     useCreateAdvertisement: () => {
@@ -28,15 +28,59 @@ export const useAdvertisementHooks = () => {
         },
       });
     },
-    useUpdateAdvertisementStatus: () => {
-      return useMutation({
-        mutationFn: ({ id, data }: { id: any; data: any }) =>
-          advertisements.updateAdvertisementStatus(id, data),
-        onSuccess: () => {
-          queryClient.invalidateQueries(["advertisements"]);
+   useUpdateAdvertisementApproval: () => {
+  return useMutation({
+    mutationFn: (id: any) =>
+      advertisements.updateAdvertisementApproval(id),
+
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({
+        queryKey: ["advertisements"],
+      });
+
+      const previousAdvertisements = queryClient.getQueriesData({
+        queryKey: ["advertisements"],
+      });
+
+      queryClient.setQueriesData(
+        {
+          queryKey: ["advertisements"],
         },
+        (old: any) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            data: old.data?.map((item: any) =>
+              item.id === id
+                ? {
+                    ...item,
+                    approved: !item.approved,
+                  }
+                : item
+            ),
+          };
+        }
+      );
+
+      return { previousAdvertisements };
+    },
+
+    onError: (_error, _id, context) => {
+      context?.previousAdvertisements?.forEach(
+        ([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        }
+      );
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["advertisements"],
       });
     },
+  });
+},
     useDeleteAdvertisement: () => {
       return useMutation({
         mutationFn: (id: any) => advertisements.deleteAdvertisement(id),

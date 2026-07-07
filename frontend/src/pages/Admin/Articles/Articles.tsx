@@ -17,7 +17,7 @@ function Articles() {
     pageSize: 10,
   });
   const [search,setSearch]=useState("")
-  const [status, setStatus] = useState(" ");
+  const [status, setStatus] = useState("");
 
   const { data, isLoading,error } = useArticlesHook.useFetchArticles({  page: pagination.pageIndex + 1,
     per_page: pagination.pageSize,search,status});

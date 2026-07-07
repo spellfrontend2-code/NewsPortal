@@ -6,16 +6,18 @@ export const advertisementsApi = () => {
       page,
       per_page,
       search,
-      status
+      status,
+      is_approved
     }: {
       page: number;
       per_page: number;
       search?: string;
-      status?: string
+      status?: string;
+      is_approved?: boolean
     }) => {
       try {
         const response = await axiosInstance.get("/admin/advertisements", {
-          params: { page, per_page, search,status },
+          params: { page, per_page, search,status,is_approved },
         });
         return response.data;
       } catch (error: any) {
@@ -32,6 +34,14 @@ export const advertisementsApi = () => {
         throw {
           message: error.message || "Something went wrong.",
         };
+      }
+    },
+    fetchSingleAdvertisement: async (id: any) => {
+      try{
+        const response = await axiosInstance.get(`/admin/advertisements/${id}`);
+        return response.data;
+      }catch(error:any){
+        throw error?.response?.data;
       }
     },
     createAdvertisement: async (data: any) => {
@@ -56,11 +66,10 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
-    updateAdvertisementStatus: async (id: any, data: any) => {
+    updateAdvertisementApproval: async (id: any) => {
       try {
-        const response = await axiosInstance.put(
-          `/admin/advertisements/${id}/status`,
-          data,
+        const response = await axiosInstance.patch(
+          `/admin/advertisements/${id}/toggle-approval`,
         );
         return response.data;
       } catch (error: any) {

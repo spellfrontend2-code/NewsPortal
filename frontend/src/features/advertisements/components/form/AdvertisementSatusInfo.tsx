@@ -9,15 +9,16 @@ import {
 } from "@/components/ui/select";
 function AdvertisementStatusInfo() {
   const { register, control } = useFormContext();
-  const status = [
-    { name: "Active", value: "active" },
-    { name: "Inactive", value: "inactive" },
-    { name: "Draft", value: "draft" },
-  ];
-  const approval = [
-    { name: "Approved", value: "true" },
-    { name: "Rejected", value: "false" },
-  ];
+const status = [
+  { name: "Draft", value: "draft" },
+  { name: "Active", value: "active" },
+  { name: "Paused", value: "paused" },
+  { name: "Ended", value: "ended" },
+  { name: "Pending Approval", value: "pending_approval" },
+  { name: "Rejected", value: "rejected" },
+  { name: "Archived", value: "archived" },
+];
+
   return (
     <div>
       {/* PRIORITY */}
@@ -40,33 +41,6 @@ function AdvertisementStatusInfo() {
 
               <SelectContent className="bg-white">
                 {status.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-      </div>
-
-      {/* APPROVAL */}
-      <div>
-        <label className="font-semibold text-gray-600">Approval</label>
-                <Controller
-          name="approved"
-          control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value !== undefined ? String(field.value) : ""}
-              onValueChange={(value) => field.onChange(value === "true")}
-            >
-              <SelectTrigger className={inputStyle}>
-                <SelectValue placeholder="Select approval status" />
-              </SelectTrigger>
-
-              <SelectContent className="bg-white">
-                {approval.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
                     {item.name}
                   </SelectItem>
