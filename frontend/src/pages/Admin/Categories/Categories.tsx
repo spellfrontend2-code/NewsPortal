@@ -3,6 +3,8 @@ import DataTable from "@/components/Admin/table/DataTable";
 import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { PERMISSIONS } from "@/features/auth/constants/permissions";
+import { usePermission } from "@/features/auth/hooks/usePermission";
 import CategoryInputForm from "@/features/categories/components/CategoryInputForm";
 import CategoryView from "@/features/categories/components/CategoryView";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
@@ -11,6 +13,7 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Categories() {
+  const {hasPermission}=usePermission();
   const categoriesHook = useCategoriesHooks();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -66,6 +69,9 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
           break;
       }
     },
+     undefined, 
+  undefined, 
+    PERMISSIONS.CATEGORY
   );
   const [addCategory, setAddCategory] = useState(false);
   return (
@@ -75,14 +81,14 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
           <p className="text-3xl font-bold ">Categories</p>
           <p className="text-gray-500">Manage your categories</p>
         </div>
-        <Button
+        {hasPermission(PERMISSIONS.CATEGORY.CREATE) && <Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setAddCategory(true)}
         >
           <Plus />
           Add Category
-        </Button>
+        </Button>}
       </div>
       <DeleteDialogBox
         deleteOpen={deleteOpen}
@@ -92,7 +98,7 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
       />
 
      
-        <DataTable
+        {hasPermission(PERMISSIONS.CATEGORY.VIEW) && <DataTable
           data={categories}
           columns={columns}
           pagination={pagination}
@@ -104,8 +110,9 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
           setSearch={setSearch}
           isLoading={isLoading}
           placeholder="Categories"
+          
       
-        />
+        />}
      
       {addCategory && (
         <CategoryInputForm

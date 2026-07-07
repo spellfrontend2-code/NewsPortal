@@ -72,3 +72,4 @@ export const PERMISSIONS = {
     ACTIVATE: "user.activate",
   },
 } as const;
+   export type ModuleName = keyof typeof PERMISSIONS;

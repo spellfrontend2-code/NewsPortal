@@ -5,12 +5,15 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import AddArticle from "@/features/articles/components/AddArticle";
 import ArticleView from "@/features/articles/components/ArticleView";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { usePermission } from "@/features/auth/hooks/usePermission";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
-import {  useState } from "react";
+import {   useState } from "react";
 import { toast } from "sonner";
+import { PERMISSIONS } from "@/features/auth/constants/permissions";
 
 function Articles() {
+  const {hasPermission}=usePermission()
   const useArticlesHook = useArticlesHooks();
     const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -89,6 +92,9 @@ const statuses = [
                 break
         }
     },
+    undefined,
+    undefined,
+    PERMISSIONS.ARTICLE
   );
   if (error) {
  toast.error(error?.message);
@@ -120,20 +126,20 @@ const statuses = [
         </p>
         <p className="text-gray-500">Manage your articles</p>
         </div>
-        <Button
+       {hasPermission(PERMISSIONS.ARTICLE.CREATE) && <Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setAddOpen(true)}
         >
           <Plus />
           Add Article
-        </Button>
+        </Button>}
       </div>
 
       { error ? (
         <p>No Articles Found.</p>
       ) :
-        <DataTable
+        hasPermission(PERMISSIONS.ARTICLE.VIEW) && <DataTable
           data={articles}
           columns={columns}
           pagination={pagination}

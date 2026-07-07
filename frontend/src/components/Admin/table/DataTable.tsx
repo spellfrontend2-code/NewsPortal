@@ -29,12 +29,12 @@ function DataTable({
   setSearch,
   isLoading,
   placeholder,
-  status,
-  setStatus,
-  statuses,
-  approvalStatus,
-  approved,
-  setApproved
+  status={},
+  setStatus={},
+  statuses=[],
+  approvalStatus=[],
+  approved={},
+  setApproved={}
 }) {
   const table = useReactTable({
     data,
@@ -76,11 +76,11 @@ function DataTable({
             </div>
             <div className="flex gap-2"><div>
               {
-                approvalStatus && <StatusDropdown statuses={approvalStatus} status={approved} setStatus={setApproved} />
+                approvalStatus.length>0 && <StatusDropdown statuses={approvalStatus} status={approved} setStatus={setApproved} />
               }
             </div>
             <div>
-              {statuses && (
+              {statuses.length>0 && (
                 <StatusDropdown
                   statuses={statuses}
                   status={status}

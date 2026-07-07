@@ -17,6 +17,15 @@ export const permissionApi=()=>{
             } catch (error: any) {
                 throw error?.response?.data;
             }
+        },
+        assignRoleBasedPermissions:async({data})=>{
+            try {
+                console.log({data})
+                const response = await axiosInstance.get("/admin/roles/assign-permissions",{data});
+                return response.data;
+            } catch (error: any) {
+                throw error?.response?.data;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+import { usePermission } from "@/features/auth/hooks/usePermission";
 import { Edit, Eye, ToggleLeft, ToggleRight, Trash, View } from "lucide-react";
 
 export function generateColumns(
@@ -6,8 +7,11 @@ export function generateColumns(
   onAction?: (action: string, row: any) => void,
   onToggleApproved?: (row: any) => void,
   updatingApprovalId?: number,
+  modulePermission?:{CREATE?:any,VIEW?:any,UPDATE?:any,DELETE?:any}
 
 ) {
+  const {hasPermission}=usePermission();
+  console.log("modulePermission",modulePermission)
   if (!data.length) return [];
   const sample = data[0];
 
@@ -82,7 +86,7 @@ export function generateColumns(
 
       return (
         <div className="flex justify-center gap-3">
-          <div
+          {hasPermission(modulePermission?.VIEW) && <div
             className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]"
             title={"View"}
             onClick={() => {
@@ -90,8 +94,8 @@ export function generateColumns(
             }}
           >
             <Eye strokeWidth={1.5} size={20} />
-          </div>
-          <div
+          </div>}
+          {hasPermission(modulePermission?.UPDATE) &&<div
             className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-blue-500 hover:bg-blue-500/10 hover:border-blue-500"
             title={"Edit"}
             onClick={() => {
@@ -99,8 +103,8 @@ export function generateColumns(
             }}
           >
             <Edit strokeWidth={1.5} size={20} />
-          </div>
-          <div
+          </div>}
+          {hasPermission(modulePermission?.DELETE) &&<div
             className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-500/10 hover:border-red-500"
             title={"Delete"}
             onClick={() => {
@@ -108,7 +112,7 @@ export function generateColumns(
             }}
           >
             <Trash strokeWidth={1.5} size={20} />
-          </div>
+          </div>}
         </div>
       );
     },

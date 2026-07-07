@@ -6,10 +6,13 @@ import AdvertisementView from "@/features/advertisements/components/Advertisemen
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { PERMISSIONS } from "@/features/auth/constants/permissions";
 function Advertisements() {
+  const {hasPermission}=usePermission()
   const advertisementHook = useAdvertisementHooks();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -114,7 +117,8 @@ const columns = generateColumns(
       }
     },
 updateApproval,
-updatingApprovalId,  );
+updatingApprovalId,
+PERMISSIONS.ADS  );
 
   if (error) toast.error(error?.message);
   return (
@@ -135,20 +139,20 @@ updatingApprovalId,  );
               <p className="text-3xl font-bold ">Advertisements</p>
               <p className="text-gray-500">Manage your advertisements</p>
             </div>
-            <Button
+           {hasPermission(PERMISSIONS.ADS.CREATE) && <Button
               variant="submit"
               className="h-10 flex items-center gap-2"
               onClick={() => setAddOpen(true)}
             >
               <Plus />
               Add Advertisement
-            </Button>
+            </Button>}
           </div>
 
           {error ? (
             <p>No Advertisements Found.</p>
           ) : (
-            <DataTable
+            hasPermission(PERMISSIONS.ADS.VIEW) && <DataTable
               columns={columns}
               data={advertisements}
               pagination={pagination}

@@ -14,12 +14,13 @@ import { Link, useLocation } from "react-router-dom";
 
 import Logo from "../../assets/hero.png";
 import { PERMISSIONS } from "@/features/auth/constants/permissions";
-
+import { usePermission } from "@/features/auth/hooks/usePermission";
 const navItems = [
   { 
     label: "Dashboard", 
     icon: House, 
-    path: "/admin" 
+    path: "/admin",
+  
   },
 
   { 
@@ -107,10 +108,22 @@ const navItems = [
     label: "Settings", 
     icon: Settings, 
     path: "/admin/settings",
+    permissions: [
+      PERMISSIONS.COMPANY.VIEW,
+      PERMISSIONS.COMPANY.UPDATE,
+    ]
   },
 ];
 
 function Sidebar() {
+  const {hasPermission}=usePermission();
+const filteredNavItems=navItems.filter(item=>{
+
+  if (!item.permissions) return true;
+
+
+  return item.permissions?.map((permission)=>hasPermission(permission))});
+
   const location = useLocation();
   //   const {authData}=useAuthStore();
   //   const user=authData?.user
@@ -144,7 +157,7 @@ function Sidebar() {
         </Link>
         <hr className="my-4 border-t border-gray-300" />
         <section className="space-y-1.5 flex flex-col w-full ">
-          {navItems.map((item) => {
+          {filteredNavItems.map((item) => {
             const isActive = location.pathname === item.path ? true : false;
             return (
               <Link key={item.label} to={item.path}>

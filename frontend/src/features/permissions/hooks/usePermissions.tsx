@@ -1,8 +1,10 @@
 import { permissionApi } from "@/services/api/permissions/permissionApi"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 const permission=permissionApi()
 export const usePermissionHooks=()=>{
+    const queryClient=useQueryClient()
+
     return{
         useFetchPermissions:()=>{
             return useQuery({
@@ -13,7 +15,14 @@ export const usePermissionHooks=()=>{
         useFetchRoleBasedPermissions:()=>{
             return useQuery({
                 queryFn:()=>permission.fetchRoleBasedPermissions(),
-                queryKey:["role-based-permissions"]
+                queryKey:["permissions"]
+            })
+        },
+        useAssignRoleBasedPermissions:()=>{
+            return useMutation({
+                mutationFn:({data}:any)=>permission.assignRoleBasedPermissions({data}),
+                onSuccess:()=>{
+                    queryClient.invalidateQueries(["permissions"]);}
             })
         }
     }

@@ -23,8 +23,10 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
-
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { PERMISSIONS } from "@/features/auth/constants/permissions";
 function Media() {
+  const {hasPermission}=usePermission();
   const { control, watch } = useForm({
     defaultValues: {
       category: "all",
@@ -74,17 +76,17 @@ function Media() {
         </p>
         <p className="text-gray-500">Manage your medias</p>
         </div>
-        <Button
+       {hasPermission(PERMISSIONS.MEDIA.CREATE) && <Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setOpenUpload(true)}
         >
           <Plus />
           Add Media
-        </Button>
+        </Button>}
       </div>
       <div className="w-full h-full flex justify-center items-center">
-        <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
+        {hasPermission(PERMISSIONS.MEDIA.VIEW) && <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
           <div className="w-full flex justify-between items-center pb-3 mb-5 border-b border-[var(--color-secondary)]">
             <div className={`${inputStyle} flex items-center gap-2 max-w-[30%] `}>
               <Search strokeWidth={1.5} size={20}/>
@@ -172,7 +174,7 @@ function Media() {
                               className="text-white hover:text-[var(--color-primary)]  h-full w-full p-1 bg-[rgb(var(--color-primary-rgb)/0.3)] rounded-md"
                             />
                           </div>
-                          <div
+                          {hasPermission(PERMISSIONS.MEDIA.DELETE) && <div
                             className="flex items-center h-[30px] w-[30px] z-50 text-red-800 hover:text-red-500 cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -185,7 +187,7 @@ function Media() {
                               size={20}
                               className="h-full w-full bg-red-100 p-1 rounded-md"
                             />
-                          </div>
+                          </div>}
                         </div>
                         <div className="flex justify-center items-center h-[20px] w-[110px] absolute bottom-1  bg-[var(--color-primary)] px-2 py-1 rounded-full text-white text-sm ">
                           {m.category}
@@ -243,7 +245,7 @@ function Media() {
               </button>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
       <UploadDialogBox
         openUpload={openUpload}
