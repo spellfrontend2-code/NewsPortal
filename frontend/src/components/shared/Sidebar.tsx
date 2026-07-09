@@ -9,121 +9,132 @@ import {
   Users,
   ChevronDown,
   Lock,
+  LogOut,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Logo from "../../assets/hero.png";
 import { PERMISSIONS } from "@/features/auth/constants/permissions";
 import { usePermission } from "@/features/auth/hooks/usePermission";
+import { useAuthHooks } from "@/features/auth/hooks/useAuth";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
 const navItems = [
-  { 
-    label: "Dashboard", 
-    icon: House, 
+  {
+    label: "Dashboard",
+    icon: House,
     path: "/admin",
-  
   },
 
-  { 
-    label: "Categories", 
-    icon: ChartColumnStacked, 
+  {
+    label: "Categories",
+    icon: ChartColumnStacked,
     path: "/admin/categories",
     permissions: [
       PERMISSIONS.CATEGORY.VIEW,
       PERMISSIONS.CATEGORY.CREATE,
       PERMISSIONS.CATEGORY.UPDATE,
       PERMISSIONS.CATEGORY.DELETE,
-    ]
+    ],
   },
 
-  { 
-    label: "Tags", 
-    icon: Tags, 
+  {
+    label: "Tags",
+    icon: Tags,
     path: "/admin/tags",
     permissions: [
       PERMISSIONS.TAG.VIEW,
       PERMISSIONS.TAG.CREATE,
       PERMISSIONS.TAG.UPDATE,
       PERMISSIONS.TAG.DELETE,
-    ]
+    ],
   },
 
-  { 
-    label: "Articles", 
-    icon: Newspaper, 
+  {
+    label: "Articles",
+    icon: Newspaper,
     path: "/admin/articles",
     permissions: [
       PERMISSIONS.ARTICLE.VIEW,
       PERMISSIONS.ARTICLE.CREATE,
       PERMISSIONS.ARTICLE.UPDATE,
       PERMISSIONS.ARTICLE.DELETE,
-    ]
+    ],
   },
 
-  { 
-    label: "Media Gallery", 
-    icon: Camera, 
+  {
+    label: "Media Gallery",
+    icon: Camera,
     path: "/admin/media",
     permissions: [
       PERMISSIONS.MEDIA.VIEW,
       PERMISSIONS.MEDIA.CREATE,
       PERMISSIONS.MEDIA.DELETE,
-    ]
+    ],
   },
 
-  { 
-    label: "Advertisements", 
-    icon: Book, 
+  {
+    label: "Advertisements",
+    icon: Book,
     path: "/admin/advertisements",
     permissions: [
       PERMISSIONS.ADS.VIEW,
       PERMISSIONS.ADS.CREATE,
       PERMISSIONS.ADS.UPDATE,
       PERMISSIONS.ADS.DELETE,
-    ]
+    ],
   },
 
-  { 
-    label: "Users", 
-    icon: Users, 
+  {
+    label: "Users",
+    icon: Users,
     path: "/admin/users",
     permissions: [
       PERMISSIONS.USER.VIEW,
       PERMISSIONS.USER.CREATE,
       PERMISSIONS.USER.UPDATE,
       PERMISSIONS.USER.DELETE,
-    ]
+    ],
+  },
+{
+  label:"Authors",
+  icon:Lock,
+  path:"/admin/authors",
+  permissions:[]
+},
+  {
+    label: "Roles And Permissions",
+    icon: Lock,
+    path: "/admin/roles-and-permissions",
+    permissions: [PERMISSIONS.PERMISSION.VIEW, PERMISSIONS.PERMISSION.ASSIGN],
   },
 
   {
-    label: "Permission Management",
-    icon: Lock,
-    path: "/admin/permission-management",
-    permissions: [
-      PERMISSIONS.PERMISSION.VIEW,
-      PERMISSIONS.PERMISSION.ASSIGN,
-    ]
-  },
-
-  { 
-    label: "Settings", 
-    icon: Settings, 
+    label: "Settings",
+    icon: Settings,
     path: "/admin/settings",
-    permissions: [
-      PERMISSIONS.COMPANY.VIEW,
-      PERMISSIONS.COMPANY.UPDATE,
-    ]
+    permissions: [PERMISSIONS.COMPANY.VIEW, PERMISSIONS.COMPANY.UPDATE],
   },
 ];
 
 function Sidebar() {
-  const {hasPermission}=usePermission();
-const filteredNavItems=navItems.filter(item=>{
+  const { hasPermission } = usePermission();
+  const navigate=useNavigate()
+  const authHook=useAuthHooks()
+  const logout=authHook.useLogout();
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.permissions) return true;
 
-  if (!item.permissions) return true;
-
-
-  return item.permissions?.map((permission)=>hasPermission(permission))});
-
+    return item.permissions?.map((permission) => hasPermission(permission));
+  });
+const handleLogout=()=>{
+  logout.mutate({},{
+    onSuccess:()=>{
+      localStorage.removeItem("auth");
+      toast.success("Logged out successfully");
+      navigate("/admin/login");
+  }})
+}
   const location = useLocation();
   //   const {authData}=useAuthStore();
   //   const user=authData?.user
@@ -177,7 +188,6 @@ const filteredNavItems=navItems.filter(item=>{
                     {item.label}
                   </span>
 
-                  {item.children && <ChevronDown />}
                   {isActive && (
                     <div className="absolute inset-0 w-[5px] h-full rounded-l-full bg-[rgb(var(--color-primary-rgb)/0.8)]" />
                   )}
@@ -186,8 +196,19 @@ const filteredNavItems=navItems.filter(item=>{
             );
           })}
         </section>
-
         <hr className="my-4 border-t border-gray-300" />
+        <Button className="flex items-center gap-2" onClick={handleLogout}>
+          <span
+            className={`flex items-center cursor-pointer gap-3 px-3 py-2.5 rounded-xl font-semibold whitespace-nowrap overflow-hidden transition-all duration-300 w-full opacity-100 bg-red-600/70 text-white hover:bg-red-600 hover:text-white`}
+          >
+            <LogOut
+              size={20}
+              strokeWidth={2.5}
+              className={`shrink-0  transition-colors`}
+            />
+            Log Out
+          </span>
+        </Button>
       </nav>
     </div>
   );

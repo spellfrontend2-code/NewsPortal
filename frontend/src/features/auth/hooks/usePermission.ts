@@ -11,7 +11,6 @@ const {
 const permissions =
  authData?.permissions ?? [];
 
-console.log(permissions)
 
 function hasPermission(
  permission:string

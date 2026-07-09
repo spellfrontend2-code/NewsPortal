@@ -68,8 +68,8 @@ function Settings() {
     const settingsHook = useSettingHooks();
 const {data,isLoading}=settingsHook.useFetchSettings()
     const settings=data?.data??[]
-
-  if (isLoading) {
+console.log(settings.social_links);  
+if (isLoading) {
     return <SettingsSkeleton />;
   }
   return (

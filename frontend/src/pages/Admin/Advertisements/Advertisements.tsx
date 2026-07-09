@@ -119,7 +119,6 @@ const columns = generateColumns(
 updateApproval,
 updatingApprovalId,
 PERMISSIONS.ADS  );
-
   if (error) toast.error(error?.message);
   return (
     <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">

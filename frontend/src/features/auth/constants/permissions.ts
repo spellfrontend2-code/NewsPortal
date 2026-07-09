@@ -46,6 +46,9 @@ export const PERMISSIONS = {
   },
 
   ROLE: {
+    CREATE:"role.create",
+    UPDATE: "role.update",
+    DELETE: "role.delete",
     VIEW: "role.view",
     ASSIGN: "role.assign",
   },

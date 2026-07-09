@@ -54,7 +54,7 @@ function DataTable({
   return (
     <>
       <div className="w-full max-w-full overflow-x-auto rounded-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
-        <div className="">
+        <div className=" ">
           <div className="flex justify-between max-w-[95%]">
             <div
               className={`${inputStyle} flex items-center gap-2 max-w-[30%] m-3`}
@@ -96,7 +96,7 @@ function DataTable({
         ) : (
           <Table className="w-full min-w-[900px]">
             {/* HEADER */}
-            <TableHeader>
+            <TableHeader >
               {table.getHeaderGroups().map((hg) => (
                 <TableRow key={hg.id}>
                   {hg.headers.map((header) => (
@@ -111,11 +111,12 @@ function DataTable({
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext(),
-                            )}{" "}
-                        {{
-                          asc: "↑",
-                          desc: "↓",
-                        }[header.column.getIsSorted()] ?? "↕"}
+                            )}
+                        {header.column.getCanSort() && (
+  {
+    asc: "↑",
+    desc: "↓",
+  }[header.column.getIsSorted()] ?? "↕")}
                       </p>
                     </TableHead>
                   ))}
@@ -145,9 +146,15 @@ function DataTable({
                 ))}
               </TableBody>
             ) : (
-               <div className="w-full h-full flex justify-center items-center text-2xl font-bold text-[var(--color-primary)]">
-              No {placeholder} Found
-            </div>
+               <TableBody>
+  <TableRow>
+    <TableCell colSpan={columns.length}>
+      <div className="w-full h-[300px] flex justify-center items-center text-2xl font-bold text-[var(--color-primary)]">
+        No {placeholder} Found
+      </div>
+    </TableCell>
+  </TableRow>
+</TableBody>
             )}
           </Table>
         )}

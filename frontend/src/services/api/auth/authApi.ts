@@ -24,7 +24,17 @@ export const authApi=()=>{
                 );
             }
         },
-        AdminLogout:()=>{}
+        AdminLogout:()=>{
+            try{
+                const response=axiosInstance.post("/admin/logout");
+                return response.data;
+            } catch (error: any) {
+                throw (
+                    new Error(error?.response?.data?.message) ||
+                    "Logout Failed"
+                );
+            }
+        }
     }
 
 }

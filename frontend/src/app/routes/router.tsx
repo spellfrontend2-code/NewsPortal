@@ -10,7 +10,8 @@ import Tags from "@/pages/Admin/Tags/Tags";
 import Advertisements from "@/pages/Admin/Advertisements/Advertisements";
 import Settings from "@/pages/Admin/Settings/Settings";
 import Users from "@/pages/Users/Users";
-import PermissionManagement from "@/pages/PermissionManagement/PermissionManagement";
+import RolesAndPermissions from "@/pages/Admin/RolesAndPermissons/RolesAndPermissions";
+import Authors from "@/pages/Admin/Authors/Authors";
 
 export const router = createBrowserRouter([
   {
@@ -52,8 +53,11 @@ export const router = createBrowserRouter([
             element:<Users/>
           },
           {
-            path:"permission-management",
-            element:<PermissionManagement/>
+            path:"roles-and-permissions",
+            element:<RolesAndPermissions/>
+          },
+          {path:"authors",
+            element:<Authors/>
           }
         ],
       },

@@ -11,6 +11,7 @@ export const useSettingHooks = () => {
                queryFn: () => settings.fetchSettings(),
            });
         },
+
         useUpdateSettings:() => {
             return useMutation({
                 mutationFn:({id,data}:any)=>settings.updateSettings({id,data}),

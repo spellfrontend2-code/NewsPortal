@@ -9,7 +9,7 @@ export const usePermissionHooks=()=>{
         useFetchPermissions:()=>{
             return useQuery({
                 queryFn:()=>permission.fetchPermissions(),
-                queryKey:["permissions"]
+                queryKey:["allPermissions"]
             })
         },
         useFetchRoleBasedPermissions:()=>{
@@ -20,7 +20,21 @@ export const usePermissionHooks=()=>{
         },
         useAssignRoleBasedPermissions:()=>{
             return useMutation({
-                mutationFn:({data}:any)=>permission.assignRoleBasedPermissions({data}),
+                mutationFn:(data:any)=>permission.assignRoleBasedPermissions(data),
+                onSuccess:()=>{
+                    queryClient.invalidateQueries(["permissions"]);}
+            })
+        },
+        useCreateRole:()=>{
+            return useMutation({
+                mutationFn:(data:any)=>permission.createRole(data),
+                onSuccess:()=>{
+                    queryClient.invalidateQueries(["permissions"]);}
+            })
+        },
+        useDeleteRole:()=>{
+            return useMutation({
+                mutationFn:(id:any)=>permission.deleteRole(id),
                 onSuccess:()=>{
                     queryClient.invalidateQueries(["permissions"]);}
             })
