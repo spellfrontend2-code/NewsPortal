@@ -1,17 +1,17 @@
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox"
 import DataTable from "@/components/Admin/table/DataTable"
-import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton"
 import { Button } from "@/components/ui/button"
 import { usePermission } from "@/features/auth/hooks/usePermission"
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore"
 import AddTag from "@/features/tags/components/AddTag"
 import { useTagsHooks } from "@/features/tags/hooks/useTags"
 import { generateColumns } from "@/lib/generateColumns"
 import { Plus } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { PERMISSIONS } from "@/features/auth/constants/permissions"
 function Tags(){
   const {hasPermission}=usePermission()
+  const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
     const tagsHook=useTagsHooks()
         const [search,setSearch]=useState("")
     const {data,isLoading,error}=tagsHook.useFetchTags({page:1,per_page:10,search})
@@ -53,7 +53,7 @@ function Tags(){
         </p>
         <p className="text-gray-500">Manage your tags</p>
         </div>
-        {hasPermission(PERMISSIONS.TAG.CREATE) &&<Button
+        {hasPermission(PERMISSIONS?.TAG?.CREATE?.name) &&<Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setAddTag(true)}
@@ -69,8 +69,7 @@ function Tags(){
         deleteField={deleteTag}
       />
     {addTag && <AddTag open={addTag} setOpen={setAddTag} />}
-      {error?<p>No tags found.</p>:(
-        hasPermission(PERMISSIONS.TAG.CREATE) && <DataTable
+      {error?<p>No tags found.</p>:(<DataTable
           data={tagsData}
           columns={columns}
           pagination={pagination}
@@ -82,7 +81,8 @@ function Tags(){
           search={search}
           setSearch={setSearch}
           placeholder="Tags"
-       
+          permission={PERMISSIONS?.TAG?.VIEW?.name}
+          permissionLoading={permissionLoading}
         />
       )}</div>)
 }

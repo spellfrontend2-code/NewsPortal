@@ -1,14 +1,16 @@
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { useUsersHooks } from "@/features/users/hooks/useUsers";
 import { generateColumns } from "@/lib/generateColumns";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
 import DataTable from "@/components/Admin/table/DataTable";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 function Users() {
   const { hasPermission } = usePermission();
+    const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
+    console.log(PERMISSIONS?.USER?.VIEW?.name)
   const userHook = useUsersHooks();
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
@@ -51,7 +53,7 @@ function Users() {
           <p className="text-3xl font-bold ">Users</p>
           <p className="text-gray-500">Manage your users</p>
         </div>
-        {hasPermission(PERMISSIONS.USER.CREATE) && (
+        {hasPermission(PERMISSIONS?.USER?.CREATE?.name) && (
           <Button
             variant="submit"
             className="h-10 flex items-center gap-2"
@@ -62,7 +64,7 @@ function Users() {
           </Button>
         )}
       </div>
-      {hasPermission(PERMISSIONS.USER.VIEW) && (
+
         <DataTable
             data={users}
           columns={columns}
@@ -75,8 +77,9 @@ function Users() {
           search={search}
           setSearch={setSearch}
           placeholder="Users"
+          permission={PERMISSIONS?.USER?.VIEW?.name}
+          permissionLoading={permissionLoading}
         />
-      )}
       <DeleteDialogBox deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} deleteField={deleteUser} selectedField={selectedUser} />
     </div>
   );

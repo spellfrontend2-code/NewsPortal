@@ -17,6 +17,22 @@ export const useAuthorHooks=()=>{
                     queryClient.invalidateQueries(["authors"]);
                 }
             })
+        },
+        useCreateAuthor:()=>{
+            return useMutation({
+                mutationFn:(data:any)=>author.createAuthor(data),
+                onSuccess:()=>{
+                    queryClient.invalidateQueries(["authors"]);
+                }
+            })
+        },
+        useUpdateAuthor:()=>{
+            return useMutation({
+                mutationFn:({data,id}:any)=>author.updateAuthor(id,data),
+                onSuccess:()=>{
+                    queryClient.invalidateQueries(["authors"]);
+                }
+            })
         }
     }
 }

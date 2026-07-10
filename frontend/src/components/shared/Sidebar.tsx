@@ -10,16 +10,24 @@ import {
   ChevronDown,
   Lock,
   LogOut,
+  User,
+  UserCircle,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Logo from "../../assets/hero.png";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { useAuthHooks } from "@/features/auth/hooks/useAuth";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
-const navItems = [
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
+import { useAuthStore } from "@/context/useAuthStore";
+
+
+function Sidebar() {
+  const { hasPermission } = usePermission();
+  const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
+  const navItems = [
   {
     label: "Dashboard",
     icon: House,
@@ -31,10 +39,10 @@ const navItems = [
     icon: ChartColumnStacked,
     path: "/admin/categories",
     permissions: [
-      PERMISSIONS.CATEGORY.VIEW,
-      PERMISSIONS.CATEGORY.CREATE,
-      PERMISSIONS.CATEGORY.UPDATE,
-      PERMISSIONS.CATEGORY.DELETE,
+      PERMISSIONS?.CATEGORY?.VIEW?.name,
+      PERMISSIONS?.CATEGORY?.CREATE?.name,
+      PERMISSIONS?.CATEGORY?.UPDATE?.name,
+      PERMISSIONS?.CATEGORY?.DELETE?.name,
     ],
   },
 
@@ -43,10 +51,10 @@ const navItems = [
     icon: Tags,
     path: "/admin/tags",
     permissions: [
-      PERMISSIONS.TAG.VIEW,
-      PERMISSIONS.TAG.CREATE,
-      PERMISSIONS.TAG.UPDATE,
-      PERMISSIONS.TAG.DELETE,
+      PERMISSIONS?.TAG?.VIEW?.name,
+      PERMISSIONS?.TAG?.CREATE?.name,
+      PERMISSIONS?.TAG?.UPDATE?.name,
+      PERMISSIONS?.TAG?.DELETE?.name,
     ],
   },
 
@@ -55,10 +63,10 @@ const navItems = [
     icon: Newspaper,
     path: "/admin/articles",
     permissions: [
-      PERMISSIONS.ARTICLE.VIEW,
-      PERMISSIONS.ARTICLE.CREATE,
-      PERMISSIONS.ARTICLE.UPDATE,
-      PERMISSIONS.ARTICLE.DELETE,
+      PERMISSIONS?.ARTICLE?.VIEW?.name,
+      PERMISSIONS?.ARTICLE?.CREATE?.name,
+      PERMISSIONS?.ARTICLE?.UPDATE?.name,
+      PERMISSIONS?.ARTICLE?.DELETE?.name,
     ],
   },
 
@@ -67,9 +75,9 @@ const navItems = [
     icon: Camera,
     path: "/admin/media",
     permissions: [
-      PERMISSIONS.MEDIA.VIEW,
-      PERMISSIONS.MEDIA.CREATE,
-      PERMISSIONS.MEDIA.DELETE,
+      PERMISSIONS?.MEDIA?.VIEW?.name,
+      PERMISSIONS?.MEDIA?.CREATE?.name,
+      PERMISSIONS?.MEDIA?.DELETE?.name,
     ],
   },
 
@@ -78,55 +86,62 @@ const navItems = [
     icon: Book,
     path: "/admin/advertisements",
     permissions: [
-      PERMISSIONS.ADS.VIEW,
-      PERMISSIONS.ADS.CREATE,
-      PERMISSIONS.ADS.UPDATE,
-      PERMISSIONS.ADS.DELETE,
+      PERMISSIONS?.ADS?.VIEW?.name,
+      PERMISSIONS?.ADS?.CREATE?.name,
+      PERMISSIONS?.ADS?.UPDATE?.name,
+      PERMISSIONS?.ADS?.DELETE?.name,
     ],
   },
 
-  {
-    label: "Users",
-    icon: Users,
-    path: "/admin/users",
-    permissions: [
-      PERMISSIONS.USER.VIEW,
-      PERMISSIONS.USER.CREATE,
-      PERMISSIONS.USER.UPDATE,
-      PERMISSIONS.USER.DELETE,
-    ],
-  },
+  // {
+  //   label: "Users",
+  //   icon: Users,
+  //   path: "/admin/users",
+  //   permissions: [
+  //     PERMISSIONS?.USER?.VIEW?.name,
+  //     PERMISSIONS?.USER?.CREATE?.name,
+  //     PERMISSIONS?.USER?.UPDATE?.name,
+  //     PERMISSIONS?.USER?.DELETE?.name,
+  //   ],
+  // },
 {
   label:"Authors",
   icon:Lock,
   path:"/admin/authors",
-  permissions:[]
-},
+ permissions: [
+      PERMISSIONS?.USER?.VIEW?.name,
+      PERMISSIONS?.USER?.CREATE?.name,
+      PERMISSIONS?.USER?.UPDATE?.name,
+      PERMISSIONS?.USER?.DELETE?.name,
+    ],},
   {
     label: "Roles And Permissions",
     icon: Lock,
     path: "/admin/roles-and-permissions",
-    permissions: [PERMISSIONS.PERMISSION.VIEW, PERMISSIONS.PERMISSION.ASSIGN],
+    permissions: [PERMISSIONS?.PERMISSION?.VIEW?.name, PERMISSIONS?.PERMISSION?.ASSIGN?.name],
   },
 
   {
     label: "Settings",
     icon: Settings,
     path: "/admin/settings",
-    permissions: [PERMISSIONS.COMPANY.VIEW, PERMISSIONS.COMPANY.UPDATE],
+    permissions: [PERMISSIONS?.COMPANY?.VIEW?.name, PERMISSIONS?.COMPANY?.UPDATE?.name],
   },
 ];
-
-function Sidebar() {
-  const { hasPermission } = usePermission();
   const navigate=useNavigate()
   const authHook=useAuthHooks()
-  const logout=authHook.useLogout();
-  const filteredNavItems = navItems.filter((item) => {
-    if (!item.permissions) return true;
+  const logout=authHook?.useLogout();
+  const {data:profile}=authHook?.useFetchProfile();
+  const profileData=profile?.data??[]
+ const filteredNavItems = permissionLoading
+  ? []
+  : navItems.filter((item) => {
+      if (!item.permissions) return true;
 
-    return item.permissions?.map((permission) => hasPermission(permission));
-  });
+      return item.permissions.some(
+        (permission) => permission && hasPermission(permission)
+      );
+    });
 const handleLogout=()=>{
   logout.mutate({},{
     onSuccess:()=>{
@@ -140,24 +155,25 @@ const handleLogout=()=>{
   //   const user=authData?.user
   //   const [languageOpen, setLanguageOpen] = useState(false);
   //   const [currencyOpen, setCurrencyOpen] = useState(false);
-  //   const [selectedLanguage, setSelectedLanguage] = useState(Languages[0].value);
+  //   const [selectedLanguage, setSelectedLanguage] = useState(Languages[0]?.value);
   //   const [selectedCurrency, setSelectedCurrency] = useState(Currencies[0]);
   //   const [menuOpen, setMenuOpen] = useState(false);
-  //   const CurrencyIcon = selectedCurrency.symbol;
+  //   const CurrencyIcon = selectedCurrency?.symbol;
   //   const navigate=useNavigate()
   //   const handleLogout=()=>{
-  //     localStorage.removeItem("auth");
-  //     toast.success("Logged out successfully");
+  //     localStorage?.removeItem("auth");
+  //     toast?.success("Logged out successfully");
   //     navigate("/login");
   //   }
   return (
     <div
-      className={`relative h-screen w-[260px] transition-all duration-300 shadow-lg `}
+      className={`relative h-screen w-[280px] overflow-auto transition-all duration-300 shadow-lg `}
     >
       <nav
-        className={`relative flex flex-col p-4  overflow-y-auto scrollbar-none transition-all duration-300 w-full h-screen`}
+        className={`relative flex flex-col justify-between  overflow-y-auto scrollbar-none transition-all duration-300 w-full h-screen`}
       >
-        <Link to="/" className="flex items-center gap-2">
+        <div>
+          <Link to="/" className="flex items-center gap-2">
           <img src={Logo} className="w-10" />
 
           <span
@@ -168,13 +184,13 @@ const handleLogout=()=>{
         </Link>
         <hr className="my-4 border-t border-gray-300" />
         <section className="space-y-1.5 flex flex-col w-full ">
-          {filteredNavItems.map((item) => {
-            const isActive = location.pathname === item.path ? true : false;
+          {filteredNavItems?.map((item) => {
+            const isActive = location?.pathname === item?.path ? true : false;
             return (
-              <Link key={item.label} to={item.path}>
+              <Link key={item?.label} to={item?.path}>
                 <div
                   className={`relative w-full flex items-center justify-start gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 font-semibold group  ${isActive ? "bg-gray-300/20 text-[var(--color-primary)]" : "hover:bg-gray-100/30 text-gray-500 hover:text-[var(--color-primary)] "}`}
-                  title={item.label}
+                  title={item?.label}
                 >
                   <item.icon
                     size={20}
@@ -185,7 +201,7 @@ const handleLogout=()=>{
                   <span
                     className={`whitespace-nowrap  transition-all duration-300`}
                   >
-                    {item.label}
+                    {item?.label}
                   </span>
 
                   {isActive && (
@@ -197,9 +213,15 @@ const handleLogout=()=>{
           })}
         </section>
         <hr className="my-4 border-t border-gray-300" />
-        <Button className="flex items-center gap-2" onClick={handleLogout}>
-          <span
-            className={`flex items-center cursor-pointer gap-3 px-3 py-2.5 rounded-xl font-semibold whitespace-nowrap overflow-hidden transition-all duration-300 w-full opacity-100 bg-red-600/70 text-white hover:bg-red-600 hover:text-white`}
+        </div>
+        <div className="flex flex-col gap-3 w-full my-3">
+          <p className="px-3 flex items-center gap-2"><UserCircle/>{profileData.name}</p>
+        <div className="w-full flex ">
+          <Button className="w-full" onClick={handleLogout}>
+          <div
+            className={`flex items-center cursor-pointer gap-3 px-3 py-2.5 rounded-xl font-semibold 
+              whitespace-nowrap overflow-hidden transition-all duration-300  opacity-100 bg-red-600/70 text-white
+               hover:bg-red-600 hover:text-white w-full`}
           >
             <LogOut
               size={20}
@@ -207,8 +229,10 @@ const handleLogout=()=>{
               className={`shrink-0  transition-colors`}
             />
             Log Out
-          </span>
+          </div>
         </Button>
+        </div>
+        </div>
       </nav>
     </div>
   );

@@ -57,8 +57,8 @@ export default function AddAdvertisement({
     }
   };
   return (
-    <div>
-      <div className="flex items-center gap-5  rounded-lg p-4 mb-6">
+<div className="w-full flex flex-col">
+        <div className="flex items-center gap-5  rounded-lg p-4 mb-6">
         <Button
           variant="ghost"
           className="h-8 w-8 cursor-pointer border border-[var(--color-secondary)] rounded-full text-[var(--color-primary)] hover:border-[var(--color-primary)] hover:shadow-md hover:shadow-[rgb(var(--color-primary-rgb)/0.3)]"
@@ -86,7 +86,7 @@ export default function AddAdvertisement({
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className="space-y-6 shadow-lg rounded-xl p-5 overflow-y-auto"
+          className="space-y-6 shadow-lg rounded-xl p-5 "
         >
           <AdvertisementBasicInfo />
           <AdvertisementTypeInfo />

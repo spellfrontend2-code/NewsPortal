@@ -157,11 +157,10 @@ const dashboardHooks = useDashboardHooks();
 
   return (
     <div className="flex w-full h-screen overflow-y-auto flex-col gap-6 p-15">
-      <div className="flex flex-col gap-1">
-        <p className="bg-gradient-to-r from-[var(--color-primary)] to-[rgb(var(--color-primary-rgb)/0.6)] bg-clip-text text-xl font-bold text-transparent">
-          Dashboard
+        <div className="flex flex-col  text-gray-800 ">
+<p className="text-3xl font-bold ">Dashboard
         </p>
-        <p className="text-sm text-[var(--color-gray-text)]">
+        <p className="text-gray-500">
           Overview of your site&rsquo;s content and activity
         </p>
       </div>

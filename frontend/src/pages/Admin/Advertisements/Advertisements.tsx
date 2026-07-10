@@ -10,9 +10,10 @@ import {  useState } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { usePermission } from "@/features/auth/hooks/usePermission";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 function Advertisements() {
   const {hasPermission}=usePermission()
+  const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
   const advertisementHook = useAdvertisementHooks();
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -121,8 +122,8 @@ updatingApprovalId,
 PERMISSIONS.ADS  );
   if (error) toast.error(error?.message);
   return (
-    <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
-      {addOpen ? (
+<div className="h-full overflow-y-auto p-20 flex flex-col gap-5">
+        {addOpen ? (
         <AddAdvertisement open={addOpen} setOpen={setAddOpen} type="add" />
       ) : editOpen ? (
         <AddAdvertisement
@@ -138,7 +139,7 @@ PERMISSIONS.ADS  );
               <p className="text-3xl font-bold ">Advertisements</p>
               <p className="text-gray-500">Manage your advertisements</p>
             </div>
-           {hasPermission(PERMISSIONS.ADS.CREATE) && <Button
+           {hasPermission(PERMISSIONS?.ADS?.CREATE?.name) && <Button
               variant="submit"
               className="h-10 flex items-center gap-2"
               onClick={() => setAddOpen(true)}
@@ -151,7 +152,7 @@ PERMISSIONS.ADS  );
           {error ? (
             <p>No Advertisements Found.</p>
           ) : (
-            hasPermission(PERMISSIONS.ADS.VIEW) && <DataTable
+       <DataTable
               columns={columns}
               data={advertisements}
               pagination={pagination}
@@ -169,6 +170,8 @@ PERMISSIONS.ADS  );
               approvalStatus={approvalStatus}
               approved={approved}
               setApproved={setApproved}
+              permission={PERMISSIONS?.ADS?.VIEW?.name}
+              permissionLoading={permissionLoading}
             />
           )}
         </>

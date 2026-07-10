@@ -16,6 +16,7 @@ import {
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import DataTableSkeleton from "./DataTableSkeleton";
 import StatusDropdown from "@/components/shared/StatusDropdown";
+import { usePermission } from "@/features/auth/hooks/usePermission";
 
 function DataTable({
   data = [],
@@ -34,8 +35,12 @@ function DataTable({
   statuses=[],
   approvalStatus=[],
   approved={},
-  setApproved={}
+  setApproved={},
+  permission,
+  permissionLoading
+
 }) {
+  const {hasPermission}=usePermission()
   const table = useReactTable({
     data,
     columns,
@@ -51,6 +56,8 @@ function DataTable({
 
     getSortedRowModel: getSortedRowModel(),
   });
+  if(!permissionLoading && !hasPermission(permission))
+    return <p>No permission</p>
   return (
     <>
       <div className="w-full max-w-full overflow-x-auto rounded-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
@@ -91,7 +98,7 @@ function DataTable({
             </div>
           </div>
         </div>
-        {isLoading ? (
+        {(isLoading || permissionLoading) ? (
           <DataTableSkeleton />
         ) : (
           <Table className="w-full min-w-[900px]">
@@ -161,8 +168,8 @@ function DataTable({
       </div>
       <div className="flex items-center justify-between mt-4 w-full h-[40px]">
         <span className="shadow-md flex items-center justify-center w-[110px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          Page {table?.getState()?.pagination?.pageIndex + 1 || 1} of{" "}
+          {table?.getPageCount()||1}
         </span>
         <div className="shadow-md  relative flex justify-between items-center overflow-hidden w-[150px] h-full border-1 border-[var(--color-primary)] bg-gray-100/90 text-gray-400  cursor-pointer rounded-2xl group">
           <button

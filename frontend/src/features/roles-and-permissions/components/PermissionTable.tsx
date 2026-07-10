@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { usePermissionHooks } from "@/features/permissions/hooks/usePermissions";
+import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
+import { usePermissionStore } from "../hooks/usePermissionStore";
 
 interface Permission {
   id: number;
@@ -15,10 +16,8 @@ function PermissionTable({
   selectedPermissions,
   setSelectedPermissions,
 }: PermissionTableProps) {
-  const permissionHook = usePermissionHooks();
-  const { data: permissions } = permissionHook.useFetchPermissions();
 
-  const PERMISSIONS = permissions?.data ?? {};
+  const {PERMISSIONS} = usePermissionStore();
 
   type ModuleName = keyof typeof PERMISSIONS;
 

@@ -1,5 +1,5 @@
 import { authApi } from "@/services/api/auth/authApi"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { use } from "react"
 const auth=authApi()
 export const useAuthHooks=()=>{
@@ -27,6 +27,12 @@ export const useAuthHooks=()=>{
                 onSuccess:()=>{
                     queryClient.invalidateQueries(["admin"])
                 }
+            })
+        },
+        useFetchProfile:()=>{
+            return useQuery({
+                queryFn:()=>auth.FetchProfile(),
+                queryKey:["admin"]
             })
         }
 

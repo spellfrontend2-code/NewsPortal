@@ -20,6 +20,7 @@ const {setAuthData}=useAuthStore()
     adminLogin.mutate(data, {
       onSuccess: (response) => {
         const res=response.data
+        console.log(res)
         const authData = {
           accessToken: res.access_token,
           expiresIn: res.expires_in,

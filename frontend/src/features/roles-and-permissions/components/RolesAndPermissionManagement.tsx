@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
 import PermissionTable from "@/features/roles-and-permissions/components/PermissionTable";
-import { usePermissionHooks } from "@/features/permissions/hooks/usePermissions";
+import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
 import { toast } from "sonner";
 
 interface RolesAndPermissionManagementProps {
@@ -40,7 +40,7 @@ function RolesAndPermissionManagement({
 
   const AssignRoleBasedPermission=permissionHook.useAssignRoleBasedPermissions()
   const CreateRole=permissionHook.useCreateRole()
-  // Create a map: permission name -> permission id
+
   const permissionMap = useMemo(() => {
     const map: Record<string, number> = {};
 

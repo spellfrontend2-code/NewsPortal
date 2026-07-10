@@ -44,9 +44,8 @@ export default function CategoryView({ category }: Props) {
             <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
               Icon
             </p>
-            <img
-              src={category.icon}
-              className="rounded-xl max-h-[200px] object-contain w-full border border-slate-200 bg-slate-50"
+            <i
+              className={category.icon}
             />
           </div>
         </div>

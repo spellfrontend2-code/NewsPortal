@@ -1,17 +1,19 @@
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
 import { Button } from "@/components/ui/button";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
 import { usePermission } from "@/features/auth/hooks/usePermission";
+import AuthorInputForm from "@/features/authors/components/AuthorInputForm";
 import { useAuthorHooks } from "@/features/authors/hooks/useAuthors";
-import { usePermissionHooks } from "@/features/permissions/hooks/usePermissions";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
 function Authors() {
   const { hasPermission } = usePermission();
+    const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
   const [addAuthor, setAddAuthor] = useState(false);
+  const [editAuthor, setEditAuthor] = useState(false);
     const [search, setSearch] = useState("");
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const authorHook = useAuthorHooks();
@@ -40,6 +42,9 @@ function Authors() {
     (action, row) => {
         setSelectedAuthor(row)
       switch (action) {
+        case "edit":
+          setEditAuthor(true);
+          break;
         case "delete":
           setDeleteOpen(true);
           break
@@ -47,8 +52,12 @@ function Authors() {
     },
     undefined,
     undefined,
-    PERMISSIONS.CATEGORY,
+    PERMISSIONS?.USER,
   );
+  if(addAuthor||editAuthor)
+  {
+    return <AuthorInputForm addAuthor={addAuthor} setAddAuthor={setAddAuthor} edit={editAuthor} setEdit={setEditAuthor} author={selectedAuthor}/>
+  }
   return (
     <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5 ">
       <div className="flex justify-between items-end rounded-xl">
@@ -56,7 +65,8 @@ function Authors() {
           <p className="text-3xl font-bold ">Authors</p>
           <p className="text-gray-500">Manage your authors</p>
         </div>
-        {hasPermission(PERMISSIONS.CATEGORY.CREATE) && (
+        
+        {hasPermission(PERMISSIONS?.USER?.CREATE?.name) && (
           <Button
             variant="submit"
             className="h-10 flex items-center gap-2"
@@ -79,6 +89,8 @@ function Authors() {
         setSearch={setSearch}
         sorting={sorting}
         setSorting={setSorting}
+        permission={PERMISSIONS?.USER?.VIEW?.name}
+        permissionLoading={permissionLoading}
       />
       <DeleteDialogBox deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} selectedField={selectedAuthor} deleteField={deleteAuthor}/>
     </div>

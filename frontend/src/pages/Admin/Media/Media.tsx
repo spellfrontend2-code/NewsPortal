@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
 import { usePermission } from "@/features/auth/hooks/usePermission";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 function Media() {
   const {hasPermission}=usePermission();
   const { control, watch } = useForm({
@@ -32,6 +32,7 @@ function Media() {
       category: "all",
     },
   });
+  const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
   const selectedCategory = watch("category");
   const [openUpload, setOpenUpload] = useState(false);
   const mediaHooks = useMediaHooks();
@@ -76,7 +77,7 @@ function Media() {
         </p>
         <p className="text-gray-500">Manage your medias</p>
         </div>
-       {hasPermission(PERMISSIONS.MEDIA.CREATE) && <Button
+       {hasPermission(PERMISSIONS?.MEDIA?.CREATE?.name) && <Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setOpenUpload(true)}
@@ -86,7 +87,7 @@ function Media() {
         </Button>}
       </div>
       <div className="w-full h-full flex justify-center items-center">
-        {hasPermission(PERMISSIONS.MEDIA.VIEW) && <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
+         <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
           <div className="w-full flex justify-between items-center pb-3 mb-5 border-b border-[var(--color-secondary)]">
             <div className={`${inputStyle} flex items-center gap-2 max-w-[30%] `}>
               <Search strokeWidth={1.5} size={20}/>
@@ -125,9 +126,9 @@ function Media() {
               />
             </div>
           </div>
-          {isLoading ? (
+          {(isLoading||permissionLoading) ? (
             <MediaSkeleton />
-          ) : media.length > 0 ? (
+          ) : (hasPermission(PERMISSIONS?.MEDIA?.VIEW?.name) && media.length > 0) ? (
             <div className="w-full h-full flex justify-center items-center">
               <div className="w-full h-[90%]  items-start">
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -245,7 +246,7 @@ function Media() {
               </button>
             </div>
           </div>
-        </div>}
+        </div>
       </div>
       <UploadDialogBox
         openUpload={openUpload}

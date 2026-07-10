@@ -23,6 +23,10 @@ export function generateColumns(
       cell: (info) => {
         const value = info.getValue();
         const row = info.row.original;
+        if(key==="icon")
+        {
+          return <i className={value}></i>
+        }
         if (key === "permissions") {
           return (
             <div className="flex flex-wrap justify-start items-center gap-2">
@@ -98,7 +102,7 @@ export function generateColumns(
 
       return (
         <div className="flex justify-center gap-3">
-          {hasPermission(modulePermission?.VIEW) && (
+          {hasPermission(modulePermission?.VIEW?.name) && (
             <div
               className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]"
               title={"View"}
@@ -109,7 +113,7 @@ export function generateColumns(
               <Eye strokeWidth={1.5} size={20} />
             </div>
           )}
-          {hasPermission(modulePermission?.UPDATE) && (
+          {hasPermission(modulePermission?.UPDATE?.name) && (
             <div
               className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-blue-500 hover:bg-blue-500/10 hover:border-blue-500"
               title={"Edit"}
@@ -120,7 +124,7 @@ export function generateColumns(
               <Edit strokeWidth={1.5} size={20} />
             </div>
           )}
-          {hasPermission(modulePermission?.DELETE) && (
+          {hasPermission(modulePermission?.DELETE?.name) && (
             <div
               className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-500/10 hover:border-red-500"
               title={"Delete"}

@@ -1,13 +1,12 @@
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
-import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import CategoryInputForm from "@/features/categories/components/CategoryInputForm";
 import CategoryView from "@/features/categories/components/CategoryView";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -29,6 +28,7 @@ useEffect(() => {
 
   return () => clearTimeout(timer);
 }, [search]);
+const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
 
 const { data,isLoading,error } = categoriesHook.useFetchCategories({
   page: pagination.pageIndex + 1,
@@ -74,6 +74,7 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
     PERMISSIONS.CATEGORY
   );
   const [addCategory, setAddCategory] = useState(false);
+
   return (
     <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5 ">
       <div className="flex justify-between items-end rounded-xl">
@@ -81,7 +82,7 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
           <p className="text-3xl font-bold ">Categories</p>
           <p className="text-gray-500">Manage your categories</p>
         </div>
-        {hasPermission(PERMISSIONS.CATEGORY.CREATE) && <Button
+        {hasPermission(PERMISSIONS?.CATEGORY?.CREATE?.name) && <Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setAddCategory(true)}
@@ -98,21 +99,27 @@ const { data,isLoading,error } = categoriesHook.useFetchCategories({
       />
 
      
-        {hasPermission(PERMISSIONS.CATEGORY.VIEW) && <DataTable
-          data={categories}
-          columns={columns}
-          pagination={pagination}
-          setPagination={setPagination}
-          pageCount={data?.pagination?.last_page}
-          sorting={sorting}
-          setSorting={setSorting}
-          search={search}
-          setSearch={setSearch}
-          isLoading={isLoading}
-          placeholder="Categories"
-          
-      
-        />}
+    {(
+  error ? (
+    <p>No Categories found.</p>
+  ) : (
+    <DataTable
+      data={categories}
+      columns={columns}
+      pagination={pagination}
+      setPagination={setPagination}
+      pageCount={data?.pagination?.last_page}
+      sorting={sorting}
+      setSorting={setSorting}
+      search={search}
+      setSearch={setSearch}
+      isLoading={isLoading}
+      placeholder="Categories"
+      permission={PERMISSIONS?.CATEGORY?.VIEW?.name}
+      permissionLoading={permissionLoading}
+    />
+  )
+)}
      
       {addCategory && (
         <CategoryInputForm

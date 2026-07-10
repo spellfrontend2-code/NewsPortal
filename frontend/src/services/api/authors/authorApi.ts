@@ -20,6 +20,22 @@ params:{page,per_page,search}
         } catch (error: any) {
             throw error?.response?.data;
         }
-    }
+    },
+    createAuthor: async (data: any) => {
+        try {
+            const response = await axiosInstance.post("/admin/authors", data);
+            return response.data;
+        } catch (error: any) {
+            throw error?.response?.data;
+        }
+    },
+    updateAuthor: async (id: any, data: any) => {
+        try {
+            const response = await axiosInstance.put(`/admin/authors/${id}`, data);
+            return response.data;
+        } catch (error: any) {
+            throw error?.response?.data;
+        }
+    },
 }
 };

@@ -6,14 +6,15 @@ import AddArticle from "@/features/articles/components/AddArticle";
 import ArticleView from "@/features/articles/components/ArticleView";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { usePermission } from "@/features/auth/hooks/usePermission";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
 import {   useState } from "react";
 import { toast } from "sonner";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
 
 function Articles() {
   const {hasPermission}=usePermission()
+    const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
   const useArticlesHook = useArticlesHooks();
     const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -94,7 +95,7 @@ const statuses = [
     },
     undefined,
     undefined,
-    PERMISSIONS.ARTICLE
+    PERMISSIONS?.ARTICLE
   );
   if (error) {
  toast.error(error?.message);
@@ -126,7 +127,7 @@ const statuses = [
         </p>
         <p className="text-gray-500">Manage your articles</p>
         </div>
-       {hasPermission(PERMISSIONS.ARTICLE.CREATE) && <Button
+       {hasPermission(PERMISSIONS?.ARTICLE?.CREATE?.name) && <Button
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setAddOpen(true)}
@@ -139,7 +140,7 @@ const statuses = [
       { error ? (
         <p>No Articles Found.</p>
       ) :
-        hasPermission(PERMISSIONS.ARTICLE.VIEW) && <DataTable
+         <DataTable
           data={articles}
           columns={columns}
           pagination={pagination}
@@ -154,6 +155,8 @@ const statuses = [
           statuses={statuses}
           status={status}
           setStatus={setStatus}
+          permission={PERMISSIONS?.ARTICLE?.VIEW?.name}
+          permissionLoading={permissionLoading}
         />
       }
     </>

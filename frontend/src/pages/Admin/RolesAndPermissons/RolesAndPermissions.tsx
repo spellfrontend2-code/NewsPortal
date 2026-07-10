@@ -1,16 +1,17 @@
 import DataTable from "@/components/Admin/table/DataTable";
 import { Button } from "@/components/ui/button";
-import { PERMISSIONS } from "@/features/auth/constants/permissions";
 import { usePermission } from "@/features/auth/hooks/usePermission";
-import { usePermissionHooks } from "@/features/permissions/hooks/usePermissions";
+import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
 import { generateColumns } from "@/lib/generateColumns";
 import RolesAndPermissionManagement from "@/features/roles-and-permissions/components/RolesAndPermissionManagement";
 import { Plus } from "lucide-react";
 import {  useState } from "react";
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 
 function RolesAndPermissions() {
   const permissionHook = usePermissionHooks();
+    const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const { data, isLoading } = permissionHook.useFetchRoleBasedPermissions();
   const roleBasedPermissions = data?.data ?? [];
@@ -19,12 +20,13 @@ function RolesAndPermissions() {
   const [search, setSearch] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editOpen,setEditOpen]=useState(false)
+  const filteredRoleBasedPermissions=roleBasedPermissions.filter((roleBasedPermission) => !roleBasedPermission.name.toLowerCase().includes("admin"));
 const [selectedRole, setSelectedRole] = useState<{
   name: string;
   permissions: string[];
 } | null>(null);  
   const columns = generateColumns(
-    roleBasedPermissions,
+    filteredRoleBasedPermissions,
     [],
     (action, row) => {
       setSelectedRole(row);
@@ -59,7 +61,7 @@ const [selectedRole, setSelectedRole] = useState<{
               <p className="text-3xl font-bold ">Roles and Permissions</p>
               <p className="text-gray-500">Manage your roles and permissions</p>
             </div>
-           {hasPermission(PERMISSIONS.ADS.CREATE) && <Button
+           {hasPermission(PERMISSIONS?.PERMISSION?.ASSIGN?.name) && <Button
               variant="submit"
               className="h-10 flex items-center gap-2"
               onClick={() => setAddOpen(true)}
@@ -69,7 +71,7 @@ const [selectedRole, setSelectedRole] = useState<{
             </Button>}
           </div>
       <DataTable
-        data={roleBasedPermissions}
+        data={filteredRoleBasedPermissions}
         columns={columns}
         pagination={pagination}
         setPagination={setPagination}
@@ -80,6 +82,8 @@ const [selectedRole, setSelectedRole] = useState<{
         setSorting={setSorting}
         search={search}
         setSearch={setSearch}
+        permissionLoading={permissionLoading}
+        permission={PERMISSIONS?.PERMISSION?.VIEW?.name}
       />
       <DeleteDialogBox
         deleteOpen={deleteOpen}
