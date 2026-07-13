@@ -32,13 +32,13 @@ const statuses = [
   { name: "Archived", value: "archived" },
 ];
   const approvalStatus = [
-    {name:"All",value:undefined},{
+    {name:"All",value:""},{
       name: "Approved",
       value: 1,
     },
     { name: "Rejected", value: 0 },
   ];
-  const [approved, setApproved] = useState(undefined);
+  const [approved, setApproved] = useState("");
   const [status, setStatus] = useState("");
   const { data, isLoading, error } = advertisementHook.useFetchAdvertisements({
     page: pagination.pageIndex + 1,

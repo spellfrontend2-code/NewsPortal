@@ -1,14 +1,52 @@
 import { Button } from "@/components/ui/button";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useSettingHooks } from "../hooks/useSettings";
 import { toast } from "sonner";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Trash, Upload, X } from "lucide-react";
-import { useRef } from "react";
+import { Check, Plus, Trash, Upload, X } from "lucide-react";
+import { useRef, useState } from "react";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
+import { useIconHooks } from "@/features/icons/hooks/useIcons";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from "@/components/ui/command";
+import IconAdd from "@/features/icons/components/IconAdd";
 function SettingsForm({ open, setOpen, settings }: any) {
   const settingsHook = useSettingHooks();
   const updateSettings = settingsHook.useUpdateSettings();
+  const iconHook = useIconHooks();
+const [openPopover, setOpenPopover] = useState<number | null>(null);  
+const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 100,
+  });
+  const queryClient = useQueryClient();
+const [searches, setSearches] = useState<Record<number, string>>({});
+const [activeIndex, setActiveIndex] = useState<number | null>(null);  const {
+    data: icons,
+    isLoading,
+    error,
+  } = iconHook.useFetchIcons({
+    page: pagination.pageIndex,
+    per_page: pagination.pageSize,
+     search:
+    activeIndex !== null
+      ? searches[activeIndex] ?? ""
+      : "",
+});
+  const [iconAddOpen, setIconAddOpen] = useState(false);
+  const iconList = icons?.data ?? [];
   const { register, handleSubmit, reset, control, watch, setValue } = useForm({
     defaultValues: {
       name: settings?.name || "",
@@ -20,7 +58,7 @@ function SettingsForm({ open, setOpen, settings }: any) {
       social_links:
         settings?.social_links?.length > 0
           ? settings.social_links
-          : [{ platform: "", url: "" }],
+          : [{ icon: "", platform: "", url: "" }],
       seo_title: settings?.seo_title || "",
       seo_description: settings?.seo_description || "",
       seo_keywords: settings?.seo_keywords || "",
@@ -81,9 +119,10 @@ function SettingsForm({ open, setOpen, settings }: any) {
     formData.append("vat_number", data.vat_number || "");
 
     data.social_links.forEach((item, index) => {
-  formData.append(`social_links[${index}][platform]`, item.platform);
-  formData.append(`social_links[${index}][url]`, item.url);
-});
+      formData.append(`social_links[${index}][icon]`, item.icon);
+      formData.append(`social_links[${index}][platform]`, item.platform);
+      formData.append(`social_links[${index}][url]`, item.url);
+    });
     if (data.logo instanceof File) {
       formData.append("logo", data.logo);
     }
@@ -92,7 +131,7 @@ function SettingsForm({ open, setOpen, settings }: any) {
       formData.append("favicon", data.favicon);
     }
     formData.append("_method", "PUT");
-    
+
     updateSettings.mutate(
       { id: settings?.id, data: formData },
       {
@@ -171,24 +210,24 @@ function SettingsForm({ open, setOpen, settings }: any) {
                         />
                       </div>
                     ) : (
-                        <label>
+                      <label>
                         <div className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border-2 border-[var(--color-primary)] text-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.01)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)]">
-                                    <Upload size={30} />
-                                </div>
-                          
-                      <input
-                        ref={logoInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0] || null;
-                          setValue("logo", file, {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          });
-                        }}
-                        hidden
-                      />
+                          <Upload size={30} />
+                        </div>
+
+                        <input
+                          ref={logoInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setValue("logo", file, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            });
+                          }}
+                          hidden
+                        />
                       </label>
                     )}
                   </div>
@@ -217,22 +256,23 @@ function SettingsForm({ open, setOpen, settings }: any) {
                         />
                       </div>
                     ) : (
-                      <label>  
+                      <label>
                         <div className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border-2 border-[var(--color-primary)] text-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.01)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)]">
-                                    <Upload size={30} />
-                                </div><input
-                        ref={faviconInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0] || null;
-                          setValue("favicon", file, {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          });
-                        }}
-                        hidden
-                      />
+                          <Upload size={30} />
+                        </div>
+                        <input
+                          ref={faviconInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setValue("favicon", file, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            });
+                          }}
+                          hidden
+                        />
                       </label>
                     )}
                   </div>
@@ -294,8 +334,128 @@ function SettingsForm({ open, setOpen, settings }: any) {
                 </div>
 
                 <div className="space-y-4">
+                  <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+                    Social Links
+                  </label>
                   {fields.map((field, index) => (
                     <div key={field.id} className="flex gap-4 items-end">
+                      <div>
+                        <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+                          Icon
+                        </label>
+
+                        <Controller
+                          name={`social_links.${index}.icon`}
+                          control={control}
+                          render={({ field }) => {
+                            const selectedIcon = iconList.find(
+                              (icon) => icon.icon_class === field.value,
+                            );
+
+                            return (
+                              <Popover
+  open={activeIndex === index}
+  onOpenChange={(open) => {
+    if (open) {
+      setActiveIndex(index);
+    } else {
+      setActiveIndex(null);
+    }
+  }}
+>
+                                <PopoverTrigger asChild>
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    className={`${inputStyle} justify-start font-normal`}
+                                  >
+                                    {selectedIcon ? (
+                                      <div className="flex items-center gap-2">
+                                        <i
+                                          className={selectedIcon.icon_class}
+                                        ></i>
+                                        <span>{selectedIcon.icon_name}</span>
+                                      </div>
+                                    ) : (
+                                      "Select icon"
+                                    )}
+                                  </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent
+                                  className="w-[300px] p-0 bg-white"
+                                  align="start"
+                                >
+                                  <Command>
+                                    <CommandInput
+  placeholder="Search icon..."
+  value={searches[index] ?? ""}
+  onValueChange={(value) => {
+    setSearches((prev) => ({
+      ...prev,
+      [index]: value,
+    }));
+
+    setActiveIndex(index);
+  }}
+/>
+                                    
+
+                                    <CommandList className="max-h-[220px]">
+                                      <CommandEmpty>
+                                        No icon found.
+                                      </CommandEmpty>
+
+                                      <CommandGroup>
+                                        {iconList.map((icon) => (
+                                          <CommandItem
+                                            key={icon.id}
+                                            value={icon.icon_name}
+                                            onSelect={() => {
+  field.onChange(icon.icon_class);
+
+  setActiveIndex(null);
+
+  setSearches((prev) => ({
+    ...prev,
+    [index]: "",
+  }));
+}}
+                                            className="flex items-center gap-2 cursor-pointer"
+                                          >
+                                            <i className={icon.icon_class}></i>
+
+                                            <span>{icon.icon_name}</span>
+
+                                            {field.value ===
+                                              icon.icon_class && (
+                                              <Check className="ml-auto h-4 w-4" />
+                                            )}
+                                          </CommandItem>
+                                        ))}
+                                      </CommandGroup>
+                                    </CommandList>
+
+                                    <div className="p-2 border-t">
+                                      <Button
+                                        type="button"
+                                        variant="submit"
+                                        className="w-full flex items-center gap-2"
+onClick={() => {
+  setActiveIndex(index);
+  setIconAddOpen(true);
+}}                                      >
+                                        <Plus className="h-4 w-4" />
+                                        Add New Icon
+                                      </Button>
+                                    </div>
+                                  </Command>
+                                </PopoverContent>
+                              </Popover>
+                            );
+                          }}
+                        />
+                      </div>
                       <div className="flex-1">
                         <label>Platform</label>
                         <input
@@ -329,6 +489,7 @@ function SettingsForm({ open, setOpen, settings }: any) {
                     variant="submit"
                     onClick={() =>
                       append({
+                        icon: "",
                         platform: "",
                         url: "",
                       })
@@ -421,6 +582,30 @@ function SettingsForm({ open, setOpen, settings }: any) {
                   </Button>
                 </div>
               </form>
+              {iconAddOpen && (
+              <IconAdd
+                open={iconAddOpen}
+                onOpenChange={setIconAddOpen}
+                onSuccess={async (icon) => {
+                  await queryClient.invalidateQueries({
+                    queryKey: ["icons"],
+                  });
+              
+                  setValue("icon", icon.icon_class, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+              
+                  setIconAddOpen(false);
+                 setActiveIndex(null);
+
+setSearches((prev) => ({
+  ...prev,
+  [activeIndex ?? 0]: "",
+}));
+                }}
+              />
+              )}
             </div>
           </div>
         </div>

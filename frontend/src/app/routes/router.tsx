@@ -9,9 +9,9 @@ import Media from "@/pages/Admin/Media/Media";
 import Tags from "@/pages/Admin/Tags/Tags";
 import Advertisements from "@/pages/Admin/Advertisements/Advertisements";
 import Settings from "@/pages/Admin/Settings/Settings";
-import Users from "@/pages/Users/Users";
 import RolesAndPermissions from "@/pages/Admin/RolesAndPermissons/RolesAndPermissions";
 import Authors from "@/pages/Admin/Authors/Authors";
+import Profile from "@/pages/Admin/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -49,15 +49,17 @@ export const router = createBrowserRouter([
             path:"settings",
             element:<Settings/>
           },
-          {path:"users",
-            element:<Users/>
-          },
+    
           {
             path:"roles-and-permissions",
             element:<RolesAndPermissions/>
           },
           {path:"authors",
             element:<Authors/>
+          },
+          {
+            path:"profile",
+            element:<Profile/>
           }
         ],
       },

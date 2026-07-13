@@ -1,6 +1,15 @@
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { Edit, Eye, ToggleLeft, ToggleRight, Trash, View } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
 export function generateColumns(
   data = [],
   hiddenColumns = [],
@@ -8,6 +17,12 @@ export function generateColumns(
   onToggleApproved?: (row: any) => void,
   updatingApprovalId?: number,
   modulePermission?: { CREATE?: any; VIEW?: any; UPDATE?: any; DELETE?: any },
+  module,
+   onChangeStatus?: (
+    row: any,
+    status: "active" | "suspended" | "banned"
+  ) => void,
+  updatingStatusId?: number
 ) {
   const { hasPermission } = usePermission();
   if (!data.length) return [];
@@ -23,6 +38,72 @@ export function generateColumns(
       cell: (info) => {
         const value = info.getValue();
         const row = info.row.original;
+  if (module === "authors" && key === "status") {
+  const row = info.row.original;
+  const isUpdating = updatingStatusId === row.id;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={isUpdating}
+          className={`capitalize h-8 gap-2 ${inputStyle} rounded-2xl border-[var(--color-secondary)] w-[130px] cursor-pointer ${
+            isUpdating ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
+          {isUpdating ? (
+            <>
+              <span className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+              Updating...
+            </>
+          ) : (
+            <>
+              
+
+             <p className={`${value==="active"?"text-green-600":value==="suspended"?"text-yellow-600":"text-red-600"}`}> {value}</p>
+
+              <MoreHorizontal className="h-4 w-4" />
+            </>
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+
+      {!isUpdating && (
+        <DropdownMenuContent
+          align="end"
+          className="bg-white border border-[var(--color-secondary)]"
+        >
+          {value !== "active" && (
+            <DropdownMenuItem
+              onClick={() => onChangeStatus?.(row, "active")}
+            >
+               Active
+            </DropdownMenuItem>
+          )}
+
+          {value !== "suspended" && (
+            <DropdownMenuItem
+              onClick={() => onChangeStatus?.(row, "suspended")}
+            >
+               Suspended
+            </DropdownMenuItem>
+          )}
+
+          {value !== "banned" && (
+            <DropdownMenuItem
+              className="text-red-600"
+              onClick={() => onChangeStatus?.(row, "banned")}
+            >
+              Banned
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      )}
+    </DropdownMenu>
+  );
+}
         if(key==="icon")
         {
           return <i className={value}></i>
@@ -102,7 +183,7 @@ export function generateColumns(
 
       return (
         <div className="flex justify-center gap-3">
-          {hasPermission(modulePermission?.VIEW?.name) && (
+          {hasPermission(modulePermission?.VIEW?.name) && (module!=="roles") && (
             <div
               className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]"
               title={"View"}

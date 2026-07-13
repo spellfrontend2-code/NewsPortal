@@ -62,7 +62,6 @@ function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
     }
   };
   const previewImages = watch("files");
-  console.log("previewImages", previewImages[0]?.type?.split("/")[0]);
 
   return (
     <Dialog open={openUpload} onOpenChange={setOpenUpload}>

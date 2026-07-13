@@ -41,11 +41,11 @@ function ImagePreview({ label, src }: { label: string; src?: string }) {
     </div>
   );
 }
-function SocialLink({ label, href }: { label: string; href?: string }) {
-  console.log(label);
+function SocialLink({ label, href,icon }: { label: string; href?: string,icon?:string }) {
   return (
      <div className="w-[1/3] flex items-center gap-2 border border-[var(--color-secondary)] rounded-md px-3 py-2">
-              <Link size={16} className="text-[var(--color-primary)] shrink-0 " />
+              {/* <Link size={16} className="text-[var(--color-primary)] shrink-0 " /> */}
+              <i className={icon}/>
               {label && <span className="text-sm font-semibold border-r-1 text-gray-400 p-[0.8px] pr-2">{label}</span>}
               {label && href ? (
                 <a
@@ -114,7 +114,7 @@ if (isLoading) {
           </span>
           <div className="w-full grid grid-cols-3 gap-5">
             {settings?.social_links?.map((social) => (
-                <SocialLink key={social.id} label={social.platform} href={social.url} />
+                <SocialLink key={social.id} label={social.platform} href={social.url} icon={social.icon}/>
                 
             ))}
             
