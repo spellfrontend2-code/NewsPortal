@@ -22,6 +22,14 @@ export const useTagsHooks=()=>{
                 }
             })
         },
+        useUpdateTag:()=>{
+          return useMutation({
+            mutationFn:({id,data}:any)=>tags.updateTag(id,data)
+            ,onSuccess:()=>{
+              queryClient.invalidateQueries(["tags"])  
+            }
+          })  
+        },
         useDeleteTag:()=>{
             return useMutation({
                 mutationFn:(id:any)=>tags.deleteTag(id)

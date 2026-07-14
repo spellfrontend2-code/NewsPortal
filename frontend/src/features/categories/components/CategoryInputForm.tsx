@@ -18,7 +18,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Check } from "lucide-react";
+import { Asterisk, Check } from "lucide-react";
 import { Plus } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import CategoryTree from "./CategoryTree";
@@ -61,11 +61,18 @@ function CategoryInputForm({
   const iconList = icons?.data ?? [];
   const addCategoryHook = categoriesHook.useCreateCategories();
   const editCategory = categoriesHook.useUpdateCategories();
-  const { register, handleSubmit, control, reset, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: edit ? category?.name : "",
       description: edit ? category?.description : "",
-      parent_id: edit ? String(category?.parent_id) : 0,
+      parent_id: edit ? String(category?.parent_id) : null,
       position: edit ? category?.position : 0,
       meta_title: edit ? category?.meta_title : "",
       meta_description: edit ? category?.meta_description : "",
@@ -105,6 +112,7 @@ function CategoryInputForm({
           toast.success(res?.message || "Category added successfully");
         },
         onError: (e) => {
+          console.log(e)
           toast.error(e?.message || "Something went wrong");
         },
       });
@@ -149,14 +157,25 @@ function CategoryInputForm({
                 className="w-full flex flex-col gap-5"
               >
                 <div>
-                  <label className="font-semibold  text-[rgb(var(--color-gray-rgb)/0.7)]">
+                  <label className={`flex items-center gap-1 font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]`}>
                     Category Name
+                    <Asterisk className="text-red-500" size={12}/>
                   </label>
                   <input
                     type="text"
-                    {...register("name")}
-                    className={`${inputStyle}`}
+                    {...register("name", {
+                      required: "Category name is required",
+                    })}
+                    className={`${inputStyle} ${
+                      errors.name ? "border-red-500 focus:border-red-500" : ""
+                    }`}
                   />
+
+                  {errors.name && (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.name.message as string}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="font-semibold  text-[rgb(var(--color-gray-rgb)/0.7)]">
@@ -235,8 +254,11 @@ function CategoryInputForm({
                           );
 
                           return (
-                            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                                <PopoverTrigger asChild>
+                            <Popover
+                              open={popoverOpen}
+                              onOpenChange={setPopoverOpen}
+                            >
+                              <PopoverTrigger asChild>
                                 <Button
                                   type="button"
                                   variant="outline"
@@ -358,25 +380,25 @@ function CategoryInputForm({
                 </div>
               </form>
               {iconAddOpen && (
-<IconAdd
-  open={iconAddOpen}
-  onOpenChange={setIconAddOpen}
-  onSuccess={async (icon) => {
-    await queryClient.invalidateQueries({
-      queryKey: ["icons"],
-    });
+                <IconAdd
+                  open={iconAddOpen}
+                  onOpenChange={setIconAddOpen}
+                  onSuccess={async (icon) => {
+                    await queryClient.invalidateQueries({
+                      queryKey: ["icons"],
+                    });
 
-    setValue("icon", icon.icon_class, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+                    setValue("icon", icon.icon_class, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
 
-    setIconAddOpen(false);
-    setPopoverOpen(false);
-    setSearch("");
-  }}
-/>
-)}
+                    setIconAddOpen(false);
+                    setPopoverOpen(false);
+                    setSearch("");
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>

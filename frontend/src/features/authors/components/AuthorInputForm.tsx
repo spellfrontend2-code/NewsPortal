@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useAuthorHooks } from "../hooks/useAuthors";
 import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
-import { Eye, EyeOff, Upload, X } from "lucide-react";
+import { Asterisk, Eye, EyeOff, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 interface AuthorFormProps {
   addAuthor: boolean;
@@ -30,9 +30,15 @@ function AuthorInputForm({
   const rolesList = roles?.data ?? [];
   const createAuthor = authorHooks.useCreateAuthor();
   const updateAuthor = authorHooks.useUpdateAuthor();
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [avatar, setAvatar] = useState<string | null>(null);
-  const { register, handleSubmit, reset,setValue } = useForm({
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: edit ? author?.name : "",
       email: edit ? author?.email : "",
@@ -68,9 +74,9 @@ function AuthorInputForm({
       avatar_url: edit ? author?.author?.avatar_url : "",
     },
   });
-useEffect(() => {
-  setAvatar(author?.author?.avatar_url);
-},[author]);
+  useEffect(() => {
+    setAvatar(author?.author?.avatar_url);
+  }, [author]);
   const emptyForm = {
     name: "",
     email: "",
@@ -102,38 +108,38 @@ useEffect(() => {
   };
 
   const onSubmit = (data: any) => {
- const formData = new FormData();
+    const formData = new FormData();
 
-formData.append("name", data.name);
-formData.append("email", data.email);
+    formData.append("name", data.name);
+    formData.append("email", data.email);
 
-if (data.password) {
-  formData.append("password", data.password);
-}
+    if (data.password) {
+      formData.append("password", data.password);
+    }
 
-formData.append("country_code", data.country_code);
-formData.append("language", data.language);
-formData.append("timezone", data.timezone);
+    formData.append("country_code", data.country_code);
+    formData.append("language", data.language);
+    formData.append("timezone", data.timezone);
 
-formData.append("role", data.role);
-formData.append("status", data.status);
+    formData.append("role", data.role);
+    formData.append("status", data.status);
 
-formData.append("preferences[currency]", data.currency);
-formData.append("preferences[theme]", data.theme);
-formData.append("bio", data.bio);
+    formData.append("preferences[currency]", data.currency);
+    formData.append("preferences[theme]", data.theme);
+    formData.append("bio", data.bio);
 
-formData.append("specialization", data.specialization);
+    formData.append("specialization", data.specialization);
 
-formData.append("verified", String(Number(data.verified)));
+    formData.append("verified", String(Number(data.verified)));
 
-formData.append("social_links[facebook]", data.facebook);
-formData.append("social_links[twitter]", data.twitter);
-formData.append("social_links[youtube]", data.youtube);
-formData.append("social_links[tiktok]", data.tiktok);
-formData.append("social_links[instagram]", data.instagram);
-if (data.avatar_url instanceof File) {
-  formData.append("avatar_url", data.avatar_url);
-}
+    formData.append("social_links[facebook]", data.facebook);
+    formData.append("social_links[twitter]", data.twitter);
+    formData.append("social_links[youtube]", data.youtube);
+    formData.append("social_links[tiktok]", data.tiktok);
+    formData.append("social_links[instagram]", data.instagram);
+    if (data.avatar_url instanceof File) {
+      formData.append("avatar_url", data.avatar_url);
+    }
 
     const payload = formData;
     if (edit) {
@@ -182,54 +188,76 @@ if (data.avatar_url instanceof File) {
         }
       }}
     >
-      <DialogContent
-        className=" !max-w-[60vw] bg-white  p-10 max-h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-secondary)]"
-      >
+      <DialogContent className=" !max-w-[60vw] bg-white  p-10 max-h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
         <div>
-          <h1
-            className=" text-xl font-bold text-[var(--color-primary)] "
-          >
+          <h1 className=" text-xl font-bold text-[var(--color-primary)] ">
             {edit ? "Edit Author" : "Add New Author"}
           </h1>
 
-          <p
-            className=" text-sm text-gray-500 "
-          >
-            Create author profile
-          </p>
+          <p className=" text-sm text-gray-500 ">Create author profile</p>
         </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="shadow-lg rounded-2xl p-10 space-y-6 "
         >
-          <div
-            className="grid grid-cols-2 gap-5 "
-          >
+          <div className="grid grid-cols-2 gap-5 ">
             <div>
-              <label className="font-semibold">Name</label>
+              <label className="flex items-center gap-1 font-semibold">
+                Name
+                <Asterisk className="text-red-500" size={12} />
+              </label>
 
-              <input {...register("name")} className={inputStyle} />
+              <input
+                {...register("name", { required: "Name is required" })}
+                className={`${inputStyle} ${
+                  errors?.name ? "border-red-500 focus:border-red-500" : ""
+                }`}
+              />
+
+              <p className="text-xs text-red-500 mt-1 h-4">
+                {errors?.name?.message as string}
+              </p>
             </div>
 
             <div>
-              <label className="font-semibold">Email</label>
+              <label className="flex items-center gap-1 font-semibold">
+                Email
+                <Asterisk className="text-red-500" size={12} />
+              </label>
 
               <input
                 type="email"
-                {...register("email")}
-                className={inputStyle}
+                {...register("email", {
+                  required: "Email is required",
+                })}
+                className={`${inputStyle} ${
+                  errors?.email ? "border-red-500 focus:border-red-500" : ""
+                }`}
               />
+
+              <p className="text-xs text-red-500 mt-1 h-4">
+                {errors?.email?.message as string}
+              </p>
             </div>
 
             <div>
-              <label className="font-semibold">Password</label>
+              <label className="flex items-center gap-1 font-semibold">
+                Password
+                {!edit && <Asterisk className="text-red-500" size={12} />}
+              </label>
 
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  {...register("password")}
-                  className={`${inputStyle} pr-12  [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-credentials-auto-fill-button]:hidden
+                  {...register("password", {
+                    required: !edit ? "Password is required" : false,
+                  })}
+                  className={`${inputStyle} ${
+                    errors?.password
+                      ? "border-red-500 focus:border-red-500"
+                      : ""
+                  } pr-12  [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-credentials-auto-fill-button]:hidden
                   [&::-webkit-clear-button]:hidden`}
                   autoComplete="new-password"
                   placeholder={
@@ -246,7 +274,11 @@ if (data.avatar_url instanceof File) {
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
+                
               </div>
+              <p className="text-xs text-red-500 mt-1 h-4">
+                  {errors?.password?.message as string}
+                </p>
             </div>
 
             <div>
@@ -280,28 +312,25 @@ if (data.avatar_url instanceof File) {
                 )}
               </select>
             </div>
-
-           
           </div>
 
-          <div className="grid grid-cols-2 gap-5 "><div
-            className="space-y-4 "
-          >
-            <label className="font-semibold">Bio</label>
+          <div className="grid grid-cols-2 gap-5 ">
+            <div className="space-y-4 ">
+              <label className="font-semibold">Bio</label>
 
-            <textarea rows={10} {...register("bio")} className={inputStyle} />
-          </div>
-           <div>
+              <textarea rows={10} {...register("bio")} className={inputStyle} />
+            </div>
+            <div>
               Avatar Image
               <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center overflow-hidden">
-                { avatar ? (
+                {avatar ? (
                   <div className="relative h-full w-full">
                     <img
                       src={avatar}
                       alt="Profile"
                       className="w-full h-full rounded-lg object-cover"
                     />
-                     <button
+                    <button
                       type="button"
                       onClick={() => {
                         setValue("avatar_url", null);
@@ -313,7 +342,7 @@ if (data.avatar_url instanceof File) {
                     </button>
                   </div>
                 ) : (
-                 <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
+                  <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -344,15 +373,13 @@ if (data.avatar_url instanceof File) {
                 )}
               </div>
             </div>
- <div>
+            <div>
               <label className="font-semibold">Specialization</label>
 
               <input {...register("specialization")} className={inputStyle} />
             </div>
-            </div>
-          <div
-            className="grid grid-cols-2 gap-5 "
-          >
+          </div>
+          <div className="grid grid-cols-2 gap-5 ">
             <div>
               <label className="font-semibold">Verified</label>
 
@@ -362,10 +389,10 @@ if (data.avatar_url instanceof File) {
                 <option value={1}>Yes</option>
               </select>
             </div>
-
           </div>
 
-            <div className="grid grid-cols-2 gap-5"><div>
+          <div className="grid grid-cols-2 gap-5">
+            <div>
               <label className="font-semibold">Currency</label>
 
               <input {...register("currency")} className={inputStyle} />
@@ -380,10 +407,8 @@ if (data.avatar_url instanceof File) {
                 <option value="light">Light</option>
               </select>
             </div>
-            </div>
-          <div
-            className=" grid grid-cols-2 gap-5 "
-          >
+          </div>
+          <div className=" grid grid-cols-2 gap-5 ">
             <div>
               <label className="font-semibold">Facebook</label>
 
@@ -393,7 +418,7 @@ if (data.avatar_url instanceof File) {
                 className={inputStyle}
               />
             </div>
- <div>
+            <div>
               <label className="font-semibold">Instagram</label>
 
               <input
@@ -429,12 +454,9 @@ if (data.avatar_url instanceof File) {
                 className={inputStyle}
               />
             </div>
-             
           </div>
 
-          <div
-            className="flex justify-end gap-3"
-          >
+          <div className="flex justify-end gap-3">
             <Button
               type="button"
               variant="submit"

@@ -7,8 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Asterisk } from "lucide-react";
 function AdvertisementPricingInfo() {
-  const { register, control } = useFormContext();
+  const { register, control,formState:{errors} } = useFormContext();
   const pricingModels = ["cpm","cpc","cpd","sponsored"];
   return (
     <div>
@@ -37,8 +38,17 @@ function AdvertisementPricingInfo() {
       </div>
 
       <div>
-        <label className="font-semibold text-gray-600">Price</label>
-        <input type="number" {...register("price")} className={inputStyle} />
+        <label className="flex items-center gap-1 font-semibold text-gray-600">Price
+                    <Asterisk className="text-red-500" size={12} />
+
+        </label>
+        <input type="number" {...register("price",{required:"Price is required"})} 
+         className={`${inputStyle} ${
+            errors?.price ? "border-red-500 focus:border-red-500" : ""
+          }`}        />
+          <p className="text-xs text-red-500 mt-1 h-4">
+          {errors?.price?.message as string}
+        </p>
       </div>
 
       <div>

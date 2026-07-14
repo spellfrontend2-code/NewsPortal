@@ -34,6 +34,14 @@ export const tagsApi = () => {
         throw error?.response?.data;
       }
   },
+  updateTag: async (id: any, data: any) => {
+    try{
+        const response = await axiosInstance.put(`/admin/tags/${id}`, data);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+  },
   deleteTag: async (id: any) => {
       try {
         const response = await axiosInstance.delete(`/admin/tags/${id}`);

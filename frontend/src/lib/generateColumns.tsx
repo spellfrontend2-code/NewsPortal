@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 export function generateColumns(
   data = [],
   hiddenColumns = [],
@@ -18,12 +19,13 @@ export function generateColumns(
   updatingApprovalId?: number,
   modulePermission?: { CREATE?: any; VIEW?: any; UPDATE?: any; DELETE?: any },
   module,
-   onChangeStatus?: (
+  onChangeStatus?: (
     row: any,
-    status: "active" | "suspended" | "banned"
+    status: "active" | "suspended" | "banned",
   ) => void,
-  updatingStatusId?: number
+  updatingStatusId?: number,
 ) {
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const { hasPermission } = usePermission();
   if (!data.length) return [];
   const sample = data[0];
@@ -38,75 +40,101 @@ export function generateColumns(
       cell: (info) => {
         const value = info.getValue();
         const row = info.row.original;
-  if (module === "authors" && key === "status") {
-  const row = info.row.original;
-  const isUpdating = updatingStatusId === row.id;
+        if (module === "authors" && key === "status") {
+          const row = info.row.original;
+          const isUpdating = updatingStatusId === row.id;
+          if (permissionLoading) return null;
+          const canActivate = hasPermission(PERMISSIONS.USER.ACTIVATE.name);
+          const canSuspend = hasPermission(PERMISSIONS.USER.SUSPEND.name);
+          const canBan = hasPermission(PERMISSIONS.USER.BAN.name);
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={isUpdating}
-          className={`capitalize h-8 gap-2 ${inputStyle} rounded-2xl border-[var(--color-secondary)] w-[130px] cursor-pointer ${
-            isUpdating ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          {isUpdating ? (
-            <>
-              <span className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-              Updating...
-            </>
-          ) : (
-            <>
-              
+          const canChangeStatus = canActivate || canSuspend || canBan;
 
-             <p className={`${value==="active"?"text-green-600":value==="suspended"?"text-yellow-600":"text-red-600"}`}> {value}</p>
+          if (!canChangeStatus) {
+            return (
+              <p
+                className={`capitalize ${
+                  value === "active"
+                    ? "text-green-600"
+                    : value === "suspended"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                }`}
+              >
+                {value}
+              </p>
+            );
+          }
 
-              <MoreHorizontal className="h-4 w-4" />
-            </>
-          )}
-        </Button>
-      </DropdownMenuTrigger>
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isUpdating}
+                  className={`capitalize h-8 gap-2 ${inputStyle} rounded-2xl border-[var(--color-secondary)] w-[130px] ${
+                    isUpdating ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {isUpdating ? (
+                    <>
+                      <span className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <span
+                        className={
+                          value === "active"
+                            ? "text-green-600"
+                            : value === "suspended"
+                              ? "text-yellow-600"
+                              : "text-red-600"
+                        }
+                      >
+                        {value}
+                      </span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
 
-      {!isUpdating && (
-        <DropdownMenuContent
-          align="end"
-          className="bg-white border border-[var(--color-secondary)]"
-        >
-          {value !== "active" && (
-            <DropdownMenuItem
-              onClick={() => onChangeStatus?.(row, "active")}
-            >
-               Active
-            </DropdownMenuItem>
-          )}
+              <DropdownMenuContent
+                align="end"
+                className="bg-white border border-[var(--color-secondary)]"
+              >
+                {value !== "active" && canActivate && (
+                  <DropdownMenuItem
+                    onClick={() => onChangeStatus?.(row, "active")}
+                  >
+                    Active
+                  </DropdownMenuItem>
+                )}
 
-          {value !== "suspended" && (
-            <DropdownMenuItem
-              onClick={() => onChangeStatus?.(row, "suspended")}
-            >
-               Suspended
-            </DropdownMenuItem>
-          )}
+                {value !== "suspended" && canSuspend && (
+                  <DropdownMenuItem
+                    onClick={() => onChangeStatus?.(row, "suspended")}
+                  >
+                    Suspended
+                  </DropdownMenuItem>
+                )}
 
-          {value !== "banned" && (
-            <DropdownMenuItem
-              className="text-red-600"
-              onClick={() => onChangeStatus?.(row, "banned")}
-            >
-              Banned
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      )}
-    </DropdownMenu>
-  );
-}
-        if(key==="icon")
-        {
-          return <i className={value}></i>
+                {value !== "banned" && canBan && (
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={() => onChangeStatus?.(row, "banned")}
+                  >
+                    Banned
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        }
+        if (key === "icon") {
+          return <i className={value}></i>;
         }
         if (key === "permissions") {
           return (
@@ -125,42 +153,45 @@ export function generateColumns(
         }
 
         if (key === "approved") {
-          return (
-            <div className="flex items-center justify-center">
-              <button
-                type="button"
-                disabled={updatingApprovalId === row.id}
-                onClick={() => onToggleApproved?.(row)}
-                className={`cursor-pointer ${
-                  updatingApprovalId === row.id
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                title={
-                  updatingApprovalId === row.id
-                    ? "Updating..."
-                    : value
-                      ? "Disable approval"
-                      : "Approve"
-                }
-              >
-                {updatingApprovalId === row.id ? (
-                  <div className="h-7 w-7 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                ) : value ? (
-                  <ToggleRight
-                    className="text-green-500 fill-green-300/20"
-                    size={30}
-                  />
-                ) : (
-                  <ToggleLeft
-                    className="text-red-500 fill-red-300/20"
-                    size={30}
-                  />
-                )}
-              </button>
-            </div>
-          );
-        }
+  const canUpdateApproval = hasPermission(
+    PERMISSIONS.ADS.UPDATE_STATUS?.name
+  );
+
+  const toggleIcon = updatingApprovalId === row.id ? (
+    <div className="h-7 w-7 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+  ) : value ? (
+    <ToggleRight
+      className="text-green-500 fill-green-300/20"
+      size={30}
+    />
+  ) : (
+    <ToggleLeft
+      className="text-red-500 fill-red-300/20"
+      size={30}
+    />
+  );
+
+  return (
+    <div className="flex items-center justify-center">
+      {canUpdateApproval ? (
+        <button
+          type="button"
+          disabled={updatingApprovalId === row.id}
+          onClick={() => onToggleApproved?.(row)}
+          className={
+            updatingApprovalId === row.id
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer"
+          }
+        >
+          {toggleIcon}
+        </button>
+      ) : (
+        toggleIcon
+      )}
+    </div>
+  );
+}
         if (key === "is_headline_news") {
           return value ? "Yes" : "No";
         }
@@ -183,17 +214,19 @@ export function generateColumns(
 
       return (
         <div className="flex justify-center gap-3">
-          {hasPermission(modulePermission?.VIEW?.name) && (module!=="roles") && (
-            <div
-              className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]"
-              title={"View"}
-              onClick={() => {
-                onAction?.("view", original);
-              }}
-            >
-              <Eye strokeWidth={1.5} size={20} />
-            </div>
-          )}
+          {hasPermission(modulePermission?.VIEW?.name) &&
+            module !== "roles" &&
+            module !== "tags" && (
+              <div
+                className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]"
+                title={"View"}
+                onClick={() => {
+                  onAction?.("view", original);
+                }}
+              >
+                <Eye strokeWidth={1.5} size={20} />
+              </div>
+            )}
           {hasPermission(modulePermission?.UPDATE?.name) && (
             <div
               className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-blue-500 hover:bg-blue-500/10 hover:border-blue-500"

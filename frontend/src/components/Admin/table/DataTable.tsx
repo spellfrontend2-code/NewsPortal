@@ -83,7 +83,7 @@ function DataTable({
             </div>
             <div className="flex gap-2"><div>
               {
-                approvalStatus.length>0 && <StatusDropdown statuses={approvalStatus} status={approved} setStatus={setApproved} />
+                approvalStatus.length>0 && <StatusDropdown statuses={approvalStatus} status={approved} setStatus={setApproved} name="Approval Status"/>
               }
             </div>
             <div>
@@ -92,6 +92,7 @@ function DataTable({
                   statuses={statuses}
                   status={status}
                   setStatus={setStatus}
+                  name="Status"
                 />
               )}
             </div>

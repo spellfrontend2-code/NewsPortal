@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 
 export function useArticleForm({article,type}:any) {
-  console.log(article);
-  const { register, handleSubmit, watch, control, setValue, reset } = useForm({
+  const { register, handleSubmit, watch, control, setValue, reset, formState:{errors} } = useForm({
     disabled:type==="view",
     defaultValues: {
       title: article?.title || "",
@@ -27,5 +26,5 @@ export function useArticleForm({article,type}:any) {
     },
   });
 
-  return { register, handleSubmit, watch, control, setValue, reset };
+  return { register, handleSubmit, watch, control, setValue, reset,formState:{errors} };
 }

@@ -51,6 +51,7 @@ const updateAuthorStatus=authorHook.useUpdateStatus()
       "created_at",
       "email_verified_at",
       "author",
+      "profile_image"
     ],
     (action, row) => {
         setSelectedAuthor(row)

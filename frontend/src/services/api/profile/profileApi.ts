@@ -13,7 +13,7 @@ export const profileApi=()=>{
         },
         updateProfile: async (data: any) => {
             try {
-                const response = await axiosInstance.put("/profile", data);
+                const response = await axiosInstance.post("/profile?_method=put", data);
                 return response.data;
             } catch (error: any) {
                 throw error?.response?.data;

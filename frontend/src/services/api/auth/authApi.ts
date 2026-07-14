@@ -7,11 +7,8 @@ export const authApi=()=>{
                 const response=await axiosInstance.post("/login",data);
                 return response.data
             } catch (error: any) {
-                throw (
-                    new Error(error?.message) ||
-                    "Login Failed"
-                );
-            }
+        throw error?.response?.data;
+      }
         },
         refreshToken:async()=>{
             try{
@@ -26,7 +23,7 @@ export const authApi=()=>{
         },
         AdminLogout:async()=>{
             try{
-                const response=await axiosInstance.post("/admin/logout");
+                const response=await axiosInstance.post("/logout");
                 return response.data;
             } catch (error: any) {
                 throw (

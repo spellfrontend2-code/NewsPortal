@@ -7,9 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Asterisk } from "lucide-react";
 
 function AdvertisementLinkInfo() {
-  const { register, control } = useFormContext();
+  const { register, control,formState:{errors} } = useFormContext();
   const placements = [
     { name: "header_banner" },
     { name: "footer_banner" },
@@ -33,8 +34,16 @@ function AdvertisementLinkInfo() {
     <div>
       {/* TARGET URL */}
       <div>
-        <label className="font-semibold text-gray-600">Target URL</label>
-        <input {...register("target_url")} className={inputStyle} />
+        <label className="flex items-center gap-1 font-semibold text-gray-600">Target URL         
+           <Asterisk className="text-red-500" size={12} />
+</label>
+        <input {...register("target_url",{required:"Target URL is required"})} 
+ className={`${inputStyle} ${
+            errors?.target_url ? "border-red-500 focus:border-red-500" : ""
+          }`}        />
+          <p className="text-xs text-red-500 mt-1 h-4">
+          {errors?.target_url?.message as string}
+        </p>
       </div>
 
       {/* TARGET BLANK */}

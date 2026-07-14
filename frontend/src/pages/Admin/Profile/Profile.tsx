@@ -59,10 +59,10 @@ function Profile() {
       country_code: user.country_code ?? "",
       language: user.language ?? "",
       timezone: user.timezone ?? "",
-       image: null,
+       image: user.profile_image ?? "",
 });
 
-setProfileImage(user.image ?? null);
+setProfileImage(user.profile_image ?? null);
   }, [user, reset]);
   const onSubmit = (data: any) => {
 const formData = new FormData();
@@ -74,7 +74,7 @@ formData.append("language", data.language);
 formData.append("timezone", data.timezone);
 
 if (data.image instanceof File) {
-  formData.append("image", data.image);
+  formData.append("profile_image", data.image);
 }
 
   updateProfile.mutate(formData, {

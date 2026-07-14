@@ -7,15 +7,16 @@ import {
 } from "@/components/ui/select";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
 
-function StatusDropdown({ statuses, setStatus, status }) {
-  return (
+function StatusDropdown({ statuses, setStatus, status,name }) {
+return (
     <div className="w-full flex gap-3 m-3 items-center">
       <Select
-        value={status}
+         value={status===undefined?"": status}
+
         onValueChange={(value) => setStatus(value)}
       >
         <SelectTrigger className={`${inputStyle} w-[120px]`}>
-          <SelectValue placeholder="Select status" />
+          <SelectValue placeholder={`Select ${name}`} />
         </SelectTrigger>
 
         <SelectContent className="bg-white">

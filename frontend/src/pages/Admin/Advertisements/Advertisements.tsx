@@ -32,13 +32,14 @@ const statuses = [
   { name: "Archived", value: "archived" },
 ];
   const approvalStatus = [
-    {name:"All",value:""},{
+    {name:"All",value:undefined},{
       name: "Approved",
       value: 1,
     },
     { name: "Rejected", value: 0 },
   ];
-  const [approved, setApproved] = useState("");
+  
+  const [approved, setApproved] = useState(undefined);
   const [status, setStatus] = useState("");
   const { data, isLoading, error } = advertisementHook.useFetchAdvertisements({
     page: pagination.pageIndex + 1,
@@ -119,7 +120,8 @@ const columns = generateColumns(
     },
 updateApproval,
 updatingApprovalId,
-PERMISSIONS.ADS  );
+PERMISSIONS.ADS,
+"advertisement"  );
   if (error) toast.error(error?.message);
   return (
 <div className="h-full overflow-y-auto p-20 flex flex-col gap-5">

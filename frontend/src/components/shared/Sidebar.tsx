@@ -6,11 +6,8 @@ import {
   Newspaper,
   Tags,
   Settings,
-  Users,
-  ChevronDown,
   Lock,
   LogOut,
-  User,
   UserCircle,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -22,8 +19,8 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { useAuthStore } from "@/context/useAuthStore";
-
 function Sidebar() {
+  const { clearAuth } = useAuthStore();
   const { hasPermission } = usePermission();
   const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const navItems = [
@@ -31,30 +28,7 @@ function Sidebar() {
       label: "Dashboard",
       icon: House,
       path: "/admin",
-    },
-
-    {
-      label: "Categories",
-      icon: ChartColumnStacked,
-      path: "/admin/categories",
-      permissions: [
-        PERMISSIONS?.CATEGORY?.VIEW?.name,
-        PERMISSIONS?.CATEGORY?.CREATE?.name,
-        PERMISSIONS?.CATEGORY?.UPDATE?.name,
-        PERMISSIONS?.CATEGORY?.DELETE?.name,
-      ],
-    },
-
-    {
-      label: "Tags",
-      icon: Tags,
-      path: "/admin/tags",
-      permissions: [
-        PERMISSIONS?.TAG?.VIEW?.name,
-        PERMISSIONS?.TAG?.CREATE?.name,
-        PERMISSIONS?.TAG?.UPDATE?.name,
-        PERMISSIONS?.TAG?.DELETE?.name,
-      ],
+      permissions: [PERMISSIONS?.DASHBOARD?.VIEW?.name],
     },
 
     {
@@ -91,7 +65,29 @@ function Sidebar() {
         PERMISSIONS?.ADS?.DELETE?.name,
       ],
     },
+    {
+      label: "Categories",
+      icon: ChartColumnStacked,
+      path: "/admin/categories",
+      permissions: [
+        PERMISSIONS?.CATEGORY?.VIEW?.name,
+        PERMISSIONS?.CATEGORY?.CREATE?.name,
+        PERMISSIONS?.CATEGORY?.UPDATE?.name,
+        PERMISSIONS?.CATEGORY?.DELETE?.name,
+      ],
+    },
 
+    {
+      label: "Tags",
+      icon: Tags,
+      path: "/admin/tags",
+      permissions: [
+        PERMISSIONS?.TAG?.VIEW?.name,
+        PERMISSIONS?.TAG?.CREATE?.name,
+        PERMISSIONS?.TAG?.UPDATE?.name,
+        PERMISSIONS?.TAG?.DELETE?.name,
+      ],
+    },
     // {
     //   label: "Users",
     //   icon: Users,
@@ -112,6 +108,7 @@ function Sidebar() {
         PERMISSIONS?.USER?.CREATE?.name,
         PERMISSIONS?.USER?.UPDATE?.name,
         PERMISSIONS?.USER?.DELETE?.name,
+        PERMISSIONS?.USER?.ACTIVATE?.name,
       ],
     },
     {
@@ -153,9 +150,16 @@ function Sidebar() {
       {},
       {
         onSuccess: () => {
-          localStorage.removeItem("auth");
+          clearAuth();
           toast.success("Logged out successfully");
-          navigate("/admin/login");
+
+          navigate("/admin/login", {
+            replace: true,
+          });
+        },
+        onError: () => {
+          clearAuth();
+          navigate("/admin/login", { replace: true });
         },
       },
     );
@@ -232,7 +236,11 @@ function Sidebar() {
             </p>
           </Link>
           <div className="w-full flex ">
-            <Button className="w-full" onClick={handleLogout}>
+            <Button
+              className="w-full"
+              onClick={handleLogout}
+              disabled={logout.isPending}
+            >
               <div
                 className={`flex items-center cursor-pointer gap-3 px-3 py-2.5 rounded-xl font-semibold 
               whitespace-nowrap overflow-hidden transition-all duration-300  opacity-100 bg-red-600/70 text-white
@@ -243,7 +251,7 @@ function Sidebar() {
                   strokeWidth={2.5}
                   className={`shrink-0  transition-colors`}
                 />
-                Log Out
+                {logout.isPending ? "Logging Out..." : "Log Out"}
               </div>
             </Button>
           </div>

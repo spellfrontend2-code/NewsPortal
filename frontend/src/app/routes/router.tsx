@@ -12,11 +12,14 @@ import Settings from "@/pages/Admin/Settings/Settings";
 import RolesAndPermissions from "@/pages/Admin/RolesAndPermissons/RolesAndPermissions";
 import Authors from "@/pages/Admin/Authors/Authors";
 import Profile from "@/pages/Admin/Profile/Profile";
+import PublicLayout from "@/layout/PublicLayout";
+import Home from "@/pages/Public/Home/Home";
+import PublicRoute from "../protectedRoute/PublicRoute";
 
 export const router = createBrowserRouter([
   {
     path: "/admin",
-    element: <ProtectedRoute role={["admin"]} navigateRoute="/admin/login" />,
+    element: <ProtectedRoute navigateRoute="/admin/login" />,
     children: [
       {
         element: <AdminLayout />,
@@ -33,44 +36,54 @@ export const router = createBrowserRouter([
             path: "categories",
             element: <Categories />,
           },
-           {
+          {
             path: "media",
             element: <Media />,
           },
           {
-            path:"tags",
-            element:<Tags/>
+            path: "tags",
+            element: <Tags />,
           },
           {
-            path:"advertisements",
-            element:<Advertisements/>
+            path: "advertisements",
+            element: <Advertisements />,
           },
           {
-            path:"settings",
-            element:<Settings/>
+            path: "settings",
+            element: <Settings />,
           },
-    
+
           {
-            path:"roles-and-permissions",
-            element:<RolesAndPermissions/>
+            path: "roles-and-permissions",
+            element: <RolesAndPermissions />,
           },
-          {path:"authors",
-            element:<Authors/>
-          },
+          { path: "authors", element: <Authors /> },
           {
-            path:"profile",
-            element:<Profile/>
-          }
+            path: "profile",
+            element: <Profile />,
+          },
         ],
       },
     ],
   },
+ {
+  path: "/admin/login",
+  element: <PublicRoute />,
+  children: [
+    {
+      index: true,
+      element: <AdminLogin />,
+    },
+  ],
+},
   {
-    path: "/admin/login",
-    element: <AdminLogin />,
+    path: "/",
+    element: <PublicLayout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+    ],
   },
-  {
-    path:"/*",
-    element:<h1>Home</h1>
-  }
 ]);

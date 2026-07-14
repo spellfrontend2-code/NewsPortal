@@ -35,6 +35,12 @@ export const useCategoriesHooks=()=>{
                   queryClient.invalidateQueries(["categories"])  
                 }
             })
+        },
+        useFetchPublicCategories:()=>{
+            return useQuery({
+                queryKey:["publicCategories"],
+                queryFn:()=>categories.fetchPublicCategories()
+            })
         }
     }
 }

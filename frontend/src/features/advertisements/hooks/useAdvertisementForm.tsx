@@ -5,7 +5,7 @@ import { toDateTimeLocal } from "@/features/articles/utils/toDateTimeLocal";
 export function useAdvertisementForm({ advertisement, type }: any) {
   const startsAt = toDateTimeLocal(advertisement?.starts_at);
   const endsAt = toDateTimeLocal(advertisement?.ends_at);
-  const { register, handleSubmit, watch, setValue, control } =
+  const { register, handleSubmit, watch, setValue, control,formState:{errors} } =
     useForm<AdvertisementForm>({
       defaultValues: {
         title: advertisement?.title || "",
@@ -46,10 +46,10 @@ export function useAdvertisementForm({ advertisement, type }: any) {
         daily_budget: advertisement?.daily_budget || "",
         total_budget: advertisement?.total_budget || "",
 
-        priority: advertisement?.priority ?? null,
+        priority: advertisement?.priority ?? 0,
         status: advertisement?.status || "active",
       },
     });
 
-  return { register, handleSubmit, watch, setValue, control };
+  return { register, handleSubmit, watch, setValue, control, formState:{errors} };
 }

@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/context/useAuthStore";
 import { useAuthHooks } from "@/features/auth/hooks/useAuth";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,11 +18,13 @@ const {setAuthData}=useAuthStore()
       password: "",
     },
   });
+const {getDefaultRoute}=usePermissionStore()
   const onSubmit = (data) => {
+    console.log(data)
     adminLogin.mutate(data, {
       onSuccess: (response) => {
         const res=response.data
-        console.log(res)
+        const route=getDefaultRoute(res?.permissions)
         const authData = {
           accessToken: res.access_token,
           expiresIn: res.expires_in,
@@ -30,10 +34,11 @@ const {setAuthData}=useAuthStore()
         };
         setAuthData(authData);
         toast.success(response?.message);
-        navigate("/admin");
+        navigate(route)
       },
       onError: (e) => {
-toast.error(e?.message);},
+toast.error(e?.message);
+},
     });
   };
   return (

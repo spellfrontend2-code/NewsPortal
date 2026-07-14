@@ -39,5 +39,13 @@ export const categoriesApi = () => {
         throw error?.response?.data;
       }
     },
+    fetchPublicCategories: async () => {
+      try {
+        const response = await axiosInstance.get("/categories");
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
   };
 };

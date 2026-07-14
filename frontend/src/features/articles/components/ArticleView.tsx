@@ -5,6 +5,8 @@ import {inputStyle} from "@/components/shared/styles/inputStyle";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { toDateTimeLocal } from "../utils/toDateTimeLocal";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 type Article = any;
 
 interface Props {
@@ -27,6 +29,8 @@ function Field({ label, value }: { label: string; value?: any }) {
 export default function ArticleView({ article }: Props) {
   if (!article) return null;
 const articleHook=useArticlesHooks();
+const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore();
+const {hasPermission}=usePermission()
 const statuses = [
   { name: "Draft", value: "draft" },
   { name: "In Review", value: "review" },
@@ -46,9 +50,9 @@ const onSubmit=(data:any)=>{
  onError:(err)=>{toast.error(err?.message||"Something went wrong");}});
 }
   return (
-    <div className="border border-slate-200 rounded-2xl max-w-5xl mx-auto p-6 space-y-6 bg-slate-50 shadow-sm">
+    <div className="border border-slate-200 rounded-2xl w-full mx-auto p-6 space-y-6 bg-slate-50 shadow-sm">
                 
-        <div className="flex items-end gap-3">
+       {permissionLoading?null:hasPermission(PERMISSIONS?.ARTICLES?.UPDATE_STATUS) && <div className="flex items-end gap-3">
           <div className="flex-1">
             <label className="text-[11px] text-black uppercase tracking-wider font-bold">
               Status
@@ -82,7 +86,7 @@ const onSubmit=(data:any)=>{
 >
             {updateStatus.isPending ? "Updating..." : "Update status"}
           </Button>
-        </div>
+        </div>}
       {/* HEADER */}
       <div className="rounded-xl p-6 bg-white shadow-sm space-y-3">
         <Field label="Title" value={article.title} />

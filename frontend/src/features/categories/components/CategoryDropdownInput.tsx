@@ -1,15 +1,13 @@
-import { Controller, useForm } from "react-hook-form";
 import {  useCategoriesHooks } from "@/features/categories/hooks/useCategories";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Check, ChevronsUpDown, Plus } from "lucide-react";
+import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-import { inputStyle } from "@/components/shared/styles/inputStyle";
+import {  useState } from "react";
 function CategoryDropdownInput({
   selectedCategoryIds,
   setSelectedCategoryIds,
@@ -22,9 +20,8 @@ function CategoryDropdownInput({
     per_page: 10,
     search
   });
-
   const CategoriesData = data?.data ?? [];
-
+  console.log(CategoriesData)
   const toggleCategory = (id: number) => {
     if (selectedCategoryIds.includes(id)) {
       setSelectedCategoryIds(

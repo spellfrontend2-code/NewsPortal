@@ -11,15 +11,21 @@ const initialAuth = {
 const AuthContext = createContext({});
 
 export function AuthProvider({ children }) {
-  const [authData, setAuthData] = useState(() => {
+  const [authData, setAuthDataState] = useState(() => {
     const stored = localStorage.getItem("auth");
     return stored ? JSON.parse(stored) : initialAuth;
   });
-  useEffect(() => {
-    localStorage.setItem("auth", JSON.stringify(authData));
-  }, [authData]);
+
+  const setAuthData = (data) => {
+    setAuthDataState(data);
+    localStorage.setItem("auth", JSON.stringify(data));
+  };
+  const clearAuth = () => {
+    setAuthDataState(initialAuth);
+    localStorage.removeItem("auth");
+  };
   return (
-    <AuthContext.Provider value={{ authData, setAuthData }}>
+    <AuthContext.Provider value={{ authData, setAuthData, clearAuth }}>
       {children}
     </AuthContext.Provider>
   );

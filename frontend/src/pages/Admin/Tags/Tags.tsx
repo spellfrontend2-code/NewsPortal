@@ -19,6 +19,7 @@ function Tags(){
     const [selectedTag,setSelectedTag]=useState(null)
     const [deleteOpen,setDeleteOpen]=useState(false)
     const [addTag,setAddTag]=useState(false)
+    const [isEdit,setIsEdit]=useState(false)
     const deleteTag=tagsHook.useDeleteTag()
     const [sorting,setSorting]=useState([])
     const [pagination,setPagination]=useState({
@@ -34,12 +35,15 @@ function Tags(){
                     setDeleteOpen(true)
                     break;
                 case "edit":
+                  setAddTag(true)
+                    setIsEdit(true)
                     break;
             }
         },
       undefined,
       undefined,
-      PERMISSIONS.TAG
+      PERMISSIONS.TAG,
+      "tags"
       )
         if(error){
           toast.error(error?.message)
@@ -68,7 +72,7 @@ function Tags(){
         selectedField={selectedTag}
         deleteField={deleteTag}
       />
-    {addTag && <AddTag open={addTag} setOpen={setAddTag} />}
+    {addTag && <AddTag setIsEdit={setIsEdit} open={addTag} setOpen={setAddTag} tag={selectedTag} type={isEdit?"edit":"add"}/>}
       {error?<p>No tags found.</p>:(<DataTable
           data={tagsData}
           columns={columns}

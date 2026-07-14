@@ -73,7 +73,6 @@ const methods = useArticleForm({article,type});
         (category: any) => category.id,
       ),
     };
-    console.log(payload);
     if (type === "edit") {
       updateArticle.mutate(
         { id: article?.id, data: payload },
