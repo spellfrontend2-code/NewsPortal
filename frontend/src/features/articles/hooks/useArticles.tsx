@@ -51,5 +51,17 @@ export const useArticlesHooks = () => {
         },
       });
     },
+    useFetchPublicArticles:({page,per_page})=>{
+      return useQuery({
+        queryKey:["public_articles"],
+        queryFn:()=>articles.fetchPublicArticles({page,per_page}),
+      })
+    },
+    useFetchPublicSingleArticle:(slug)=>{
+      return useQuery({
+        queryKey:["public_single_articles",slug],
+        queryFn:()=>articles.fetchPublicSingleArticle(slug),
+      })
+    }
   };
 };

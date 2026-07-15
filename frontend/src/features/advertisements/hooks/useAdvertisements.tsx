@@ -88,6 +88,12 @@ export const useAdvertisementHooks = () => {
           queryClient.invalidateQueries(["advertisements"]);
         }  
     });
+    },
+    useFetchPublicAdvertisements:()=>{
+      return useQuery({
+        queryFn: () => advertisements.fetchPublicAdvertisements(),
+        queryKey: ["public_advertisements"],
+      });
     }
   };
 };

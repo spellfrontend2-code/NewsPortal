@@ -14,7 +14,7 @@ function AdvertisementTypeInfo()
       const [mediaDialog, setMediaDialog] = useState<{
         open: boolean;
         fileType: "image" | "video";
-        field: "image_url" |"video_url" |"video_videoThumbnail"| null;
+        field: "image_url" |"video_url" |"video_thumbnail"| null;
       }>({
         open: false,
         fileType: "image",

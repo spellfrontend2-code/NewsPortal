@@ -1,13 +1,14 @@
 import Footer from "@/components/Public/Footer"
-import Navbar from "@/components/Public/Navbar/Navbar"
+import NavbarCategories from "@/components/Public/Navbar/NavbarCategories"
+import NavbarTop from "@/components/Public/Navbar/NavbarTop"
 import { Outlet } from "react-router-dom"
 
 function PublicLayout()
 {
     return (
         <div className="h-screen w-full">
-
-    <Navbar />
+<NavbarTop/>
+    <NavbarCategories />
  
 
     <Outlet />

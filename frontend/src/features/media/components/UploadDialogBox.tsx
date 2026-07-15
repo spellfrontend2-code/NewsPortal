@@ -29,9 +29,9 @@ function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
   const useMedia = useMediaHooks();
   const addBulkMedia = useMedia.useAddBulkMedia();
   const addMedia=useMedia.useCreateMedia()
-  const onSubmit = (data,e) => {
-        e.stopPropagation();
-
+  const onSubmit = (data,event) => {
+     event.preventDefault();
+  event.stopPropagation();
     {quantity==="multiple" && addBulkMedia.mutate(data, {
       onSuccess: (res) => {
         setOpenUpload(false);

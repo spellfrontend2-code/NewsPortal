@@ -52,7 +52,7 @@ const onSubmit=(data:any)=>{
   return (
     <div className="border border-slate-200 rounded-2xl w-full mx-auto p-6 space-y-6 bg-slate-50 shadow-sm">
                 
-       {permissionLoading?null:hasPermission(PERMISSIONS?.ARTICLES?.UPDATE_STATUS) && <div className="flex items-end gap-3">
+       {permissionLoading?null:hasPermission(PERMISSIONS?.ARTICLE?.UPDATE_STATUS?.name) && <div className="flex items-end gap-3">
           <div className="flex-1">
             <label className="text-[11px] text-black uppercase tracking-wider font-bold">
               Status

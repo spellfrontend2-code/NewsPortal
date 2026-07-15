@@ -11,5 +11,14 @@
   --color-secondary-rgb: 75 85 99;
   --color-primary-rgb: 124 58 237;
   --color-public-primary:#0f184b;
+  --color-public-navtext:#ffffff;
+    --color-public-navtext-rgb:255 255 255;
+    --color-public-dark:#000000;
+    --color-public-dark-rgb:0 0 0;
+  --color-public-bg:#ffffff;
+  --color-public-newsText:#0f184b;
+  --color-public-newsText-rgb: 15 24 75;
+    --color-public-newsText-hover:#ff0000;
+
 }
 

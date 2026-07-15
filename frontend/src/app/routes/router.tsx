@@ -15,8 +15,17 @@ import Profile from "@/pages/Admin/Profile/Profile";
 import PublicLayout from "@/layout/PublicLayout";
 import Home from "@/pages/Public/Home/Home";
 import PublicRoute from "../protectedRoute/PublicRoute";
+import { publicCategoriesQuery } from "@/features/categories/hooks/useCategories";
+import {  type QueryClient } from "@tanstack/react-query";
+import { queryClient } from "@/services/queryClient";
+import NewsDetail from "@/pages/Public/News/NewsDetail";
+const publicLayoutLoader = (queryClient: QueryClient) => async () => {
+  await queryClient.ensureQueryData(publicCategoriesQuery());
 
-export const router = createBrowserRouter([
+  return null;
+};
+export const router = createBrowserRouter(
+  [
   {
     path: "/admin",
     element: <ProtectedRoute navigateRoute="/admin/login" />,
@@ -79,11 +88,17 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <PublicLayout />,
+      loader: publicLayoutLoader(queryClient),
+
     children: [
       {
         index: true,
         element: <Home />,
       },
+      {
+        path: "news/:slug",
+        element: <NewsDetail />,
+      }
     ],
   },
 ]);

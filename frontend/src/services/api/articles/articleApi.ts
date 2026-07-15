@@ -58,5 +58,23 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
+    fetchPublicArticles: async ({ page, per_page }: { page: number; per_page: number }) => {
+      try {
+        const response = await axiosInstance.get("/articles",{
+          params: { page, per_page }
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    fetchPublicSingleArticle: async (slug: any) => {
+      try {
+        const response = await axiosInstance.get(`/articles/${slug}`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    }
   };
 };

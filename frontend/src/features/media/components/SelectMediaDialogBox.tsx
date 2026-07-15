@@ -5,7 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import MediaCard from "./MediaCard";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
@@ -68,15 +67,15 @@ function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
   }, [advertisementMediaData, advertisementPagination.pageIndex]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <><Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[70vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
         <DialogHeader>
           <DialogTitle className="flex justify-between h-1/2  gap-2 items-center text-lg text-[var(--color-primary)] font-semibold">
             <p>Media</p>
 
-            <Button variant="submit" onClick={() => setUploadOpen(true)}>
+            <Button  type="button" variant="submit" onClick={() => setUploadOpen(true)}>
               <Plus />
-              Upload New Image
+              Upload New {file_type === "image" ? "Image" : "Video"}
             </Button>
           </DialogTitle>
         </DialogHeader>
@@ -104,14 +103,17 @@ function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
             onSelectMedia={onSelectMedia}
           />
         </div>
-        <UploadDialogBox
+ 
+      </DialogContent>
+   
+    </Dialog>
+              <UploadDialogBox
           openUpload={uploadOpen}
           setOpenUpload={setUploadOpen}
           quantity="single"
-          type="image"
+          type={file_type}
         />
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
 export default SelectMediaDialogBox;

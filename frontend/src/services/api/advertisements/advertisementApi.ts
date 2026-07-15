@@ -15,7 +15,6 @@ export const advertisementsApi = () => {
       status?: string;
       is_approved?: boolean
     }) => {
-      console.log(page, per_page, search,status,is_approved)
       try {
         const response = await axiosInstance.get("/admin/advertisements", {
           params: { page, per_page, search,status,is_approved },
@@ -88,5 +87,13 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
+    fetchPublicAdvertisements: async () => {
+      try {
+        const response = await axiosInstance.get("advertisements");
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    }
   };
 };

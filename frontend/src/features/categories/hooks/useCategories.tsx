@@ -36,11 +36,19 @@ export const useCategoriesHooks=()=>{
                 }
             })
         },
-        useFetchPublicCategories:()=>{
-            return useQuery({
-                queryKey:["publicCategories"],
-                queryFn:()=>categories.fetchPublicCategories()
-            })
-        }
+        // useFetchPublicCategories:()=>{
+        //     return useQuery({
+        //         queryKey:["publicCategories"],
+        //         queryFn:()=>categories.fetchPublicCategories()
+        //     })
+        // },
+        useFetchPublicCategories: () => {
+  return useQuery(publicCategoriesQuery());
+},
     }
 }
+export const publicCategoriesQuery = () => ({
+  queryKey: ["public_categories"],
+  queryFn: () => categories.fetchPublicCategories(),
+  staleTime: 1000 * 60 * 10,
+});

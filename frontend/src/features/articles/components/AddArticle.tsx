@@ -64,6 +64,9 @@ const methods = useArticleForm({article,type});
   const onSubmit = (data: any) => {
     const payload = {
       ...data,
+      is_head_line_news: data?.is_headline_news===true?1:0,
+      display_type: data?.headline_display_type,
+      order: data?.headline_order,
       thumbnail:(data?.media_type==="video" || data?.media_type==="youtube")? data?.thumbnail?.file_path:null,
       featured_image:data?.media_type==="image"? data?.featured_image?.file_path:null,
       video_url:data?.media_type==="video"? data?.video_url?.file_path:null,

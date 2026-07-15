@@ -14,6 +14,7 @@ return (
             </div>
             {pagination.pageIndex+1 < lastPage && (
               <Button
+              type="button"
               variant="outline"
                 onClick={() =>
                   setPagination((prev) => ({
