@@ -19,6 +19,9 @@ import { publicCategoriesQuery } from "@/features/categories/hooks/useCategories
 import {  type QueryClient } from "@tanstack/react-query";
 import { queryClient } from "@/services/queryClient";
 import NewsDetail from "@/pages/Public/News/NewsDetail";
+import Unauthorized from "@/pages/Error/Unauthorized";
+import LatestNewsList from "@/features/articles/components/Public/NewsList/LatestNewsList";
+import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 const publicLayoutLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(publicCategoriesQuery());
 
@@ -98,7 +101,20 @@ export const router = createBrowserRouter(
       {
         path: "news/:slug",
         element: <NewsDetail />,
+      },
+      {
+                path:"news-list/latest-news",
+
+        element:<LatestNewsList/>
+      },
+      {
+        path:"news-list/category/:slug",
+        element:<CategoryBasedNewsList/>
       }
     ],
   },
+  {
+    path:"/unauthorized",
+    element:<Unauthorized/>
+  }
 ]);

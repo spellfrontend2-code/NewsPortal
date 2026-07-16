@@ -5,6 +5,7 @@ export const profileApi=()=>{
         fetchProfile: async () => {
             try {
                 const response = await axiosInstance.get("/profile");
+                console.log(response.data.id)
                 return response.data;
             } catch (error: any) {
                 console.log(error)

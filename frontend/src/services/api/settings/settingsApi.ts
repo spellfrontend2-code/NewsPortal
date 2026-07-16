@@ -17,6 +17,14 @@ export const settingsApi=()=>{
             } catch (error: any) {
                 throw error?.response?.data;
             }
-        }
+        },
+        fetchPublicSettings: async () => {
+            try {
+                const response = await axiosInstance.get("/company");
+                return response.data;
+            } catch (error: any) {
+                throw error?.response?.data;
+            }
+        },
     }
 }

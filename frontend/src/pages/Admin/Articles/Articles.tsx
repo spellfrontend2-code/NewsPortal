@@ -2,8 +2,8 @@ import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import AddArticle from "@/features/articles/components/AddArticle";
-import ArticleView from "@/features/articles/components/ArticleView";
+import AddArticle from "@/features/articles/components/Admin/AddArticle";
+import ArticleView from "@/features/articles/components/Admin/ArticleView";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
@@ -102,7 +102,7 @@ const statuses = [
 }
   return (
     
-   <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
+   <div className="w-full h-full overflow-y-auto p-20 flex flex-col gap-5">
 {
   addOpen ? (
     <AddArticle
@@ -128,6 +128,7 @@ const statuses = [
         <p className="text-gray-500">Manage your articles</p>
         </div>
        {hasPermission(PERMISSIONS?.ARTICLE?.CREATE?.name) && <Button
+       type="button"
           variant="submit"
           className="h-10 flex items-center gap-2"
           onClick={() => setAddOpen(true)}

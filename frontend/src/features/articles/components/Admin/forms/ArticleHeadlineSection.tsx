@@ -29,8 +29,8 @@ function ArticleHeadlineSection() {
                       <SelectContent className="bg-white">
                         <SelectItem value="image">Image</SelectItem>
 
-                        <SelectItem value="text">Text</SelectItem>
-                        <SelectItem value="both">Both</SelectItem>
+                        <SelectItem value="title_only">Title Only</SelectItem>
+                        <SelectItem value="mixed">Both</SelectItem>
                       </SelectContent>
                     </Select>
                   )}

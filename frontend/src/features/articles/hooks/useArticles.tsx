@@ -51,10 +51,26 @@ export const useArticlesHooks = () => {
         },
       });
     },
-    useFetchPublicArticles:({page,per_page})=>{
+    useFetchHeadlineArticles: ({ page, per_page }) => {
       return useQuery({
-        queryKey:["public_articles"],
-        queryFn:()=>articles.fetchPublicArticles({page,per_page}),
+        queryKey: ["headline_articles"],
+        queryFn: () =>
+          articles.fetchPublicHeadlineArticles({
+            page,
+            per_page,
+          }),
+      });
+    },
+    useFetchPublicArticles:({page,per_page,from_date,to_date,slug}:{page:number,per_page:number,from_date?:string,to_date?:string,slug?:string})=>{
+      return useQuery({
+        queryKey:["public_articles",page,per_page,from_date,to_date,slug],
+        queryFn:()=>articles.fetchPublicArticles({page,per_page,from_date,to_date,slug}),
+      })
+    },
+    useFetchPublicArticlesByCategory:({page,per_page,slug}:{page:number,per_page:number,slug?:string})=>{
+      return useQuery({
+        queryKey:["public_articles_by_category",page,per_page,slug],
+        queryFn:()=>articles.fetchPublicArticlesByCategory({page,per_page,slug}),
       })
     },
     useFetchPublicSingleArticle:(slug)=>{

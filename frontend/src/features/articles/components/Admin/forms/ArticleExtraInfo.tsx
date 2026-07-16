@@ -4,35 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import WordSeparator from "@/components/shared/WordSeparator";
 function ArticleExtraInfo()
 {
-  const statuses = [{name:"Pending",value:"pending"},{name:"Published",value:"published"}];
-  const {register,control} = useFormContext();
+  const {register} = useFormContext();
     return (
         <div className=" flex flex-col gap-3">
-          
-                  <div>
-                    <label>Status</label>
-          
-                    <Controller
-                      control={control}
-                      name="status"
-                      render={({ field }) => (
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <SelectTrigger className={inputStyle}>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white">
-                            {
-                              statuses.map((status) => (
-                                <SelectItem key={status.value} value={status.value}>
-                                  {status.name}
-                                </SelectItem>
-                              ))
-                            }
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                  </div>
           
                   {/* Schedule */}
           

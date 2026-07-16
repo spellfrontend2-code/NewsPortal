@@ -58,10 +58,30 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchPublicArticles: async ({ page, per_page }: { page: number; per_page: number }) => {
+    fetchPublicHeadlineArticles: async ({ page, per_page }: { page: number; per_page: number }) => {
+      try {
+        const response = await axiosInstance.get("/headline-news",{
+          params: { page, per_page }
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    fetchPublicArticles: async ({ page, per_page,from_date,to_date,slug }: { page: number; per_page: number,from_date?:string,to_date?:string,slug?:string }) => {
       try {
         const response = await axiosInstance.get("/articles",{
-          params: { page, per_page }
+          params: { page, per_page ,from_date,to_date,slug}
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    fetchPublicArticlesByCategory: async ({ page, per_page,slug }: { page: number; per_page: number,slug?:string }) => {
+      try {
+        const response = await axiosInstance.get(`/articles/category/${slug}`,{
+          params: { page, per_page ,slug}
         });
         return response.data;
       } catch (error: any) {

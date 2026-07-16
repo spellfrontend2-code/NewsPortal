@@ -6,17 +6,17 @@ export const permissionApi=()=>{
             try {
                 const response = await axiosInstance.get("/admin/permissions");
                 return response.data;
-            } catch (error: any) {
-                throw error?.response?.data;
-            }
+            }catch (error) {
+  throw error;
+}
         },
         fetchRoleBasedPermissions:async()=>{
             try {
                 const response = await axiosInstance.get("/admin/roles");
                 return response.data;
             } catch (error: any) {
-                throw error?.response?.data;
-            }
+    throw error;
+  }
         },
         assignRoleBasedPermissions:async(data)=>{
             try {

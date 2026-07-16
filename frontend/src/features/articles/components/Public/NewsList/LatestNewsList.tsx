@@ -1,0 +1,33 @@
+import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { formatDateTime } from "@/lib/formatDateTime";
+import NewsList from "@/pages/Public/News/NewsList";
+import { useEffect, useState } from "react";
+
+function LatestNewsList()
+{
+     const fromDate = new Date();
+      const toDate = new Date();
+      fromDate.setDate(fromDate.getDate() - 1);
+      const to_date = formatDateTime(toDate);
+      const from_date = formatDateTime(fromDate);
+      const articleHook = useArticlesHooks();
+    const [pagination,setPagination]=useState({pageIndex:0,pageSize:2})
+      const { data: allArticles, isLoading } = articleHook.useFetchPublicArticles({
+        from_date,
+        to_date,
+        page: pagination?.pageIndex+1,
+        per_page: pagination?.pageSize,
+      });
+      const articles = allArticles?.data ?? [];
+   useEffect(() => {
+       console.log(pagination)
+   },[pagination])
+
+    return(
+        <div className="flex flex-col gap-10 justify-center items-center w-full ">
+            <NewsList articles={articles} page_headline="Latest News" pagination={pagination} setPagination={setPagination} lastPage={allArticles?.pagination?.last_page} isLoading={isLoading}/>
+        </div>
+        )
+}
+
+export default LatestNewsList

@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { useArticleForm } from "../hooks/useArticleForm";
+import { useArticleForm } from "../../hooks/useArticleForm";
 import ArticleBasicInfo from "./forms/ArticleBasicInfo";
 import { ArrowLeft } from "lucide-react";
 import ArticleContent from "./forms/ArticleContent";
 import ArticleHeadlineSection from "./forms/ArticleHeadlineSection";
 import ArticleSeoSection from "./forms/ArticleSeoSection";
 import ArticleExtraInfo from "./forms/ArticleExtraInfo";
-import { useArticlesHooks } from "../hooks/useArticles";
+import { useArticlesHooks } from "../../hooks/useArticles";
 import ArticleActions from "./forms/ArticleActions";
 import ArticleCategoriesTags from "./forms/ArticleCategoriesTags";
 import { useEffect, useState } from "react";
-import { toDateTimeLocal } from "../utils/toDateTimeLocal";
+import { toDateTimeLocal } from "../../utils/toDateTimeLocal";
 import { FormProvider } from "react-hook-form";
 import ArticleMediaSection from "./forms/ArticleMediaSection";
 import { toast } from "sonner";
@@ -103,7 +103,7 @@ const methods = useArticleForm({article,type});
   };
 
   return (
-    <div>
+    <div >
             <div className="flex items-center gap-5 rounded-lg p-4">
         <Button
           variant="ghost"

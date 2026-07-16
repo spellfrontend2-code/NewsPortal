@@ -20,5 +20,11 @@ export const useSettingHooks = () => {
                 },
             })
          },
+         useFetchPublicSettings:()=>{
+            return useQuery({
+                queryKey: ["publicSettings"],
+                queryFn: () => settings.fetchPublicSettings(),
+            });
+         }
     }
 }

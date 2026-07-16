@@ -19,7 +19,7 @@ function ArticleCategoriesTags({
   const { data: tagsList } = tagHook.useFetchTags({ page: 1, per_page: 100 });
   const TagsData = tagsList?.data ?? [];
   return (
-    <div className="mt-3">
+    <div className="mt3">
       {/* Categories */}
 
       <div className=" flex flex-col gap-3">

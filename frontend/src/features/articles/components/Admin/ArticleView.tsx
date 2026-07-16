@@ -1,10 +1,10 @@
 import { Controller, useForm } from "react-hook-form";
-import { useArticlesHooks } from "../hooks/useArticles";
+import { useArticlesHooks } from "../../hooks/useArticles";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {inputStyle} from "@/components/shared/styles/inputStyle";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { toDateTimeLocal } from "../utils/toDateTimeLocal";
+import { toDateTimeLocal } from "../../utils/toDateTimeLocal";
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 type Article = any;
