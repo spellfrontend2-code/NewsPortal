@@ -12,11 +12,11 @@ function LatestNews() {
     const navigate = useNavigate();
   const fromDate = new Date();
   const toDate = new Date();
-  fromDate.setDate(fromDate.getDate() - 1);
-  const to_date = formatDateTime(toDate);
+  fromDate.setDate(fromDate.getDate() - 4);
+  toDate.setDate(toDate.getDate() - 3);
+    const to_date = formatDateTime(toDate);
   const from_date = formatDateTime(fromDate);
   const articleHook = useArticlesHooks();
-  console.log(from_date, to_date);
   const { data: allArticles, isLoading } = articleHook.useFetchPublicArticles({
     from_date,
     to_date,
@@ -26,8 +26,8 @@ function LatestNews() {
   const articles = allArticles?.data ?? [];
   return (
     <div className="h-[500px] w-full">
-      <h1 className="text-3xl font-bold text-[var(--color-public-newsText)]">Latest News</h1>
-      {isLoading ? (
+{articles.length > 0 &&      <h1 className="text-3xl font-bold text-[var(--color-public-newsText)]">Latest News</h1>
+}      {isLoading ? (
         <LatestNewsSkeleton />
       ) : articles?.length > 0 ? (
         <div className="flex w-full h-full gap-3">

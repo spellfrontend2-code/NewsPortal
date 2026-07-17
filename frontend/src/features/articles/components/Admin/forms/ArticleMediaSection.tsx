@@ -11,7 +11,7 @@ import { Upload, X } from "lucide-react";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
 import SelectMediaDialogBox from "@/features/media/components/SelectMediaDialogBox";
 
-function ArticleMediaSection() {
+function ArticleMediaSection({setUploadType, setUploadOpen}) {
   const { register, control, watch, setValue } = useFormContext();
 
   const media_type = watch("media_type");
@@ -226,6 +226,8 @@ function ArticleMediaSection() {
 
       {/* Single Media Dialog */}
       <SelectMediaDialogBox
+setUploadType={setUploadType}
+setUploadOpen={setUploadOpen}
         open={mediaDialog.open}
         onOpenChange={(open) =>
           setMediaDialog((prev) => ({

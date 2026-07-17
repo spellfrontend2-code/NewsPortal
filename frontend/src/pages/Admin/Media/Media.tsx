@@ -175,7 +175,7 @@ function Media() {
                               className="text-white hover:text-[var(--color-primary)]  h-full w-full p-1 bg-[rgb(var(--color-primary-rgb)/0.3)] rounded-md"
                             />
                           </div>
-                          {hasPermission(PERMISSIONS.MEDIA.DELETE) && <div
+                          {hasPermission(PERMISSIONS.MEDIA.DELETE?.name) && <div
                             className="flex items-center h-[30px] w-[30px] z-50 text-red-800 hover:text-red-500 cursor-pointer"
                             onClick={(e) => {
                               e.stopPropagation();

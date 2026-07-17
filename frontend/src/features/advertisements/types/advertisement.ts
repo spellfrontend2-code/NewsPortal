@@ -19,7 +19,9 @@ export type AdvertisementForm = {
 
   placement: string;
 
-  target_categories_ids: string[];
+  target_categories: string[];
+    target_categories_ids: string[];
+
   target_tags_ids: string[];
 
   target_countries: string[];

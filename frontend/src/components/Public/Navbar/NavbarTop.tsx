@@ -1,6 +1,5 @@
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import logo from "../../../assets/logo.png";
-import ad from "../../../assets/adsize.avif";
 import { Link } from "react-router-dom";
 
 function NavbarTop() {
@@ -10,7 +9,7 @@ function NavbarTop() {
   const filteredAd=advertisementsList.filter((ad)=>ad.placement==="header_banner");
  return (
   <div className="flex h-30 w-full items-center justify-between gap-10 bg-[var(--color-public-bg)] p-3">
-    <div className="h-[100%] w-[40%] ">
+    <div className="h-[100%] w-[40%]">
       <img
       src={logo}
       alt="Logo"
@@ -18,19 +17,18 @@ function NavbarTop() {
     />
     </div>
 
-    <div className="h-full w-[60%]">
+    <div className="h-full w-[60%] ">
       {filteredAd.length > 0 && (
       <Link
         to={filteredAd[0].target_url}
           target={filteredAd[0]. target_blank}
-
       >
 
         {filteredAd[0].ad_type === "image" && (
           <img
             src={filteredAd[0].image_url}
             alt={filteredAd[0].title}
-            className="h-25 w-70 object-contain"
+            className="h-full w-full object-fill"
           />
         )}
 

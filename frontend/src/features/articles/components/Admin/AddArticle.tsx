@@ -14,12 +14,15 @@ import { toDateTimeLocal } from "../../utils/toDateTimeLocal";
 import { FormProvider } from "react-hook-form";
 import ArticleMediaSection from "./forms/ArticleMediaSection";
 import { toast } from "sonner";
+import UploadDialogBox from "@/features/media/components/UploadDialogBox";
 
 function AddArticle({ setOpen, article, type }: any) {
 const methods = useArticleForm({article,type});
   const articleHook = useArticlesHooks();
   const createArticle = articleHook.useCreateArticles();
   const updateArticle = articleHook.useUpdateArticles();
+  const [uploadOpen, setUploadOpen] = useState(false);
+    const [uploadType, setUploadType] = useState<"image" | "video">("image");
 
   const isPending =
     type === "edit" ? updateArticle.isPending : createArticle.isPending;
@@ -126,7 +129,7 @@ const methods = useArticleForm({article,type});
       <form onSubmit={methods.handleSubmit(onSubmit)} className="shadow-lg rounded-xl p-10">
         <ArticleBasicInfo />
         <ArticleContent   />
-        <ArticleMediaSection/>
+        <ArticleMediaSection setUploadType={setUploadType} setUploadOpen={setUploadOpen}/>
         <ArticleHeadlineSection/>
         <ArticleExtraInfo     />
         <ArticleSeoSection   />
@@ -143,6 +146,12 @@ const methods = useArticleForm({article,type});
         />}
       </form>
       </FormProvider>
+        <UploadDialogBox
+          openUpload={uploadOpen}
+          setOpenUpload={setUploadOpen}
+          quantity="single"
+          type={uploadType}
+        />
     </div>
   );
 }

@@ -1,10 +1,10 @@
-import { useFormContext } from "react-hook-form";
+import { set, useFormContext } from "react-hook-form";
 import { inputStyle } from "../../../../components/shared/styles/inputStyle";
 import { useState } from "react";
 import { Upload, X } from "lucide-react";
 import SelectMediaDialogBox from "@/features/media/components/SelectMediaDialogBox";
 
-function AdvertisementTypeInfo()
+function AdvertisementTypeInfo({setUploadOpen,setUploadType})
 {
     const { register,watch,setValue } = useFormContext();
     const adType = watch("ad_type");
@@ -184,6 +184,8 @@ function AdvertisementTypeInfo()
         </div>}
            {/* Single Media Dialog */}
       <SelectMediaDialogBox
+      setUploadOpen={setUploadOpen}
+      setUploadType={setUploadType}
         open={mediaDialog.open}
         onOpenChange={(open) =>
           setMediaDialog((prev) => ({

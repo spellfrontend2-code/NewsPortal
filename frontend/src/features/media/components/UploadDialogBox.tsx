@@ -29,9 +29,7 @@ function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
   const useMedia = useMediaHooks();
   const addBulkMedia = useMedia.useAddBulkMedia();
   const addMedia=useMedia.useCreateMedia()
-  const onSubmit = (data,event) => {
-     event.preventDefault();
-  event.stopPropagation();
+  const onSubmit = (data) => {
     {quantity==="multiple" && addBulkMedia.mutate(data, {
       onSuccess: (res) => {
         setOpenUpload(false);
@@ -62,7 +60,7 @@ function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
     }
   };
   const previewImages = watch("files");
-
+console.log(quantity==="multiple")
   return (
     <Dialog open={openUpload} onOpenChange={setOpenUpload}>
       <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[50vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">

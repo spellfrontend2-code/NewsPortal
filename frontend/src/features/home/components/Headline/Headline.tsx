@@ -9,7 +9,8 @@ function Headline() {
     page: 1,
     per_page: 10,
   });
-const HeadlineNews = articles?.data
+  const allHeadlines=articles?.data?.map((article: any) => article?.data);
+  const HeadlineNews = allHeadlines
   ?.filter((article: any) => article.is_headline_news === true)
   ?.sort(
     (a: any, b: any) =>

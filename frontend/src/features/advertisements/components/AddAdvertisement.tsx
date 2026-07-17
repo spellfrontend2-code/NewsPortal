@@ -12,16 +12,34 @@ import AdvertisementPricingInfo from "./form/AdvertisementPricingInfo";
 import AdvertisementStatusInfo from "./form/AdvertisementSatusInfo";
 import { useAdvertisementHooks } from "../hooks/useAdvertisements";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import UploadDialogBox from "@/features/media/components/UploadDialogBox";
 export default function AddAdvertisement({
   advertisement,
   setOpen,
   type,
 }: any) {
   const methods = useAdvertisementForm({ advertisement, type });
+  const [uploadOpen,setUploadOpen] = useState(false);
+  const [uploadType,setUploadType] = useState<"image" | "video">("image");
   const advertisementHook = useAdvertisementHooks();
   const createAdvertisement = advertisementHook.useCreateAdvertisement();
   const updateAdvertisement = advertisementHook.useUpdateAdvertisement();
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  useEffect(() => {
+    if (!advertisement) return;
 
+    const normalizedCategories =
+      advertisement?.target_categories?.map((c: any) => ({
+        id: c.id,
+        name: c.name,
+      })) || [];
+
+
+    setSelectedCategories(normalizedCategories);
+
+
+  }, [advertisement]);
   const onSubmit = (data: AdvertisementForm) => {
     const updatedData = {
       ...data,
@@ -30,6 +48,9 @@ export default function AddAdvertisement({
       video_thumbnail: data?.video_thumbnail?.file_path,
       daily_start_time: data.daily_start_time?.slice(0, 5),
       daily_end_time: data.daily_end_time?.slice(0, 5),
+        target_categories: (selectedCategories ?? []).map(
+        (category: any) => category.id,
+      ),
     };
     if (type === "add") {
       createAdvertisement.mutate(updatedData, {
@@ -89,12 +110,12 @@ export default function AddAdvertisement({
           className="space-y-6 shadow-lg rounded-xl p-5 "
         >
           <AdvertisementBasicInfo />
-          <AdvertisementTypeInfo />
+          <AdvertisementTypeInfo setUploadOpen={setUploadOpen} setUploadType={setUploadType}/>
           <AdvertisementLinkInfo />
           <AdvertisementTargetInfo />
           <AdvertisementScheduleInfo />
           <AdvertisementPricingInfo />
-          <AdvertisementStatusInfo />
+          <AdvertisementStatusInfo selectedCategories={selectedCategories} setSelectedCategories={setSelectedCategories}/>
 
           <Button
             type="submit"
@@ -114,6 +135,12 @@ export default function AddAdvertisement({
           </Button>
         </form>
       </FormProvider>
+           <UploadDialogBox
+          openUpload={uploadOpen}
+          setOpenUpload={setUploadOpen}
+          quantity="single"
+          type={uploadType}
+        />
     </div>
   );
 }

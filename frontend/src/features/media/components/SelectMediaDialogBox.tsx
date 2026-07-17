@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 import UploadDialogBox from "./UploadDialogBox";
 import MediaCollage from "./MediaCollage";
 
-function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
+function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange , onSelectMedia,file_type}) {
   const mediaHook = useMediaHooks();
   const [articlePagination, setArticlePagination] = useState({
     pageIndex: 0,
@@ -21,7 +21,6 @@ function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
     pageIndex: 0,
     pageSize: 10,
   });
-  const [uploadOpen, setUploadOpen] = useState(false);
   const { data: articleMediaData } = mediaHook.useFetchMedia({
     search: "articles",
     page: articlePagination.pageIndex + 1,
@@ -67,13 +66,14 @@ function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
   }, [advertisementMediaData, advertisementPagination.pageIndex]);
 
   return (
-    <><Dialog open={open} onOpenChange={onOpenChange}>
+    <>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[70vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
         <DialogHeader>
           <DialogTitle className="flex justify-between h-1/2  gap-2 items-center text-lg text-[var(--color-primary)] font-semibold">
             <p>Media</p>
 
-            <Button  type="button" variant="submit" onClick={() => setUploadOpen(true)}>
+            <Button  type="button" variant="submit" onClick={() =>{setUploadType(file_type); setUploadOpen(true);}}>
               <Plus />
               Upload New {file_type === "image" ? "Image" : "Video"}
             </Button>
@@ -107,12 +107,7 @@ function SelectMediaDialogBox({ open, onOpenChange , onSelectMedia,file_type}) {
       </DialogContent>
    
     </Dialog>
-              <UploadDialogBox
-          openUpload={uploadOpen}
-          setOpenUpload={setUploadOpen}
-          quantity="single"
-          type={file_type}
-        />
+            
     </>
   );
 }

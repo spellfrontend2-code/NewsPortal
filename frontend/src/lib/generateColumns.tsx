@@ -18,7 +18,7 @@ export function generateColumns(
   onToggleApproved?: (row: any) => void,
   updatingApprovalId?: number,
   modulePermission?: { CREATE?: any; VIEW?: any; UPDATE?: any; DELETE?: any },
-  module,
+  module?: string,
   onChangeStatus?: (
     row: any,
     status: "active" | "suspended" | "banned",

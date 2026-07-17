@@ -2,7 +2,7 @@ import axiosInstance from "@/services/axios";
 
 export const authApi=()=>{
     return {
-        AdminLogin:async (data:any)=>{
+        Login:async (data:any)=>{
             try{
                 const response=await axiosInstance.post("/login",data);
                 return response.data
@@ -35,13 +35,20 @@ export const authApi=()=>{
         FetchProfile:async ()=>{
             try{
                 const response=await axiosInstance.get("/profile");
-                console.log(response)
                 return response.data;
             } catch (error: any) {
                 throw (
                     new Error(error?.response?.data?.message) ||
                     "Logout Failed"
                 );
+            }
+        },
+        CreatePublicUser:async (data:any)=>{
+            try{
+                const response=await axiosInstance.post("/register",data);
+                return response.data;
+            } catch (error: any) {
+                throw error?.response?.data;
             }
         }
     }

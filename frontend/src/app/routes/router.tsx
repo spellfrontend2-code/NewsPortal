@@ -22,6 +22,7 @@ import NewsDetail from "@/pages/Public/News/NewsDetail";
 import Unauthorized from "@/pages/Error/Unauthorized";
 import LatestNewsList from "@/features/articles/components/Public/NewsList/LatestNewsList";
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
+import ErrorPage from "@/pages/Error/ErrorPage";
 const publicLayoutLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(publicCategoriesQuery());
 
@@ -32,6 +33,7 @@ export const router = createBrowserRouter(
   {
     path: "/admin",
     element: <ProtectedRoute navigateRoute="/admin/login" />,
+    errorElement: <ErrorPage />,
     children: [
       {
         element: <AdminLayout />,
@@ -91,6 +93,7 @@ export const router = createBrowserRouter(
   {
     path: "/",
     element: <PublicLayout />,
+    errorElement: <ErrorPage />,
       loader: publicLayoutLoader(queryClient),
 
     children: [

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/context/useAuthStore";
 import { useAuthHooks } from "@/features/auth/hooks/useAuth";
-import { usePermission } from "@/features/auth/hooks/usePermission";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,7 @@ function AdminLogin() {
   const navigate = useNavigate();
 const {setAuthData}=useAuthStore()
   const authHook = useAuthHooks();
-  const adminLogin = authHook.useAdminLogin();
+  const adminLogin = authHook.useLogin();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       email: "",

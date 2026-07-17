@@ -59,25 +59,25 @@ function Profile() {
       country_code: user.country_code ?? "",
       language: user.language ?? "",
       timezone: user.timezone ?? "",
-       image: user.profile_image ?? "",
-});
+      image: user.profile_image ?? "",
+    });
 
-setProfileImage(user.profile_image ?? null);
+    setProfileImage(user.profile_image ?? null);
   }, [user, reset]);
   const onSubmit = (data: any) => {
-const formData = new FormData();
+    const formData = new FormData();
 
-formData.append("name", data.name);
-formData.append("email", data.email);
-formData.append("country_code", data.country_code);
-formData.append("language", data.language);
-formData.append("timezone", data.timezone);
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("country_code", data.country_code);
+    formData.append("language", data.language);
+    formData.append("timezone", data.timezone);
 
-if (data.image instanceof File) {
-  formData.append("profile_image", data.image);
-}
+    if (data.image instanceof File) {
+      formData.append("profile_image", data.image);
+    }
 
-  updateProfile.mutate(formData, {
+    updateProfile.mutate(formData, {
       onSuccess: (res) => {
         setIsEditing(false);
         toast.success(res?.message || "Profile updated successfully");
@@ -109,115 +109,141 @@ if (data.image instanceof File) {
         </div>
       </div>
 
-      <div className="w-full flex flex-col items-center gap-5"><form
-        onSubmit={handleSubmit(onSubmit)}
-                className="w-full flex flex-col gap-5 shadow-lg p-10 rounded-2xl"
-      >
-        {/* Basic Information */}
-        <div>
+      <div className="w-full flex flex-col items-center gap-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col gap-5 shadow-lg p-10 rounded-2xl"
+        >
+          {/* Basic Information */}
+          <div>
+            <div className="grid grid-cols-2 gap-5">
+              <Field label="Name" value={user?.name} editing={isEditing}>
+                <input {...register("name")} className={inputStyle} />
+              </Field>
 
-          <div className="grid grid-cols-2 gap-5">
-            <Field label="Name" value={user?.name} editing={isEditing}>
-              <input {...register("name")} className={inputStyle} />
-            </Field>
+              <Field label="Email" value={user?.email} editing={isEditing}>
+                <input {...register("email")} className={inputStyle} />
+              </Field>
+              <Field
+                label="Country Code"
+                value={user?.country_code}
+                editing={isEditing}
+              >
+                <input {...register("country_code")} className={inputStyle} />
+              </Field>
 
-            <Field label="Email" value={user?.email} editing={isEditing}>
-              <input {...register("email")} className={inputStyle} />
-            </Field>
-            <Field
-              label="Country Code"
-              value={user?.country_code}
-              editing={isEditing}
-            >
-              <input {...register("country_code")} className={inputStyle} />
-            </Field>
+              <Field
+                label="Language"
+                value={user?.language}
+                editing={isEditing}
+              >
+                <input {...register("language")} className={inputStyle} />
+              </Field>
 
-            <Field label="Language" value={user?.language} editing={isEditing}>
-              <input {...register("language")} className={inputStyle} />
-            </Field>
+              <Field
+                label="Timezone"
+                value={user?.timezone}
+                editing={isEditing}
+              >
+                <input {...register("timezone")} className={inputStyle} />
+              </Field>
 
-            <Field label="Timezone" value={user?.timezone} editing={isEditing}>
-              <input {...register("timezone")} className={inputStyle} />
-            </Field>
-
-            <Field label="Role" value={user?.role?.join(", ")} />
-            <div>
-              Profile Image
-              <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center overflow-hidden">
-                { profileImage ? (
-                  <div className="relative h-full w-full">
-                    <img
-                      src={profileImage}
-                      alt="Profile"
-                      className="w-full h-full rounded-lg object-cover"
-                    />
-                    {isEditing && <button
-                      type="button"
-                      onClick={() => {
-                        setValue("image", null);
-                        setProfileImage(null);
-                      }}
-                      className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
-                    >
-                      <X className="text-red-500" size={18} />
-                    </button>}
-                  </div>
-                ) : (
-                  isEditing && <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-
-                        if (file) {
-                          setValue("image", file);
-
-                          const preview = URL.createObjectURL(file);
-                          setProfileImage(preview);
-                        }
-                      }}
-                    />
-                    <div
-                      className="h-full w-full flex items-center justify-center cursor-pointer"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <Upload
-                        color="var(--color-primary)"
-                        strokeWidth={1.5}
-                        size={50}
+              <Field label="Role" value={user?.role?.join(", ")} />
+              <div>
+                Profile Image
+                <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center overflow-hidden">
+                  {profileImage ? (
+                    <div className="relative h-full w-full">
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full rounded-lg object-cover"
                       />
+                      {isEditing && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setValue("image", null);
+                            setProfileImage(null);
+                          }}
+                          className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
+                        >
+                          <X className="text-red-500" size={18} />
+                        </button>
+                      )}
                     </div>
-                  </label>
-                )}
+                  ) : (
+                    isEditing && (
+                      <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+
+                            if (file) {
+                              setValue("image", file);
+
+                              const preview = URL.createObjectURL(file);
+                              setProfileImage(preview);
+                            }
+                          }}
+                        />
+                        <div
+                          className="h-full w-full flex items-center justify-center cursor-pointer"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <Upload
+                            color="var(--color-primary)"
+                            strokeWidth={1.5}
+                            size={50}
+                          />
+                        </div>
+                      </label>
+                    )
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-end gap-3">
-          {isEditing ? (
-            <>
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => {
-                  reset();
-                  setProfileImage(null);
-                  setIsEditing(false);
-                }}
-              >
-                Cancel
-              </Button>
+          <div className="flex justify-end gap-3">
+            {isEditing ? (
+              <>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    reset({
+                      name: user.name ?? "",
+                      email: user.email ?? "",
+                      country_code: user.country_code ?? "",
+                      language: user.language ?? "",
+                      timezone: user.timezone ?? "",
+                      image: user.profile_image ?? "",
+                    });
 
-              <Button variant="submit" type="submit">
-                Save Changes
-              </Button>
-            </>
-          ) : null}
-        </div>
-      </form>
+                    setProfileImage(user.profile_image ?? null);
+
+                    // Clear selected file input
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+
+                    setIsEditing(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button variant="submit" type="submit">
+                  Save Changes
+                </Button>
+              </>
+            ) : null}
+          </div>
+        </form>
       </div>
       <PasswordDialogBox open={openPassword} setOpen={setOpenPassword} />
     </div>

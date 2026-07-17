@@ -5,9 +5,9 @@ const auth=authApi()
 export const useAuthHooks=()=>{
     const queryClient=useQueryClient()
     return{
-        useAdminLogin:()=>{
+        useLogin:()=>{
             return useMutation({
-                mutationFn:(data:any)=>auth.AdminLogin(data),
+                mutationFn:(data:any)=>auth.Login(data),
                 onSuccess:()=>{
                     queryClient.invalidateQueries(["admin"])
                 }
@@ -33,6 +33,14 @@ export const useAuthHooks=()=>{
             return useQuery({
                 queryFn:()=>auth.FetchProfile(),
                 queryKey:["admin"]
+            })
+        },
+        useCreatePublicUser:()=>{
+            return useMutation({
+                mutationFn:(data:any)=>auth.CreatePublicUser(data),
+                onSuccess:()=>{
+                    queryClient.invalidateQueries(["public_user"])
+                }
             })
         }
 

@@ -60,9 +60,12 @@ function NewsList({
 }, [pagination.pageIndex]);
   return (
     <div className="w-full flex flex-col gap-5">
-      <h1 className="text-5xl font-bold text-[var(--color-public-newsText)]">
+      <div className="relative h-15 w-full flex items-center py-8  ">
+        <h1 className="text-5xl font-bold text-[var(--color-public-newsText)] ">
         {page_headline}
       </h1>
+      <div className="absolute -left-4 w-2 h-full rounded-l-md bg-[var(--color-public-newsText)]"></div>
+      </div>
       {isLoading ? (
         <NewsListSkeleton />
       ) : (
@@ -110,7 +113,7 @@ function NewsList({
               <button
                 disabled={currentPage === lastPage}
                 onClick={() => goToPage(currentPage + 1)}
-                className="rounded border-2 border-[rgb(var(--color-public-newsText-rgb)/0.6)] text-[rgb(var(--color-public-newsText-rgb)/0.6)] enabled:hover:text-[var(--color-public-newsText)] enabled:hover:border-[var(--color-public-newsText)] transition-all duration-300 px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                className={`rounded border-2 border-[rgb(var(--color-public-newsText-rgb)/0.3)] text-[rgb(var(--color-public-newsText-rgb)/0.3)] enabled:hover:text-[var(--color-public-newsText)] enabled:hover:border-[var(--color-public-newsText)] transition-all duration-300 px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer`}
               >
                 <ChevronRight size={18} strokeWidth={3} />
               </button>
