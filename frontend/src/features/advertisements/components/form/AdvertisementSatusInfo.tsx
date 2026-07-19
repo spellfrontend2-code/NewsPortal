@@ -41,7 +41,7 @@ const status = [
           control={control}
           render={({ field }) => (
             <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className={inputStyle}>
+              <SelectTrigger className={`${inputStyle} py-5 text-base`}>
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
 

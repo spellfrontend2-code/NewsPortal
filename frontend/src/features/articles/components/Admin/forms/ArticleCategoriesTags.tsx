@@ -23,7 +23,7 @@ function ArticleCategoriesTags({
       {/* Categories */}
 
       <div className=" flex flex-col gap-3">
-          <label>Categories</label>
+          <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Categories</label>
           {selectedCategories.length > 0 && (
             <div
               className="h-full w-full flex flex-wrap  [&::-webkit-scrollbar]:hidden
@@ -52,7 +52,7 @@ function ArticleCategoriesTags({
       {/* Tags */}
 
       <div className="mt-5 flex flex-col gap-3">
-          <label>Tags</label>
+          <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Tags</label>
           {selectedTags.length > 0 && (
             <div
               className="h-full w-full flex flex-wrap [&::-webkit-scrollbar]:hidden

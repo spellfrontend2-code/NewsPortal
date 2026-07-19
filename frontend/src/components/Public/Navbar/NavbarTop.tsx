@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 function NavbarTop() {
   const advertisementHook=useAdvertisementHooks();
-  const {data:advertisements,isLoading:advertisementsLoading}=advertisementHook.useFetchPublicAdvertisements();
-  const advertisementsList = advertisements?.data ?? [];
-  const filteredAd=advertisementsList.filter((ad)=>ad.placement==="header_banner");
+//   const {data:advertisements,isLoading:advertisementsLoading}=advertisementHook.useFetchPublicAdvertisements();
+//   const advertisementsList = advertisements?.data ?? [];
+//   const filteredAd=advertisementsList?.filter((ad)=>ad.placement==="header_banner");
  return (
   <div className="flex h-30 w-full items-center justify-between gap-10 bg-[var(--color-public-bg)] p-3">
     <div className="h-[100%] w-[40%]">
@@ -17,7 +17,7 @@ function NavbarTop() {
     />
     </div>
 
-    <div className="h-full w-[60%] ">
+    {/* <div className="h-full w-[60%] ">
       {filteredAd.length > 0 && (
       <Link
         to={filteredAd[0].target_url}
@@ -56,7 +56,7 @@ function NavbarTop() {
         )}
       </Link>
     )}
-    </div>
+    </div> */}
   </div>
 );
 }

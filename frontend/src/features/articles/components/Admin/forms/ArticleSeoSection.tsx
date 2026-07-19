@@ -8,13 +8,13 @@ function ArticleSeoSection(){
                {/* SEO */}
             
                     <div>
-                      <label>Meta Title</label>
+                      <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Meta Title</label>
             
                       <input {...register("meta_title")} className={inputStyle} />
                     </div>
             
                     <div>
-                      <label>Meta Description</label>
+                      <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Meta Description</label>
             
                       <textarea
                         rows={4}

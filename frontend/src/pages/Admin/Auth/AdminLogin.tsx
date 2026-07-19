@@ -19,7 +19,6 @@ const {setAuthData}=useAuthStore()
   });
 const {getDefaultRoute}=usePermissionStore()
   const onSubmit = (data) => {
-    console.log(data)
     adminLogin.mutate(data, {
       onSuccess: (response) => {
         const res=response.data

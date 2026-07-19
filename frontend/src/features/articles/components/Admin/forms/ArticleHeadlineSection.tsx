@@ -6,23 +6,23 @@ function ArticleHeadlineSection() {
   const {register,watch,control} = useFormContext();
   const isHeadline = watch("is_headline_news");
     return (
-    <div className="grid grid-cols-3 gap-3 mt-3 h-[70px]">
-          <div className="flex items-center gap-2 ">
-            <input type="checkbox" {...register("is_headline_news")} />
+    <div className="flex justify-between items-center gap-3 mt-3 h-[80px] w-full bg-[rgb(var(--color-secondary-rgb)/0.1)] rounded-md p-5">
+          <div className="w-1/3 flex items-center gap-2">
+            <input type="checkbox" {...register("is_headline_news")} className="accent-[var(--color-primary)]"/>
 
-            <label>Headline News</label>
+            <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Mark Headline News</label>
           </div>
           {isHeadline && (
-            <>
-              <div>
-                <label>Headline Display</label>
+            <div className="w-2/3 flex justify-between gap-3">
+              <div className="w-1/2">
+                <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Headline Display</label>
 
                 <Controller
                   control={control}
                   name="headline_display_type"
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className={inputStyle}>
+                      <SelectTrigger className={`${inputStyle} p-5`}>
                         <SelectValue />
                       </SelectTrigger>
 
@@ -37,8 +37,8 @@ function ArticleHeadlineSection() {
                 />
               </div>
 
-              <div>
-                <label>Headline Order</label>
+              <div className="w-1/2">
+                <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">Headline Order</label>
 
                 <input
                   type="number"
@@ -46,9 +46,9 @@ function ArticleHeadlineSection() {
                   className={inputStyle}
                 />
               </div>
-            </>
+            </div>
           )}
-        </div> 
+  </div> 
 )
 }
 export default ArticleHeadlineSection

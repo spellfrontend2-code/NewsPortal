@@ -22,7 +22,7 @@ function TagDropdownInput({
   const tagsHook = useTagsHooks();
   const [search, setSearch] = useState("");
   const [createTagOpen, setCreateTagOpen] = useState(false);
-
+  
   const { data } = tagsHook.useFetchTags({
     page: 1,
     per_page: 10,
@@ -58,7 +58,7 @@ function TagDropdownInput({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="submit" className="w-full justify-between bg-white text-gray-800 font-semibold border-gray-400 hover:border-[var(--color-primary)]">
+        <Button variant="submit" className="w-full rounded-md p-5 justify-between bg-white text-gray-800 font-semibold border-gray-400 hover:border-[var(--color-primary)]">
           {selectedTagIds.length
             ? `${selectedTagIds.length} Tags Selected`
             : "Select Tags"}
@@ -66,7 +66,7 @@ function TagDropdownInput({
       </PopoverTrigger>
 
       <PopoverContent className="w-[300px] bg-white">
-        <Command>
+        <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search tags..."
             value={search}

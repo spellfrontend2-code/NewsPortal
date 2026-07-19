@@ -1,5 +1,5 @@
 import { Asterisk, Eye, EyeOff } from "lucide-react";
-import { inputStyle } from "@/components/shared/styles/inputStyle";
+import { authInputStyle } from "@/components/shared/styles/inputStyle";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -58,7 +58,7 @@ function UserSignInForm({ setSignInOpen }) {
           {...register("name", {
             required: "Name is required",
           })}
-          className={`${inputStyle} ${
+          className={`${authInputStyle} ${
             errors.name ? "border-red-500 focus:border-red-500" : ""
           }`}
           placeholder="Enter name"
@@ -74,7 +74,7 @@ function UserSignInForm({ setSignInOpen }) {
         <input
           type="text"
           {...register("country_code")}
-          className={`${inputStyle} ${
+          className={`${authInputStyle} ${
             errors.country_code ? "border-red-500 focus:border-red-500" : ""
           }`}
           placeholder="Enter country code"
@@ -93,7 +93,7 @@ function UserSignInForm({ setSignInOpen }) {
         <input
           type="text"
           {...register("language")}
-          className={`${inputStyle} ${
+          className={`${authInputStyle} ${
             errors.language ? "border-red-500 focus:border-red-500" : ""
           }`}
           placeholder="Enter language"
@@ -112,7 +112,7 @@ function UserSignInForm({ setSignInOpen }) {
         <input
           type="text"
           {...register("timezone")}
-          className={`${inputStyle} ${
+          className={`${authInputStyle} ${
             errors.timezone ? "border-red-500 focus:border-red-500" : ""
           }`}
           placeholder="Enter timezone"
@@ -134,7 +134,7 @@ function UserSignInForm({ setSignInOpen }) {
           {...register("email", {
             required: "Email is required",
           })}
-          className={`${inputStyle} ${
+          className={`${authInputStyle} ${
             errors.email ? "border-red-500 focus:border-red-500" : ""
           }`}
           placeholder="Enter email"
@@ -155,7 +155,7 @@ function UserSignInForm({ setSignInOpen }) {
             {...register("password", {
               required: "Password is required",
             })}
-            className={`${inputStyle} ${
+            className={`${authInputStyle} ${
               errors.password ? "border-red-500 focus:border-red-500" : ""
             } pr-12 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-credentials-auto-fill-button]:hidden [&::-webkit-clear-button]:hidden`}
             autoComplete="new-password"
@@ -190,7 +190,7 @@ function UserSignInForm({ setSignInOpen }) {
               validate: (value) =>
                 value === password || "Passwords do not match",
             })}
-            className={`${inputStyle} ${
+            className={`${authInputStyle} ${
               errors.confirmation_password
                 ? "border-red-500 focus:border-red-500"
                 : ""
@@ -220,7 +220,7 @@ function UserSignInForm({ setSignInOpen }) {
         <Button
           type="submit"
           variant="submit"
-          className="w-[100px]"
+          className="w-full p-5 text-lg rounded-md"
           disabled={createPublicUser?.isPending}
         >
           {createPublicUser?.isPending ? "Signing In..." : " Sign In"}

@@ -195,9 +195,10 @@ const [activeIndex, setActiveIndex] = useState<number | null>(null);  const {
                           src={logoPreview}
                           className="h-full w-full object-fill"
                         />
-                        <X
-                          className="h-5 w-5 cursor-pointer absolute top-2 right-2 bg-[var(--color-secondary)] rounded-md hover:text-red-500"
-                          onClick={() => {
+                     
+                         <button
+                      type="button"
+                      onClick={() => {
                             setValue("logo", null, {
                               shouldDirty: true,
                               shouldValidate: true,
@@ -207,11 +208,15 @@ const [activeIndex, setActiveIndex] = useState<number | null>(null);  const {
                               logoInputRef.current.value = "";
                             }
                           }}
-                        />
+                            
+                      className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
+                    >
+                      <X className="text-red-500" size={18} />
+                    </button>
                       </div>
                     ) : (
                       <label>
-                        <div className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border-2 border-[var(--color-primary)] text-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.01)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)]">
+                        <div className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-[var(--color-secondary)] hover:border-[var(--color-primary)] text-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.01)] hover:bg-[rgb(var(--color-primary-rgb)/0.06)] transition-all duration-300">
                           <Upload size={30} />
                         </div>
 
@@ -241,23 +246,27 @@ const [activeIndex, setActiveIndex] = useState<number | null>(null);  const {
                           src={faviconPreview}
                           className="h-full w-full object-fill"
                         />
-                        <X
-                          className="h-5 w-5 cursor-pointer absolute top-2 right-2 bg-[var(--color-secondary)] rounded-md hover:text-red-500"
-                          onClick={() => {
+                        <button
+                      type="button"
+                      onClick={() => {
                             setValue("favicon", null, {
                               shouldDirty: true,
                               shouldValidate: true,
                             });
 
-                            if (faviconInputRef.current) {
-                              faviconInputRef.current.value = "";
+                            if (logoInputRef.current) {
+                              logoInputRef.current.value = "";
                             }
                           }}
-                        />
+                            
+                      className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
+                    >
+                      <X className="text-red-500" size={18} />
+                    </button>
                       </div>
                     ) : (
                       <label>
-                        <div className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border-2 border-[var(--color-primary)] text-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.01)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)]">
+                        <div className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-[var(--color-secondary)] hover:border-[var(--color-primary)] text-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.01)] hover:bg-[rgb(var(--color-primary-rgb)/0.06)] transition-all duration-300">
                           <Upload size={30} />
                         </div>
                         <input

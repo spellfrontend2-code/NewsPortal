@@ -54,6 +54,7 @@ function AdvertisementBasicInfo() {
           {...register("advertiser_email")}
           className={inputStyle}
         />
+        
       </div>
 
       {/* WEBSITE */}

@@ -252,6 +252,7 @@ function Media() {
         openUpload={openUpload}
         setOpenUpload={setOpenUpload}
         quantity="multiple"
+        type=""
         
       />
       {deleteOpen && (

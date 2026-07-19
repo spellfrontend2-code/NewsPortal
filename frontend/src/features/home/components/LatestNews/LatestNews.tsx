@@ -7,27 +7,30 @@ import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LatestNewsSkeleton from "./LatestNewsSkeleton";
 
-
 function LatestNews() {
-    const navigate = useNavigate();
-  const fromDate = new Date();
-  const toDate = new Date();
-  fromDate.setDate(fromDate.getDate() - 4);
-  toDate.setDate(toDate.getDate() - 3);
-    const to_date = formatDateTime(toDate);
-  const from_date = formatDateTime(fromDate);
+  const navigate = useNavigate();
+  // const fromDate = new Date();
+  // const toDate = new Date();
+  // fromDate.setDate(fromDate.getDate() - 4);
+  // toDate.setDate(toDate.getDate() - 3);
+  //   const to_date = formatDateTime(toDate);
+  // const from_date = formatDateTime(fromDate);
   const articleHook = useArticlesHooks();
-  const { data: allArticles, isLoading } = articleHook.useFetchPublicArticles({
-    from_date,
-    to_date,
-    page: 1,
-    per_page: 5,
-  });
-  const articles = allArticles?.data ?? [];
+  const { data: allArticles, isLoading } =
+    articleHook.useFetchPublicLatestArticles({
+      page: 1,
+      per_page: 5,
+    });
+  const articles =
+    allArticles?.data?.map((article: any) => article?.data) ?? [];
   return (
     <div className="h-[500px] w-full">
-{articles.length > 0 &&      <h1 className="text-3xl font-bold text-[var(--color-public-newsText)]">Latest News</h1>
-}      {isLoading ? (
+      {articles.length > 0 && (
+        <h1 className="text-3xl font-bold text-[var(--color-public-newsText)]">
+          Latest News
+        </h1>
+      )}{" "}
+      {isLoading ? (
         <LatestNewsSkeleton />
       ) : articles?.length > 0 ? (
         <div className="flex w-full h-full gap-3">
@@ -41,8 +44,15 @@ function LatestNews() {
                 <ArticleRectangleCard key={article.id} article={article} />
               ))}
 
-              <Button variant="view" className="w-full" onClick={() => {navigate("/news-list/latest-news")}}>
-                <Clock/>View 24 hours latest news
+              <Button
+                variant="view"
+                className="w-full"
+                onClick={() => {
+                  navigate("/news-list/latest-news");
+                }}
+              >
+                <Clock />
+                View 24 hours latest news
               </Button>
             </div>
           </div>

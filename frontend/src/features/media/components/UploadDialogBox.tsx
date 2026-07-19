@@ -28,119 +28,152 @@ function UploadDialogBox({ openUpload, setOpenUpload, quantity, type }) {
   });
   const useMedia = useMediaHooks();
   const addBulkMedia = useMedia.useAddBulkMedia();
-  const addMedia=useMedia.useCreateMedia()
+  const addMedia = useMedia.useCreateMedia();
   const onSubmit = (data) => {
-    {quantity==="multiple" && addBulkMedia.mutate(data, {
-      onSuccess: (res) => {
-        setOpenUpload(false);
-        reset({
-          category: "articles",
-          files: [],
-        });
-        toast.success(res?.message || "Files uploaded successfully");
-      },
-      onError: (e) => {
-        toast.error(e?.message || "Something went wrong");
-      },
-    });}
     {
-      quantity==="single" && addMedia.mutate(data, {
-        onSuccess: (res) => {
-          setOpenUpload(false);
-          reset({
-            category: "articles",
-            files: [],
-          });
-          toast.success(res?.message || "File uploaded successfully");
-        },
-        onError: (e) => {
-          toast.error(e?.message || "Something went wrong");
-        },
-      });
+      quantity === "multiple" &&
+        addBulkMedia.mutate(data, {
+          onSuccess: (res) => {
+            setOpenUpload(false);
+            reset({
+              category: "articles",
+              files: [],
+            });
+            toast.success(res?.message || "Files uploaded successfully");
+          },
+          onError: (e) => {
+            toast.error(e?.message || "Something went wrong");
+          },
+        });
+    }
+    {
+      quantity === "single" &&
+        addMedia.mutate(data, {
+          onSuccess: (res) => {
+            setOpenUpload(false);
+            reset({
+              category: "articles",
+              files: [],
+            });
+            toast.success(res?.message || "File uploaded successfully");
+          },
+          onError: (e) => {
+            toast.error(e?.message || "Something went wrong");
+          },
+        });
     }
   };
   const previewImages = watch("files");
-console.log(quantity==="multiple")
+  console.log(quantity === "multiple");
   return (
     <Dialog open={openUpload} onOpenChange={setOpenUpload}>
       <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[50vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
         <DialogHeader>
           <DialogTitle className="flex h-1/2  gap-2 items-center text-2xl text-[var(--color-primary)] font-bold">
-            <UploadIcon
-              className="bg-[rgb(var(--color-primary-rgb)/0.3)] p-2 rounded-md"
-              size={35}
-            />
-            Upload Files
+            <div className="flex items-center  justify-start gap-2 h-15 w-full ">
+              <div className="bg-[rgb(var(--color-primary-rgb)/0.1)] p-2 rounded-md h-full w-[10%] flex items-center justify-center">
+                <UploadIcon />
+              </div>
+              <div>
+                Upload Files
+                <p className="font-normal text-sm text-[rgb(var(--color-secondary-rgb)/0.5)]">
+                  {quantity === "single"
+                    ? "Choose a file to upload"
+                    : "Choose one or more files to upload"}
+                </p>
+              </div>
+            </div>
           </DialogTitle>
         </DialogHeader>
         <form
-          className="w-full mt-5 h-2/3 flex flex-col gap-5 items-center"
+          className="w-full mt-5 h-2/3 flex flex-col gap-5 items-center justify-center"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex flex-col items-center justify-center w-full">
-            <p className="font-semibold text-xl flex items-center gap-2">
-              {quantity === "single" ? "Upload a File" : "Upload Multiple Files"}
-            </p>
-            <p className="text-sm text-[rgb(var(--color-gray-rgb)/0.5)]">
-              Drag and drop your {quantity === "single" ? "file" : "files"} here, or click to browse
-            </p>
-            <p className="text-[rgb(var(--color-gray-rgb)/0.5)]">
-              {type === "image" ? "Images" : type === "video" ? "Videos" : "All"}
-            </p>
+          <div className="h-full w-full flex items-center justify-center cursor-pointer">
+            <div className="w-full h-[50%] rounded-2xl flex flex-col items-center justify-center p-20 border-2 border-dashed border-[rgb(var(--color-gray-rgb)/0.5)] hover:border-[var(--color-primary)] ">
+              <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept={
+                    type === "image"
+                      ? "image/*"
+                      : type === "video"
+                        ? "video/*"
+                        : "*/*"
+                  }
+                  multiple={quantity === "multiple"}
+                  className="hidden"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setValue("files", files, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                  }}
+                />
+                <div className="flex flex-col items-center justify-center  text-center">
+                  <p className="font-semibold text-xl flex items-center gap-2">
+                    {quantity === "single"
+                      ? "Upload a File"
+                      : "Upload Multiple Files"}
+                  </p>
+                  <p className="text-sm text-[rgb(var(--color-gray-rgb)/0.5)] ">
+                    Drag and drop your{" "}
+                    {quantity === "single" ? "file" : "files"} here, or click to
+                    browse{" "}
+                    {type === "image"
+                      ? "Images"
+                      : type === "video"
+                        ? "Videos"
+                        : "All"}
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="submit"
+                  className="flex h-[120px] w-1/2 items-center justify-center rounded-lg  bg-[rgb(var(--color-primary-rgb)/0.1)] p-2 text-4xl"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <UploadIcon
+                    color="var(--color-primary)"
+                    className="!h-12 !w-12"
+                    strokeWidth={1.5}
+                  />
+                </Button>
+              </label>
+            </div>
           </div>
 
-          <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={
-                type === "image"
-                  ? "image/*"
-                  : type === "video"
-                    ? "video/*"
-                    : "*/*"
-              }
-              multiple={quantity === "multiple"}
-              className="hidden"
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                setValue("files", files, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
-              }}
-            />
-            <Button
-              type="button"
-              variant="submit"
-              className="text-lg h-[40px] flex items-center gap-2"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Plus strokeWidth={3} />
-              Choose {quantity === "single" ? "File" : "Files"}
-            </Button>
-          </label>
           {previewImages.length > 0 && (
-            <div className="w-full h-[350px]  bg-[rgb(var(--color-primary-rgb)/0.1)] p-5 rounded-2xl flex flex-col justify-between">
-              <Controller
-                name="category"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="bg-gray-100 w-[150px]">
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
+            <div className="w-full h-[350px]   p-5 rounded-2xl flex flex-col justify-between">
+              <div className="w-full flex justify-between">
+                <p className="font-semibold text-base">
+                  {previewImages.length > 1
+                    ? previewImages.length + " files"
+                    : previewImages.length + " file"}{" "}
+                  selected{" "}
+                </p>
+                <Controller
+                  name="category"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="bg-gray-100 w-[150px]">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
 
-                    <SelectContent className="bg-gray-100 w-[200px]">
-                      <SelectItem value="advertisements">
-                        Advertisement
-                      </SelectItem>
-                      <SelectItem value="articles">Article</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              <div className="grid grid-cols-3 gap-2 w-full overflow-x-auto m-3">
+                      <SelectContent className="bg-gray-100 w-[200px]">
+                        <SelectItem value="advertisements">
+                          Advertisement
+                        </SelectItem>
+                        <SelectItem value="articles">Article</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-2 w-full overflow-x-auto mt-3">
                 {previewImages.map((image) => (
                   <div className="relative h-[200px] w-[200px]">
                     {image?.type?.split("/")[0] === "video" ? (

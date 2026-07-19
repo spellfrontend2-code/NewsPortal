@@ -316,13 +316,30 @@ function AuthorInputForm({
 
           <div className="grid grid-cols-2 gap-5 ">
             <div className="space-y-4 ">
-              <label className="font-semibold">Bio</label>
+              <div><label className="font-semibold">Bio</label>
 
               <textarea rows={10} {...register("bio")} className={inputStyle} />
+              </div>
+              <div className="grid grid-cols-2 gap-5 ">
+            <div>
+              <label className="font-semibold">Specialization</label>
+
+              <input {...register("specialization")} className={inputStyle} />
             </div>
             <div>
+              <label className="font-semibold">Verified</label>
+
+              <select {...register("verified")} className={inputStyle}>
+                <option value={0}>No</option>
+
+                <option value={1}>Yes</option>
+              </select>
+            </div>
+          </div>
+            </div>
+            <div className="space-y-4 ">
               Avatar Image
-              <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center overflow-hidden">
+              <div className="h-[90%] w-full rounded-xl border-2 border-dashed border-[var(--color-secondary)] hover:border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center overflow-hidden">
                 {avatar ? (
                   <div className="relative h-full w-full">
                     <img
@@ -360,7 +377,7 @@ function AuthorInputForm({
                       }}
                     />
                     <div
-                      className="h-full w-full flex items-center justify-center cursor-pointer"
+                      className="h-full w-full flex flex-col items-center justify-center cursor-pointer"
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <Upload
@@ -368,28 +385,15 @@ function AuthorInputForm({
                         strokeWidth={1.5}
                         size={50}
                       />
+                      <p className="font-semibold text-[rgb(var(--color-secondary-rgb)/0.9)]">Upload Avatar</p>
                     </div>
                   </label>
                 )}
               </div>
             </div>
-            <div>
-              <label className="font-semibold">Specialization</label>
-
-              <input {...register("specialization")} className={inputStyle} />
-            </div>
+            
           </div>
-          <div className="grid grid-cols-2 gap-5 ">
-            <div>
-              <label className="font-semibold">Verified</label>
-
-              <select {...register("verified")} className={inputStyle}>
-                <option value={0}>No</option>
-
-                <option value={1}>Yes</option>
-              </select>
-            </div>
-          </div>
+          
 
           <div className="grid grid-cols-2 gap-5">
             <div>

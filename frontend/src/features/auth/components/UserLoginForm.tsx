@@ -1,5 +1,5 @@
-import { Eye, EyeOff } from "lucide-react";
-import { inputStyle } from "@/components/shared/styles/inputStyle";
+import { Eye, EyeOff, User } from "lucide-react";
+import { authInputStyle } from "@/components/shared/styles/inputStyle";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ const onSubmit = (data) => {
           {...register("email", {
             required: "Email is required",
           })}
-          className={`${inputStyle} ${
+          className={`${authInputStyle} ${
             errors?.email ? "border-red-500 focus:border-red-500" : ""
           }`}
           placeholder={"Enter email"}
@@ -71,17 +71,18 @@ const onSubmit = (data) => {
         </label>
 
         <div className="relative">
+           
           <input
             type={showPassword ? "text" : "password"}
             {...register("password", {
               required: "Password is required",
             })}
-            className={`${inputStyle} ${
+            className={`${authInputStyle} ${
               errors?.password ? "border-red-500 focus:border-red-500" : ""
             } pr-12  [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-credentials-auto-fill-button]:hidden
                   [&::-webkit-clear-button]:hidden`}
             autoComplete="new-password"
-            placeholder={"Enter password"}
+            placeholder={`Enter password`}
           />
 
           <button
@@ -98,7 +99,7 @@ const onSubmit = (data) => {
       </div>
 
       <div className="flex flex-col items-center justify-center gap-3">
-        <Button type="submit" variant="submit" className="w-[100px]" disabled={login.isPending}>
+        <Button type="submit" variant="submit" className="w-full p-5 rounded-md" disabled={login.isPending}>
           {login.isPending ? "Loggin In..." : "Log In"}
         </Button>
       </div>

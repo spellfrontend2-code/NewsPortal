@@ -2,7 +2,7 @@ import { inputStyle } from "@/components/shared/styles/inputStyle";
 import { Button } from "@/components/ui/button";
 import PasswordDialogBox from "@/features/profile/components/PasswordDialogBox";
 import { useProfileHooks } from "@/features/profile/hooks/useProfile";
-import { Plus, Upload, X } from "lucide-react";
+import { Plus, Shield, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { set, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -112,11 +112,106 @@ function Profile() {
       <div className="w-full flex flex-col items-center gap-5">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-5 shadow-lg p-10 rounded-2xl"
+          className="w-full flex flex-col gap-5 shadow-lg  rounded-2xl"
         >
+          <div className="relative w-full h-[280px] rounded-t-2xl overflow-visible">
+            <div className="absolute inset-0 h-[150px] rounded-t-2xl overflow-hidden bg-[var(--color-primary)]"></div>
+
+            {/* Profile Image */}
+          <div className="absolute left-10 bottom-10 z-10">
+  {/* Profile Image */}
+  <div className="relative h-[180px] w-[180px] rounded-full border-4 border-white bg-[rgb(var(--color-primary-rgb)/0.1)] shadow-lg flex items-center justify-center overflow-hidden">
+    {profileImage ? (
+      <img
+        src={profileImage}
+        alt="Profile"
+        className="h-full w-full rounded-full object-cover"
+      />
+    ) : (
+      <label className="h-full w-full flex items-center justify-center cursor-pointer bg-gray-100">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+
+            if (file) {
+              setValue("image", file);
+
+              const preview = URL.createObjectURL(file);
+              setProfileImage(preview);
+            }
+          }}
+        />
+
+        <Upload
+          color="var(--color-primary)"
+          strokeWidth={1.5}
+          size={50}
+        />
+      </label>
+    )}
+  </div>
+
+  {/* Remove Image Button - Outside Image */}
+  {isEditing && profileImage && (
+    <button
+      type="button"
+      onClick={() => {
+        setValue("image", null);
+        setProfileImage(null);
+
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      }}
+      className="
+      cursor-pointer
+        absolute
+        top-4
+       right-0
+        z-20
+        h-8
+        w-8
+        rounded-full
+        bg-white
+        shadow-md
+        flex
+        items-center
+        justify-center
+        hover:bg-gray-100
+      "
+    >
+      <X className="text-red-500" size={18} />
+    </button>
+  )}
+</div>
+
+            {/* Role Badge */}
+            <div className="absolute right-10 bottom-20 z-10">
+              <p
+                className="
+        flex items-center gap-3
+        w-fit
+        text-base font-semibold
+        border border-[var(--color-primary)]
+        bg-white
+        text-[var(--color-primary)]
+        px-4 py-2
+        rounded-2xl
+        shadow-md
+      "
+              >
+                <Shield size={20} />
+                {user?.role?.join(", ")}
+              </p>
+            </div>
+          </div>
           {/* Basic Information */}
           <div>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-5 px-10 pb-10">
               <Field label="Name" value={user?.name} editing={isEditing}>
                 <input {...register("name")} className={inputStyle} />
               </Field>
@@ -147,70 +242,11 @@ function Profile() {
               >
                 <input {...register("timezone")} className={inputStyle} />
               </Field>
-
-              <Field label="Role" value={user?.role?.join(", ")} />
-              <div>
-                Profile Image
-                <div className="h-[200px] w-[200px] rounded-xl border-2 border-[var(--color-primary)] bg-[rgb(var(--color-primary-rgb)/0.1)] flex items-center justify-center overflow-hidden">
-                  {profileImage ? (
-                    <div className="relative h-full w-full">
-                      <img
-                        src={profileImage}
-                        alt="Profile"
-                        className="w-full h-full rounded-lg object-cover"
-                      />
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setValue("image", null);
-                            setProfileImage(null);
-                          }}
-                          className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
-                        >
-                          <X className="text-red-500" size={18} />
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    isEditing && (
-                      <label className=" flex flex-col cursor-pointer w-1/2 rounded-xl h-full flex items-center justify-center">
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-
-                            if (file) {
-                              setValue("image", file);
-
-                              const preview = URL.createObjectURL(file);
-                              setProfileImage(preview);
-                            }
-                          }}
-                        />
-                        <div
-                          className="h-full w-full flex items-center justify-center cursor-pointer"
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          <Upload
-                            color="var(--color-primary)"
-                            strokeWidth={1.5}
-                            size={50}
-                          />
-                        </div>
-                      </label>
-                    )
-                  )}
-                </div>
-              </div>
             </div>
           </div>
           <div className="flex justify-end gap-3">
             {isEditing ? (
-              <>
+              <div className="flex gap-3 p-5">
                 <Button
                   variant="outline"
                   type="button"
@@ -240,7 +276,7 @@ function Profile() {
                 <Button variant="submit" type="submit">
                   Save Changes
                 </Button>
-              </>
+              </div>
             ) : null}
           </div>
         </form>

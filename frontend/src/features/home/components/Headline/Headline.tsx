@@ -1,5 +1,5 @@
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
-import { Clock, UserCircle } from "lucide-react";
+import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import HeadlineSkeleton from "./HeadlineSkeleton";
 

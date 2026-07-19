@@ -15,7 +15,7 @@ const permissions =
 function hasPermission(
  permission:string
 ){
-return permissions.includes(permission);
+return permissions?.includes(permission);
 
 }
 

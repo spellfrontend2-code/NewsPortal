@@ -21,7 +21,6 @@ const profileData=profile?.data??[];
     isLoading: categoriesLoading,
     error: categoriesError,
   } = categoryHook.useFetchPublicCategories();
-
   const categories = CategoryList?.data ?? [];
   const [profileInfoOpen, setProfileInfoOpen] = useState(false);
   const updatedCategories = [{ id: 0, name: "Home", slug: "" }, ...categories];
@@ -74,10 +73,10 @@ logout.mutate({},{
           </div>
 
           <div>
-          {profileLoading?null:
-          profileData?.length>0?<UserCircle color="white" size={30} className="cursor-pointer" onClick={() => {setLoginOpen(true)}}/>:
+          {
+          profileData.id?
           <div className="relative h-8 w-8 rounded-full bg-[rgb(var(--color-public-navtext-rgb)/0.3)] border border-[var(--color-public-navtext)]
-           flex justify-center items-center font-bold text-xl text-[var(--color-public-navtext)] cursor-pointer" onMouseEnter={() => {setProfileInfoOpen(true)}} onMouseLeave={()=>setProfileInfoOpen(false)}>
+           flex justify-center items-center font-bold text-xl text-[var(--color-public-navtext)] cursor-pointer" onClick={() => {setProfileInfoOpen(true)}} >
             {profileData?.name?.charAt(0)}
             {
               profileInfoOpen && <div className="absolute rounded-2xl top-8 w-[120px] h-[80px] flex flex-col gap-2 bg-[rgb(var(--color-public-newsText-rgb)/0.3)] p-2 font-semibold text-base">
@@ -85,7 +84,10 @@ logout.mutate({},{
                 <p onClick={handleLogout}>Logout</p>
               </div>
               }
-            </div>}
+            </div>
+          :
+                  <UserCircle color="white" size={30} className="cursor-pointer" onClick={() => {setLoginOpen(true)}}/>
+}
         </div>
         </div>
 

@@ -6,9 +6,21 @@ export const permissionApi=()=>{
             try {
                 const response = await axiosInstance.get("/admin/permissions");
                 return response.data;
-            }catch (error) {
-  throw error;
-}
+            } catch (error: any) {
+    if (error.response) {
+      throw error.response.data;
+    }
+
+    if (error.request) {
+      throw {
+        message: "Unable to connect to the server. Please try again later.",
+      };
+    }
+
+    throw {
+      message: error.message || "Something went wrong.",
+    };
+  }
         },
         fetchRoleBasedPermissions:async()=>{
             try {

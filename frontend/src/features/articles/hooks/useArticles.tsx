@@ -67,6 +67,12 @@ export const useArticlesHooks = () => {
         queryFn:()=>articles.fetchPublicArticles({page,per_page,from_date,to_date,slug}),
       })
     },
+    useFetchPublicLatestArticles:({page,per_page}:{page:number,per_page:number})=>{
+      return useQuery({
+        queryKey:["public_latest_articles",page,per_page],
+        queryFn:()=>articles.fetchPublicLatestArticles({page,per_page}),
+      })
+    },
     useFetchPublicArticlesByCategory:({page,per_page,slug}:{page:number,per_page:number,slug?:string})=>{
       return useQuery({
         queryKey:["public_articles_by_category",page,per_page,slug],

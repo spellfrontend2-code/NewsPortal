@@ -1,5 +1,5 @@
 import {  useCategoriesHooks } from "@/features/categories/hooks/useCategories";
-import { Command, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,14 +14,13 @@ function CategoryDropdownInput({
 }: any) {
   const CategoriesHook = useCategoriesHooks();
     const [search, setSearch] = useState("");
-
-  const { data } = CategoriesHook.useFetchCategories({
+const [open, setOpen] = useState(false);
+  const { data, isLoading } = CategoriesHook.useFetchCategories({
     page: 1,
     per_page: 10,
     search
   });
   const CategoriesData = data?.data ?? [];
-  console.log(CategoriesData)
   const toggleCategory = (id: number) => {
     if (selectedCategoryIds.includes(id)) {
       setSelectedCategoryIds(
@@ -33,9 +32,9 @@ function CategoryDropdownInput({
   };
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="submit" className="w-full justify-between bg-white text-gray-800 font-semibold border-gray-400 hover:border-[var(--color-primary)]">
+        <Button variant="submit" className="w-full rounded-md p-5 justify-between bg-white text-gray-800 font-semibold border-gray-400 hover:border-[var(--color-primary)]">
           {selectedCategoryIds.length
             ? `${selectedCategoryIds.length} Categories Selected`
             : "Select Categories"}
@@ -43,7 +42,7 @@ function CategoryDropdownInput({
       </PopoverTrigger>
 
       <PopoverContent className="w-[300px] bg-white">
-        <Command>
+        <Command shouldFilter={false}>
             <CommandInput
           
   placeholder="Search Categories..."
@@ -51,7 +50,18 @@ value={search}
   onValueChange={setSearch}
   />
           <CommandList >
-            {CategoriesData.map((category: any) => {
+               {isLoading && (
+              <div className="p-3 text-sm text-gray-500">
+                Loading categories...
+              </div>
+            )}
+
+            {!isLoading && CategoriesData.length === 0 && (
+              <CommandEmpty>
+                No categories found.
+              </CommandEmpty>
+            )}
+            {!isLoading && CategoriesData.map((category: any) => {
               const selected = selectedCategoryIds.includes(category.id);
 
               return (

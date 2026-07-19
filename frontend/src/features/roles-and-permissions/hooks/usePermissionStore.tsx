@@ -49,8 +49,8 @@ const DEFAULT_ROUTES = [
 ];
 
  const getDefaultRoute = (permissions: string[]) => {
-  const route = DEFAULT_ROUTES.find((item) =>
-    permissions.includes(item.permission)
+  const route = DEFAULT_ROUTES?.find((item) =>
+    permissions?.includes(item?.permission)
   );
   return route?.route || "/admin/profile";
 };
