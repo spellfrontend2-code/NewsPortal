@@ -6,18 +6,19 @@ import { Outlet } from "react-router-dom";
 
 function PublicLayout() {
   return (
-    <><ScrollToTop/>
-    <div className="h-screen w-full flex flex-col items-center justify-between">
-      <div className="h-[300px] w-full"><NavbarTop />
-      <NavbarCategories />
+    <>
+      <ScrollToTop />
+      <div className="min-h-screen flex flex-col">
+  <NavbarTop />
+  <NavbarCategories />
+
+  <main className="flex-1 w-[80%] mx-auto py-20">
+    <Outlet />
+  </main>
+
+  <Footer />
 </div>
-      <div className="w-[70%] h-(calc(100% - 800px)) py-20">
-        <Outlet />
-      </div>
-      <div className="h-[500px] w-full">
-      <Footer />
-      </div>
-    </div></>
+    </>
   );
 }
 

@@ -3,40 +3,44 @@ import UserLogin from "@/features/auth/components/userLogin";
 import { useAuthHooks } from "@/features/auth/hooks/useAuth";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
 import { useProfileHooks } from "@/features/profile/hooks/useProfile";
-import { Search, UserCircle } from "lucide-react";
+import { LogOut, Search, UserCircle } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
 
-
 function NavbarCategories() {
-  const {setAuthData}=useAuthStore()
-  const profileHook=useProfileHooks()
-  const {data:profile,isLoading:profileLoading}=profileHook.useFetchProfile()
-const profileData=profile?.data??[];
+  const { setAuthData } = useAuthStore();
+  const profileHook = useProfileHooks();
+  const { data: profile, isLoading: profileLoading } =
+    profileHook.useFetchProfile();
+  const profileData = profile?.data ?? [];
   const categoryHook = useCategoriesHooks();
-  const [loginOpen,setLoginOpen]=useState(false)
+  const [loginOpen, setLoginOpen] = useState(false);
   const {
     data: CategoryList,
     isLoading: categoriesLoading,
     error: categoriesError,
-  } = categoryHook.useFetchPublicCategories();
+  } = categoryHook.useFetchPublicCategories({ page: 1, per_page: 5 });
   const categories = CategoryList?.data ?? [];
   const [profileInfoOpen, setProfileInfoOpen] = useState(false);
   const updatedCategories = [{ id: 0, name: "Home", slug: "" }, ...categories];
-  const authHook=useAuthHooks()
-  const logout=authHook.useLogout()
-const handleLogout=()=>{
-logout.mutate({},{
-  onSuccess:(res) => {
-    setAuthData({})
-    toast.success(res?.message||"Logged out successfully")
-}})
-}
+  const authHook = useAuthHooks();
+  const logout = authHook.useLogout();
+  const handleLogout = () => {
+    logout.mutate(
+      {},
+      {
+        onSuccess: (res) => {
+          setAuthData({});
+          toast.success(res?.message || "Logged out successfully");
+        },
+      },
+    );
+  };
   return (
-    <div className="flex w-full items-center justify-center">
-      <div className="flex h-[50px] w-full justify-between bg-[var(--color-public-primary)] px-30">
-        <div className="flex w-[70%] items-center justify-between">
+    <div className="flex w-full items-center justify-center bg-[var(--color-public-primary)]">
+      <div className="flex h-[50px] w-[80%] justify-between">
+        <div className="flex w-[70%]  justify-between">
           {updatedCategories.map((category) => (
             <NavLink
               key={category.id}
@@ -58,7 +62,7 @@ logout.mutate({},{
           ))}
         </div>
 
-        <div className="flex h-full w-[20%] items-center justify-end gap-3">
+        <div className="flex h-full w-[30%] items-center justify-end gap-3">
           <div className="flex h-[60%] items-center gap-2 rounded-2xl border-2 border-[var(--color-secondary)] p-2">
             <Search
               size={18}
@@ -73,27 +77,36 @@ logout.mutate({},{
           </div>
 
           <div>
-          {
-          profileData.id?
-          <div className="relative h-8 w-8 rounded-full bg-[rgb(var(--color-public-navtext-rgb)/0.3)] border border-[var(--color-public-navtext)]
-           flex justify-center items-center font-bold text-xl text-[var(--color-public-navtext)] cursor-pointer" onClick={() => {setProfileInfoOpen(true)}} >
-            {profileData?.name?.charAt(0)}
-            {
-              profileInfoOpen && <div className="absolute rounded-2xl top-8 w-[120px] h-[80px] flex flex-col gap-2 bg-[rgb(var(--color-public-newsText-rgb)/0.3)] p-2 font-semibold text-base">
-                <p>My Profile</p>
-                <p onClick={handleLogout}>Logout</p>
+            {profileData.id ? (
+              <div
+                className="relative h-8 w-8 rounded-full bg-[rgb(var(--color-public-navtext-rgb)/0.3)] border border-[var(--color-public-navtext)]
+           flex justify-center items-center font-bold text-xl text-[var(--color-public-navtext)] cursor-pointer"
+                onClick={() => {
+                  setProfileInfoOpen(!profileInfoOpen);
+                }}
+              >
+                {profileData?.name?.charAt(0)}
+                {profileInfoOpen && (
+                  <div className="absolute rounded-2xl border top-10 w-[200px] h-[100px] flex flex-col gap-2 bg-[var(--color-public-bg)] text-[var(--color-public-newsText)]  ">
+                    <div className="flex flex-col px-3 pt-1"><p className="text-base font-bold">{profileData?.name}</p><p className="text-sm text-gray-400 font-normal">{profileData?.email}</p></div>
+                    <div className="hover:bg-red-100 h-full w-full rounded-b-2xl border-t border-[rgb(var(--color-public-newsText-rgb)/0.3)] px-3 pt-2"><p onClick={handleLogout} className="text-base text-red-500 flex items-center gap-2 hover:bg-red-100"><LogOut size={20}/>Logout</p>
+                  </div></div>
+                )}
               </div>
-              }
-            </div>
-          :
-                  <UserCircle color="white" size={30} className="cursor-pointer" onClick={() => {setLoginOpen(true)}}/>
-}
+            ) : (
+              <UserCircle
+                color="white"
+                size={30}
+                className="cursor-pointer"
+                onClick={() => {
+                  setLoginOpen(true);
+                }}
+              />
+            )}
+          </div>
         </div>
-        </div>
-
-        
       </div>
-    <UserLogin open={loginOpen} onOpenChange={setLoginOpen}/>
+      <UserLogin open={loginOpen} onOpenChange={setLoginOpen} />
     </div>
   );
 }

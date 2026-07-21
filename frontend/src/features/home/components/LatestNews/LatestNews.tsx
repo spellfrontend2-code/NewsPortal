@@ -4,17 +4,13 @@ import ArticleSquareHoverCard from "@/features/articles/components/Public/cards/
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { formatDateTime } from "@/lib/formatDateTime";
 import { Clock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LatestNewsSkeleton from "./LatestNewsSkeleton";
+import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
+import SidebarAdvertisement from "@/features/advertisements/components/Public/SidebarAdvertisement";
 
 function LatestNews() {
   const navigate = useNavigate();
-  // const fromDate = new Date();
-  // const toDate = new Date();
-  // fromDate.setDate(fromDate.getDate() - 4);
-  // toDate.setDate(toDate.getDate() - 3);
-  //   const to_date = formatDateTime(toDate);
-  // const from_date = formatDateTime(fromDate);
   const articleHook = useArticlesHooks();
   const { data: allArticles, isLoading } =
     articleHook.useFetchPublicLatestArticles({
@@ -23,6 +19,11 @@ function LatestNews() {
     });
   const articles =
     allArticles?.data?.map((article: any) => article?.data) ?? [];
+  const advertisementHook = useAdvertisementHooks();
+  const { data: advertisements, isLoading: advertisementsLoading } =
+    advertisementHook.useFetchPublicAdvertisements();
+  const advertisementsList = advertisements?.data ?? [];
+  const sidebarAd = advertisementsList?.sidebar?.slice(0, 3);
   return (
     <div className="h-[500px] w-full">
       {articles.length > 0 && (
@@ -56,7 +57,13 @@ function LatestNews() {
               </Button>
             </div>
           </div>
-          <div className="w-1/4">Advertisements</div>
+          <div className="w-1/4">
+            <div className="h-full w-full flex flex-col gap-2">
+              {sidebarAd &&
+               <SidebarAdvertisement Ads={sidebarAd} />
+               }
+            </div>
+          </div>
         </div>
       ) : (
         <p>No news</p>

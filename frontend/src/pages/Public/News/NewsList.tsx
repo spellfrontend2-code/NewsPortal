@@ -76,7 +76,7 @@ function NewsList({
             </div>
             <div className="grid grid-cols-4 w-full h-full gap-3 pt-10">
               {articles.slice(1).map((article: any) => (
-                <div className="h-[500px] w-full">
+                <div className="h-[300px] w-full">
                   <ArticleSquareCard article={article} />
                 </div>
               ))}

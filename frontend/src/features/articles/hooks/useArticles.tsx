@@ -61,10 +61,10 @@ export const useArticlesHooks = () => {
           }),
       });
     },
-    useFetchPublicArticles:({page,per_page,from_date,to_date,slug}:{page:number,per_page:number,from_date?:string,to_date?:string,slug?:string})=>{
+    useFetchPublicFeedArticles:({page,per_page,from_date,to_date,slug}:{page:number,per_page:number,from_date?:string,to_date?:string,slug?:string})=>{
       return useQuery({
         queryKey:["public_articles",page,per_page,from_date,to_date,slug],
-        queryFn:()=>articles.fetchPublicArticles({page,per_page,from_date,to_date,slug}),
+        queryFn:()=>articles.fetchPublicFeedArticles({page,per_page,from_date,to_date,slug}),
       })
     },
     useFetchPublicLatestArticles:({page,per_page}:{page:number,per_page:number})=>{

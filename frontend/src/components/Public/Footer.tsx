@@ -11,7 +11,8 @@ function Footer() {
   if (isLoading) return null;
 
   return (
-    <footer className="bg-[var(--color-public-primary)] text-white">
+    <div className="w-full bg-[var(--color-public-primary)] text-white flex justify-center">
+      <footer className="  w-[80%]">
       {/* Main Footer */}
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 lg:grid-cols-4">
         {/* Company Info */}
@@ -194,6 +195,7 @@ function Footer() {
         </div>
       </div>
     </footer>
+    </div>
   );
 }
 

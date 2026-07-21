@@ -42,13 +42,20 @@ export const useCategoriesHooks=()=>{
         //         queryFn:()=>categories.fetchPublicCategories()
         //     })
         // },
-        useFetchPublicCategories: () => {
-  return useQuery(publicCategoriesQuery());
+        useFetchPublicCategories: ({ page, per_page }) => {
+  return useQuery(publicCategoriesQuery({ page, per_page }));
 },
     }
 }
-export const publicCategoriesQuery = () => ({
-  queryKey: ["public_categories"],
-  queryFn: () => categories.fetchPublicCategories(),
+export const publicCategoriesQuery = ({
+  page = 1,
+  per_page = 5,
+} = {}) => ({
+  queryKey: ["public_categories", page, per_page],
+  queryFn: () =>
+    categories.fetchPublicCategories({
+      page,
+      per_page,
+    }),
   staleTime: 1000 * 60 * 10,
 });

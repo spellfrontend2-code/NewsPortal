@@ -9,7 +9,7 @@ export const useAuthHooks=()=>{
             return useMutation({
                 mutationFn:(data:any)=>auth.Login(data),
                 onSuccess:()=>{
-                    queryClient.invalidateQueries(["admin"])
+                    queryClient.invalidateQueries(["admin","public_user"])
                 }
             })
         },
@@ -25,21 +25,21 @@ export const useAuthHooks=()=>{
             return useMutation({
                 mutationFn:()=>auth.AdminLogout(),
                 onSuccess:()=>{
-                    queryClient.invalidateQueries(["admin"])
+                    queryClient.invalidateQueries(["admin","public_user"])
                 }
             })
         },
         useFetchProfile:()=>{
             return useQuery({
                 queryFn:()=>auth.FetchProfile(),
-                queryKey:["admin"]
+                queryKey:["admin","public_user"]
             })
         },
         useCreatePublicUser:()=>{
             return useMutation({
                 mutationFn:(data:any)=>auth.CreatePublicUser(data),
                 onSuccess:()=>{
-                    queryClient.invalidateQueries(["public_user"])
+                    queryClient.invalidateQueries(["admin","public_user"])
                 }
             })
         }

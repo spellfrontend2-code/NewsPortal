@@ -342,6 +342,7 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
               field: null,
             });
           }}
+          module="advertisements"
         />
       </div>
     </div>

@@ -16,7 +16,7 @@ import PublicLayout from "@/layout/PublicLayout";
 import Home from "@/pages/Public/Home/Home";
 import PublicRoute from "../protectedRoute/PublicRoute";
 import { publicCategoriesQuery } from "@/features/categories/hooks/useCategories";
-import {  type QueryClient } from "@tanstack/react-query";
+import { type QueryClient } from "@tanstack/react-query";
 import { queryClient } from "@/services/queryClient";
 import NewsDetail from "@/pages/Public/News/NewsDetail";
 import Unauthorized from "@/pages/Error/Unauthorized";
@@ -24,12 +24,11 @@ import LatestNewsList from "@/features/articles/components/Public/NewsList/Lates
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 import ErrorPage from "@/pages/Error/ErrorPage";
 const publicLayoutLoader = (queryClient: QueryClient) => async () => {
-  await queryClient.ensureQueryData(publicCategoriesQuery());
+  await queryClient.ensureQueryData(publicCategoriesQuery({ page: 1, per_page: 5 }));
 
   return null;
 };
-export const router = createBrowserRouter(
-  [
+export const router = createBrowserRouter([
   {
     path: "/admin",
     element: <ProtectedRoute navigateRoute="/admin/login" />,
@@ -80,21 +79,21 @@ export const router = createBrowserRouter(
       },
     ],
   },
- {
-  path: "/admin/login",
-  element: <PublicRoute />,
-  children: [
-    {
-      index: true,
-      element: <AdminLogin />,
-    },
-  ],
-},
+  {
+    path: "/admin/login",
+    element: <PublicRoute />,
+    children: [
+      {
+        index: true,
+        element: <AdminLogin />,
+      },
+    ],
+  },
   {
     path: "/",
     element: <PublicLayout />,
     errorElement: <ErrorPage />,
-      loader: publicLayoutLoader(queryClient),
+    loader: publicLayoutLoader(queryClient),
 
     children: [
       {
@@ -106,18 +105,18 @@ export const router = createBrowserRouter(
         element: <NewsDetail />,
       },
       {
-                path:"news-list/latest-news",
+        path: "news-list/latest-news",
 
-        element:<LatestNewsList/>
+        element: <LatestNewsList />,
       },
       {
-        path:"news-list/category/:slug",
-        element:<CategoryBasedNewsList/>
-      }
+        path: "news-list/category/:slug",
+        element: <CategoryBasedNewsList />,
+      },
     ],
   },
   {
-    path:"/unauthorized",
-    element:<Unauthorized/>
-  }
+    path: "/unauthorized",
+    element: <Unauthorized />,
+  },
 ]);

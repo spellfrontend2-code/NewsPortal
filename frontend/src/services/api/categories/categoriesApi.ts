@@ -39,9 +39,11 @@ export const categoriesApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchPublicCategories: async () => {
+    fetchPublicCategories: async ({ page, per_page }: { page: number; per_page: number }) => {
       try {
-        const response = await axiosInstance.get("/categories");
+        const response = await axiosInstance.get("/categories", {
+          params: { page, per_page },
+        });
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;

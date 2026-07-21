@@ -9,14 +9,14 @@ function NewsDetail() {
   const articleHook = useArticlesHooks();
   const { data: articles, isLoading } =
     articleHook.useFetchPublicSingleArticle(slug);
-  const articleData = articles?.data ?? [];
+   const Data=articles?.data??[]
   return (
     <div className="flex justify-center w-full">
       {isLoading?
       <NewsDetailSkeleton/>:
       <div className="flex flex-col justify-center gap-3 w-full">
-      <NewsHeader articleData={articleData}/>
-       <NewsContent articleData={articleData} />
+      <NewsHeader Data={Data}/>
+       <NewsContent Data={Data} />
       </div>}
     </div>
   );

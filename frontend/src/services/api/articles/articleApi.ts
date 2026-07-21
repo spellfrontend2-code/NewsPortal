@@ -68,7 +68,7 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchPublicArticles: async ({ page, per_page,from_date,to_date,slug }: { page: number; per_page: number,from_date?:string,to_date?:string,slug?:string }) => {
+    fetchPublicFeedArticles: async ({ page, per_page,from_date,to_date,slug }: { page: number; per_page: number,from_date?:string,to_date?:string,slug?:string }) => {
       try {
         const response = await axiosInstance.get("/articles",{
           params: { page, per_page ,from_date,to_date,slug}

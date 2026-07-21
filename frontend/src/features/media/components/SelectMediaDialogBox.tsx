@@ -8,10 +8,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
-import UploadDialogBox from "./UploadDialogBox";
 import MediaCollage from "./MediaCollage";
+import MediaSkeleton from "./MediaSkeleton";
 
-function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange , onSelectMedia,file_type}) {
+function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange , onSelectMedia,file_type,module}) {
   const mediaHook = useMediaHooks();
   const [articlePagination, setArticlePagination] = useState({
     pageIndex: 0,
@@ -21,13 +21,14 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
     pageIndex: 0,
     pageSize: 10,
   });
-  const { data: articleMediaData } = mediaHook.useFetchMedia({
+  const { data: articleMediaData, isLoading: articleMediaLoading } = mediaHook.useFetchMedia({
     search: "articles",
     page: articlePagination.pageIndex + 1,
     per_page: articlePagination.pageSize,
     file_type
   });
-  const { data: advertisementMediaData } = mediaHook.useFetchMedia({
+  console.log("articleMediaData",articleMediaData)
+  const { data: advertisementMediaData, isLoading: advertisementMediaLoading } = mediaHook.useFetchMedia({
     search: "advertisements",
     page: advertisementPagination.pageIndex + 1,
     per_page: advertisementPagination.pageSize,
@@ -38,6 +39,16 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
   const [articleLastPage, setArticleLastPage] = useState(1);
   const [advertisementLastPage, setAdvertisementLastPage] = useState(1);
   useEffect(() => {
+      setArticleMedia([]);
+
+  setArticlePagination({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+    setAdvertisementPagination({
+    pageIndex: 0,
+    pageSize: 10,
+  });
     const medias = articleMediaData?.data ?? [];
 
     if (!medias.length) return;
@@ -49,9 +60,13 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
     } else {
       setArticleMedia((prev) => [...prev, ...medias]);
     }
-  }, [articleMediaData, articlePagination.pageIndex]);
+        console.log("updated")
+
+  }, [articleMediaData, articlePagination.pageIndex,file_type]);
 
   useEffect(() => {
+      setAdvertisementMedia([]);
+
     const medias = advertisementMediaData?.data ?? [];
     if (advertisementMediaData?.pagination?.last_page) {
       setAdvertisementLastPage(advertisementMediaData.pagination.last_page);
@@ -63,8 +78,45 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
     } else {
       setAdvertisementMedia((prev) => [...prev, ...medias]);
     }
-  }, [advertisementMediaData, advertisementPagination.pageIndex]);
-
+  }, [advertisementMediaData, advertisementPagination.pageIndex,file_type]);
+const sections =
+  module === "articles"
+    ? [
+        {
+          title: "Articles",
+          loading: articleMediaLoading,
+          media: articleMedia,
+          pagination: articlePagination,
+          setPagination: setArticlePagination,
+          lastPage: articleLastPage,
+        },
+        {
+          title: "Advertisements",
+          loading: advertisementMediaLoading,
+          media: advertisementMedia,
+          pagination: advertisementPagination,
+          setPagination: setAdvertisementPagination,
+          lastPage: advertisementLastPage,
+        },
+      ]
+    :module==="advertisements" && [
+        {
+          title: "Advertisements",
+          loading: advertisementMediaLoading,
+          media: advertisementMedia,
+          pagination: advertisementPagination,
+          setPagination: setAdvertisementPagination,
+          lastPage: advertisementLastPage,
+        },
+        {
+          title: "Articles",
+          loading: articleMediaLoading,
+          media: articleMedia,
+          pagination: articlePagination,
+          setPagination: setArticlePagination,
+          lastPage: articleLastPage,
+        },
+      ];
   return (
     <>
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -79,31 +131,52 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
             </Button>
           </DialogTitle>
         </DialogHeader>
-        <div className="w-full h-full p-5 flex flex-col  border border-[var(--color-secondary)] rounded-xl">
+        {/* <div className="w-full h-full p-5 flex flex-col  border border-[var(--color-secondary)] rounded-xl">
           <p className="text-lg font-semibold text-[var(--color-primary)] mb-3">
             Articles
           </p>
-          <MediaCollage
+         {articleMediaLoading?<MediaSkeleton/>: <MediaCollage
             allMedia={articleMedia}
             pagination={articlePagination}
             setPagination={setArticlePagination}
             lastPage={articleLastPage}
   onSelectMedia={onSelectMedia}
-          />
+          />}
         </div>
         <div className="w-full h-full p-5 flex flex-col border border-[var(--color-secondary)] rounded-xl">
           <p className="text-lg font-semibold text-[var(--color-primary)] mb-3">
             Advertisements
           </p>
-          <MediaCollage
+          {advertisementMediaLoading?<MediaSkeleton/>:<MediaCollage
             allMedia={advertisementMedia}
             pagination={advertisementPagination}
             setPagination={setAdvertisementPagination}
             lastPage={advertisementLastPage}
             onSelectMedia={onSelectMedia}
-          />
-        </div>
- 
+          />}
+        </div> */}
+ {sections?.map((section) => (
+  <div
+    key={section.title}
+    className="w-full h-full p-5 flex flex-col border border-[var(--color-secondary)] rounded-xl"
+  >
+    <p className="text-lg font-semibold text-[var(--color-primary)] mb-3">
+      {section.title}
+    </p>
+
+    {section.loading ? (
+      <MediaSkeleton />
+    ) : (
+      <MediaCollage
+        allMedia={section.media}
+        pagination={section.pagination}
+        setPagination={section.setPagination}
+        lastPage={section.lastPage}
+        onSelectMedia={onSelectMedia}
+      />
+    )}
+  </div>
+))}
       </DialogContent>
    
     </Dialog>
