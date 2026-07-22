@@ -3,27 +3,31 @@ import NewsList from "@/pages/Public/News/NewsList";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-function CategoryBasedNewsList() {
+function CategoryBasedNewsList({categorySlug}:{categorySlug?:string}) {
   const { slug } = useParams();
   const articleHook = useArticlesHooks();
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 2 });
-  const { data: allArticles } =articleHook.useFetchPublicArticlesByCategory({
+const defaultPageSize = categorySlug ? 4 : 12;
+
+const [pagination, setPagination] = useState({
+  pageIndex: 0,
+  pageSize: defaultPageSize,
+});  const { data: allArticles } =articleHook.useFetchPublicArticlesByCategory({
       page: pagination?.pageIndex + 1,
       per_page: pagination?.pageSize,
-      slug: slug,
+      slug: categorySlug?categorySlug:slug,
     });
-  const articles = allArticles?.data?.map((article: any) => article?.data) ?? [];
-
-  
-  return (
+const articles =
+  allArticles?.data
+    ?.filter((item: any) => item.type === "article")
+    .map((item: any) => item.data) ?? [];  return (
     <div className="">
      <NewsList
           articles={articles}
-          page_headline={articles[0]?.categories[0]?.name}
+          page_headline={categorySlug?categorySlug:slug}
           pagination={pagination}
           setPagination={setPagination}
           lastPage={allArticles?.pagination?.last_page}
-      
+          show={categorySlug?"list":"all"}
         />
     </div>
   );

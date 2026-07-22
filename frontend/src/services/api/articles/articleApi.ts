@@ -106,6 +106,16 @@ export const articleApi = () => {
       } catch (error: any) {
         throw error?.response?.data;
       }
-    }
+    },
+    searchPublicArticles: async ({page, per_page,search}: any) => {
+      try {
+        const response = await axiosInstance.get(`/articles/search`,{
+          params: { page, per_page ,search}
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
   };
 };

@@ -94,6 +94,16 @@ export const advertisementsApi = () => {
       } catch (error: any) {
         throw error?.response?.data;
       }
-    }
+    },
+    trackPublicAdClick: async (advertisement_id: any) => {
+      try {
+        const response = await axiosInstance.post(
+          `/advertisements/${advertisement_id}/click`,
+        );
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
   };
 };

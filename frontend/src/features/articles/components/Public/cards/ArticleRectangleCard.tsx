@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 function ArticleRectangleCard({ article, type = "view" }: any) {
   const navigate = useNavigate();
   return (
-    <div className={`flex h-full w-full group overflow-hidden cursor-pointer   rounded-lg`} onClick={()=>navigate(`/news/${article?.slug}`)}>
-      <img
+    <div className={`flex h-full w-full group overflow-hidden cursor-pointer items-stretch `} onClick={()=>navigate(`/news/${article?.slug}`)}>
+      <div className=" w-[40%]"><img
         src={article?.media_type === "image" ?  article?.featured_image:article?.thumbnail}
         alt={article?.title}
-        className="h-full w-[40%] object-cover "
+        className="h-full w-full object-fill "
       />
+      </div>
 
       <div className={`${type==="detailed"?"bg-slate-200/60 text-5xl p-10":"text-sm bg-white p-5"} w-[60%] font-bold text-[var(--color-public-newsText)] p-3 flex flex-col justify-center `}>
         <p className="group-hover:text-[var(--color-public-newsText-hover)]">

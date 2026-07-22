@@ -3,7 +3,7 @@ import {
   ArticleSquareCardSkeleton,
 } from "@/features/articles/components/Public/cards/CardSkeleton";
 
-function NewsListSkeleton() {
+function NewsListSkeleton({length}) {
   return (
     <div className="w-full flex flex-col gap-2 animate-pulse">
       {/* Page Heading */}

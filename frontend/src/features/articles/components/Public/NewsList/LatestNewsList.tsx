@@ -11,7 +11,7 @@ function LatestNewsList() {
   // const to_date = formatDateTime(toDate);
   // const from_date = formatDateTime(fromDate);
   const articleHook = useArticlesHooks();
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 2 });
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 12 });
   const { data: allArticles, isLoading } = articleHook.useFetchPublicLatestArticles({
     page: pagination?.pageIndex + 1,
     per_page: pagination?.pageSize,

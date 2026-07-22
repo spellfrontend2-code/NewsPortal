@@ -79,7 +79,6 @@ const columns = generateColumns(
       "advertiser_website",
       "text_content",
       "target_url",
-      "placement",
       "target_categories",
       "target_categories_ids",
       "target_tags",

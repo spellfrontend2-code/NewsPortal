@@ -5,16 +5,17 @@ const articles = articleApi();
 export const useArticlesHooks = () => {
   const queryClient = useQueryClient();
   return {
-    useFetchArticles: ({ page, per_page, search,status }) => {
+    useFetchArticles: ({ page, per_page, search, status }) => {
       return useQuery({
-        queryKey: ["articles", page, per_page, search,status],
+        queryKey: ["articles", page, per_page, search, status],
         queryFn: () =>
           articles.fetchArticles({
             page,
             per_page: per_page,
-            search,status
+            search,
+            status,
           }),
-        retry: false, 
+        retry: false,
       });
     },
     useCreateArticles: () => {
@@ -61,29 +62,83 @@ export const useArticlesHooks = () => {
           }),
       });
     },
-    useFetchPublicFeedArticles:({page,per_page,from_date,to_date,slug}:{page:number,per_page:number,from_date?:string,to_date?:string,slug?:string})=>{
+    useFetchPublicFeedArticles: ({
+      page,
+      per_page,
+      from_date,
+      to_date,
+      slug,
+    }: {
+      page: number;
+      per_page: number;
+      from_date?: string;
+      to_date?: string;
+      slug?: string;
+    }) => {
       return useQuery({
-        queryKey:["public_articles",page,per_page,from_date,to_date,slug],
-        queryFn:()=>articles.fetchPublicFeedArticles({page,per_page,from_date,to_date,slug}),
-      })
+        queryKey: ["public_articles", page, per_page, from_date, to_date, slug],
+        queryFn: () =>
+          articles.fetchPublicFeedArticles({
+            page,
+            per_page,
+            from_date,
+            to_date,
+            slug,
+          }),
+      });
     },
-    useFetchPublicLatestArticles:({page,per_page}:{page:number,per_page:number})=>{
+    useFetchPublicLatestArticles: ({
+      page,
+      per_page,
+    }: {
+      page: number;
+      per_page: number;
+    }) => {
       return useQuery({
-        queryKey:["public_latest_articles",page,per_page],
-        queryFn:()=>articles.fetchPublicLatestArticles({page,per_page}),
-      })
+        queryKey: ["public_latest_articles", page, per_page],
+        queryFn: () => articles.fetchPublicLatestArticles({ page, per_page }),
+      });
     },
-    useFetchPublicArticlesByCategory:({page,per_page,slug}:{page:number,per_page:number,slug?:string})=>{
+    useFetchPublicArticlesByCategory: ({
+      page,
+      per_page,
+      slug,
+    }: {
+      page: number;
+      per_page: number;
+      slug?: string;
+    }) => {
       return useQuery({
-        queryKey:["public_articles_by_category",page,per_page,slug],
-        queryFn:()=>articles.fetchPublicArticlesByCategory({page,per_page,slug}),
-      })
+        queryKey: ["public_articles_by_category", page, per_page, slug],
+        queryFn: () =>
+          articles.fetchPublicArticlesByCategory({ page, per_page, slug }),
+      });
     },
-    useFetchPublicSingleArticle:(slug)=>{
+    useFetchPublicSingleArticle: (slug) => {
       return useQuery({
-        queryKey:["public_single_articles",slug],
-        queryFn:()=>articles.fetchPublicSingleArticle(slug),
-      })
-    }
+        queryKey: ["public_single_articles", slug],
+        queryFn: () => articles.fetchPublicSingleArticle(slug),
+      });
+    },
+    useSearchPublicArticles: ({
+      page,
+      per_page,
+      search,
+    }: {
+      page: number;
+      per_page: number;
+      search?: string;
+    }) => {
+      return useQuery({
+        queryKey: ["public_search_articles", page, per_page, search],
+        queryFn: () => {
+          return articles.searchPublicArticles({
+            page,
+            per_page,
+            search,
+          });
+        },
+      });
+    },
   };
 };
