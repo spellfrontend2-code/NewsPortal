@@ -12,7 +12,6 @@ function NewsList({
   pagination,
   setPagination,
   lastPage,
-  isLoading,
   show = "all",
 }: any) {
   const currentPage = pagination.pageIndex + 1;
@@ -74,14 +73,11 @@ function NewsList({
         >
           {page_headline}
         </h1>
-        {!isLoading && articles?.length > 0 && show === "all" && (
+        { articles?.length > 0 && show === "all" && (
           <div className="absolute -left-4 w-2 h-full rounded-l-md bg-[var(--color-public-newsText)]" />
         )}
       </div>}
-      {isLoading ? (
-        <NewsListSkeleton length={show === "all" ? 4 : 8} />
-      ) : (
-        articles?.length > 0 && (
+      {articles?.length > 0 && (
           <div>
             {show === "all" && (
               <div className="h-[300px] w-full">
@@ -146,7 +142,7 @@ function NewsList({
             )}
           </div>
         )
-      )}
+      }
     </div>
   );
 }

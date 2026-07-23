@@ -9,11 +9,11 @@ function NewsHeader({ Data }: any) {
       <p className="text-5xl h-[1/4]  font-bold text-[var(--color-public-newsText)] ">
         {articleData?.title}
       </p>
-      <div className="h-[150px] w-full">
-        {advertisementData?.top && (
+       {advertisementData?.top &&<div className="h-[150px] w-full">
+        (
           <BannerAdvertisement Ad={advertisementData?.top} />
-        )}
-      </div>
+        )
+      </div>}
       <p className="text-[rgb(var(--color-public-newsText-rgb)/0.6)]">
         {articleData?.excerpt}
       </p>

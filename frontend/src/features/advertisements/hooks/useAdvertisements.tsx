@@ -121,6 +121,11 @@ export const useAdvertisementHooks = () => {
       return useMutation({
         mutationFn: (advertisement_id: any) => advertisements.trackPublicAdClick(advertisement_id),
       });
-    }
+    },
+    useTrackPublicAdImpression: () => {
+      return useMutation({
+        mutationFn: (advertisement_id: any) => advertisements.trackPublicAdImpression(advertisement_id),
+      });
+    },
   };
 };

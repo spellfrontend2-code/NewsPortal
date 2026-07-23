@@ -18,12 +18,12 @@ function LatestNews() {
       per_page: 5,
     });
   const articles =
-    allArticles?.data?.map((article: any) => article?.data) ?? [];
+    allArticles?.data?.filter((article: any) => article?.type==="article").map((article: any) => article?.data) ?? [];
   const advertisementHook = useAdvertisementHooks();
   const { data: advertisements, isLoading: advertisementsLoading } =
     advertisementHook.useFetchPublicAdvertisements();
   const advertisementsList = advertisements?.data ?? [];
-  const sidebarAd = advertisementsList?.sidebar?.slice(0, 3);
+  const sidebarAds = advertisementsList?.sidebar?.slice(0, 3);
   return (
     <div className="h-[500px] w-full ">
       {articles.length > 0 && (
@@ -58,9 +58,14 @@ Latest News      </h1>
           </div>
           <div className="w-1/4">
             <div className="h-full w-full flex flex-col gap-2 ">
-              {sidebarAd &&
-               <SidebarAdvertisement Ads={sidebarAd} />
-               }
+           {
+  sidebarAds.length > 0 &&
+    sidebarAds.map((ad: any, index: number) => (
+      <div key={ad.id ?? index} className="h-[200px] w-full">
+        <SidebarAdvertisement Ad={ad} />
+      </div>
+    ))
+}
             </div>
           </div>
         </div>

@@ -94,7 +94,6 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     errorElement: <ErrorPage />,
     loader: publicLayoutLoader(queryClient),
-
     children: [
       {
         index: true,

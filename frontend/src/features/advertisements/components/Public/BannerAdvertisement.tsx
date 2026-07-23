@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import HtmlAd from "./HtmlAd";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 import { toast } from "sonner";
+import { useAdImpression } from "../../hooks/useAdImpression";
 
 function BannerAdvertisement({Ad}) {
+  console.log("BannerAd",Ad)
+    const adRef = useAdImpression({
+    adId: Ad?.id,
+  });
     const advertisementHook=useAdvertisementHooks();
     const trackAdClick=advertisementHook.useTrackPublicAdClick()
   const handleAdClick = (advertisement_id: number) => {
@@ -16,7 +21,7 @@ function BannerAdvertisement({Ad}) {
       },
     });
   };
-    return <div className="h-full w-full">
+    return <div className="h-full w-full" ref={adRef}>
         <Link
         to={Ad?.target_url}
           target={Ad?. target_blank}

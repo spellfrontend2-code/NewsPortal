@@ -61,7 +61,7 @@ export default function AdvertisementView({ advertisement }: Props) {
   //     }
   //   );
   // };
-
+console.log("ADTYPE",advertisement.ad_type)
   return (
     <div className="border border-slate-200 rounded-2xl max-w-5xl mx-auto p-6 space-y-6 bg-slate-50 shadow-sm">
       {/* <div className="flex items-end gap-3">
@@ -137,7 +137,7 @@ export default function AdvertisementView({ advertisement }: Props) {
           Media Information
         </h2>
 
-        {(advertisement.ad_type === "image" && advertisement.image_url) && (
+        {((advertisement.ad_type === "image" || advertisement.ad_type === "native") && advertisement.image_url) && (
           <div className="space-y-1">
             <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
               Image
@@ -185,7 +185,7 @@ export default function AdvertisementView({ advertisement }: Props) {
           </div>
         )}
 
-        {advertisement.ad_type === "text" && <Field label="Text Content" value={advertisement.text_content} />}
+        {(advertisement.ad_type === "text" || advertisement.ad_type === "native") && <Field label="Text Content" value={advertisement.text_content} />}
       </div>
 
       {/* CALL TO ACTION */}
@@ -197,7 +197,7 @@ export default function AdvertisementView({ advertisement }: Props) {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Field label="Target URL" value={advertisement.target_url} />
           <Field label="Target Blank" value={advertisement.target_blank} />
-          <Field label="CTA Text" value={advertisement.cta_text} />
+         {advertisement?.ad_type==="native" && <Field label="CTA Text" value={advertisement.cta_text} />}
         </div>
       </div>
 
@@ -246,7 +246,7 @@ export default function AdvertisementView({ advertisement }: Props) {
             label="Starts At"
             value={
               advertisement.starts_at
-                ? toDateTimeLocal(advertisement.starts_at)
+                ? toDateTimeLocal(advertisement.starts_at).replace("T", " ")
                 : "-"
             }
           />
@@ -254,7 +254,7 @@ export default function AdvertisementView({ advertisement }: Props) {
             label="Ends At"
             value={
               advertisement.ends_at
-                ? toDateTimeLocal(advertisement.ends_at)
+                ? toDateTimeLocal(advertisement.ends_at).replace("T", " ")
                 : "-"
             }
           />

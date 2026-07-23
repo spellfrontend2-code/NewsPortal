@@ -108,9 +108,7 @@ function AuthorInputForm({
   };
 
   const onSubmit = (data: any) => {
-    
     const formData = new FormData();
-formData.append("_method", "PUT");
     formData.append("name", data.name);
     formData.append("email", data.email);
 
@@ -138,17 +136,16 @@ formData.append("_method", "PUT");
     formData.append("social_links[youtube]", data.youtube);
     formData.append("social_links[tiktok]", data.tiktok);
     formData.append("social_links[instagram]", data.instagram);
-    console.log(data.avatar_url);
     if (data.avatar_url instanceof File) {
       formData.append("avatar_url", data.avatar_url);
     }
 
-    const payload = formData;
     if (edit) {
+      formData.append("_method", "PUT");
       updateAuthor.mutate(
         {
           id: author.id,
-          data: payload,
+          data: formData,
         },
         {
           onSuccess: (res: any) => {
@@ -165,7 +162,7 @@ formData.append("_method", "PUT");
         },
       );
     } else {
-      createAuthor.mutate(payload, {
+      createAuthor.mutate(formData, {
         onSuccess: (res: any) => {
           toast.success(res?.message || "Author created successfully");
 

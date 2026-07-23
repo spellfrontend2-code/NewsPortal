@@ -1,3 +1,4 @@
+import { shareArticle } from "@/lib/shareHandler";
 import axiosInstance from "@/services/axios";
 
 export const articleApi = () => {
@@ -26,7 +27,6 @@ export const articleApi = () => {
 },
     createArticle:async (data) => {
       try {
-        console.log("API",data)
         const response = await axiosInstance.post("/admin/articles",data);
         return response.data;
       } catch (error: any) {
@@ -93,7 +93,6 @@ export const articleApi = () => {
         const response = await axiosInstance.get(`/articles/category/${slug}`,{
           params: { page, per_page ,slug}
         });
-        console.log(response.data)
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;
@@ -117,5 +116,55 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
+    likeArticle: async (id: any) => {
+      try {
+        const response = await axiosInstance.post(`/viewer/articles/${id}/interact/like`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    dislikeArticle: async (id: any) => {
+      try {
+        const response = await axiosInstance.post(`/viewer/articles/${id}/interact/dislike`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    shareArticle: async ({id,platform}: any) => {
+      try {
+        console.log(id,platform)
+        const response = await axiosInstance.post(`/viewer/articles/${id}/share`,{platform});
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    viewArticle: async (id: any) => {
+      try {
+        const response = await axiosInstance.post(`/articles/${id}/view`);
+        console.log(response.data)
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    reportArticle: async (id: any) => {
+      try {
+        const response = await axiosInstance.post(`/viewer/articles/${id}/interact/report`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+     bookmarkArticle: async (id: any) => {
+      try {
+        const response = await axiosInstance.post(`/viewer/articles/${id}/interact/bookmark`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    }
   };
 };

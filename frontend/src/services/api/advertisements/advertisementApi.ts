@@ -89,11 +89,23 @@ export const advertisementsApi = () => {
     },
     fetchPublicAdvertisements: async () => {
       try {
-        const response = await axiosInstance.get("advertisements");
+        const response = await axiosInstance.get("/advertisements");
         return response.data;
       } catch (error: any) {
-        throw error?.response?.data;
-      }
+    if (error.response) {
+      throw error.response.data;
+    }
+
+    if (error.request) {
+      throw {
+        message: "Unable to connect to the server. Please try again later.",
+      };
+    }
+
+    throw {
+      message: error.message || "Something went wrong.",
+    };
+  }
     },
     trackPublicAdClick: async (advertisement_id: any) => {
       try {
@@ -105,5 +117,15 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
+    trackPublicAdImpression: async (advertisement_id: any) => {
+      try {
+        const response = await axiosInstance.post(
+          `/advertisements/${advertisement_id}/impression`,
+        );
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    }
   };
 };

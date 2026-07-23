@@ -1,6 +1,5 @@
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import logo from "../../../assets/logo.png";
-import { Link } from "react-router-dom";
 import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 
 function NavbarTop() {
@@ -8,7 +7,6 @@ function NavbarTop() {
   const {data:advertisements,isLoading:advertisementsLoading}=advertisementHook.useFetchPublicAdvertisements();
   const advertisementsList = advertisements?.data ?? [];
   const headerAd=advertisementsList?.header;
-  console.log(headerAd)
  return (
   <div className="w-full flex items-center justify-center ">
     <div className="flex h-30 w-[80%]  items-center justify-between bg-[var(--color-public-bg)] gap-10 p-3">

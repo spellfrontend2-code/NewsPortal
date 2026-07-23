@@ -1,10 +1,14 @@
+import { useArticleView } from "@/features/articles/hooks/useArticleView";
 import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function ArticleRectangleCard({ article, type = "view" }: any) {
   const navigate = useNavigate();
+  const {viewPublicArticle}=useArticleView();
   return (
-    <div className={`flex h-full w-full group overflow-hidden cursor-pointer items-stretch `} onClick={()=>navigate(`/news/${article?.slug}`)}>
+    <div className={`flex h-full w-full group overflow-hidden cursor-pointer items-stretch `}
+     onClick={()=>{viewPublicArticle(article?.id);navigate(`/news/${article?.slug}`)}}    
+     >
       <div className=" w-[40%]"><img
         src={article?.media_type === "image" ?  article?.featured_image:article?.thumbnail}
         alt={article?.title}

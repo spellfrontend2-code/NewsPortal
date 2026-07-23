@@ -19,13 +19,11 @@ function Home() {
   const advertisementHook = useAdvertisementHooks();
   const { data: advertisements } =
     advertisementHook.useFetchPublicAdvertisements();
-    console.log("popup",advertisements?.data?.popup)
   const categoriesHook = useCategoriesHooks();
   const { data: categories } = categoriesHook.useFetchPublicCategories({
     page: 1,
     per_page: 15,
   });
-  console.log(categories?.data);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 6 });
   const { data: allArticles, isLoading: feedLoading } =
     articleHook.useFetchPublicFeedArticles({
@@ -46,8 +44,9 @@ function Home() {
     }
   }, [allArticles, pagination.pageIndex]);
   useEffect(() => {
-      setShowPopup(true);
-  }, []);
+    if(advertisements?.data?.popup)  
+    setShowPopup(true);
+  }, [advertisements?.data?.popup]);
   return (
     <div className="flex flex-col gap-10 justify-center items-center w-full py-10 ">
       <Headline />

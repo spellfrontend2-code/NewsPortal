@@ -1,53 +1,15 @@
-import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 import { toast } from "sonner";
-
-function HtmlAd({ html }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const responsiveHtml = html
-    .replace(/width\s*:\s*[^;]+;?/gi, "width:100%;")
-    .replace(/height\s*:\s*[^;]+;?/gi, "height:100%;");
-  useEffect(() => {
-    if (!containerRef.current || !contentRef.current) return;
-
-    const container = containerRef.current;
-    const content = contentRef.current;
-
-    requestAnimationFrame(() => {
-      const scaleX = container.clientWidth / content.scrollWidth;
-      const scaleY = container.clientHeight / content.scrollHeight;
-
-      const scale = Math.min(scaleX, scaleY);
-
-      content.style.transform = `scale(${scale})`;
-      content.style.transformOrigin = "top left";
-    });
-  }, [html]);
-
-  return (
-    <div
-      ref={containerRef}
-      className="w-full h-full overflow-hidden"
-    >
-      <div
-        ref={contentRef}
-        className="w-fit h-fit"
-      >
-        <div
-          dangerouslySetInnerHTML={{
-            __html: responsiveHtml,
-          }}
-        />
-      </div>
-    </div>
-  );
-}
+import HtmlAd from "./HtmlAd";
+import { useAdImpression } from "../../hooks/useAdImpression";
 
 
-function SidebarAdvertisement({ Ads }) {
+
+function SidebarAdvertisement({ Ad }) {
+const adRef = useAdImpression({
+  adId: Ad?.id,
+})
   const advertisementHook=useAdvertisementHooks();
   const trackAdClick=advertisementHook.useTrackPublicAdClick()
 const handleAdClick = (advertisement_id: number) => {
@@ -61,24 +23,24 @@ const handleAdClick = (advertisement_id: number) => {
   });
 };
   return (
-    <div className="h-full w-full flex flex-col gap-2 overflow-hidden">
-      {Ads?.map((ad, index) => (
+    <div ref={adRef} className="h-full w-full flex flex-col gap-2 overflow-hidden">
+     
         <Link
-          key={ad?.id ?? index}
-          to={ad?.url || "#"}
-          target={ad?.target}
+          key={Ad?.id }
+          to={Ad?.url || "#"}
+          target={Ad?.target}
           className="h-full w-full cursor-pointer"
-          onClick={()=>handleAdClick(ad?.id)}
+          onClick={()=>handleAdClick(Ad?.id)}
         >
-          {ad?.type === "image" ? (
+          {Ad?.type === "image" ? (
             <img
-              src={ad?.image}
-              alt={ad?.title}
+              src={Ad?.image}
+              alt={Ad?.title}
               className="h-full w-full object-fill"
             />
-          ) : ad?.type === "video" ? (
+          ) : Ad?.type === "video" ? (
             <video
-              src={ad?.video}
+              src={Ad?.video}
               autoPlay
               muted
               playsInline
@@ -86,15 +48,15 @@ const handleAdClick = (advertisement_id: number) => {
               loop
               className="h-full w-full object-fill"
             />
-          ) : ad?.type === "text" ? (
+          ) : Ad?.type === "text" ? (
             <div className="bg-gray-100 h-full w-full">
-              {ad?.text}
+              {Ad?.text}
             </div>
-          ) : ad?.type === "html" ? (
-            <HtmlAd html={ad?.html} />
+          ) : Ad?.type === "html" ? (
+            <HtmlAd html={Ad?.html} />
           ) : null}
         </Link>
-      ))}
+      
     </div>
   );
 }

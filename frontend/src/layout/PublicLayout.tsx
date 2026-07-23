@@ -9,15 +9,15 @@ function PublicLayout() {
     <>
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
-  <NavbarTop />
-  <NavbarCategories />
+        <NavbarTop />
+        <NavbarCategories />
 
-  <main className="flex-1 w-[80%] mx-auto ">
-    <Outlet />
-  </main>
+        <main className="flex-1 w-[80%] mx-auto ">
+          <Outlet />
+        </main>
 
-  <Footer />
-</div>
+        <Footer />
+      </div>
     </>
   );
 }

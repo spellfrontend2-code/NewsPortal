@@ -65,10 +65,10 @@ function AdvertisementLinkInfo() {
       </div>
 
       {/* CTA */}
-      <div>
+      {/* <div>
         <label className="font-semibold text-gray-600">CTA Text</label>
         <input {...register("cta_text")} className={inputStyle} />
-      </div>
+      </div> */}
 
 
     </div>

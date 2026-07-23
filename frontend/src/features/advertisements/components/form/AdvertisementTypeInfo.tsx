@@ -45,6 +45,11 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
       value: "text",
       icon: FileType,
     },
+    {
+      name:"Native",
+      value:"native",
+      icon:Upload
+    }
   ];
   const { register, watch, setValue,control,formState:{errors} } = useFormContext();
   const adType = watch("ad_type");
@@ -62,15 +67,15 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
     field: null,
   });
   const placements = [
-    { name: "header_banner",size:"1200x120" },
-    { name: "footer_banner",size:"1200x120" },
+    { name: "header_banner",size:"1200 x 120" },
+    { name: "footer_banner",size:"1200 x 120" },
     { name: "sidebar",size:"300x250" },
-    { name: "in_article_top",size:"800x150" },
-    { name: "in_article_middle",size:"800x150" },
-    { name: "in_article_bottom",size:"800x150" },
-    { name: "between_articles",size:"800x150" },
-    { name: "popup",size:"300x250" },
-    { name: "native_feed",size:"300x250" },
+    { name: "in_article_top",size:"800 x 150" },
+    { name: "in_article_middle",size:"800 x 150" },
+    { name: "in_article_bottom",size:"800 x 150" },
+    { name: "between_articles",size:"800 x 150" },
+    { name: "popup",size:"300 x 250" },
+    { name: "native_feed",size:"300 x 250" },
   ];
   const recommendedSize=placements.find((p) => p.name === placement)?.size
   return (
@@ -308,6 +313,84 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
               <textarea {...register("text_content")} className={inputStyle} />
             </div>
           )}
+
+          {
+            adType==="native" && (
+              <div className="flex flex-col gap-3">
+                <label className="font-semibold text-gray-600">
+                   Text Content
+                </label>
+          <textarea {...register("text_content")} className={`${inputStyle} h-[200px]`} />
+              </div>
+              
+            )
+          }
+           {adType === "native" && (
+            <div className="flex flex-col gap-3">
+              <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+                Featured Image
+              </label>
+
+              <div className="h-[200px] w-full rounded-xl border-2 border-[rgb(var(--color-secondary-rgb)/0.7)] hover:border-[var(--color-primary)] border-dashed bg-[rgb(var(--color-secondary-rgb)/0.1)] flex items-center justify-center">
+                {imageUrl ? (
+                  <div className="relative h-full w-full">
+                    <img
+                      src={
+                        typeof imageUrl === "string"
+                          ? imageUrl
+                          : imageUrl.file_url
+                      }
+                      className="h-full w-full rounded-xl object-cover"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setValue("image_url", "")}
+                      className="absolute top-2 right-2 h-8 w-8 rounded-md bg-gray-200 hover:bg-gray-100 flex items-center justify-center"
+                    >
+                      <X className="text-red-500" size={18} />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className="h-full w-full flex flex-col items-center justify-center cursor-pointer gap-3"
+                    onClick={() =>
+                      setMediaDialog({
+                        open: true,
+                        fileType: "image",
+                        field: "image_url",
+                      })
+                    }
+                  >
+                    <div className="flex items-center justify-center w-10 h-10 bg-[rgb(var(--color-primary-rgb)/0.4)] rounded-lg">
+                      <Upload
+                        color="var(--color-primary)"
+                        strokeWidth={1.5}
+                        size={30}
+                      />
+                    </div>
+                    <p className="text-sm text-[rgb(var(--color-secondary-rgb)/0.7)]">
+                      Click to choose from media gallery
+                    </p>
+                    <p className="text-sm text-[rgb(var(--color-secondary-rgb)/0.7)]">
+                      Recommended  {recommendedSize} for {placement} placement
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+           {
+            adType==="native" && (
+              <div className="flex flex-col gap-3">
+                <label className="font-semibold text-gray-600">
+                  CTA Text 
+                </label>
+          <input {...register("cta_text")} className={inputStyle} />
+              </div>
+              
+            )
+          }
         </div>
 
         {/* Caption */}

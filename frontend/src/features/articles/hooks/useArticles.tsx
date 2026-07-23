@@ -140,5 +140,54 @@ export const useArticlesHooks = () => {
         },
       });
     },
+    useLikePublicArticle: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.likeArticle(id),
+         onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    useDislikePublicArticle: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.dislikeArticle(id),
+         onSuccess: () => {
+          queryClient.invalidateQueries(["like"]);
+        },
+      });
+    },
+    useSharePublicArticle: () => {
+      return useMutation({
+        mutationFn: ({id,platform}: any) => articles.shareArticle({id,platform}),
+         onSuccess: () => {
+          queryClient.invalidateQueries(["like"]);
+        },
+
+      });
+    },
+    useViewPublicArticle: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.viewArticle(id),
+         onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    useReportPublicArticle: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.reportArticle(id),
+         onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    useBookmarkPublicArticle:()=>{
+      return useMutation({
+        mutationFn: (id: any) => articles.bookmarkArticle(id),
+         onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    }
   };
 };

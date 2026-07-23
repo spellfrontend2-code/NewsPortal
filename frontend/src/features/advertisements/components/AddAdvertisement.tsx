@@ -37,8 +37,6 @@ export default function AddAdvertisement({
 
 
     setSelectedCategories(normalizedCategories);
-
-
   }, [advertisement]);
   const onSubmit = (data: AdvertisementForm) => {
     const updatedData = {

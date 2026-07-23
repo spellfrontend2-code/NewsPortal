@@ -7,7 +7,6 @@ export default function HtmlAd({ html }) {
   const responsiveHtml = html
     .replace(/width\s*:\s*[^;]+;?/gi, "width:100%;")
     .replace(/height\s*:\s*[^;]+;?/gi, "height:100%;");
-console.log(responsiveHtml)
   useEffect(() => {
     if (!containerRef.current || !contentRef.current) return;
 
