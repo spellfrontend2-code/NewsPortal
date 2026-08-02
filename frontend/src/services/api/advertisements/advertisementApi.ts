@@ -7,19 +7,20 @@ export const advertisementsApi = () => {
       per_page,
       search,
       status,
-      is_approved
+      is_approved,
+      placement,
     }: {
       page: number;
       per_page: number;
       search?: string;
       status?: string;
-      is_approved?: boolean
+      is_approved?: boolean;
+      placement?: string;
     }) => {
       try {
         const response = await axiosInstance.get("/admin/advertisements", {
-          params: { page, per_page, search,status,is_approved },
+          params: { page, per_page, search, status, is_approved, placement },
         });
-        console.log(response.data)
         return response.data;
       } catch (error: any) {
         if (error.response) {

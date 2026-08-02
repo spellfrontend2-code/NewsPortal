@@ -32,7 +32,7 @@ export function useAdImpression({
 
           trackAdImpression.mutate(adId, {
             onSuccess: (res) => {
-              toast.success(res?.message || "Impression tracked successfully");
+              // toast.success(res?.message || "Impression tracked successfully");
             },
           });
 

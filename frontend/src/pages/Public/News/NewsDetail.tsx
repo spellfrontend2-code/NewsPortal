@@ -84,76 +84,111 @@ function NewsDetail() {
       },
     );
   };
-  const handleBookmark=()=>{
-  if (!checkAuth("Please login to save this article")) return;
-bookmarkPublicArticle.mutate(Data?.article?.id, {
-  onSuccess: (res) => {
-    toast.success(res?.message || "Saved successfully");
-  },
-  onError: (err) => {
-    toast.error(err?.message || "Something went wrong");
-}})
+  const handleBookmark = () => {
+    if (!checkAuth("Please login to save this article")) return;
+    bookmarkPublicArticle.mutate(Data?.article?.id, {
+      onSuccess: (res) => {
+        toast.success(res?.message || "Saved successfully");
+      },
+      onError: (err) => {
+        toast.error(err?.message || "Something went wrong");
+      }
+    })
   }
   return (
-    <div className="flex justify-center w-full py-10">
+    <div className="flex justify-center w-full py-6 md:py-10">
       {isLoading ? (
         <NewsDetailSkeleton />
       ) : (
         Data && (
-          <div className="relative flex flex-col justify-center gap-3 w-full">
+          <div className="flex flex-col gap-6 w-full max-w-screen-xl mx-auto px-4 md:px-8">
+            {/* Article Header (Full Width) */}
             <NewsHeader Data={Data} />
-            <NewsContent Data={Data} />
-            <div className="absolute -left-20 top-0 h-[300px] w-[50px] ">
-              <div className="sticky top-20 flex flex-col gap-3 py-5 items-center text-black">
-                <div>
-                  <Bookmark size={30} className={`cursor-pointer text-yellow-300 ${Data?.article?.user_interactions?.has_bookmarked===true?"fill-yellow-300":""}`}
-                   onClick={()=>handleBookmark()}/>
-                </div>
-                <div className="flex flex-col items-center w-full justify-center">
-                  <MessageCircle />
-                  <p className="font-bold text-lg">
-                    {Data?.article?.comment_count}
-                  </p>
-                  <p className="uppercase tracking-wider text-xs font-bold text-gray-400">
-                    Comments
-                  </p>
-                </div>
-                <div className="flex flex-col items-center w-full justify-center">
-                  <p className="font-bold text-lg">
-                    {Data?.article?.share_count}
-                  </p>
-                  <p className="uppercase tracking-wider text-xs font-bold text-gray-400">
-                    shares
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  {socialMedias?.map((media, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleSocialShare(media)}
-                      className="cursor-pointer"
-                    >
-                      <i
-                        className={`${media?.icon_class} text-2xl `}
-                        style={{ color: media?.color }}
-                      ></i>
-                    </button>
-                  ))}
+            <div className="w-full h-px bg-slate-200/60 my-1"></div>
+
+            {/* Layout: Sidebar + Main Content */}
+            <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 w-full relative">
+              
+              {/* Responsive Interaction Bar (Mobile: Horizontal under header, Desktop: Vertical sticky left) */}
+              <div className="xl:w-[60px] shrink-0 order-1 z-20">
+                <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-full shadow-sm text-slate-600 w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
+                  
+                  {/* Bookmark */}
+                  <button
+                    onClick={() => handleBookmark()}
+                    className="group flex items-center justify-center p-2 rounded-full hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                  >
+                    <Bookmark
+                      size={22}
+                      className={`transition-all duration-200 ${
+                        Data?.article?.user_interactions?.has_bookmarked === true
+                          ? "fill-amber-400 text-amber-400"
+                          : "text-slate-400 group-hover:text-amber-500"
+                      }`}
+                    />
+                  </button>
+
+                  <div className="hidden xl:block w-6 h-px bg-slate-200"></div>
+                  <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
+
+                  {/* Comments Count */}
+                  <div className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0">
+                    <MessageCircle size={18} className="text-slate-450 xl:w-5 xl:h-5" />
+                    <p className="font-bold text-xs xl:text-sm text-slate-700 xl:mt-0.5">
+                      {Data?.article?.comment_count}
+                    </p>
+                  </div>
+
+                  {/* Shares Count */}
+                  <div className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0">
+                    <p className="font-bold text-xs xl:text-sm text-slate-700">
+                      {Data?.article?.share_count}
+                    </p>
+                    <p className="uppercase tracking-widest text-[10px] xl:text-[9px] font-bold text-slate-400">
+                      shares
+                    </p>
+                  </div>
+
+                  <div className="hidden xl:block w-6 h-px bg-slate-200"></div>
+                  <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
+
+                  {/* Social Actions */}
+                  <div className="flex flex-row xl:flex-col gap-2 xl:gap-4 items-center shrink-0">
+                    {socialMedias?.map((media, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSocialShare(media)}
+                        className="cursor-pointer hover:scale-110 transition-transform duration-150 p-1.5 rounded-full hover:bg-slate-100"
+                      >
+                        <i
+                          className={`${media?.icon_class} text-base xl:text-lg`}
+                          style={{ color: media?.color }}
+                        ></i>
+                      </button>
+                    ))}
+                  </div>
+
                 </div>
               </div>
+
+              {/* Main Content */}
+              <div className="flex-1 min-w-0 order-2">
+                <NewsContent Data={Data} />
+              </div>
+              
             </div>
           </div>
         )
       )}
-      <PopupAdvertisement
-        advertisements={Data?.advertisements?.popup}
+      {Data?.advertisements?.popup?.length>0 && <PopupAdvertisement
+        advertisements={Data?.advertisements?.popup[0]}
         showPopup={showPopup}
         setShowPopup={setShowPopup}
+      />}
+      <UserLogin
+        open={open}
+        onOpenChange={setOpen}
       />
-       <UserLogin
-            open={open}
-            onOpenChange={setOpen}
-          />
     </div>
   );
 }

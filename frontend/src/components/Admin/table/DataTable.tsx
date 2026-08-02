@@ -36,6 +36,9 @@ function DataTable({
   approvalStatus=[],
   approved={},
   setApproved={},
+  placements=[],
+  placement={},
+  setPlacement={},
   permission,
   permissionLoading
 
@@ -81,21 +84,37 @@ function DataTable({
                 className="bg-transparent outline-none focus:outline-none w-full "
               />
             </div>
-            <div className="flex gap-2"><div>
-              {
-                approvalStatus.length>0 && <StatusDropdown statuses={approvalStatus} status={approved} setStatus={setApproved} name="Approval Status"/>
-              }
-            </div>
-            <div>
-              {statuses.length>0 && (
-                <StatusDropdown
-                  statuses={statuses}
-                  status={status}
-                  setStatus={setStatus}
-                  name="Status"
-                />
-              )}
-            </div>
+            <div className="flex gap-2">
+              <div>
+                {approvalStatus.length > 0 && (
+                  <StatusDropdown
+                    statuses={approvalStatus}
+                    status={approved}
+                    setStatus={setApproved}
+                    name="Approval"
+                  />
+                )}
+              </div>
+              <div>
+                {placements.length > 0 && (
+                  <StatusDropdown
+                    statuses={placements}
+                    status={placement}
+                    setStatus={setPlacement}
+                    name="Placement"
+                  />
+                )}
+              </div>
+              <div>
+                {statuses.length > 0 && (
+                  <StatusDropdown
+                    statuses={statuses}
+                    status={status}
+                    setStatus={setStatus}
+                    name="Status"
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -23,6 +23,7 @@ import Unauthorized from "@/pages/Error/Unauthorized";
 import LatestNewsList from "@/features/articles/components/Public/NewsList/LatestNewsList";
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 import ErrorPage from "@/pages/Error/ErrorPage";
+import { PermissionProvider } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 const publicLayoutLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(publicCategoriesQuery({ page: 1, per_page: 5 }));
 
@@ -31,7 +32,11 @@ const publicLayoutLoader = (queryClient: QueryClient) => async () => {
 export const router = createBrowserRouter([
   {
     path: "/admin",
-    element: <ProtectedRoute navigateRoute="/admin/login" />,
+    element: (
+    <PermissionProvider>
+      <ProtectedRoute navigateRoute="/admin/login" />
+    </PermissionProvider>
+  ),
     errorElement: <ErrorPage />,
     children: [
       {
@@ -81,7 +86,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin/login",
-    element: <PublicRoute />,
+    element:(<PermissionProvider><PublicRoute /></PermissionProvider> ),
     children: [
       {
         index: true,

@@ -1,9 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
-import { useAdvertisementHooks } from "../hooks/useAdvertisements";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { inputStyle } from "@/components/shared/styles/inputStyle";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+
 import { toDateTimeLocal } from "@/features/articles/utils/toDateTimeLocal";
 
 type Advertisement = any;

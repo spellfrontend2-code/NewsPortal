@@ -1,13 +1,34 @@
+import { useArticleView } from "@/features/articles/hooks/useArticleView";
+import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-function ArticleSquareHoverCard({ article }) {
+function ArticleSquareHoverCard({ article }: any) {
   const navigate = useNavigate();
+  const { viewPublicArticle } = useArticleView();
   return (
-    <div className="relative h-full w-full group overflow-hidden cursor-pointer" onClick={()=>navigate(`/news/${article?.slug}`)}>
-      <img src={article?.featured_image} className="h-full w-full group-hover:scale-110 transition-all duration-300" />
-      <div className="bg-gradient-to-t from-[rgb(var(--color-public-dark-rgb)/0.8)] to-transparent absolute top-0 left-0 h-full w-full" />
-      <div className="absolute bottom-3 left-3 font-bold text-[var(--color-public-navtext)] group-hover:text-[var(--color-public-newsText-hover)]">
-        {article?.title}
+    <div
+      className="relative h-full w-full group overflow-hidden cursor-pointer rounded-2xl border border-slate-200/80 shadow-md bg-slate-950"
+      onClick={() => {
+        viewPublicArticle(article?.id);
+        navigate(`/news/${article?.slug}`);
+      }}
+    >
+      <img
+        src={article?.featured_image}
+        alt={article?.title}
+        className="h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-75"
+      />
+      <div className="bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent absolute inset-0 w-full h-full" />
+
+      <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-2.5">
+        <p className="font-serif font-black text-xl md:text-2xl text-white tracking-tight leading-tight transition-colors duration-250 group-hover:text-amber-200">
+          {article?.title}
+        </p>
+
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-300">
+          <Clock size={12} className="text-slate-405" />
+          <span>{article?.published_at?.split("T")[0]}</span>
+        </div>
       </div>
     </div>
   );

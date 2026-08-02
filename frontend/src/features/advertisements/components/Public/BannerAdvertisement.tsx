@@ -4,8 +4,7 @@ import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 import { toast } from "sonner";
 import { useAdImpression } from "../../hooks/useAdImpression";
 
-function BannerAdvertisement({Ad}) {
-  console.log("BannerAd",Ad)
+function BannerAdvertisement({Ad}:{Ad:any}) {
     const adRef = useAdImpression({
     adId: Ad?.id,
   });
@@ -14,7 +13,7 @@ function BannerAdvertisement({Ad}) {
   const handleAdClick = (advertisement_id: number) => {
     trackAdClick.mutate(advertisement_id, {
       onSuccess: (res) => {
-        toast.success(res?.message || "Advertisement clicked successfully");
+        // toast.success(res?.message || "Advertisement clicked successfully");
       },
       onError: (e: any) => {
         toast.error(e?.message || "Something went wrong");

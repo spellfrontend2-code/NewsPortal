@@ -6,7 +6,7 @@ import { useAdImpression } from "../../hooks/useAdImpression";
 
 
 
-function SidebarAdvertisement({ Ad }) {
+function SidebarAdvertisement({ Ad }:{Ad:any}) {
 const adRef = useAdImpression({
   adId: Ad?.id,
 })

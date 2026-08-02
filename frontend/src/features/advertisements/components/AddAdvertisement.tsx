@@ -76,7 +76,7 @@ export default function AddAdvertisement({
     }
   };
   return (
-<div className="w-full flex flex-col">
+<div className="w-full h-screen flex flex-col">
         <div className="flex items-center gap-5  rounded-lg p-4 mb-6">
         <Button
           variant="ghost"

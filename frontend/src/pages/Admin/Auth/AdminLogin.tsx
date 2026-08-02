@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 function AdminLogin() {
   const navigate = useNavigate();
-const {setAuthData}=useAuthStore()
+  const { setAuthData } = useAuthStore();
   const authHook = useAuthHooks();
   const adminLogin = authHook.useLogin();
   const { register, handleSubmit } = useForm({
@@ -17,12 +17,13 @@ const {setAuthData}=useAuthStore()
       password: "",
     },
   });
-const {getDefaultRoute}=usePermissionStore()
+  const { getDefaultRoute } = usePermissionStore();
   const onSubmit = (data) => {
     adminLogin.mutate(data, {
       onSuccess: (response) => {
-        const res=response.data
-        const route=getDefaultRoute(res?.permissions)
+        const res = response.data;
+        const route = getDefaultRoute(res?.permissions);
+        console.log(route)
         const authData = {
           accessToken: res.access_token,
           expiresIn: res.expires_in,
@@ -32,11 +33,11 @@ const {getDefaultRoute}=usePermissionStore()
         };
         setAuthData(authData);
         toast.success(response?.message);
-        navigate(route)
+        navigate(route);
       },
       onError: (e) => {
-toast.error(e?.message);
-},
+        toast.error(e?.message);
+      },
     });
   };
   return (
@@ -65,7 +66,12 @@ toast.error(e?.message);
           />
         </div>
         <div className="flex items-center justify-center">
-          <Button type="submit"variant="submit" className="w-1/2 h-[40px] text-lg" disabled={adminLogin?.isPending}>
+          <Button
+            type="submit"
+            variant="submit"
+            className="w-1/2 h-[40px] text-lg"
+            disabled={adminLogin?.isPending}
+          >
             {adminLogin?.isPending ? "Logging In..." : "Log In"}
           </Button>
         </div>

@@ -31,6 +31,15 @@ const statuses = [
   { name: "Rejected", value: "rejected" },
   { name: "Archived", value: "archived" },
 ];
+const placements = [
+  { name: "All", value: "" },
+  { name: "Header", value: "header" },
+  { name: "Sidebar", value: "sidebar" },
+  { name: "Banner", value: "banner" },
+  { name: "Popup", value: "popup" },
+  { name: "In-Feed", value: "in_feed" },
+  { name: "Footer", value: "footer" },
+];
   const approvalStatus = [
     {name:"All",value:undefined},{
       name: "Approved",
@@ -41,12 +50,14 @@ const statuses = [
   
   const [approved, setApproved] = useState(undefined);
   const [status, setStatus] = useState("");
+  const [placement, setPlacement] = useState("");
   const { data, isLoading, error } = advertisementHook.useFetchAdvertisements({
     page: pagination.pageIndex + 1,
     per_page: pagination.pageSize,
     search,
     status,
     is_approved:approved,
+    placement,
   });
  
   const deleteAdvertisement = advertisementHook.useDeleteAdvertisement();
@@ -123,7 +134,7 @@ PERMISSIONS.ADS,
 "advertisement"  );
   if (error) toast.error(error?.message);
   return (
-<div className="h-full overflow-y-auto p-20 flex flex-col gap-5">
+    <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
         {addOpen ? (
         <AddAdvertisement open={addOpen} setOpen={setAddOpen} type="add" />
       ) : editOpen ? (
@@ -171,6 +182,9 @@ PERMISSIONS.ADS,
               approvalStatus={approvalStatus}
               approved={approved}
               setApproved={setApproved}
+              placements={placements}
+              placement={placement}
+              setPlacement={setPlacement}
               permission={PERMISSIONS?.ADS?.VIEW?.name}
               permissionLoading={permissionLoading}
             />

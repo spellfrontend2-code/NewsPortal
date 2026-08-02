@@ -1,5 +1,4 @@
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
-import { formatDateTime } from "@/lib/formatDateTime";
 import NewsList from "@/pages/Public/News/NewsList";
 import { useEffect, useState } from "react";
 
@@ -11,7 +10,7 @@ function LatestNewsList() {
   // const to_date = formatDateTime(toDate);
   // const from_date = formatDateTime(fromDate);
   const articleHook = useArticlesHooks();
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 12 });
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 17 });
   const { data: allArticles, isLoading } = articleHook.useFetchPublicLatestArticles({
     page: pagination?.pageIndex + 1,
     per_page: pagination?.pageSize,

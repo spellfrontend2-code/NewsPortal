@@ -3,22 +3,41 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
-:root{
-    --color-primary:#7c3aed;
-    --color-gray-text:#0c0c0c6e;
-    --color-secondary:#d0d5dd;
-    --color-gray-rgb:17 24 39;
-  --color-secondary-rgb: 75 85 99;
-  --color-primary-rgb: 124 58 237;
-  --color-public-primary:#0f184b;
-  --color-public-navtext:#ffffff;
-    --color-public-navtext-rgb:255 255 255;
-    --color-public-dark:#000000;
-    --color-public-dark-rgb:0 0 0;
-  --color-public-bg:#ffffff;
-  --color-public-newsText:#0f184b;
-  --color-public-newsText-rgb: 15 24 75;
-    --color-public-newsText-hover:#ff0000;
+:root {
+  --color-primary: #4f46e5;
+  /* Indigo */
+  --color-gray-text: #64748b;
+  /* Slate-500 */
+  --color-secondary: #e2e8f0;
+  /* Slate-200 */
+  --color-gray-rgb: 15 23 42;
+  --color-secondary-rgb: 100 116 139;
+  --color-primary-rgb: 79 70 229;
 
+  --color-public-primary: #0f172a;
+  /* Slate-900 */
+  --color-public-navtext: #ffffff;
+  --color-public-navtext-rgb: 255 255 255;
+  --color-public-dark: #020617;
+  /* Slate-950 */
+  --color-public-dark-rgb: 2 6 23;
+  --color-public-bg: #f8fafc;
+  /* Slate-50 */
+  --color-public-newsText: #1e293b;
+  /* Slate-800 */
+  --color-public-newsText-rgb: 30 41 59;
+  --color-public-newsText-hover: #4f46e5;
+  /* Indigo-600 */
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Geist Variable", sans-serif;
+  background-color: var(--color-public-bg);
+  color: var(--color-public-newsText);
+}

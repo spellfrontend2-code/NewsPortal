@@ -1,14 +1,37 @@
+import { useArticleView } from "@/features/articles/hooks/useArticleView";
+import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-function ArticleSquareCard({article}:any)
-{
-    const navigate = useNavigate();
-    return (
-    <div className="flex flex-col h-full w-full gap-2 group overflow-hidden cursor-pointer" onClick={()=>navigate(`/news/${article?.slug}`)}>
-      <img src={article?.featured_image || article?.thumbnail} className="h-2/3 w-full" />
-      <div className="px-5 h-1/3 font-bold text-[var(--color-public-newsText)] group-hover:text-[var(--color-public-newsText-hover)]">
-        {article?.title}
+function ArticleSquareCard({ article }: any) {
+  const navigate = useNavigate();
+  const { viewPublicArticle } = useArticleView();
+  return (
+    <div
+      className="flex flex-col h-full w-full group overflow-hidden cursor-pointer rounded-2xl border border-slate-100 bg-white hover:shadow-md hover:border-slate-200 transition-all duration-300"
+      onClick={() => {
+        viewPublicArticle(article?.id);
+        navigate(`/news/${article?.slug}`);
+      }}
+    >
+      <div className="h-[70%] w-full overflow-hidden relative">
+        <img
+          src={article?.featured_image || article?.thumbnail}
+          alt={article?.title}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
       </div>
-    </div>)
+      <div className="p-4 flex flex-col justify-between flex-1 gap-2 bg-white">
+        <p className="font-bold text-slate-900 text-sm line-clamp-2 leading-snug transition-colors duration-250 group-hover:text-[var(--color-public-newsText-hover)]">
+          {article?.title}
+        </p>
+
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-450">
+          <Clock size={12} />
+          <span>{article?.published_at?.split("T")[0]}</span>
+        </div>
+      </div>
+    </div>
+  );
 }
-export default ArticleSquareCard
+
+export default ArticleSquareCard;

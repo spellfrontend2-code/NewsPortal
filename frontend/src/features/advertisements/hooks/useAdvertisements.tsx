@@ -10,12 +10,14 @@ export const useAdvertisementHooks = () => {
       search,
       status,
       is_approved,
+      placement,
     }: {
       page: number;
       per_page: number;
       search?: string;
       status?: string;
       is_approved?: boolean;
+      placement?: string;
     }) => {
       return useQuery({
         queryFn: () =>
@@ -25,6 +27,7 @@ export const useAdvertisementHooks = () => {
             search,
             status,
             is_approved,
+            placement,
           }),
         queryKey: [
           "advertisements",
@@ -33,6 +36,7 @@ export const useAdvertisementHooks = () => {
           search,
           status,
           is_approved,
+          placement,
         ],
       });
     },

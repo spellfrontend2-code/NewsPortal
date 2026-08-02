@@ -25,52 +25,56 @@ function LatestNews() {
   const advertisementsList = advertisements?.data ?? [];
   const sidebarAds = advertisementsList?.sidebar?.slice(0, 3);
   return (
-    <div className="h-[500px] w-full ">
-      {articles.length > 0 && (
-        <h1 className="text-5xl font-bold text-[var(--color-public-newsText)] ">
-Latest News      </h1>
+    <div className="w-full py-4">
+      {articles?.length > 0 && (
+        <h2 className="text-2xl md:text-3xl font-serif font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
+          <span className="h-6 w-1 bg-indigo-650 rounded-full"></span>
+          Latest News
+        </h2>
       )}
       {isLoading ? (
         <LatestNewsSkeleton />
       ) : articles?.length > 0 ? (
-        <div className="flex w-full h-full gap-3 ">
-          <div className="flex w-3/4 gap-3">
-            <div className="flex-[3] min-w-0">
+        <div className="flex flex-col lg:flex-row w-full gap-6">
+          <div className="flex flex-col md:flex-row lg:w-3/4 gap-6">
+            <div className="md:flex-[3] min-w-0 h-[480px]">
               <ArticleSquareHoverCard article={articles[0]} />
             </div>
 
-            <div className="flex flex-[2] min-w-0 flex-col gap-3">
-              {articles.slice(1).map((article: any) => (
-                <ArticleRectangleCard key={article.id} article={article} />
-              ))}
+            <div className="flex md:flex-[2] min-w-0 flex-col gap-4 justify-between">
+              <div className="flex flex-col gap-3">
+                {articles.slice(1).map((article: any) => (
+                  <div key={article.id} className="h-[105px]">
+                    <ArticleRectangleCard article={article} />
+                  </div>
+                ))}
+              </div>
 
               <Button
-                variant="view"
-                className="w-full"
+                variant="outline"
+                className="w-full rounded-full border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-3 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
                 onClick={() => {
                   navigate("/news-list/latest-news");
                 }}
               >
-                <Clock />
-                View 24 hours latest news
+                <Clock size={14} />
+                <span>24-Hour Archive</span>
               </Button>
             </div>
           </div>
-          <div className="w-1/4">
-            <div className="h-full w-full flex flex-col gap-2 ">
-           {
-  sidebarAds.length > 0 &&
-    sidebarAds.map((ad: any, index: number) => (
-      <div key={ad.id ?? index} className="h-[200px] w-full">
-        <SidebarAdvertisement Ad={ad} />
-      </div>
-    ))
-}
+          <div className="lg:w-1/4 w-full">
+            <div className="h-full w-full flex flex-col gap-4">
+              {sidebarAds.length > 0 &&
+                sidebarAds.map((ad: any, index: number) => (
+                  <div key={ad.id ?? index} className="h-[160px] w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+                    <SidebarAdvertisement Ad={ad} />
+                  </div>
+                ))}
             </div>
           </div>
         </div>
       ) : (
-        <p>No news</p>
+        <p className="text-slate-500 font-medium text-center py-6">No news articles found</p>
       )}
     </div>
   );

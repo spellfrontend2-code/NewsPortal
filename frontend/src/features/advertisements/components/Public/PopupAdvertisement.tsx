@@ -2,10 +2,10 @@ import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import SidebarAdvertisement from "./SidebarAdvertisement";
 import { useEffect, useRef } from "react";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
-import { toast } from "sonner";
 
 function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
 {
+  console.log(advertisements)
     const tracked = useRef(false);
  const advertisementHook=useAdvertisementHooks();
  const trackAdImpression=advertisementHook.useTrackPublicAdImpression();
@@ -14,7 +14,7 @@ function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
       tracked.current = true;
       trackAdImpression.mutate(advertisements.id,{
         onSuccess: (res) => {
-toast.success(res?.message||"Impression tracked successfully");
+// toast.success(res?.message||"Impression tracked successfully");
         },
       });
     }
@@ -37,7 +37,7 @@ toast.success(res?.message||"Impression tracked successfully");
                 <p className=" text-blue-900" >Skip this</p>
               </button>
             </DialogClose></div>
-            <div className="h-[90%] w-full"><SidebarAdvertisement Ads={[advertisements]} /></div>
+            <div className="h-[90%] w-full"><SidebarAdvertisement Ad={advertisements} /></div>
           </div>
         </DialogContent>
       </Dialog>

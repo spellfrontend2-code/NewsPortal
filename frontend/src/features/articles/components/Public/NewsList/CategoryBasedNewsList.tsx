@@ -20,16 +20,25 @@ const [pagination, setPagination] = useState({
 const articles =
   allArticles?.data
     ?.filter((item: any) => item.type === "article")
-    .map((item: any) => item.data) ?? [];  return (
-    <div className="py-10">
-     {isLoading ? <NewsListSkeleton show={categorySlug?"list":"all"}/> : <NewsList
+    .map((item: any) => item.data) ?? [];
+
+  // Don't render anything if not loading and no articles
+  if (!isLoading && articles.length === 0) return null;
+
+  return (
+    <div className={categorySlug ? "py-6 border-b border-slate-100 last:border-b-0" : "py-10"}>
+      {isLoading ? (
+        <NewsListSkeleton show={categorySlug ? "list" : "all"} />
+      ) : (
+        <NewsList
           articles={articles}
-          page_headline={categorySlug?categorySlug:slug}
+          page_headline={categorySlug ? categorySlug : slug}
           pagination={pagination}
           setPagination={setPagination}
           lastPage={allArticles?.pagination?.last_page}
-          show={categorySlug?"list":"all"}
-        />}
+          show={categorySlug ? "list" : "all"}
+        />
+      )}
     </div>
   );
 }

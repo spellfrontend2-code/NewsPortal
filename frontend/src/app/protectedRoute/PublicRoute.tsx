@@ -7,7 +7,7 @@ function PublicRoute() {
 //   const { getDefaultRoute } = usePermissionStore();
 // const authorizedRoute=getDefaultRoute(authData?.permissions);
   if (authData?.accessToken) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
   return <Outlet />;
