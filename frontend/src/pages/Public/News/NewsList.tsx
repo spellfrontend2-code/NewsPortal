@@ -1,8 +1,6 @@
-import { Button } from "@/components/ui/button";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
-import NewsListSkeleton from "@/features/articles/components/Public/NewsList/NewsListSkeleton";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

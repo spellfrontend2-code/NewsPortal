@@ -91,8 +91,8 @@ function NewsContent({ Data }: any) {
         </div>
 
         {/* Bottom Advertisement */}
-        {advertisementData?.bottom && (
-          <div className="h-[150px] w-full rounded-2xl overflow-hidden border border-slate-100/80 shadow-sm bg-slate-50/30 my-2">
+        {advertisementData?.bottom?.length>0 && (
+          <div className=" w-full rounded-2xl overflow-hidden border border-slate-100/80 shadow-sm bg-slate-50/30 my-2">
             <BannerAdvertisement Ad={advertisementData?.bottom[0]} />
           </div>
         )}

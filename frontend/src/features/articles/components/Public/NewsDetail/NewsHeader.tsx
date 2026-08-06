@@ -14,7 +14,7 @@ function NewsHeader({ Data }: any) {
       </div>
 
       {/* Top Banner Advertisement */}
-      {advertisementData?.top && (
+      {advertisementData?.top?.length>0 && (
         <div className="w-full my-2 overflow-hidden rounded-2xl border border-slate-100/80 shadow-sm bg-slate-50/50">
           <BannerAdvertisement Ad={advertisementData?.top[0]} />
         </div>

@@ -72,7 +72,7 @@ function CategoryInputForm({
     defaultValues: {
       name: edit ? category?.name : "",
       description: edit ? category?.description : "",
-      parent_id: edit ? String(category?.parent_id) : null,
+      parent_id: edit ? category?.parent_id : null,
       position: edit ? category?.position : 0,
       meta_title: edit ? category?.meta_title : "",
       meta_description: edit ? category?.meta_description : "",

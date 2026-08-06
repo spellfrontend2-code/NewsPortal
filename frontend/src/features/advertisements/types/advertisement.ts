@@ -16,7 +16,8 @@ export type AdvertisementForm = {
   target_url: string;
   target_blank: string;
   cta_text: string;
-
+  
+  page_type: string;
   placement: string;
 
   target_categories: string[];

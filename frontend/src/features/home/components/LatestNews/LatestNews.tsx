@@ -25,7 +25,7 @@ function LatestNews() {
   const advertisementsList = advertisements?.data ?? [];
   const sidebarAds = advertisementsList?.sidebar?.slice(0, 3);
   return (
-    <div className="w-full py-4">
+    <div className="w-full h-[500px] mb-6">
       {articles?.length > 0 && (
         <h2 className="text-2xl md:text-3xl font-serif font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
           <span className="h-6 w-1 bg-indigo-650 rounded-full"></span>
@@ -35,9 +35,9 @@ function LatestNews() {
       {isLoading ? (
         <LatestNewsSkeleton />
       ) : articles?.length > 0 ? (
-        <div className="flex flex-col lg:flex-row w-full gap-6">
-          <div className="flex flex-col md:flex-row lg:w-3/4 gap-6">
-            <div className="md:flex-[3] min-w-0 h-[480px]">
+        <div className="flex flex-col lg:flex-row w-full h-full gap-6">
+          <div className="h-full flex flex-col md:flex-row lg:w-3/4 gap-6">
+            <div className="md:flex-[3] min-w-0 h-full">
               <ArticleSquareHoverCard article={articles[0]} />
             </div>
 
@@ -63,13 +63,15 @@ function LatestNews() {
             </div>
           </div>
           <div className="lg:w-1/4 w-full">
-            <div className="h-full w-full flex flex-col gap-4">
+            <div className="h-full w-full flex flex-row lg:flex-col gap-4 ">
               {sidebarAds.length > 0 &&
-                sidebarAds.map((ad: any, index: number) => (
-                  <div key={ad.id ?? index} className="h-[160px] w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
-                    <SidebarAdvertisement Ad={ad} />
-                  </div>
-                ))}
+                sidebarAds.map((ad: any, index: number) => {
+                  return (
+                    <div key={ad.id ?? index} className="h-[160px] w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+                      <SidebarAdvertisement Ad={ad} />
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>

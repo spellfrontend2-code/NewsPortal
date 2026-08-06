@@ -66,6 +66,10 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
     fileType: "image",
     field: null,
   });
+  const page_type=[
+    {name:"Home",value:"home"},
+  {name:"Category",value:"category"},
+{name:"Single",value:"single"},]
   const placements = [
     { name: "header_banner",size:"1200 x 120" },
     { name: "footer_banner",size:"1200 x 120" },
@@ -80,6 +84,29 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
   const recommendedSize=placements.find((p) => p.name === placement)?.size
   return (
     <div className="flex flex-col gap-3 mt-3">
+                 {/* PAGE TYPE */}
+      <div>
+        <label className="font-semibold text-gray-600">Page Type</label>
+        <Controller
+          name="page_type"
+          control={control}
+          render={({ field }) => (
+            <Select value={field.value} onValueChange={field.onChange}>
+              <SelectTrigger className={`${inputStyle} py-5 text-base`}>
+                <SelectValue placeholder="Select a page type" />
+              </SelectTrigger>
+
+              <SelectContent className="bg-white">
+                {page_type.map((pageType) => (
+                  <SelectItem key={pageType.value} value={pageType.value}>
+                    {pageType.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+      </div>
             {/* PLACEMENT */}
       <div>
         <label className="font-semibold text-gray-600">Placement</label>

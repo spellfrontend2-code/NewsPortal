@@ -25,7 +25,7 @@ export function useAdvertisementForm({ advertisement, type }: any) {
         target_blank: advertisement?.target_blank || "_self",
         cta_text: advertisement?.cta_text || "",
 
-
+        page_type: advertisement?.page_type || "home",
         placement: advertisement?.placement || "header_banner",
         target_categories: advertisement?.target_categories || [],
 

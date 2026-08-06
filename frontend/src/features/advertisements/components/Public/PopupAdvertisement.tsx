@@ -5,7 +5,6 @@ import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 
 function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
 {
-  console.log(advertisements)
     const tracked = useRef(false);
  const advertisementHook=useAdvertisementHooks();
  const trackAdImpression=advertisementHook.useTrackPublicAdImpression();
@@ -37,7 +36,7 @@ function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
                 <p className=" text-blue-900" >Skip this</p>
               </button>
             </DialogClose></div>
-            <div className="h-[90%] w-full"><SidebarAdvertisement Ad={advertisements} /></div>
+            <div className="h-[90%] w-full "><SidebarAdvertisement Ad={advertisements} /></div>
           </div>
         </DialogContent>
       </Dialog>

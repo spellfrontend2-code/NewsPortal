@@ -7,7 +7,7 @@ import NewsListSkeleton from "./NewsListSkeleton";
 function CategoryBasedNewsList({categorySlug}:{categorySlug?:string}) {
   const { slug } = useParams();
   const articleHook = useArticlesHooks();
-const defaultPageSize = categorySlug ? 4 : 12;
+const defaultPageSize = categorySlug ? 3 : 12;
 
 const [pagination, setPagination] = useState({
   pageIndex: 0,

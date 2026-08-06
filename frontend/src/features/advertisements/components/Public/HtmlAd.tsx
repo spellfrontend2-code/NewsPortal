@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function HtmlAd({ html }) {
+export default function HtmlAd({ html }:{html:string}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 

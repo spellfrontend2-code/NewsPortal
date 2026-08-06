@@ -69,7 +69,7 @@ function Home() {
               </div>
             ) : feed?.type === "advertisement" ? (
               <div key={feed?.id} className="col-span-full my-6">
-                <div className="w-full h-[100px] overflow-hidden rounded-2xl border border-slate-100 shadow-sm bg-slate-50/50">
+                <div className="w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm bg-slate-50/50">
                   <BannerAdvertisement Ad={feed?.data} />
                 </div>
               </div>

@@ -56,10 +56,10 @@ function Headline() {
                           <span className="text-slate-700">{article?.author?.name}</span>
                         </p>
                         <span className="text-slate-300">•</span>
-                        <p className="flex items-center gap-1">
-                          <Clock size={14} className="text-slate-400" />
-                          <span>{article.read_time_minutes} min read</span>
-                        </p>
+                         <div className="flex items-center gap-2 text-slate-500 bg-slate-50 px-3.5 py-2 rounded-full border border-slate-100 shadow-sm">
+          <Clock size={15} className="text-slate-400" />
+          <span className="font-semibold text-xs tracking-wider uppercase">{article?.published_at?.split("T")[0]}</span>
+        </div>
                       </div>
                     </>
                   )}
