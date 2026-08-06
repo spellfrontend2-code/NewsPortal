@@ -1,0 +1,82 @@
+import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
+import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+
+function MultiCategoryInOneRow({
+  categoryOne,
+  categoryTwo,
+}: {
+  categoryOne: any;
+  categoryTwo: any;
+}) {
+  const articleHook = useArticlesHooks();
+  const [categoryOnePagination, setCategoryOnePagination] = useState({
+    pageIndex: 0,
+    pageSize: 4,
+  });
+
+  const [categoryTwoPagination, setCategoryTwoPagination] = useState({
+    pageIndex: 0,
+    pageSize: 2,
+  });
+  const categoryOneArticles = articleHook.useFetchPublicArticlesByCategory({
+    page: categoryOnePagination.pageIndex + 1,
+    per_page: categoryOnePagination.pageSize,
+    slug: categoryOne?.slug,
+  });
+
+  const categoryTwoArticles = articleHook.useFetchPublicArticlesByCategory({
+    page: categoryTwoPagination.pageIndex + 1,
+    per_page: categoryTwoPagination.pageSize,
+    slug: categoryTwo?.slug,
+  });
+
+  const articlesOne =
+    categoryOneArticles.data?.data
+      ?.filter((item: any) => item.type === "article")
+      .map((item: any) => item.data) ?? [];
+
+  const articlesTwo =
+    categoryTwoArticles.data?.data
+      ?.filter((item: any) => item.type === "article")
+      .map((item: any) => item.data) ?? [];
+  const navigate = useNavigate();
+  return (
+    <div className="flex  gap-4 w-full">
+      <div className="flex gap-4 w-full ">
+        <div className="w-2/3">
+          <h1
+            className={`text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+            onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
+          >
+            {categoryOne?.name}
+          </h1>
+          <div className="grid grid-cols-2 gap-4">
+            {articlesOne.map((article: any) => (
+              <div key={article.id} className="h-[320px] w-full bg-transparent">
+                <ArticleSquareCard article={article} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="w-1/3 ">
+          <h1
+            className={`text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+            onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
+          >
+            {categoryTwo?.name}
+          </h1>
+          {articlesTwo.map((article: any) => (
+            <div key={article.id} className="h-[320px] w-full bg-transparent">
+              <ArticleSquareCard article={article} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default MultiCategoryInOneRow;

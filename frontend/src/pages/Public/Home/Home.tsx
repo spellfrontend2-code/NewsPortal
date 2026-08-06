@@ -7,15 +7,20 @@ import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
+import CategoryWithChildren from "@/features/home/components/CategoryWithChildren/CategoryWithChildren";
+import ColoredCategoryNews from "@/features/home/components/ColoredCategoryNews";
+import ColumnViewCategoryNews from "@/features/home/components/ColumnViewCategoryNews";
+import ColumnViewMultiCategoryNews from "@/features/home/components/ColumnViewMultiCategoryNews";
 import Headline from "@/features/home/components/Headline/Headline";
 import LatestNews from "@/features/home/components/LatestNews/LatestNews";
+import MultiCategoryInOneRow from "@/features/home/components/MultiCategoryInOneRow/MultiCategoryInOneRow";
 import { useEffect, useState } from "react";
 
 function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const articleHook = useArticlesHooks();
   const advertisementHook = useAdvertisementHooks();
-  const { data: advertisements,isLoading:adLoading } =
+  const { data: advertisements, isLoading: adLoading } =
     advertisementHook.useFetchPublicAdvertisements();
   const categoriesHook = useCategoriesHooks();
   const { data: categories } = categoriesHook.useFetchPublicCategories({
@@ -41,43 +46,46 @@ function Home() {
     }
   }, [allArticles, pagination.pageIndex]);
   useEffect(() => {
-    if (advertisements?.data?.popup)
-      setShowPopup(true);
+    if (advertisements?.data?.popup) setShowPopup(true);
   }, [advertisements?.data?.popup]);
- 
+
   return (
-    <div className="flex flex-col gap-10 justify-center items-center w-full py-10 ">
+    <div className="flex flex-col gap-10 justify-center items-center w-full  ">
       <Headline />
       <LatestNews />
-
-            <div className="flex flex-col w-full mt-10">
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {!(feedData?.length > 0)
-          ? Array.from({ length: 6 }, (_, index) => (
-            <div key={index} className="h-[400px] w-full">
-              <ArticleSquareCardSkeleton />
-            </div>
-          ))
-          : feedData?.map((feed: any) =>
-            feed?.type === "article" ? (
-              <div
-                key={feed?.data?.id}
-                className="h-[300px] w-full bg-transparent"
-              >
-                <ArticleSquareCard article={feed.data} />
-              </div>
-            ) : feed?.type === "advertisement" ? (
-              <div key={feed?.id} className="col-span-full my-6">
-                <div className="w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm bg-slate-50/50">
-                  <BannerAdvertisement Ad={feed?.data} />
+      {/* <MultiCategoryInOneRow categoryOne={categories?.data[3]} categoryTwo={categories?.data[1]} /> */}
+      {/* <CategoryWithChildren category={categories?.data[3]} /> */}
+      {/* <ColoredCategoryNews category={categories?.data[3]} color="blue" /> */}
+      {/* <ColumnViewCategoryNews category={categories?.data[3]} /> */}
+      {/* <ColumnViewMultiCategoryNews categoryOne={categories?.data[3]} categoryTwo={categories?.data[1]} /> */}
+      <>
+      <div className="flex flex-col w-full mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {!(feedData?.length > 0)
+            ? Array.from({ length: 6 }, (_, index) => (
+                <div key={index} className="h-[400px] w-full">
+                  <ArticleSquareCardSkeleton />
                 </div>
-              </div>
-            ) : null,
-          )}
-      </div>
-      {(pagination.pageIndex + 1 < allArticles?.pagination?.last_page ||
-        feedLoading) && (
+              ))
+            : feedData?.map((feed: any) =>
+                feed?.type === "article" ? (
+                  <div
+                    key={feed?.data?.id}
+                    className="h-[300px] w-full bg-transparent"
+                  >
+                    <ArticleSquareCard article={feed.data} />
+                  </div>
+                ) : feed?.type === "advertisement" ? (
+                  <div key={feed?.id} className="col-span-full my-6">
+                    <div className="w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm bg-slate-50/50">
+                      <BannerAdvertisement Ad={feed?.data} />
+                    </div>
+                  </div>
+                ) : null,
+              )}
+        </div>
+        {(pagination.pageIndex + 1 < allArticles?.pagination?.last_page ||
+          feedLoading) && (
           <div className="flex justify-center items-center mt-8">
             <Button
               variant="submit"
@@ -94,24 +102,29 @@ function Home() {
             </Button>
           </div>
         )}
-    </div>
-      {
-    categories?.data?.length > 0 && (
-      <div className="flex flex-col w-full ">
-        <div>
-          {categories?.data?.map((category: any) => (
-            <CategoryBasedNewsList
-              key={category?.id}
-              categorySlug={category?.slug}
-            />
-          ))}
-        </div>
       </div>
-    )
-  }
+      {categories?.data?.length > 0 && (
+        <div className="flex flex-col w-full ">
+          <div>
+            {categories?.data?.map((category: any) => (
+              <CategoryBasedNewsList
+                key={category?.id}
+                categorySlug={category?.slug}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
-{!adLoading && advertisements?.data?.popup?.id &&  <PopupAdvertisement advertisements={advertisements?.data?.popup} showPopup={showPopup} setShowPopup={setShowPopup} />
-}    </div >
+      {!adLoading && advertisements?.data?.popup?.id && (
+        <PopupAdvertisement
+          advertisements={advertisements?.data?.popup}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+        />
+      )}
+      </>
+    </div>
   );
 }
 

@@ -2,6 +2,7 @@ import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import HeadlineSkeleton from "./HeadlineSkeleton";
+import { useArticleView } from "@/features/articles/hooks/useArticleView";
 
 function Headline() {
   const articleHook = useArticlesHooks();
@@ -20,6 +21,7 @@ function Headline() {
   const handleNavigation = (slug: any) => {
   navigate(`/news/${slug}`);
   };
+  const {viewPublicArticle}=useArticleView()
   return (
     <div className="flex flex-col gap-8 h-full w-full justify-center items-center">
       {isLoading
@@ -30,7 +32,7 @@ function Headline() {
             <div
               key={article?.id ?? idx}
               className="w-full flex flex-col justify-center items-center gap-6 group cursor-pointer"
-              onClick={() => handleNavigation(article?.slug)}
+              onClick={() =>{viewPublicArticle(article?.id); handleNavigation(article?.slug)}}
             >
               {(article?.headline?.display_type === "image" ||
                 article?.headline?.display_type === "mixed" ||

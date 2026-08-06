@@ -25,9 +25,9 @@ function LatestNews() {
   const advertisementsList = advertisements?.data ?? [];
   const sidebarAds = advertisementsList?.sidebar?.slice(0, 3);
   return (
-    <div className="w-full h-[500px] mb-6">
+    <div className="w-full h-[580px]  ">
       {articles?.length > 0 && (
-        <h2 className="text-2xl md:text-3xl font-serif font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
+        <h2 className="h-[5%]  text-2xl md:text-3xl font-serif font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
           <span className="h-6 w-1 bg-indigo-650 rounded-full"></span>
           Latest News
         </h2>
@@ -35,7 +35,7 @@ function LatestNews() {
       {isLoading ? (
         <LatestNewsSkeleton />
       ) : articles?.length > 0 ? (
-        <div className="flex flex-col lg:flex-row w-full h-full gap-6">
+        <div className="flex flex-col lg:flex-row w-full h-[90%] gap-6">
           <div className="h-full flex flex-col md:flex-row lg:w-3/4 gap-6">
             <div className="md:flex-[3] min-w-0 h-full">
               <ArticleSquareHoverCard article={articles[0]} />

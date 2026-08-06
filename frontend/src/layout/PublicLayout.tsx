@@ -12,7 +12,7 @@ function PublicLayout() {
         <NavbarTop />
         <NavbarCategories />
 
-        <main className="flex-1 w-[70%] mx-auto">
+        <main className="flex-1 w-[92%] sm:w-[85%] md:w-[70%] py-10 mx-auto">
           <Outlet />
         </main>
 
