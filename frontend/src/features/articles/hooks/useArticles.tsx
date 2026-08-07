@@ -143,7 +143,7 @@ export const useArticlesHooks = () => {
     useLikePublicArticle: () => {
       return useMutation({
         mutationFn: (id: any) => articles.likeArticle(id),
-         onSuccess: () => {
+        onSuccess: () => {
           queryClient.invalidateQueries(["articles"]);
         },
       });
@@ -151,24 +151,24 @@ export const useArticlesHooks = () => {
     useDislikePublicArticle: () => {
       return useMutation({
         mutationFn: (id: any) => articles.dislikeArticle(id),
-         onSuccess: () => {
+        onSuccess: () => {
           queryClient.invalidateQueries(["like"]);
         },
       });
     },
     useSharePublicArticle: () => {
       return useMutation({
-        mutationFn: ({id,platform}: any) => articles.shareArticle({id,platform}),
-         onSuccess: () => {
+        mutationFn: ({ id, platform }: any) =>
+          articles.shareArticle({ id, platform }),
+        onSuccess: () => {
           queryClient.invalidateQueries(["like"]);
         },
-
       });
     },
     useViewPublicArticle: () => {
       return useMutation({
         mutationFn: (id: any) => articles.viewArticle(id),
-         onSuccess: () => {
+        onSuccess: () => {
           queryClient.invalidateQueries(["articles"]);
         },
       });
@@ -176,18 +176,59 @@ export const useArticlesHooks = () => {
     useReportPublicArticle: () => {
       return useMutation({
         mutationFn: (id: any) => articles.reportArticle(id),
-         onSuccess: () => {
+        onSuccess: () => {
           queryClient.invalidateQueries(["articles"]);
         },
       });
     },
-    useBookmarkPublicArticle:()=>{
+    useBookmarkPublicArticle: () => {
       return useMutation({
         mutationFn: (id: any) => articles.bookmarkArticle(id),
-         onSuccess: () => {
+        onSuccess: () => {
           queryClient.invalidateQueries(["articles"]);
         },
       });
-    }
+    },
+    useCommentPublicArticle: () => {
+      return useMutation({
+        mutationFn: ({ commentData }: any) =>
+          articles.commentArticle({ commentData }),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    useAdminCommentDelete: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.adminCommentDelete(id),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    usePublicCommentDelete: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.publicCommentDelete(id),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    usePublicCommentLike: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.publicCommentLike(id),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
+    usePublicCommentReport: () => {
+      return useMutation({
+        mutationFn: (id: any) => articles.publicCommentReport(id),
+        onSuccess: () => {
+          queryClient.invalidateQueries(["articles"]);
+        },
+      });
+    },
   };
 };

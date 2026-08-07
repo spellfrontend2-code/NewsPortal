@@ -3,6 +3,7 @@ import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvert
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { useNavigate } from "react-router-dom";
+import ColumnViewMultiCategoryNewsSkeleton from "./ColumnViewMultiCategoryNewsSkeleton";
 
 function ColumnViewMultiCategoryNews({
   categoryOne,
@@ -42,6 +43,13 @@ function ColumnViewMultiCategoryNews({
       .map((item: any) => item.data) ?? [];
   const slicedCategoryTwoArticles = categoryTwoArticlesList.slice(0, 6);
   const navigate = useNavigate();
+  if(
+    categoryOneArticleLoading ||
+    categoryTwoArticleLoading ||
+    advertisementsLoading
+  ) {
+    return <ColumnViewMultiCategoryNewsSkeleton />;
+  }
   return (
     <div className="w-full h-full flex">
       <div className="w-2/3 h-full flex flex-col gap-2 py-5">

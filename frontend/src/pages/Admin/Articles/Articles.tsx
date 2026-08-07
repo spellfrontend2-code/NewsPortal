@@ -118,7 +118,8 @@ const statuses = [
       article={selectedArticle}
       type="edit"
     />
-  ) : (
+  ) :  viewOpen ?<ArticleView article={selectedArticle} setViewOpen={setViewOpen}/>:
+(
     <>
        <div className="flex justify-between items-end rounded-xl  ">
         <div className="flex flex-col  text-gray-800 ">
@@ -164,11 +165,7 @@ const statuses = [
   )
 }
 
-  <Dialog open={viewOpen} onOpenChange={setViewOpen}>
-      <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[50vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
-      <ArticleView article={selectedArticle} />
-    </DialogContent>
-  </Dialog>
+   
 
   <DeleteDialogBox
     deleteOpen={deleteOpen}

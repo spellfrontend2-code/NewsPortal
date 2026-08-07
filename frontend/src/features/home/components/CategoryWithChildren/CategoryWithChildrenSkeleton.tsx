@@ -26,7 +26,7 @@ function CategoryWithChildrenSkeleton({
 
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(11)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <div key={i} className="space-y-3">
               <div className="h-[180px] rounded-xl bg-slate-200" />
               <div className="h-5 w-3/4 rounded bg-slate-200" />
@@ -39,8 +39,10 @@ function CategoryWithChildrenSkeleton({
 
       {/* Sidebar */}
       {hasSidebarAds && (
-        <div className="w-1/4">
-          <div className="h-[160px] w-full rounded-2xl bg-slate-200" />
+        <div className="flex flex-col gap-4 w-1/4">
+                   {[...Array(5)].map((_, i) => (
+ <div key={i} className="h-[160px] w-full rounded-2xl bg-slate-200" />          ))}
+
         </div>
       )}
     </div>

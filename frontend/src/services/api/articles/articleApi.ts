@@ -165,6 +165,48 @@ export const articleApi = () => {
       } catch (error: any) {
         throw error?.response?.data;
       }
+    },
+    commentArticle: async ({commentData}: any) => {
+      try {
+        
+        const response = await axiosInstance.post(`/viewer/comments`,commentData);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    adminCommentDelete: async (id: any) => {
+      try {
+        const response = await axiosInstance.delete(`/admin/comments/${id}`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+  },
+  publicCommentDelete: async (id: any) => {
+    try {
+      const response = await axiosInstance.delete(`/viewer/comments/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error?.response?.data;
     }
-  };
+  
+},
+publicCommentLike: async (id: any) => {
+  try {
+    console.log(id)
+    const response = await axiosInstance.post(`/viewer/comments/${id}/likes`);
+    return response.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+},
+publicCommentReport: async (id: any) => {
+  try {
+    const response = await axiosInstance.post(`/viewer/comments/${id}/report`);
+    return response.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }}
+}
 };

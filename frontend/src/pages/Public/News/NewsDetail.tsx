@@ -1,4 +1,5 @@
 import PopupAdvertisement from "@/features/advertisements/components/Public/PopupAdvertisement";
+import Comment from "@/features/articles/components/Public/NewsDetail/NewsComment";
 import NewsContent from "@/features/articles/components/Public/NewsDetail/NewsContent";
 import NewsDetailSkeleton from "@/features/articles/components/Public/NewsDetail/NewsDetailSkeleton";
 import NewsHeader from "@/features/articles/components/Public/NewsDetail/NewsHeader";
@@ -7,7 +8,7 @@ import UserLogin from "@/features/auth/components/UserLogin";
 import { useAuthChecker } from "@/features/auth/hooks/useAuthChecker";
 import { shareArticle } from "@/lib/shareHandler";
 import { Bookmark, MessageCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 const socialMedias = [
@@ -95,6 +96,7 @@ function NewsDetail() {
       }
     })
   }
+  const commentRef=useRef<HTMLDivElement>(null);
   return (
     <div className="flex justify-center w-full py-6 md:py-10">
       {isLoading ? (
@@ -132,7 +134,7 @@ function NewsDetail() {
                   <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
 
                   {/* Comments Count */}
-                  <div className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0">
+                  <div className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0" onClick={()=> commentRef.current?.scrollIntoView({ behavior: "smooth" })}>
                     <MessageCircle size={18} className="text-slate-450 xl:w-5 xl:h-5" />
                     <p className="font-bold text-xs xl:text-sm text-slate-700 xl:mt-0.5">
                       {Data?.article?.comment_count}
@@ -173,9 +175,9 @@ function NewsDetail() {
 
               {/* Main Content */}
               <div className="flex-1 min-w-0 order-2">
-                <NewsContent Data={Data} />
+                <NewsContent Data={Data} commentRef={commentRef}/>
               </div>
-              
+             
             </div>
           </div>
         )

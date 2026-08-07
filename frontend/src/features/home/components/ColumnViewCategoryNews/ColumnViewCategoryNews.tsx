@@ -3,6 +3,7 @@ import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvert
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { useNavigate } from "react-router-dom";
+import ColumnViewCategoryNewsSkeleton from "./ColumnViewCategoryNewsSkeleton";
 
 function ColumnViewCategoryNews({ category }: { category: any }) {
   const articleHook = useArticlesHooks();
@@ -24,6 +25,7 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
   const sidebarAds = advertisementsList?.sidebar?.slice(0, 2);
   const hasSidebarAds = sidebarAds?.length > 0;
   const navigate = useNavigate();
+  if(articleLoading || advertisementsLoading) return <ColumnViewCategoryNewsSkeleton/>
   return (
     <div className="w-full h-full flex flex-col gap-2 py-5">
       <h1

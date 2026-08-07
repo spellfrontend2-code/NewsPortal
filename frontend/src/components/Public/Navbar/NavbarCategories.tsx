@@ -1,3 +1,4 @@
+import { getAvatarColor } from "@/components/shared/getAvatarColor";
 import { useAuthStore } from "@/context/useAuthStore";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import { ArticleRectangleCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
@@ -45,7 +46,9 @@ function NavbarCategories() {
 
   const [openCategory, setOpenCategory] = useState<number | null>(null);
   // Tracks which category's submenu is expanded inside the mobile drawer
-  const [openMobileCategory, setOpenMobileCategory] = useState<number | null>(null);
+  const [openMobileCategory, setOpenMobileCategory] = useState<number | null>(
+    null,
+  );
 
   const handleLogout = () => {
     logout.mutate(undefined, {
@@ -115,7 +118,9 @@ function NavbarCategories() {
         ? "text-white border-indigo-500 bg-white/10"
         : "text-slate-400 border-transparent hover:text-white hover:bg-white/5"
     }`;
-
+  const avatarColor = profileData?.id
+    ? getAvatarColor(profileData.id)
+    : "from-indigo-600 to-indigo-500";
   return (
     <div className="w-full bg-slate-900/95 backdrop-blur-md shadow-sm border-b border-slate-800 sticky top-0 z-50">
       {/* ── Main bar ── */}
@@ -132,10 +137,18 @@ function NavbarCategories() {
         {/* Desktop: category links */}
         <div className="hidden md:flex items-center h-full  min-w-0">
           {updatedCategories.map((category) => (
-            <div key={category.id} className="relative shrink-0">
+            <div
+              key={category.id}
+              ref={openCategory === category.id ? categoryRef : undefined}
+              className="relative shrink-0"
+            >
               <div className="flex items-center">
                 <NavLink
-                  to={category.slug === "" ? "/" : `/news-list/category/${category.slug}`}
+                  to={
+                    category.slug === ""
+                      ? "/"
+                      : `/news-list/category/${category.slug}`
+                  }
                   className={navLinkClass}
                 >
                   {category.name}
@@ -144,7 +157,9 @@ function NavbarCategories() {
                 {category.children?.length > 0 && (
                   <button
                     onClick={() =>
-                      setOpenCategory(openCategory === category.id ? null : category.id)
+                      setOpenCategory(
+                        openCategory === category.id ? null : category.id,
+                      )
                     }
                     className="p-1 text-slate-400 hover:text-white"
                     aria-label={`Toggle ${category.name} submenu`}
@@ -159,10 +174,7 @@ function NavbarCategories() {
                 )}
               </div>
               {openCategory === category.id && (
-                <div
-                  ref={categoryRef}
-                  className="absolute left-0 mt-2 w-40 rounded-md bg-white shadow-lg z-50 p-1"
-                >
+                <div className="absolute left-0 mt-2 w-40 rounded-md bg-white shadow-lg z-50 p-1">
                   {category.children.map((child: any) => (
                     <NavLink
                       key={child.id}
@@ -219,7 +231,9 @@ function NavbarCategories() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-slate-500 text-xs p-3 text-center">No articles found</p>
+                  <p className="text-slate-500 text-xs p-3 text-center">
+                    No articles found
+                  </p>
                 )}
               </div>
             )}
@@ -230,7 +244,7 @@ function NavbarCategories() {
             {profileData.id ? (
               <div className="relative" ref={profileRef}>
                 <button
-                  className="h-8 w-8 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 border border-indigo-400/20 flex justify-center items-center font-bold text-xs text-white cursor-pointer shadow-sm transition-all"
+                  className={`h-8 w-8 rounded-full bg-gradient-to-tr ${avatarColor} border border-white/20 flex justify-center items-center font-bold text-xs text-white cursor-pointer shadow-sm transition-all`}
                   onClick={() => setProfileInfoOpen(!profileInfoOpen)}
                 >
                   {profileData?.name?.charAt(0).toUpperCase()}
@@ -274,8 +288,14 @@ function NavbarCategories() {
             <div key={category.id} className="flex flex-col">
               <div className="flex items-center">
                 <NavLink
-                  to={category.slug === "" ? "/" : `/news-list/category/${category.slug}`}
-                  className={({ isActive }) => `${mobileLinkClass({ isActive })} flex-1`}
+                  to={
+                    category.slug === ""
+                      ? "/"
+                      : `/news-list/category/${category.slug}`
+                  }
+                  className={({ isActive }) =>
+                    `${mobileLinkClass({ isActive })} flex-1`
+                  }
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {category.name}
@@ -284,7 +304,7 @@ function NavbarCategories() {
                   <button
                     onClick={() =>
                       setOpenMobileCategory(
-                        openMobileCategory === category.id ? null : category.id
+                        openMobileCategory === category.id ? null : category.id,
                       )
                     }
                     className="p-3 text-slate-400 hover:text-white"

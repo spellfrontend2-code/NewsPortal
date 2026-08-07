@@ -2,6 +2,7 @@ import ArticleSquareCard from "@/features/articles/components/Public/cards/Artic
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import MultiCategoryInOneRowSkeleton from "./MultiCategoryInOneRowSkeleton";
 
 function MultiCategoryInOneRow({
   categoryOne,
@@ -20,28 +21,30 @@ function MultiCategoryInOneRow({
     pageIndex: 0,
     pageSize: 2,
   });
-  const categoryOneArticles = articleHook.useFetchPublicArticlesByCategory({
+  const { data: categoryOneArticles , isLoading: categoryOneArticlesLoading} = articleHook.useFetchPublicArticlesByCategory({
     page: categoryOnePagination.pageIndex + 1,
     per_page: categoryOnePagination.pageSize,
     slug: categoryOne?.slug,
   });
 
-  const categoryTwoArticles = articleHook.useFetchPublicArticlesByCategory({
+  const { data: categoryTwoArticles , isLoading: categoryTwoArticlesLoading} = articleHook.useFetchPublicArticlesByCategory({
     page: categoryTwoPagination.pageIndex + 1,
     per_page: categoryTwoPagination.pageSize,
     slug: categoryTwo?.slug,
   });
 
   const articlesOne =
-    categoryOneArticles.data?.data
+    categoryOneArticles?.data
       ?.filter((item: any) => item.type === "article")
       .map((item: any) => item.data) ?? [];
 
   const articlesTwo =
-    categoryTwoArticles.data?.data
+    categoryTwoArticles?.data
       ?.filter((item: any) => item.type === "article")
       .map((item: any) => item.data) ?? [];
   const navigate = useNavigate();
+  if(categoryOneArticlesLoading || categoryTwoArticlesLoading)
+     return <MultiCategoryInOneRowSkeleton/>
   return (
     <div className="flex  gap-4 w-full">
       <div className="flex gap-4 w-full ">

@@ -187,7 +187,7 @@ function DataTable({
         )}
       </div>
       <div className="flex items-center justify-between mt-4 w-full h-[40px]">
-        <span className="shadow-md flex items-center justify-center w-[110px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
+        <span className="shadow-md flex items-center justify-center w-[150px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
           Page {table?.getState()?.pagination?.pageIndex + 1 || 1} of{" "}
           {table?.getPageCount()||1}
         </span>

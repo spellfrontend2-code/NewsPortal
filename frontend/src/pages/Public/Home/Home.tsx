@@ -8,9 +8,9 @@ import CategoryBasedNewsList from "@/features/articles/components/Public/NewsLis
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
 import CategoryWithChildren from "@/features/home/components/CategoryWithChildren/CategoryWithChildren";
-import ColoredCategoryNews from "@/features/home/components/ColoredCategoryNews";
-import ColumnViewCategoryNews from "@/features/home/components/ColumnViewCategoryNews";
-import ColumnViewMultiCategoryNews from "@/features/home/components/ColumnViewMultiCategoryNews";
+import ColoredCategoryNews from "@/features/home/components/ColoredCategoryNews/ColoredCategoryNews";
+import ColumnViewCategoryNews from "@/features/home/components/ColumnViewCategoryNews/ColumnViewCategoryNews";
+import ColumnViewMultiCategoryNews from "@/features/home/components/ColumnViewMultiCategoryNews/ColumnViewMultiCategoryNews";
 import Headline from "@/features/home/components/Headline/Headline";
 import LatestNews from "@/features/home/components/LatestNews/LatestNews";
 import MultiCategoryInOneRow from "@/features/home/components/MultiCategoryInOneRow/MultiCategoryInOneRow";
@@ -55,10 +55,10 @@ function Home() {
       <LatestNews />
       {/* <MultiCategoryInOneRow categoryOne={categories?.data[3]} categoryTwo={categories?.data[1]} /> */}
       {/* <CategoryWithChildren category={categories?.data[3]} /> */}
-      {/* <ColoredCategoryNews category={categories?.data[3]} color="blue" /> */}
+      {/* <ColoredCategoryNews category={categories?.data[3]} color="#D2E7FE" /> */}
       {/* <ColumnViewCategoryNews category={categories?.data[3]} /> */}
       {/* <ColumnViewMultiCategoryNews categoryOne={categories?.data[3]} categoryTwo={categories?.data[1]} /> */}
-      <>
+      {/* <>
       <div className="flex flex-col w-full mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {!(feedData?.length > 0)
@@ -123,7 +123,7 @@ function Home() {
           setShowPopup={setShowPopup}
         />
       )}
-      </>
+      </> */}
     </div>
   );
 }

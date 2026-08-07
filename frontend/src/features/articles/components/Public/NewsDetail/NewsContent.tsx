@@ -6,8 +6,9 @@ import { useAuthChecker } from "@/features/auth/hooks/useAuthChecker";
 import { ClipboardMinus, Tag, ThumbsDown, ThumbsUp } from "lucide-react";
 import { toast } from "sonner";
 import HtmlParser from "./HtmlParser";
+import NewsComment from "./NewsComment";
 
-function NewsContent({ Data }: any) {
+function NewsContent({ Data,commentRef }: any) {
   const articleData = Data?.article;
   const advertisementData = Data?.advertisements;
   const articleHook = useArticlesHooks();
@@ -157,6 +158,11 @@ function NewsContent({ Data }: any) {
               </button>
             </div>
           </div>
+        </div>
+
+        {/*Comments Section */}
+        <div ref={commentRef} className="w-full">
+          <NewsComment articleId={articleData?.id} articleComments={articleData?.comments}/>
         </div>
       </div>
 
