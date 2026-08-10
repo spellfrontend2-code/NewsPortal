@@ -49,7 +49,7 @@ function NewsComment({ articleId, articleComments }: any) {
   return (
     <div className=" w-full flex justify-center">
       <div className="flex flex-col gap-6 justify-between bg-slate-50 border border-slate-200/60 rounded-3xl p-6 md:p-8 w-full shadow-sm">
-        <p className="font-semibold text-lg text-slate-800 font-serif">
+        <p className="font-semibold text-lg text-slate-800">
           Comments
         </p>
         <div className="space-y-4">
@@ -89,14 +89,19 @@ function NewsComment({ articleId, articleComments }: any) {
           <div className="flex gap-4 items-end w-full border border-slate-200/60 rounded-3xl p-4 md:p-6 shadow-sm">
             <textarea
               rows={1}
-              {...rest}
-              ref={(e) => {
+  {...rest}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(onSubmit)();
+    }
+  }}              ref={(e) => {
                 ref(e);
                 textareaRef.current = e;
               }}
               onInput={handleInput}
               placeholder="Write a comment..."
-              className="w-full resize-none overflow-hidden bg-transparent text-slate-800 font-serif placeholder:text-slate-400 p-2 outline-none"
+              className="w-full resize-none overflow-hidden bg-transparent text-slate-800 placeholder:text-slate-400 p-2 outline-none"
             />
 
             <button

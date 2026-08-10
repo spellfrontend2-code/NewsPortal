@@ -1,4 +1,3 @@
-import { shareArticle } from "@/lib/shareHandler";
 import axiosInstance from "@/services/axios";
 
 export const articleApi = () => {
@@ -111,6 +110,14 @@ export const articleApi = () => {
         const response = await axiosInstance.get(`/articles/search`,{
           params: { page, per_page ,search}
         });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    fetchRelatedArticles: async (slug: any) => {
+      try {
+        const response = await axiosInstance.get(`/articles/${slug}/related`);
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;

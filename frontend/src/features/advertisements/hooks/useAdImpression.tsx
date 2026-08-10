@@ -1,7 +1,6 @@
 // hooks/useAdImpression.ts
 
 import { useEffect, useRef } from "react";
-import { toast } from "sonner";
 import { useAdvertisementHooks } from "./useAdvertisements";
 
 interface UseAdImpressionOptions {

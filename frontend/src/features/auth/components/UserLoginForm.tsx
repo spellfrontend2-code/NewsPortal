@@ -99,7 +99,7 @@ const onSubmit = (data) => {
       </div>
 
       <div className="flex flex-col items-center justify-center gap-3">
-        <Button type="submit" variant="submit" className="w-full p-5 rounded-md" disabled={login.isPending}>
+        <Button type="submit" variant="submit" className="w-full p-5 rounded-md bg-[var(--color-public-primary)]" disabled={login.isPending}>
           {login.isPending ? "Loggin In..." : "Log In"}
         </Button>
       </div>

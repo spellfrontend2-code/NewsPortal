@@ -4,11 +4,12 @@ function ColumnViewCategoryNewsSkeleton({
   hasSidebarAds?: boolean;
 }) {
   return (
-    <div className="animate-pulse">
-      {/* Category Title */}
+    <div className="w-screen animate-pulse">
+           <div className="w-[92%] sm:w-[85%] md:w-[70%] mx-auto">
+ {/* Category Title */}
       <div className="h-8 w-56 rounded bg-slate-300 mb-4" />
 
-      <div className="flex gap-4">
+      <div className="flex w-full gap-4">
         {/* Articles */}
         <div
           className={`grid grid-cols-2 gap-2 ${
@@ -48,6 +49,7 @@ function ColumnViewCategoryNewsSkeleton({
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

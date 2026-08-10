@@ -8,7 +8,7 @@ function NewsHeader({ Data }: any) {
     <div className="flex flex-col gap-6 w-full pb-2">
       {/* Category Tag & Title */}
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-black tracking-tight text-slate-900 leading-[1.15]">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.15]">
           {articleData?.title}
         </h1>
       </div>
@@ -22,7 +22,7 @@ function NewsHeader({ Data }: any) {
 
       {/* Excerpt */}
       {articleData?.excerpt && (
-        <p className="text-xl text-slate-650 leading-relaxed font-serif italic border-l-4 border-slate-800 pl-6 my-2">
+        <p className="text-xl text-slate-650 leading-relaxed italic border-l-4 border-slate-800 pl-6 my-2">
           {articleData?.excerpt}
         </p>
       )}

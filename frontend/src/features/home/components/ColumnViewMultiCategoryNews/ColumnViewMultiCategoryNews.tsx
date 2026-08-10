@@ -51,17 +51,17 @@ function ColumnViewMultiCategoryNews({
     return <ColumnViewMultiCategoryNewsSkeleton />;
   }
   return (
-    <div className="w-full h-full flex">
-      <div className="w-2/3 h-full flex flex-col gap-2 py-5">
+    <div className="w-full h-full flex lg:flex-row flex-col">
+      <div className="w-full lg:w-2/3 h-full flex flex-col  gap-2 py-5">
         <h1
           className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
           onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
         >
           {categoryOne?.name}
         </h1>
-        <div className="flex flex w-full h-full  ">
+        <div className="flex lg:flex-row flex-col gap-5 w-full h-full  ">
           <div
-            className={` ${hasSidebarAds ? "w-2/3" : "w-full"} grid grid-cols-1 gap-1`}
+            className={` ${hasSidebarAds ? "lg:w-2/3 w-full" : "w-full"} grid grid-cols-1 gap-1`}
           >
             {slicedCategoryOneArticles.map((article: any) => (
               <div key={article.id} className="h-[105px]">
@@ -71,7 +71,7 @@ function ColumnViewMultiCategoryNews({
           </div>
           {hasSidebarAds && (
             <div className="lg:w-1/4 w-full">
-              <div className="h-full w-full flex flex-row lg:flex-col gap-4 ">
+              <div className="h-full w-full flex flex-col gap-4 ">
                 {sidebarAds.map((ad: any, index: number) => {
                   return (
                     <div
@@ -87,7 +87,7 @@ function ColumnViewMultiCategoryNews({
           )}
         </div>
       </div>
-      <div className="flex flex-col w-1/3 h-full  mt-4">
+      <div className="flex flex-col lg:w-1/3 w-full h-full  mt-4">
         <h1
           className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
           onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}

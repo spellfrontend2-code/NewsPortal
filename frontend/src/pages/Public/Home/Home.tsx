@@ -53,12 +53,7 @@ function Home() {
     <div className="flex flex-col gap-10 justify-center items-center w-full  ">
       <Headline />
       <LatestNews />
-      {/* <MultiCategoryInOneRow categoryOne={categories?.data[3]} categoryTwo={categories?.data[1]} /> */}
-      {/* <CategoryWithChildren category={categories?.data[3]} /> */}
-      {/* <ColoredCategoryNews category={categories?.data[3]} color="#D2E7FE" /> */}
-      {/* <ColumnViewCategoryNews category={categories?.data[3]} /> */}
-      {/* <ColumnViewMultiCategoryNews categoryOne={categories?.data[3]} categoryTwo={categories?.data[1]} /> */}
-      {/* <>
+  <>
       <div className="flex flex-col w-full mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {!(feedData?.length > 0)
@@ -103,10 +98,16 @@ function Home() {
           </div>
         )}
       </div>
+        <MultiCategoryInOneRow categoryOne={categories?.data[0]} categoryTwo={categories?.data[1]} />
+      <CategoryWithChildren category={categories?.data[2]} />
+      <ColoredCategoryNews category={categories?.data[3]} color="#D2E7FE" />
+      <ColumnViewCategoryNews category={categories?.data[4]} />
+      <ColumnViewMultiCategoryNews categoryOne={categories?.data[5]} categoryTwo={categories?.data[6]} />
+      
       {categories?.data?.length > 0 && (
         <div className="flex flex-col w-full ">
           <div>
-            {categories?.data?.map((category: any) => (
+            {categories?.data?.slice(7)?.map((category: any) => (
               <CategoryBasedNewsList
                 key={category?.id}
                 categorySlug={category?.slug}
@@ -123,7 +124,7 @@ function Home() {
           setShowPopup={setShowPopup}
         />
       )}
-      </> */}
+      </>
     </div>
   );
 }

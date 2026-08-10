@@ -140,22 +140,157 @@ export const useArticlesHooks = () => {
         },
       });
     },
-    useLikePublicArticle: () => {
-      return useMutation({
-        mutationFn: (id: any) => articles.likeArticle(id),
-        onSuccess: () => {
-          queryClient.invalidateQueries(["articles"]);
-        },
+    useFetchRelatedArticles:(slug?:string)=>{
+      return useQuery({
+        queryKey:["related_articles",slug],
+        queryFn:()=>articles.fetchRelatedArticles(slug)})
+      },
+ useLikePublicArticle: () => {
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) =>
+      articles.likeArticle(id),
+
+    onMutate: async ({ id, slug }) => {
+      await queryClient.cancelQueries({
+        queryKey: ["public_single_articles", slug],
+      });
+
+      const previousData = queryClient.getQueryData([
+        "public_single_articles",
+        slug,
+      ]);
+
+      queryClient.setQueryData(
+        ["public_single_articles", slug],
+        (old: any) => {
+          if (!old?.article) return old;
+
+          const article = old.article;
+
+          const isLiked =
+            article.user_interactions?.has_liked === true;
+
+          const wasDisliked =
+            article.user_interactions?.has_dislike === true;
+
+          return {
+            ...old,
+
+            article: {
+              ...article,
+
+              // Toggle like count
+              likes_count: isLiked
+                ? Math.max(0, (article.likes_count ?? 0) - 1)
+                : (article.likes_count ?? 0) + 1,
+
+              // Remove dislike when liking
+              dislikes_count: wasDisliked
+                ? Math.max(0, (article.dislikes_count ?? 0) - 1)
+                : article.dislikes_count ?? 0,
+
+              user_interactions: {
+                ...article.user_interactions,
+
+                has_liked: !isLiked,
+                has_dislike: false,
+              },
+            },
+          };
+        }
+      );
+
+      return { previousData };
+    },
+
+    onError: (_error, _variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ["public_single_articles", _variables.slug],
+          context.previousData
+        );
+      }
+    },
+
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["public_single_articles", variables.slug],
       });
     },
-    useDislikePublicArticle: () => {
-      return useMutation({
-        mutationFn: (id: any) => articles.dislikeArticle(id),
-        onSuccess: () => {
-          queryClient.invalidateQueries(["like"]);
-        },
+  });
+},
+ useDislikePublicArticle: () => {
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) =>
+      articles.dislikeArticle(id),
+
+    onMutate: async ({ id, slug }) => {
+      await queryClient.cancelQueries({
+        queryKey: ["public_single_articles", slug],
+      });
+
+      const previousData = queryClient.getQueryData([
+        "public_single_articles",
+        slug,
+      ]);
+
+      queryClient.setQueryData(
+        ["public_single_articles", slug],
+        (old: any) => {
+          if (!old?.article) return old;
+
+          const article = old.article;
+
+          const isDisliked =
+            article.user_interactions?.has_dislike === true;
+
+          const wasLiked =
+            article.user_interactions?.has_liked === true;
+
+          return {
+            ...old,
+
+            article: {
+              ...article,
+
+              dislikes_count: isDisliked
+                ? Math.max(0, (article.dislikes_count ?? 0) - 1)
+                : (article.dislikes_count ?? 0) + 1,
+
+              likes_count: wasLiked
+                ? Math.max(0, (article.likes_count ?? 0) - 1)
+                : article.likes_count ?? 0,
+
+              user_interactions: {
+                ...article.user_interactions,
+
+                has_dislike: !isDisliked,
+                has_liked: false,
+              },
+            },
+          };
+        }
+      );
+
+      return { previousData };
+    },
+
+    onError: (_error, variables, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ["public_single_articles", variables.slug],
+          context.previousData
+        );
+      }
+    },
+
+    onSettled: (_data, _error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["public_single_articles", variables.slug],
       });
     },
+  });
+},
     useSharePublicArticle: () => {
       return useMutation({
         mutationFn: ({ id, platform }: any) =>
@@ -181,14 +316,61 @@ export const useArticlesHooks = () => {
         },
       });
     },
-    useBookmarkPublicArticle: () => {
-      return useMutation({
-        mutationFn: (id: any) => articles.bookmarkArticle(id),
-        onSuccess: () => {
-          queryClient.invalidateQueries(["articles"]);
-        },
+useBookmarkPublicArticle: () => {
+  return useMutation({
+    mutationFn: ({ id }: { id: number; slug: string }) =>
+      articles.bookmarkArticle(id),
+
+    onMutate: async ({ slug }) => {
+      await queryClient.cancelQueries({
+        queryKey: ["public_single_articles", slug],
+      });
+
+      const queryKey = ["public_single_articles", slug];
+
+      const previousData = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (old: any) => {
+        if (!old?.article) return old;
+
+        return {
+          ...old,
+
+          article: {
+            ...old.article,
+
+            user_interactions: {
+              ...old.article.user_interactions,
+
+              // Toggle bookmark immediately
+              has_bookmarked:
+                !old.article.user_interactions?.has_bookmarked,
+            },
+          },
+        };
+      });
+
+      return { previousData };
+    },
+
+    onError: (_error, variables, context) => {
+      // Rollback if API fails
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ["public_single_articles", variables.slug],
+          context.previousData
+        );
+      }
+    },
+
+    onSettled: (_data, _error, variables) => {
+      // Confirm with server
+      queryClient.invalidateQueries({
+        queryKey: ["public_single_articles", variables.slug],
       });
     },
+  });
+},
     useCommentPublicArticle: () => {
       return useMutation({
         mutationFn: ({ commentData }: any) =>

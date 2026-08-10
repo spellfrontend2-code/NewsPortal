@@ -131,11 +131,7 @@ function Footer() {
                 </a>
               </li>
 
-              <li>
-                <a href="/about-us" className="transition-colors hover:text-white">
-                  About Us
-                </a>
-              </li>
+             
 
               <li>
                 <a href="/contact-us" className="transition-colors hover:text-white">

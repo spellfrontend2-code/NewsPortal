@@ -22,7 +22,7 @@ function ReplyBox({
   articleId,
   onClose,
   comment,
-  setExpanded
+  setExpanded,
 }: {
   articleId: number;
   onClose: () => void;
@@ -75,17 +75,24 @@ function ReplyBox({
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
           <div className="flex gap-3 items-end w-full border border-indigo-200 bg-indigo-50/40 rounded-2xl px-4 py-3 shadow-sm focus-within:border-indigo-400 focus-within:bg-white transition-all duration-200">
-
             <div className="flex-1">
               {comment?.author_name && (
                 <p className="text-[10px] font-semibold text-indigo-400 mb-1">
                   Replying to
-                  <span className="text-indigo-600">@{comment.author_name}</span>
+                  <span className="text-indigo-600">
+                    @{comment.author_name}
+                  </span>
                 </p>
               )}
               <textarea
                 rows={1}
                 {...rest}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(onSubmit)();
+                  }
+                }}
                 ref={(e) => {
                   ref(e);
                   textareaRef.current = e;
@@ -135,9 +142,9 @@ function CommentItem({
   module?: "admin" | "public";
   articleId?: number;
 }) {
-  const avatarColor= getAvatarColor(comment?.user_id) ?? "bg-indigo-500";
+  const avatarColor = getAvatarColor(comment?.user_id) ?? "bg-indigo-500";
   const initials = comment.author_name
-    ? comment.author_name.slice(0,1).toUpperCase()
+    ? comment.author_name.slice(0, 1).toUpperCase()
     : "??";
   const articleHook = useArticlesHooks();
   const deleteAdminComment = articleHook.useAdminCommentDelete();
@@ -161,7 +168,6 @@ function CommentItem({
       });
     }
   };
-
 
   const hasReplies = comment.replies && comment.replies.length > 0;
 
@@ -200,15 +206,8 @@ function CommentItem({
               <span className="font-semibold text-sm text-slate-800">
                 {comment.author_name ?? "Anonymous"}
               </span>
-              {depth === 0 && (
-                <span className="text-[10px] text-slate-400 border border-slate-200 rounded-full px-2 py-0.5">
-                  #{comment.id}
-                </span>
-              )}
             </div>
             <div className="flex items-center gap-3">
-             
-
               {/* Action buttons */}
               <div className="flex items-center gap-1.5">
                 {module === "public" && (
@@ -231,8 +230,7 @@ function CommentItem({
                         </span>
                       </button>
                     )}
-</>
-                   
+                  </>
                 )}
 
                 {module === "admin" && (
@@ -260,10 +258,10 @@ function CommentItem({
 
           {/* Footer stats */}
           <div className="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100">
-        <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                <Clock size={11} />
-                {new Date(comment.created_at).toLocaleString()}
-              </span>
+            <span className="text-[11px] text-slate-400 flex items-center gap-1">
+              <Clock size={11} />
+              {new Date(comment.created_at).toLocaleString()}
+            </span>
             {hasReplies && (
               <button
                 onClick={() => setExpanded((v) => !v)}

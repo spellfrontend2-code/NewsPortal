@@ -220,7 +220,7 @@ function UserSignInForm({ setSignInOpen }) {
         <Button
           type="submit"
           variant="submit"
-          className="w-full p-5 text-lg rounded-md"
+          className="w-full p-5 text-lg rounded-md bg-[var(--color-public-primary)]"
           disabled={createPublicUser?.isPending}
         >
           {createPublicUser?.isPending ? "Signing In..." : " Sign In"}

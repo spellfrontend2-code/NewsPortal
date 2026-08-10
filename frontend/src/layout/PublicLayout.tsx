@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 function PublicLayout() {
   return (
     <>
-      {/* <ScrollToTop /> */}
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <NavbarTop />
         <NavbarCategories />

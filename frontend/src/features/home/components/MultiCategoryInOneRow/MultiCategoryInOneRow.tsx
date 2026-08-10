@@ -43,7 +43,7 @@ function MultiCategoryInOneRow({
       ?.filter((item: any) => item.type === "article")
       .map((item: any) => item.data) ?? [];
   const navigate = useNavigate();
-  if(categoryOneArticlesLoading || categoryTwoArticlesLoading)
+  if(categoryOneArticlesLoading || categoryTwoArticlesLoading )
      return <MultiCategoryInOneRowSkeleton/>
   return (
     <div className="flex  gap-4 w-full">

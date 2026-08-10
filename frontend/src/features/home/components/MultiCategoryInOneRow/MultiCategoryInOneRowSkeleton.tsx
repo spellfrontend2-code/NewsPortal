@@ -1,7 +1,7 @@
 function MultiCategoryInOneRowSkeleton() {
   return (
     <div className="w-full animate-pulse">
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-6 ">
         {/* Left Section */}
         <div className="w-full lg:w-2/3">
           {/* Title */}

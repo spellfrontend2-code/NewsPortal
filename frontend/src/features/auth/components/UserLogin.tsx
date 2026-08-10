@@ -9,7 +9,7 @@ function UserLogin({ open, onOpenChange }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-[90vh] !max-w-[25vw] flex-col overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
-        <DialogHeader className="relative -mx-4 -mt-4 w-[calc(100%+2rem)] bg-[var(--color-primary)]  px-4 py-2">
+        <DialogHeader className="relative -mx-4 -mt-4 w-[calc(100%+2rem)] bg-[var(--color-public-newsText)]  px-4 py-2">
   <DialogTitle className="text-center text-2xl font-bold text-white">
     {signInOpen ? 
     <div>
@@ -27,7 +27,7 @@ function UserLogin({ open, onOpenChange }) {
             <p>
               Already have an account?
               <span
-                className="cursor-pointer pl-3 text-[var(--color-primary)] transition-all duration-600 hover:underline"
+                className="cursor-pointer pl-3 font-semibold text-[var(--color-public-primary)] transition-all duration-600 hover:underline"
                 onClick={() => setSignInOpen(false)}
               >
                 Log In
@@ -41,7 +41,7 @@ function UserLogin({ open, onOpenChange }) {
             <p>
               Don't have an account?
               <span
-                className="cursor-pointer pl-3 text-[var(--color-primary)] transition-all duration-600 hover:underline"
+                className="cursor-pointer font-semibold pl-3 text-[var(--color-public-primary)] transition-all duration-600 hover:underline"
                 onClick={() => setSignInOpen(true)}
               >
                 Sign In

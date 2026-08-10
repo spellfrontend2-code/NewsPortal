@@ -43,7 +43,7 @@ function Headline() {
                     <>
                       <div className="flex flex-col items-center gap-3">
                       
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-black text-center text-slate-900 transition-colors duration-250 group-hover:text-[var(--color-public-newsText-hover)] leading-[1.15] max-w-4xl px-4">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6x font-black text-center text-slate-900 transition-colors duration-250 group-hover:text-[var(--color-public-newsText-hover)] leading-[1.15] max-w-4xl px-4">
                           {article.title}
                         </h2>
                       </div>

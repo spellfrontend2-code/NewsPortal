@@ -8,7 +8,6 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
   const adRef = useAdImpression({
     adId: Ad?.id,
   });
-  console.log("sidebaradforlatets", Ad);
 
   const advertisementHook = useAdvertisementHooks();
   const trackAdClick = advertisementHook.useTrackPublicAdClick();
@@ -16,7 +15,7 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
   const handleAdClick = (advertisement_id: number) => {
     trackAdClick.mutate(advertisement_id, {
       onSuccess: (res) => {
-        toast.success(res?.message || "Advertisement clicked successfully");
+        // toast.success(res?.message || "Advertisement clicked successfully");
       },
       onError: (e: any) => {
         toast.error(e?.message || "Something went wrong");
@@ -25,10 +24,7 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
   };
 
   return (
-    <div
-      ref={adRef}
-      className="h-full w-full flex flex-col overflow-hidden"
-    >
+    <div ref={adRef} className="h-full w-full flex flex-col overflow-hidden">
       <Link
         to={Ad?.url || "#"}
         target={Ad?.target || "_blank"}
@@ -66,8 +62,6 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
             />
 
             <div className="h-1/3 px-4 flex flex-col justify-between py-2">
-             
-
               <h3 className="mt-2 text-lg font-semibold text-gray-900 line-clamp-2">
                 {Ad?.title}
               </h3>
@@ -76,13 +70,12 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
                 {Ad?.text}
               </p>
 
-      
-
               <button
                 type="button"
                 className="mt-4 w-full rounded bg-blue-600 py-2 text-white text-sm font-medium"
               >
-{Ad?.cta}              </button>
+                {Ad?.cta}{" "}
+              </button>
             </div>
           </div>
         ) : null}

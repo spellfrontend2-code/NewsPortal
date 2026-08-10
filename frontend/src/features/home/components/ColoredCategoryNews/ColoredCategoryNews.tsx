@@ -29,7 +29,7 @@ function ColoredCategoryNews({
     <div className={`relative w-screen py-5`} style={{ backgroundColor: color }}>
       <div className="w-[92%] sm:w-[85%] md:w-[70%] mx-auto">
     <div className="w-full flex flex-col  h-full">
-        <h2 className="cursor-pointer h-[5%]  text-2xl md:text-3xl font-serif font-black text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200  mb-6 uppercase tracking-tight flex items-center gap-2"
+        <h2 className="cursor-pointer h-[5%]  text-2xl md:text-3xl font-black text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200  mb-6 uppercase tracking-tight flex items-center gap-2"
             onClick={() => navigate(`/news-list/category/${category?.slug}`)}
           >
             {category?.name}

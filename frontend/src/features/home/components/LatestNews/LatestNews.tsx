@@ -26,7 +26,7 @@ function LatestNews() {
   return (
     <div className="w-full flex flex-col  h-full">
       {articles?.length > 0 && (
-        <h2 className=" h-[5%]  text-2xl md:text-3xl font-serif font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
+        <h2 className=" h-[5%]  text-2xl md:text-3xl font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
           {/* <span className="h-6 w-1 bg-indigo-650 rounded-full"></span> */}
           Latest News
         </h2>
