@@ -7,7 +7,7 @@ function ArticleSquareHoverCard({ article }: any) {
   const { viewPublicArticle } = useArticleView();
   return (
     <div
-      className="relative h-full w-full group overflow-hidden cursor-pointer rounded-2xl border border-slate-200/80 shadow-md bg-slate-950"
+      className="relative h-full w-full group overflow-hidden cursor-pointer rounded-md border border-slate-200/80 shadow-md bg-slate-950"
       onClick={() => {
         viewPublicArticle(article?.id);
         navigate(`/news/${article?.slug}`);

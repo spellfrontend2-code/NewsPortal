@@ -43,23 +43,23 @@ function Headline() {
                     <>
                       <div className="flex flex-col items-center gap-3">
                       
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6x font-black text-center text-slate-900 transition-colors duration-250 group-hover:text-[var(--color-public-newsText-hover)] leading-[1.15] max-w-4xl px-4">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center text-[var(--color-public-text-main)] transition-colors duration-250 group-hover:text-[var(--color-public-text-accent)] leading-[1.15] max-w-4xl px-4">
                           {article.title}
                         </h2>
                       </div>
 
-                      <div className="flex gap-4 items-center text-xs font-semibold text-slate-500">
+                      <div className="flex gap-4 items-center text-xs font-semibold text-[var(--color-public-text-muted)]">
                         <p className="flex items-center gap-1.5">
                           <img
                             src={article?.author?.image}
                             alt={article?.author?.name}
-                            className="h-6 w-6 rounded-full object-cover border border-slate-200"
+                            className="h-6 w-6 rounded-full object-cover border border-[var(--color-public-border-main)]"
                           />
-                          <span className="text-slate-700">{article?.author?.name}</span>
+                          <span className="text-[var(--color-public-text-tertiary)]">{article?.author?.name}</span>
                         </p>
-                        <span className="text-slate-300">•</span>
-                         <div className="flex items-center gap-2 text-slate-500 bg-slate-50 px-3.5 py-2 rounded-full border border-slate-100 shadow-sm">
-          <Clock size={15} className="text-slate-400" />
+                        <span className="text-[var(--color-public-text-tertiary)]">•</span>
+                         <div className="flex items-center gap-2 text-[var(--color-public-text-tertiary)] ">
+          <Clock size={15} className="text-[var(--color-public-text-tertiary)]" />
           <span className="font-semibold text-xs tracking-wider uppercase">{article?.published_at?.split("T")[0]}</span>
         </div>
                       </div>
@@ -67,7 +67,7 @@ function Headline() {
                   )}
                   {(article?.headline?.display_type === "image" ||
                     article?.headline?.display_type === "mixed") && (
-                    <div className="relative w-full rounded-3xl overflow-hidden border border-slate-100 shadow-md bg-slate-50 aspect-[21/10] max-h-[500px]">
+                    <div className="relative w-full rounded-md overflow-hidden border border-[var(--color-public-border-light)] shadow-md bg-[var(--color-public-bg-secondary)] aspect-[21/10] max-h-[500px]">
                       <img
                         src={article?.featured_image || article?.thumbnail}
                         alt={article?.title}
@@ -77,7 +77,7 @@ function Headline() {
                   )}
                 </>
               )}
-              <hr className="w-full border-t border-slate-150/80 mt-2" />
+              <hr className="w-full border-t border-[var(--color-public-border-main)] mt-2" />
             </div>
           ))}
     </div>

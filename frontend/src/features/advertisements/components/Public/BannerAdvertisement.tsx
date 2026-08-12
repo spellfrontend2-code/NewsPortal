@@ -53,7 +53,7 @@ function BannerAdvertisement({ Ad }: { Ad: any }) {
         )}
 
         {Ad?.type === "native" && (
-          <div className="flex flex-col h-[500px] w-full justify-between rounded-lg  bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+          <div className="flex flex-col h-[500px] w-full justify-between rounded-md  bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <img
               src={Ad?.image}
               alt={Ad?.title}
@@ -69,7 +69,7 @@ function BannerAdvertisement({ Ad }: { Ad: any }) {
                 {Ad?.text}
               </p>
 
-           <button type="button" className="mt-4 w-full cursor-pointer rounded bg-blue-600 py-2 text-sm font-medium text-white" onClick={(e) => { e.stopPropagation(); handleAdClick(Ad?.id); if (Ad?.url) { window.open( Ad.url, Ad?.target === "_blank" ? "_blank" : "_self" ); } }} > {Ad?.cta} </button>
+           <button type="button" className="mt-4 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-sm font-medium text-white" onClick={(e) => { e.stopPropagation(); handleAdClick(Ad?.id); if (Ad?.url) { window.open( Ad.url, Ad?.target === "_blank" ? "_blank" : "_self" ); } }} > {Ad?.cta} </button>
             </div>
           </div>
         )}

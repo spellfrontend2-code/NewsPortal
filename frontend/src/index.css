@@ -14,20 +14,38 @@
   --color-secondary-rgb: 100 116 139;
   --color-primary-rgb: 79 70 229;
 
-  --color-public-primary: #0f172a;
-  /* Slate-900 */
-  --color-public-navtext: #ffffff;
-  --color-public-navtext-rgb: 255 255 255;
-  --color-public-dark: #020617;
-  /* Slate-950 */
-  --color-public-dark-rgb: 2 6 23;
-  --color-public-bg: #f8fafc;
-  /* Slate-50 */
-  --color-public-newsText: #1e293b;
-  /* Slate-800 */
-  --color-public-newsText-rgb: 30 41 59;
-  --color-public-newsText-hover: #4f46e5;
-  /* Indigo-600 */
+  /* --- Public Pages Semantic Colors --- */
+  /* Backgrounds */
+  --color-public-bg-main: #ffffff;
+  --color-public-bg-secondary: #f8fafc;
+  --color-public-bg-tertiary: #f1f5f9;
+  --color-public-bg-muted: #e2e8f0;
+  --color-public-bg-skeleton: #cbd5e1;
+  --color-public-bg-dark-secondary: #2261bf;
+  --color-public-bg-darker: #2260BF;
+  --color-public-bg-dark: #2261bf;
+  --color-public-bg-accent: #2261bf;
+  --color-public-bg-accent-hover: #2261bf;
+  
+  /* Text */
+  --color-public-text-main: #161A25;
+  --color-public-text-secondary: #1e293b;
+  --color-public-text-tertiary: #334155;
+  --color-public-text-muted: #b9d2f5;
+  --color-public-text-lighter: #e6eefa;
+  --color-public-text-lightest: #70C9FF;
+  --color-public-text-inverse: #ffffff;
+  --color-public-text-accent: #2260BF;
+  --color-public-text-accent-hover: #2285bf;
+  --color-public-text-danger: #e11d48;
+  
+  /* Borders */
+  --color-public-border-light: #f1f5f9;
+  --color-public-border-main: #e2e8f0;
+  --color-public-border-strong: #cbd5e1;
+  --color-public-border-dark: #d3e2f7;
+  --color-public-border-darker: #ffffff;
+  --color-public-border-accent: #70C9FF;
 }
 
 html,
@@ -38,6 +56,6 @@ body,
 
 body {
 font-family: "Inter", sans-serif;
-  background-color: var(--color-public-bg);
-  color: var(--color-public-newsText);
+  background-color: var(--color-public-bg-secondary);
+  color: var(--color-public-text-secondary);
 }

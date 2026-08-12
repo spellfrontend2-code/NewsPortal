@@ -10,7 +10,7 @@ function UserLogin({ open, onOpenChange }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-[90vh] !max-w-[25vw] flex-col overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
         <DialogHeader className="relative -mx-4 -mt-4 w-[calc(100%+2rem)] bg-[var(--color-public-newsText)]  px-4 py-2">
-  <DialogTitle className="text-center text-2xl font-bold text-white">
+  <DialogTitle className="text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
     {signInOpen ? 
     <div>
       <p>Create New Account</p>

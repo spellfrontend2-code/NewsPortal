@@ -7,7 +7,7 @@ function ArticleSquareCard({ article }: any) {
   const { viewPublicArticle } = useArticleView();
   return (
     <div
-      className="flex flex-col h-full w-full group overflow-hidden cursor-pointer rounded-2xl border border-slate-100 bg-white hover:shadow-md hover:border-slate-200 transition-all duration-300"
+      className="flex flex-col h-full w-full group overflow-hidden cursor-pointer rounded-md border border-slate-100 bg-white hover:shadow-md hover:border-slate-200 transition-all duration-300"
       onClick={() => {
         viewPublicArticle(article?.id);
         navigate(`/news/${article?.slug}`);

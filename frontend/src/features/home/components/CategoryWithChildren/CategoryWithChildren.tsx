@@ -37,7 +37,7 @@ function CategoryWithChildren({ category }: { category: any }) {
         className={`flex flex-col gap-4 ${hasSidebarAds ? "w-3/4" : "w-full"}`}
       >
         <div className="h-[10%] flex items-center gap-4 w-full">
-          <div className="h-full w-1/5 flex border-r border-slate-300">
+          <div className="h-full w-1/5 flex border-r border-[var(--color-public-border-strong)]">
             <h1
               className={`text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
               onClick={() => navigate(`/news-list/category/${category?.slug}`)}
@@ -85,7 +85,7 @@ function CategoryWithChildren({ category }: { category: any }) {
               return (
                 <div
                   key={ad.id ?? index}
-                  className=" h-[160px] w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm"
+                  className=" h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
                 >
                   <SidebarAdvertisement Ad={ad} />
                 </div>

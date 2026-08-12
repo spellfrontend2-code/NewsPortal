@@ -54,7 +54,7 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
         ) : Ad?.type === "html" ? (
           <HtmlAd html={Ad?.html} />
         ) : Ad?.type === "native" ? (
-          <div className="flex flex-col h-full w-full justify-between rounded-lg bg-white shadow-sm hover:shadow-md transition overflow-hidden">
+          <div className="flex flex-col h-full w-full justify-between rounded-md bg-white shadow-sm hover:shadow-md transition overflow-hidden">
             <img
               src={Ad?.image}
               alt={Ad?.title}
@@ -72,7 +72,7 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
 
               <button
                 type="button"
-                className="mt-4 w-full rounded bg-blue-600 py-2 text-white text-sm font-medium"
+                className="mt-4 w-full rounded-md bg-blue-600 py-2 text-white text-sm font-medium"
               >
                 {Ad?.cta}{" "}
               </button>

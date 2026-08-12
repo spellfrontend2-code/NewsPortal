@@ -17,7 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
 
 function NavbarCategories() {
@@ -37,8 +37,8 @@ function NavbarCategories() {
   const [profileInfoOpen, setProfileInfoOpen] = useState(false);
   const updatedCategories =
     categories.length > 0
-      ? [{ id: 0, name: "Home", slug: "" }, ...categories]
-      : [{ id: 0, name: "Home", slug: "" }];
+      ? [{ id: 0, name: "गृहपृष्ठ", slug: "" }, ...categories]
+      : [{ id: 0, name: "गृहपृष्ठ", slug: "" }];
 
   const debouncedSearch = useDebounce(search, 1000);
   const articleHook = useArticlesHooks();
@@ -160,37 +160,37 @@ function NavbarCategories() {
   }, []);
 
   const navLinkClass = ({ isActive }) =>
-    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs lg:text-sm font-bold uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-white whitespace-nowrap p-1  ${
+    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-[var(--color-public-text-inverse)] whitespace-nowrap p-1  ${
       isActive
-        ? "text-white border-indigo-500 bg-white/5"
-        : "border-transparent text-slate-400 hover:bg-white/5"
+        ? "text-[var(--color-public-text-inverse)] border-[var(--color-public-border-accent)] bg-[var(--color-public-bg-main)]/5"
+        : "border-transparent text-[var(--color-public-text-lighter)] hover:bg-[var(--color-public-bg-main)]/5"
     }`;
 
   const mobileLinkClass = ({ isActive }) =>
-    `flex-1 flex items-center px-5 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${
-      isActive ? "text-white" : "text-slate-300 hover:text-white"
+    `flex-1 flex items-center px-5 py-3 text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wider transition-colors ${
+      isActive ? "text-[var(--color-public-text-inverse)]" : "text-[var(--color-public-text-lighter)] group-hover:text-[var(--color-public-text-inverse)]"
     }`;
 
   const mobileChildLinkClass = ({ isActive }) =>
-    `w-full flex items-center pl-9 pr-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors border-l-4 ${
+    `w-full flex items-center pl-9 pr-5 py-2.5 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-colors border-l-4 ${
       isActive
-        ? "text-white border-indigo-500 bg-white/10"
-        : "text-slate-400 border-transparent hover:text-white hover:bg-white/5"
+        ? "text-[var(--color-public-text-inverse)] border-[var(--color-public-border-accent)] bg-[var(--color-public-bg-main)]/5"
+        : "text-[var(--color-public-text-lighter)] border-transparent hover:text-[var(--color-public-text-inverse)] hover:bg-[var(--color-public-bg-main)]/5"
     }`;
   const avatarColor = profileData?.id
     ? getAvatarColor(profileData.id)
-    : "from-indigo-600 to-indigo-500";
+    : "from-public-bg-accent to-public-bg-accent-hover";
 
   const visibleCategories = updatedCategories.slice(0, visibleCount);
   const overflowCategories = updatedCategories.slice(visibleCount);
 
   return (
-    <div className="w-full bg-slate-900/95 backdrop-blur-md shadow-sm border-b border-slate-800 sticky top-0 z-50">
+    <div className="w-full bg-[var(--color-public-bg-dark)]/95 backdrop-blur-md shadow-sm border-b border-[var(--color-public-border-darker)] sticky top-0 z-50">
       {/* ── Main bar ── */}
       <div className="flex h-[54px] w-[92%] sm:w-[85%] md:w-[70%] max-w-screen-xl mx-auto items-center gap-2 md:gap-4">
         {/* Mobile: hamburger toggle (leftmost on small screens) */}
         <button
-          className="md:hidden flex items-center justify-center p-2 -ml-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+          className="md:hidden flex items-center justify-center p-2 -ml-2 rounded-lg text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-inverse)] hover:bg-[var(--color-public-bg-main)]/10 transition-colors shrink-0"
           onClick={() => setMobileMenuOpen((v) => !v)}
           aria-label="Toggle navigation menu"
         >
@@ -227,7 +227,7 @@ function NavbarCategories() {
                           openCategory === category.id ? null : category.id,
                         );
                       }}
-                      className="cursor-pointer text-slate-400 hover:text-white"
+                      className="cursor-pointer text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-inverse)]"
                       aria-label={`Toggle ${category.name} submenu`}
                     >
                       <ChevronDown
@@ -241,12 +241,12 @@ function NavbarCategories() {
                 </NavLink>
               </div>
               {openCategory === category.id && (
-                <div className="absolute left-0 mt-2 w-40 rounded-md bg-slate-800 border border-slate-700 shadow-lg z-50 p-1">
+                <div className="absolute left-0 mt-2 w-40 rounded-md bg-[var(--color-public-bg-dark-secondary)] shadow-lg z-50 p-1">
                   {category.children.map((child) => (
                     <NavLink
                       key={child.id}
                       to={`/news-list/category/${child.slug}`}
-                      className="block px-4 py-2 text-sm text-slate-300 rounded-md hover:bg-white/10 hover:text-white transition-colors"
+                      className="block px-4 py-2 text-xs sm:text-sm md:text-base font-bold rounded-md hover:bg-[var(--color-public-bg-main)]/10 text-[var(--color-public-text-inverse)] transition-colors"
                       onClick={() => setOpenCategory(null)}
                     >
                       {child.name}
@@ -268,14 +268,14 @@ function NavbarCategories() {
                   setOpenOthersChild(null);
                 }}
                 className={
-    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs lg:text-sm font-bold uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-white whitespace-nowrap p-1  ${
+    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-[var(--color-public-text-inverse)] whitespace-nowrap p-1  ${
                   openOthers
-                    ? "text-white border-indigo-500 bg-white/5"
-                    : "border-transparent text-slate-400 hover:text-white hover:bg-white/5"
+                    ? "text-[var(--color-public-text-inverse)] border-[var(--color-public-border-accent)] bg-[var(--color-public-bg-main)]/5"
+                    : "border-transparent text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-inverse)] hover:bg-[var(--color-public-bg-main)]/5"
                 }`}
                 aria-label="Show more categories"
               >
-                Others
+                अन्य
                 <ChevronDown
                   size={14}
                   className={`transition-transform ${openOthers ? "rotate-180" : ""}`}
@@ -284,17 +284,17 @@ function NavbarCategories() {
               </div>
 
               {openOthers && (
-                <div className="absolute left-0 mt-2 w-56 max-w-[85vw] max-h-[70vh] overflow-y-auto rounded-md bg-slate-800 border border-slate-700 text-white shadow-lg z-50 p-1">
+                <div className="absolute left-0 mt-2 w-40 max-w-[85vw] max-h-[70vh] overflow-y-auto rounded-md bg-[var(--color-public-bg-dark-secondary)] shadow-lg z-50 p-1">
                   {overflowCategories.map((category) => (
                     <div key={category.id}>
-                      <div className="flex items-center justify-between rounded-md hover:bg-white/10 transition-colors">
+                      <div className="flex items-center justify-between rounded-md hover:bg-[var(--color-public-bg-main)]/10 transition-colors">
                         <NavLink
                           to={
                             category.slug === ""
                               ? "/"
                               : `/news-list/category/${category.slug}`
                           }
-                          className="flex-1 block px-4 py-2 text-sm text-slate-300 hover:text-white"
+                          className="flex-1 block px-4 py-2 text-xs sm:text-sm md:text-base font-bold text-[var(--color-public-text-inverse)] transition-colors"
                           onClick={() => {
                             setOpenOthers(false);
                             setOpenOthersChild(null);
@@ -313,7 +313,7 @@ function NavbarCategories() {
                                   : category.id,
                               );
                             }}
-                            className="px-3 py-2 text-slate-400 hover:text-white"
+                            className="px-3 py-2 text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-inverse)]"
                             aria-label={`Toggle ${category.name} submenu`}
                           >
                             <ChevronDown
@@ -328,12 +328,12 @@ function NavbarCategories() {
                         )}
                       </div>
                       {openOthersChild === category.id && (
-                        <div className="flex flex-col bg-white/5 rounded-md my-0.5">
+                        <div className="flex flex-col bg-[var(--color-public-bg-main)]/5 rounded-md my-0.5">
                           {category.children.map((child) => (
                             <NavLink
                               key={child.id}
                               to={`/news-list/category/${child.slug}`}
-                              className="pl-7 pr-4 py-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+                              className="pl-7 pr-4 py-1.5 text-xs sm:text-sm md:text-base font-bold text-[var(--color-public-text-inverse)] transition-colors"
                               onClick={() => {
                                 setOpenOthers(false);
                                 setOpenOthersChild(null);
@@ -375,7 +375,7 @@ function NavbarCategories() {
           <div ref={measureOthersRef} className="shrink-0">
             <span className="inline-flex items-center gap-1.5 h-full px-2.5 lg:px-3.5 text-xs lg:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
               <MoreHorizontal size={16} />
-              Others
+              अन्य
               <ChevronDown size={14} />
             </span>
           </div>
@@ -387,14 +387,14 @@ function NavbarCategories() {
           {/* Search */}
           <div
             ref={searchRef}
-            className="relative flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800/60 px-3 py-1.5 transition-all duration-300 focus-within:bg-white focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 group w-36 sm:w-40 md:w-44 focus-within:w-48 sm:focus-within:w-56 md:focus-within:w-64"
+            className="relative flex items-center gap-2 rounded-full border border-[var(--color-public-border-dark)] bg-[var(--color-public-bg-dark-secondary)]/60 px-3 py-1.5 transition-all duration-300 focus-within:bg-[var(--color-public-bg-main)] focus-within:border-[var(--color-public-border-accent)] focus-within:ring-2 focus-within:ring-indigo-500/20 group w-36 sm:w-40 md:w-44 focus-within:w-48 sm:focus-within:w-56 md:focus-within:w-64"
           >
             <Search
               size={14}
-              className="text-slate-400 group-focus-within:text-slate-900 transition-colors shrink-0"
+              className="text-[var(--color-public-text-lighter)] group-focus-within:text-[var(--color-public-text-main)] transition-colors shrink-0"
             />
             <input
-              className="border-none bg-transparent text-xs text-white outline-none w-full focus:text-slate-900 transition-colors placeholder-slate-500 min-w-0"
+              className="border-none bg-transparent text-xs text-[var(--color-public-text-inverse)] outline-none w-full focus:text-[var(--color-public-text-main)] transition-colors placeholder-public-text-muted min-w-0"
               placeholder="Search news..."
               onChange={(e) => setSearch(e.target.value)}
               value={search}
@@ -403,7 +403,7 @@ function NavbarCategories() {
             {/* Search results dropdown — anchored to the input, clamped
                 to the viewport so it never bleeds off-screen */}
             {searchOpen && debouncedSearch && (
-              <div className="absolute z-50 right-0 top-[calc(100%+8px)] max-h-72 w-[min(300px,calc(100vw-2rem))] bg-white border border-slate-100 shadow-xl rounded-2xl overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 p-2 flex flex-col gap-1.5">
+              <div className="absolute z-50 right-0 top-[calc(100%+8px)] max-h-72 w-[min(300px,calc(100vw-2rem))] bg-[var(--color-public-bg-main)] border border-[var(--color-public-border-light)] shadow-xl rounded-2xl overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 p-2 flex flex-col gap-1.5">
                 {searchLoading ? (
                   <>
                     <ArticleRectangleCardSkeleton />
@@ -413,7 +413,7 @@ function NavbarCategories() {
                   searchedArticles.map((article) => (
                     <div
                       key={article?.data?.id}
-                      className="w-full cursor-pointer hover:bg-slate-50 rounded-xl overflow-hidden p-1 transition-colors"
+                      className="w-full cursor-pointer hover:bg-[var(--color-public-bg-secondary)] rounded-xl overflow-hidden p-1 transition-colors"
                       onClick={() => {
                         setSearch("");
                         setSearchOpen(false);
@@ -423,7 +423,7 @@ function NavbarCategories() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-slate-500 text-xs p-3 text-center">
+                  <p className="text-[var(--color-public-text-muted)] text-xs p-3 text-center">
                     No articles found
                   </p>
                 )}
@@ -436,25 +436,25 @@ function NavbarCategories() {
             {profileData.id ? (
               <div className="relative" ref={profileRef}>
                 <button
-                  className={`h-8 w-8 rounded-full bg-gradient-to-tr ${avatarColor} border border-white/20 flex justify-center items-center font-bold text-xs text-white cursor-pointer shadow-sm transition-all`}
+                  className={`h-8 w-8 rounded-full bg-gradient-to-tr ${avatarColor} border border-[var(--color-public-border-light)]/20 flex justify-center items-center font-bold text-xs text-[var(--color-public-text-inverse)] cursor-pointer shadow-sm transition-all`}
                   onClick={() => setProfileInfoOpen(!profileInfoOpen)}
                 >
                   {profileData?.name?.charAt(0).toUpperCase()}
                 </button>
                 {profileInfoOpen && (
-                  <div className="absolute right-0 mt-2.5 rounded-2xl z-50 shadow-2xl w-[240px] max-w-[calc(100vw-1.5rem)] bg-white border border-slate-100 p-1 text-slate-800 flex flex-col gap-1">
-                    <div className="flex flex-col px-4 py-3 bg-slate-50/50 rounded-t-xl border-b border-slate-100">
-                      <p className="text-sm font-bold text-slate-900 leading-tight">
+                  <div className="absolute right-0 mt-2.5 rounded-2xl z-50 shadow-2xl w-[240px] max-w-[calc(100vw-1.5rem)] bg-[var(--color-public-bg-main)] border border-[var(--color-public-border-light)] p-1 text-[var(--color-public-text-secondary)] flex flex-col gap-1">
+                    <div className="flex flex-col px-4 py-3 bg-[var(--color-public-bg-secondary)]/50 rounded-t-xl border-b border-[var(--color-public-border-light)]">
+                      <p className="text-sm font-bold text-[var(--color-public-text-main)] leading-tight">
                         {profileData?.name}
                       </p>
-                      <p className="text-xs text-slate-400 font-medium truncate mt-0.5">
+                      <p className="text-xs text-[var(--color-public-text-lighter)] font-medium truncate mt-0.5">
                         {profileData?.email}
                       </p>
                     </div>
 
                     <button
                       onClick={handleLogout}
-                      className="w-full flex h-10 cursor-pointer items-center gap-2 rounded-xl px-4 text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+                      className="w-full flex h-10 cursor-pointer items-center gap-2 rounded-xl px-4 text-sm font-semibold text-[var(--color-public-text-danger)] hover:bg-rose-50 transition-colors"
                     >
                       <LogOut size={16} />
                       Logout
@@ -465,7 +465,7 @@ function NavbarCategories() {
             ) : (
               <button
                 onClick={() => setLoginOpen(true)}
-                className="flex items-center justify-center p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-indigo-400 hover:scale-105 transition-all cursor-pointer"
+                className="flex items-center justify-center p-2 rounded-full hover:bg-[var(--color-public-bg-dark-secondary)] text-[var(--color-public-text-lighter)] hover:text-indigo-400 hover:scale-105 transition-all cursor-pointer"
               >
                 <UserCircle size={24} />
               </button>
@@ -476,14 +476,14 @@ function NavbarCategories() {
 
       {/* ── Mobile drawer ── */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-800 flex flex-col py-2 bg-slate-900 max-h-[calc(100vh-54px)] overflow-y-auto">
+        <div className="md:hidden border-t border-[var(--color-public-border-darker)] flex flex-col py-2 bg-[var(--color-public-bg-dark-secondary)] max-h-[calc(100vh-54px)] overflow-y-auto">
           {updatedCategories.map((category) => (
-            <div key={category.id} className="flex flex-col">
+            <div key={category.id} className="flex flex-col group">
               <div
                 className={`flex items-center border-l-4 transition-colors ${
                   openMobileCategory === category.id
-                    ? "bg-white/5 border-indigo-500"
-                    : "border-transparent"
+                    ? "bg-[var(--color-public-bg-main)]/5 border-[var(--color-public-border-accent)]"
+                    : "border-transparent hover:bg-[var(--color-public-bg-main)]/5"
                 }`}
               >
                 <NavLink
@@ -508,7 +508,11 @@ function NavbarCategories() {
                           : category.id,
                       );
                     }}
-                    className="p-3 pr-5 text-slate-400 hover:text-white"
+                    className={`p-3 pr-5 transition-colors ${
+                      openMobileCategory === category.id
+                        ? "text-[var(--color-public-text-inverse)]"
+                        : "text-[var(--color-public-text-lighter)] group-hover:text-[var(--color-public-text-inverse)]"
+                    }`}
                     aria-label={`Toggle ${category.name} submenu`}
                   >
                     <ChevronDown
@@ -521,7 +525,7 @@ function NavbarCategories() {
                 )}
               </div>
               {openMobileCategory === category.id && (
-                <div className="flex flex-col bg-black/20">
+                <div className="flex flex-col bg-[var(--color-public-bg-main)]/5 my-0.5">
                   {category.children.map((child) => (
                     <NavLink
                       key={child.id}

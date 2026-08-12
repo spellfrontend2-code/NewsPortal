@@ -51,7 +51,7 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
                 return (
                   <div
                     key={ad.id ?? index}
-                    className=" h-[160px] w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm"
+                    className=" h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
                   >
                     <SidebarAdvertisement Ad={ad} />
                   </div>

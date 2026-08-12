@@ -26,7 +26,7 @@ function LatestNews() {
   return (
     <div className="w-full flex flex-col  h-full">
       {articles?.length > 0 && (
-        <h2 className=" h-[5%]  text-2xl md:text-3xl font-black text-slate-900 mb-6 uppercase tracking-tight flex items-center gap-2">
+        <h2 className=" h-[5%]  text-2xl md:text-3xl font-black text-[var(--color-public-text-main)] mb-6 uppercase tracking-tight flex items-center gap-2">
           {/* <span className="h-6 w-1 bg-indigo-650 rounded-full"></span> */}
           Latest News
         </h2>
@@ -51,7 +51,7 @@ function LatestNews() {
 
               <Button
                 variant="outline"
-                className="w-full rounded-full border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold py-3 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                className="w-full rounded-full border border-[var(--color-public-border-main)] hover:border-[var(--color-public-border-strong)] hover:bg-[var(--color-public-bg-secondary)] text-[var(--color-public-text-tertiary)] font-bold py-3 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
                 onClick={() => {
                   navigate("/news-list/latest-news");
                 }}
@@ -66,7 +66,7 @@ function LatestNews() {
               {sidebarAds.length > 0 &&
                 sidebarAds.map((ad: any, index: number) => {
                   return (
-                    <div key={ad.id ?? index} className="h-[160px] w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm">
+                    <div key={ad.id ?? index} className="h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm">
                       <SidebarAdvertisement Ad={ad} />
                     </div>
                   );
@@ -75,7 +75,7 @@ function LatestNews() {
           </div>
         </div>
       ) : (
-        <p className="text-slate-500 font-medium text-center py-6">No news articles found</p>
+        <p className="text-[var(--color-public-text-muted)] font-medium text-center py-6">No news articles found</p>
       )}
     </div>
   );

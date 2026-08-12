@@ -6,7 +6,7 @@ function NavbarSkeleton() {
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="h-5 w-20 rounded bg-white/20 animate-pulse"
+              className="h-5 w-20 rounded bg-[var(--color-public-bg-main)]/20 animate-pulse"
             />
           ))}
         </div>

@@ -7,7 +7,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
   const { viewPublicArticle } = useArticleView();
   return (
     <div
-      className="flex h-full w-full group overflow-hidden cursor-pointer items-stretch rounded-2xl bg-white border border-slate-100 hover:shadow-md hover:border-slate-200 transition-all duration-300"
+      className="flex h-full w-full group overflow-hidden cursor-pointer items-stretch rounded-md bg-white border border-slate-100 hover:shadow-md hover:border-slate-200 transition-all duration-300"
       onClick={() => {
         viewPublicArticle(article?.id);
         navigate(`/news/${article?.slug}`);

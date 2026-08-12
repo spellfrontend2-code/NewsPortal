@@ -32,7 +32,7 @@ function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
             <div className="flex justify-between h-[10%] w-full items-center">
               <p className="uppercase tracking-wider font-semibold">Advertisement</p>
               <DialogClose asChild>
-              <button className="h-[30px] w-30 rounded-full bg-white  shadow-lg cursor-pointer focus-visible:outline-none">
+              <button className="h-[30px] w-30 rounded-md bg-white  shadow-lg cursor-pointer focus-visible:outline-none">
                 <p className=" text-blue-900" >Skip this</p>
               </button>
             </DialogClose></div>
