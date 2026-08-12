@@ -21,11 +21,11 @@ function ArticleSquareCard({ article }: any) {
         />
       </div>
       <div className="p-4 flex flex-col justify-between flex-1 gap-2 bg-white">
-        <p className="font-bold text-slate-900 text-sm line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
+        <p className="font-bold text-slate-900 text-base md:text-lg line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
           {article?.title}
         </p>
 
-        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-450">
+        <div className="flex items-center text-sm  gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-450">
           <Clock size={12} />
           <span>{article?.published_at?.split("T")[0]}</span>
         </div>

@@ -1,8 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
-
+/* @import "@fontsource-variable/geist"; */
+/* @import "@fontsource/noto-sans-devanagari"; */
+@import "@fontsource/mukta";
 :root {
   --color-primary: #4f46e5;
   /* Indigo */
@@ -58,4 +59,22 @@ body {
 font-family: "Inter", sans-serif;
   background-color: var(--color-public-bg-secondary);
   color: var(--color-public-text-secondary);
+}
+
+/* ── Breaking news ticker scroll animation ── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker 35s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+.public{
+  font-family:"Mukta", sans-serif;;
 }

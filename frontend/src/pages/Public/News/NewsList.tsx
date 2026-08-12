@@ -68,15 +68,16 @@ function NewsList({
         <div
           className={`relative h-15 w-full flex items-center ${show === "all" ? "py-8" : ""}  `}
         >
+             {articles?.length > 0 && show === "all" && (
+            <div className="absolute inset-0 w-2 h-full rounded-l-md bg-[var(--color-public-bg-accent)]" />
+          )}
           <h1
-            className={`${show === "all" ? "text-5xl text-[var(--color-public-text-secondary)]" : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"} cursor-pointer uppercase font-bold  `}
+            className={`${show === "all" ? "ml-3 text-5xl text-[var(--color-public-text-secondary)]" : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"} cursor-pointer uppercase font-bold  `}
             onClick={() => navigate(`/news-list/category/${page_headline}`)}
           >
             {page_headline}
           </h1>
-          {articles?.length > 0 && show === "all" && (
-            <div className="absolute -left-4 w-2 h-full rounded-l-md bg-[var(--color-public-newsText)]" />
-          )}
+       
         </div>
       )}
       {articles?.length > 0 && (

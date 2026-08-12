@@ -30,7 +30,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
         <p
           className={`${type === "detailed"
             ? "text-xl md:text-2xl lg:text-3xl font-black tracking-tight leading-tight text-slate-900"
-            : "text-sm font-bold text-slate-900 line-clamp-2 leading-snug"
+            : "text-sm md:text-base font-bold text-slate-900 line-clamp-2 leading-snug"
             } transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]`}
         >
           {article?.title}

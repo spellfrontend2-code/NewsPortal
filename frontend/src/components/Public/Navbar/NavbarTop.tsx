@@ -28,7 +28,7 @@ function NavbarTop() {
 
         {/* Header Ad  */}
         {headerAd && (
-          <div className=" sm:flex h-full flex-1 overflow-hidden rounded-xl border border-[var(--color-public-border-light)]">
+          <div className=" sm:flex h-full flex-1 overflow-hidden rounded-md border border-[var(--color-public-border-light)]">
             <BannerAdvertisement Ad={headerAd} />
           </div>
         )}
