@@ -21,7 +21,7 @@ function ArticleSquareHoverCard({ article }: any) {
       <div className="bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent absolute inset-0 w-full h-full" />
 
       <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-2.5">
-        <p className=" font-black text-xl md:text-2xl text-white tracking-tight leading-tight transition-colors duration-250 group-hover:text-amber-200">
+        <p className=" font-black text-xl md:text-2xl text-white tracking-tight leading-tight transition-colors duration-200 group-hover:text-[var(--color-public-text-lightest)]">
           {article?.title}
         </p>
 

@@ -35,11 +35,12 @@ function ColoredCategoryNews({
       }}
     >
       <div className="w-full flex flex-col  h-full">
-        <h2 className="cursor-pointer h-[5%]  text-2xl md:text-3xl font-black text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200  mb-6 uppercase tracking-tight flex items-center gap-2"
+          <h1
+            className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
             onClick={() => navigate(`/news-list/category/${category?.slug}`)}
           >
             {category?.name}
-          </h2>
+          </h1>
 
         <div className="flex flex-col lg:flex-row w-full h-[95%] gap-6">
             <div className="lg:flex-[3] min-w-0 h-[350px] lg:h-auto">

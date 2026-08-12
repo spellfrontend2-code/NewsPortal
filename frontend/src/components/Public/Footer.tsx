@@ -12,7 +12,7 @@ function Footer() {
 
   return (
     <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex justify-center ">
-      <footer className="w-[70%]">
+      <footer className="w-[80%]">
         {/* Main Footer */}
         <div className="mx-auto grid grid-cols-1 gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
@@ -50,7 +50,7 @@ function Footer() {
 
           {/* Contact Information */}
           <div className="flex flex-col gap-5">
-            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-wider uppercase text-[var(--color-public-text-lightest)]">Contact Us</h3>
+            <h3 className="text-sm sm:text-base   font-bold tracking-wider uppercase text-[var(--color-public-text-lighter)]">Contact Us</h3>
 
             <div className="space-y-4 text-sm text-[var(--color-public-text-lighter)]">
               {company?.address && (
@@ -113,7 +113,7 @@ function Footer() {
 
           {/* Quick Links */}
           <div className="flex flex-col gap-5">
-            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-wider uppercase text-[var(--color-public-text-lightest)]">Quick Links</h3>
+            <h3 className="text-sm sm:text-base   font-bold tracking-wider uppercase text-[var(--color-public-text-lighter)]">Quick Links</h3>
 
             <ul className="space-y-3 text-sm text-[var(--color-public-text-lighter)]">
               <li>
@@ -143,7 +143,7 @@ function Footer() {
 
           {/* Registration Information */}
           <div className="flex flex-col gap-5">
-            <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold tracking-wider uppercase text-[var(--color-public-text-lightest)]">Legal Info</h3>
+            <h3 className="text-sm sm:text-base   font-bold tracking-wider uppercase text-[var(--color-public-text-lighter)]">Legal Info</h3>
 
             <div className="space-y-4 text-sm text-[var(--color-public-text-lighter)]">
               {company?.press_registration_number && (

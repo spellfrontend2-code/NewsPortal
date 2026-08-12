@@ -54,7 +54,7 @@ function ColumnViewMultiCategoryNews({
     <div className="w-full h-full flex lg:flex-row flex-col">
       <div className="w-full lg:w-2/3 h-full flex flex-col  gap-2 py-5">
         <h1
-          className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+          className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
           onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
         >
           {categoryOne?.name}
@@ -76,7 +76,7 @@ function ColumnViewMultiCategoryNews({
                   return (
                     <div
                       key={ad.id ?? index}
-                      className=" h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
+                      className=" h-[160px] w-full overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
                     >
                       <SidebarAdvertisement Ad={ad} />
                     </div>
@@ -89,7 +89,7 @@ function ColumnViewMultiCategoryNews({
       </div>
       <div className="flex flex-col lg:w-1/3 w-full h-full  mt-4">
         <h1
-          className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+          className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
           onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
         >
           {categoryTwo?.name}

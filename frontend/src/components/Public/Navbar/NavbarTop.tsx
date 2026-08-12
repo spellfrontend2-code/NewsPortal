@@ -15,7 +15,7 @@ function NavbarTop() {
   const navigate=useNavigate();
   return (
     <div className="w-full flex items-center justify-center border-b border-[var(--color-public-border-light)] bg-[var(--color-public-bg-main)]">
-      <div className="flex h-20 md:h-24 w-[92%] sm:w-[85%] md:w-[70%] max-w-screen-xl mx-auto items-center justify-between gap-4 md:gap-8 py-3">
+      <div className="flex h-20 md:h-24 w-[92%] sm:w-[85%] md:w-[80%]  mx-auto items-center justify-between gap-4 md:gap-8 py-3">
         {/* Logo */}
         <div className="h-full flex items-center shrink-0">
           <img

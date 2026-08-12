@@ -37,20 +37,20 @@ function CategoryWithChildren({ category }: { category: any }) {
         className={`flex flex-col gap-4 ${hasSidebarAds ? "w-3/4" : "w-full"}`}
       >
         <div className="h-[10%] flex items-center gap-4 w-full">
-          <div className="h-full w-1/5 flex border-r border-[var(--color-public-border-strong)]">
+          <div className="h-full w-[10%] flex border-r border-[var(--color-public-border-strong)]">
             <h1
-              className={`text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+              className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
               onClick={() => navigate(`/news-list/category/${category?.slug}`)}
             >
               {category?.name}
             </h1>
           </div>
           {category?.children?.length > 0 && (
-            <div className="h-full w-4/5 flex gap-4 flex-wrap">
+            <div className="h-full w-4/5 flex gap-4 flex-wrap items-center">
               {category?.children?.map((child: any) => (
                 <h1
                   key={child?.id}
-                  className={`text-lg cursor-pointer hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+                  className={`text-base cursor-pointer font-semibold hover:text-[var(--color-public-text-accent-hover)] transition-all duration-200 tracking-tight`}
                   onClick={() =>
                     navigate(
                       `/news-list/category/${category?.slug}/${child?.slug}`,

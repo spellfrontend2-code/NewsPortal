@@ -12,6 +12,7 @@ function NewsList({
   lastPage,
   show = "all",
 }: any) {
+  
   const currentPage = pagination.pageIndex + 1;
   const slicedArticles = show === "all" ? articles.slice(1) : articles;
   const goToPage = (page: number) => {
@@ -68,7 +69,7 @@ function NewsList({
           className={`relative h-15 w-full flex items-center ${show === "all" ? "py-8" : ""}  `}
         >
           <h1
-            className={`${show === "all" ? "text-5xl" : "text-2xl"} cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+            className={`${show === "all" ? "text-5xl text-[var(--color-public-text-secondary)]" : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"} cursor-pointer uppercase font-bold  `}
             onClick={() => navigate(`/news-list/category/${page_headline}`)}
           >
             {page_headline}
@@ -118,8 +119,8 @@ function NewsList({
                     onClick={() => goToPage(page as number)}
                     className={`rounded-full font-bold h-9 w-9 text-sm transition-all duration-200 border cursor-pointer ${
                       currentPage === page
-                        ? "bg-slate-900 border-slate-900 text-white shadow-sm"
-                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                        ? "bg-[var(--color-public-bg-accent)] border-[var(--color-public-bg-accent)] text-white shadow-sm"
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-[var(--color-public-bg-accent)]"
                     }`}
                   >
                     {page}

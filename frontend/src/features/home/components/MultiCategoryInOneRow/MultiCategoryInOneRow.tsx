@@ -50,7 +50,7 @@ function MultiCategoryInOneRow({
       <div className="flex gap-4 w-full ">
         <div className="w-2/3">
           <h1
-            className={`text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+            className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
             onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
           >
             {categoryOne?.name}
@@ -66,7 +66,7 @@ function MultiCategoryInOneRow({
 
         <div className="w-1/3 ">
           <h1
-            className={`text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+            className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
             onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
           >
             {categoryTwo?.name}

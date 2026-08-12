@@ -72,7 +72,7 @@ function Home() {
                   </div>
                 ) : feed?.type === "advertisement" ? (
                   <div key={feed?.id} className="col-span-full my-6">
-                    <div className="w-full overflow-hidden rounded-2xl border border-slate-100 shadow-sm bg-slate-50/50">
+                    <div className="w-full overflow-hidden rounded-md border border-slate-100 shadow-sm bg-slate-50/50">
                       <BannerAdvertisement Ad={feed?.data} />
                     </div>
                   </div>
@@ -84,7 +84,7 @@ function Home() {
           <div className="flex justify-center items-center mt-8">
             <Button
               variant="submit"
-              className="rounded-full bg-slate-900 text-white font-semibold px-8 py-2.5 hover:bg-slate-800 transition-all duration-200 shadow-md cursor-pointer hover:shadow-lg disabled:opacity-50"
+              className="rounded-md bg-[var(--color-public-bg-dark-secondary)] text-white font-semibold px-8 py-2.5 hover:bg-[var(--color-public-bg-darker)] transition-all duration-200 shadow-md cursor-pointer hover:shadow-lg disabled:opacity-50"
               disabled={feedLoading}
               onClick={() =>
                 setPagination((prev) => ({

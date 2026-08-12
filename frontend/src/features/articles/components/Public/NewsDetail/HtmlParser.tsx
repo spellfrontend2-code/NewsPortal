@@ -21,8 +21,7 @@ return parse(content, {
 
       if (paragraphCount % 2 === 0 && ad[adIndex]) {
         advertisement = (
-          <div className="my-6" key={adIndex}>
-            {ad[adIndex]?.title}
+          <div className=" h-[200px] max-h-[500px]" key={adIndex}>
             <BannerAdvertisement Ad={ad[adIndex]} />
           </div>
         );

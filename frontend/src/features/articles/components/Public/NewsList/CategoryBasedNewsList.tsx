@@ -22,7 +22,7 @@ const articles =
   allArticles?.data
     ?.filter((item:any) => item.type === "article")
     .map((item: any) => item.data) ?? [];
-
+const name=articles[0]?.categories?.filter((category)=>slug===category.slug)[0]?.name
   if (!isLoading && articles.length === 0 && categorySlug) return null;
 
   return (
@@ -32,7 +32,7 @@ const articles =
       ) : 
         articles?.length>0 ? <NewsList
           articles={articles}
-          page_headline={categorySlug ? categorySlug : slug}
+          page_headline={categorySlug ? categorySlug : name}
           pagination={pagination}
           setPagination={setPagination}
           lastPage={allArticles?.pagination?.last_page}

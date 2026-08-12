@@ -1,5 +1,5 @@
 import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
-import { Clock, UserCircle } from "lucide-react";
+import { Clock } from "lucide-react";
 
 function NewsHeader({ Data }: any) {
   const articleData = Data?.article;
@@ -8,14 +8,14 @@ function NewsHeader({ Data }: any) {
     <div className="flex flex-col gap-6 w-full pb-2">
       {/* Category Tag & Title */}
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.15]">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-slate-900 leading-[1.15]">
           {articleData?.title}
         </h1>
       </div>
 
       {/* Top Banner Advertisement */}
       {advertisementData?.top?.length>0 && (
-        <div className="w-full my-2 overflow-hidden rounded-2xl border border-slate-100/80 shadow-sm bg-slate-50/50">
+        <div className="w-full my-2 overflow-hidden rounded-md border border-slate-100/80 shadow-sm bg-slate-50/50">
           <BannerAdvertisement Ad={advertisementData?.top[0]} />
         </div>
       )}
@@ -43,8 +43,8 @@ function NewsHeader({ Data }: any) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-slate-500 bg-slate-50 px-3.5 py-2 rounded-full border border-slate-100 shadow-sm">
-          <Clock size={15} className="text-slate-400" />
+        <div className="flex items-center gap-2 text-[var(--color-public-text-main)]">
+          <Clock size={15}  />
           <span className="font-semibold text-xs tracking-wider uppercase">{articleData?.published_at?.split("T")[0]}</span>
         </div>
       </div>

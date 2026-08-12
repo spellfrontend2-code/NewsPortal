@@ -48,7 +48,8 @@ function NavbarCategories() {
       per_page: 5,
       search: debouncedSearch,
     });
-  const searchedArticles = searchedArticlesData?.data ?? [];
+  const searchedArticles = searchedArticlesData?.data?.filter((article) => article.type === "article") ?? [];
+
   const [searchOpen, setSearchOpen] = useState(false);
   const logout = authHook.useLogout();
 
@@ -187,7 +188,7 @@ function NavbarCategories() {
   return (
     <div className="w-full bg-[var(--color-public-bg-dark)]/95 backdrop-blur-md shadow-sm border-b border-[var(--color-public-border-darker)] sticky top-0 z-50">
       {/* ── Main bar ── */}
-      <div className="flex h-[54px] w-[92%] sm:w-[85%] md:w-[70%] max-w-screen-xl mx-auto items-center gap-2 md:gap-4">
+      <div className="flex h-[54px] w-[92%] sm:w-[85%] md:w-[80%] mx-auto items-center gap-2 md:gap-4">
         {/* Mobile: hamburger toggle (leftmost on small screens) */}
         <button
           className="md:hidden flex items-center justify-center p-2 -ml-2 rounded-lg text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-inverse)] hover:bg-[var(--color-public-bg-main)]/10 transition-colors shrink-0"
@@ -403,25 +404,27 @@ function NavbarCategories() {
             {/* Search results dropdown — anchored to the input, clamped
                 to the viewport so it never bleeds off-screen */}
             {searchOpen && debouncedSearch && (
-              <div className="absolute z-50 right-0 top-[calc(100%+8px)] max-h-72 w-[min(300px,calc(100vw-2rem))] bg-[var(--color-public-bg-main)] border border-[var(--color-public-border-light)] shadow-xl rounded-2xl overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 p-2 flex flex-col gap-1.5">
+              <div className="absolute z-50 left-0 top-[calc(100%+8px)] max-h-72 w-[min(400px,calc(100vw-2rem))] bg-[var(--color-public-bg-main)] border border-[var(--color-public-border-light)] shadow-xl rounded-md overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 p-2 flex flex-col gap-1.5">
                 {searchLoading ? (
                   <>
                     <ArticleRectangleCardSkeleton />
                     <ArticleRectangleCardSkeleton />
                   </>
                 ) : searchedArticles && searchedArticles.length > 0 ? (
-                  searchedArticles.map((article) => (
+                 <div className="max-h-[300px] w-full ">{searchedArticles.map((article) => (
                     <div
                       key={article?.data?.id}
-                      className="w-full cursor-pointer hover:bg-[var(--color-public-bg-secondary)] rounded-xl overflow-hidden p-1 transition-colors"
+                      className="w-full h-full cursor-pointer hover:bg-[var(--color-public-bg-secondary)] rounded-md overflow-hidden p-1 transition-colors"
                       onClick={() => {
                         setSearch("");
                         setSearchOpen(false);
                       }}
                     >
+                      
                       <ArticleRectangleCard article={article?.data} type="" />
                     </div>
-                  ))
+                  ))}
+                  </div>
                 ) : (
                   <p className="text-[var(--color-public-text-muted)] text-xs p-3 text-center">
                     No articles found
@@ -447,7 +450,7 @@ function NavbarCategories() {
                       <p className="text-sm font-bold text-[var(--color-public-text-main)] leading-tight">
                         {profileData?.name}
                       </p>
-                      <p className="text-xs text-[var(--color-public-text-lighter)] font-medium truncate mt-0.5">
+                      <p className="text-xs text-[var(--color-public-text-tertiary)] font-medium truncate mt-0.5">
                         {profileData?.email}
                       </p>
                     </div>
@@ -465,7 +468,7 @@ function NavbarCategories() {
             ) : (
               <button
                 onClick={() => setLoginOpen(true)}
-                className="flex items-center justify-center p-2 rounded-full hover:bg-[var(--color-public-bg-dark-secondary)] text-[var(--color-public-text-lighter)] hover:text-indigo-400 hover:scale-105 transition-all cursor-pointer"
+                className="flex items-center justify-center p-2 rounded-full hover:bg-[var(--color-public-bg-dark-secondary)] text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-lightest)] hover:scale-105 transition-all cursor-pointer"
               >
                 <UserCircle size={24} />
               </button>

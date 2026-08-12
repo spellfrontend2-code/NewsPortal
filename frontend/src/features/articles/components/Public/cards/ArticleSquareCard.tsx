@@ -21,7 +21,7 @@ function ArticleSquareCard({ article }: any) {
         />
       </div>
       <div className="p-4 flex flex-col justify-between flex-1 gap-2 bg-white">
-        <p className="font-bold text-slate-900 text-sm line-clamp-2 leading-snug transition-colors duration-250 group-hover:text-[var(--color-public-newsText-hover)]">
+        <p className="font-bold text-slate-900 text-sm line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
           {article?.title}
         </p>
 

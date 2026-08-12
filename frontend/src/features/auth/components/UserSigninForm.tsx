@@ -165,7 +165,7 @@ function UserSignInForm({ setSignInOpen }) {
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[var(--color-primary)]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[var(--color-public-text-accent)]"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
@@ -202,7 +202,7 @@ function UserSignInForm({ setSignInOpen }) {
           <button
             type="button"
             onClick={() => setShowConfirmationPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[var(--color-primary)]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[var(--color-public-text-accent)]"
           >
             {showConfirmationPassword ? (
               <EyeOff size={20} />
@@ -220,7 +220,7 @@ function UserSignInForm({ setSignInOpen }) {
         <Button
           type="submit"
           variant="submit"
-          className="w-full p-5 text-lg rounded-md bg-[var(--color-public-primary)]"
+          className="w-full p-5 text-lg rounded-md bg-[var(--color-public-bg-darker)]"
           disabled={createPublicUser?.isPending}
         >
           {createPublicUser?.isPending ? "Signing In..." : " Sign In"}

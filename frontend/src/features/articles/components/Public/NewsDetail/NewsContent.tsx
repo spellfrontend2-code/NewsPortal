@@ -49,7 +49,7 @@ function NewsContent({ Data, commentRef }: any) {
         className={`${advertisementData?.sidebar?.length > 0 ? "lg:w-3/4 w-full" : "w-full"} flex flex-col gap-6`}
       >
         {/* Media Block */}
-        <div className="w-full rounded-2xl overflow-hidden shadow-md">
+        <div className="w-full rounded-md overflow-hidden shadow-md">
           <div className="w-full aspect-video md:h-[480px] overflow-hidden">
             {articleData?.media_type === "image" &&
             articleData?.featured_image ? (
@@ -104,7 +104,7 @@ function NewsContent({ Data, commentRef }: any) {
 
         {/* Bottom Advertisement */}
         {advertisementData?.bottom?.length > 0 && (
-          <div className=" w-full rounded-2xl overflow-hidden border border-slate-100/80 shadow-sm bg-slate-50/30 my-2">
+          <div className=" w-full rounded-md overflow-hidden border border-slate-100/80 shadow-sm bg-slate-50/30 my-2">
             <BannerAdvertisement Ad={advertisementData?.bottom[0]} />
           </div>
         )}
@@ -126,14 +126,14 @@ function NewsContent({ Data, commentRef }: any) {
 
         {/* Feedback Section */}
         <div className="my-8 w-full flex justify-center">
-          <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-slate-50 border border-slate-200/60 rounded-3xl p-6 md:p-8 w-full shadow-sm">
+          <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-slate-50 border border-slate-200/60 rounded-md p-6 md:p-8 w-full shadow-sm">
             <p className="font-semibold text-lg text-slate-800 ">
               Was this article helpful?
             </p>
             <div className="flex flex-wrap items-center gap-3">
               {/* Like Button */}
               <button
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-medium text-sm transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-md border font-medium text-sm transition-all duration-200 cursor-pointer ${
                   articleData?.user_interactions?.has_liked === true
                     ? "bg-emerald-50 border-emerald-200 text-emerald-700 shadow-sm"
                     : "bg-white border-slate-200 hover:border-emerald-200 hover:bg-emerald-50/30 text-slate-650 hover:text-emerald-700"
@@ -155,7 +155,7 @@ function NewsContent({ Data, commentRef }: any) {
 
               {/* Dislike Button */}
               <button
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-medium text-sm transition-all duration-200 cursor-pointer ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-md border font-medium text-sm transition-all duration-200 cursor-pointer ${
                   articleData?.user_interactions?.has_dislike === true
                     ? "bg-rose-50 border-rose-200 text-rose-700 shadow-sm"
                     : "bg-white border-slate-200 hover:border-rose-200 hover:bg-rose-50/30 text-slate-655 hover:text-rose-700"
@@ -177,7 +177,7 @@ function NewsContent({ Data, commentRef }: any) {
 
               {/* Report Button */}
               <button
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-600 hover:text-slate-850 font-medium text-sm transition-all duration-200 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-md border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-600 hover:text-slate-850 font-medium text-sm transition-all duration-200 cursor-pointer"
                 onClick={handleReport}
               >
                 <ClipboardMinus size={16} />
@@ -202,7 +202,7 @@ function NewsContent({ Data, commentRef }: any) {
           {advertisementData.sidebar.map((ad: any, index: number) => (
             <div
               key={ad.id ?? index}
-              className="h-[160px] w-full overflow-hidden rounded-2xl border border-slate-200/60 shadow-sm"
+              className="h-[160px] w-full overflow-hidden rounded-md border border-slate-200/60 shadow-sm"
             >
               <SidebarAdvertisement Ad={ad} />
             </div>

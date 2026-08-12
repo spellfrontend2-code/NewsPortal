@@ -48,7 +48,7 @@ function NewsComment({ articleId, articleComments }: any) {
   const [visibleComments, setVisibleComments] = useState(2);
   return (
     <div className=" w-full flex justify-center">
-      <div className="flex flex-col gap-6 justify-between bg-slate-50 border border-slate-200/60 rounded-3xl p-6 md:p-8 w-full shadow-sm">
+      <div className="flex flex-col gap-6 justify-between bg-slate-50 border border-slate-200/60 rounded-md p-6 md:p-8 w-full shadow-sm">
         <p className="font-semibold text-lg text-slate-800">
           Comments
         </p>

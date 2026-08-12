@@ -29,7 +29,7 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
   return (
     <div className="w-full h-full flex flex-col gap-2 py-5">
       <h1
-        className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold text-[var(--color-public-newsText)] hover:text-[var(--color-public-newsText-hover)] transition-all duration-200 tracking-tight`}
+        className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
         onClick={() => navigate(`/news-list/category/${category?.slug}`)}
       >
         {category?.name}
@@ -51,7 +51,7 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
                 return (
                   <div
                     key={ad.id ?? index}
-                    className=" h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
+                    className=" h-[160px] w-full overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
                   >
                     <SidebarAdvertisement Ad={ad} />
                   </div>

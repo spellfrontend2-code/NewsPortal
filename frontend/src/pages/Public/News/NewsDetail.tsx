@@ -117,11 +117,11 @@ function NewsDetail() {
               <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 w-full relative ">
                 {/* Responsive Interaction Bar (Mobile: Horizontal under header, Desktop: Vertical sticky left) */}
                 <div className="xl:w-[65px] shrink-0 order-1 z-20">
-                  <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-full shadow-sm text-slate-600 w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
+                  <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-md shadow-sm text-slate-600 w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
                     {/* Bookmark */}
                     <button
                       onClick={() => handleBookmark()}
-                      className="group flex items-center justify-center p-2 rounded-full hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                      className="group flex items-center justify-center p-2 rounded-md hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
                     >
                       <Bookmark
                         size={22}
@@ -174,7 +174,7 @@ function NewsDetail() {
                         <button
                           key={index}
                           onClick={() => handleSocialShare(media)}
-                          className="cursor-pointer hover:scale-110 transition-transform duration-150 p-1.5 rounded-full hover:bg-slate-100"
+                          className="cursor-pointer hover:scale-110 transition-transform duration-150 p-1.5 rounded-md hover:bg-slate-100"
                         >
                           <i
                             className={`${media?.icon_class} text-base xl:text-lg`}
@@ -194,7 +194,7 @@ function NewsDetail() {
             </div>
             {relatedNews?.length>0 && <div className=" ">
               <div className="flex flex-col gap-4  mb-4">
-                <h1 className="text-3xl  lg:text-4xl  font-black tracking-tight text-slate-900 leading-[1.15]">
+                <h1 className="text-3xl  lg:text-4xl  font-semibold tracking-tight text-[var(--color-public-text-accent)] leading-[1.15]">
                   Related News
                 </h1>
               </div>
