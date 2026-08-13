@@ -62,10 +62,10 @@ function DataTable({
   if(!permissionLoading && !hasPermission(permission))
     return <p>No permission</p>
   return (
-    <>
-      <div className="w-full max-w-full overflow-x-auto rounded-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
+    <div className="h-full w-full flex flex-col gap-5 items-center">
+      <div className="w-full max-w-full rounded-xl shadow-lg shadow-[var(--color-secondary)] scrollbar-thin border-[0.5px] border-[var(--color-secondary)]">
         <div className=" ">
-          <div className="flex justify-between max-w-[95%]">
+          <div className="flex justify-between w-full">
             <div
               className={`${inputStyle} flex items-center gap-2 max-w-[30%] m-3`}
             >
@@ -121,7 +121,7 @@ function DataTable({
         {(isLoading || permissionLoading) ? (
           <DataTableSkeleton />
         ) : (
-          <Table className="w-full min-w-[900px]">
+          <Table className="h-full w-full min-w-[900px]">
             {/* HEADER */}
             <TableHeader >
               {table.getHeaderGroups().map((hg) => (
@@ -186,7 +186,7 @@ function DataTable({
           </Table>
         )}
       </div>
-      <div className="flex items-center justify-between mt-4 w-full h-[40px]">
+      <div className="flex items-center justify-between mt-4 w-full h-[5%]">
         <span className="shadow-md flex items-center justify-center w-[150px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
           Page {table?.getState()?.pagination?.pageIndex + 1 || 1} of{" "}
           {table?.getPageCount()||1}
@@ -213,7 +213,7 @@ function DataTable({
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export default DataTable;

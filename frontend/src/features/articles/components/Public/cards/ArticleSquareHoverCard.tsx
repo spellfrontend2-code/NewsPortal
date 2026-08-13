@@ -25,8 +25,8 @@ function ArticleSquareHoverCard({ article }: any) {
           {article?.title}
         </p>
 
-        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-          <Clock size={12} className="text-slate-405" />
+        <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-300">
+          <Clock size={12} strokeWidth={3}/>
           <span>{article?.published_at?.split("T")[0]}</span>
         </div>
       </div>

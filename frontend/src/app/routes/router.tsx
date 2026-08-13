@@ -24,7 +24,7 @@ import LatestNewsList from "@/features/articles/components/Public/NewsList/Lates
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 import ErrorPage from "@/pages/Error/ErrorPage";
 import { PermissionProvider } from "@/features/roles-and-permissions/hooks/usePermissionStore";
-import ContactUs from "@/pages/Public/ContactUs/ContactUS";
+import ContactUs from "@/pages/Public/ContactUs/ContactUs";
 const publicLayoutLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(publicCategoriesQuery({ page: 1, per_page: 5 }));
 

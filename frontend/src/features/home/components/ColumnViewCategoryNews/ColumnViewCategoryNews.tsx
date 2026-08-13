@@ -36,7 +36,7 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
       </h1>
       <div className="flex lg:flex-row flex-col gap-4 w-full h-full  ">
         <div
-          className={` ${hasSidebarAds ? "w-full :w-2/3" : "w-full"} grid grid-cols-1 md:grid-cols-2 gap-4`}
+          className={` ${hasSidebarAds ? "w-4/5" : "w-full"} grid grid-cols-1 md:grid-cols-2 gap-4`}
         >
           {slicedArticles.map((article: any) => (
             <div key={article.id} className="h-[105px]">
@@ -45,13 +45,13 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
           ))}
         </div>
         {hasSidebarAds && (
-          <div className="lg:w-1/3 w-full">
+          <div className="lg:w-1/5 w-full">
             <div className="h-full w-full flex flex-col md:flex-row lg:flex-col gap-4 ">
               {sidebarAds.map((ad: any, index: number) => {
                 return (
                   <div
                     key={ad.id ?? index}
-                    className=" h-[160px] w-full overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
+  className="w-full aspect-square overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
                   >
                     <SidebarAdvertisement Ad={ad} />
                   </div>

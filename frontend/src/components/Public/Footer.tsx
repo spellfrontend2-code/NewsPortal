@@ -145,17 +145,17 @@ function Footer() {
           <div className="flex flex-col gap-5">
             <h3 className="text-sm sm:text-base   font-bold tracking-wider uppercase text-[var(--color-public-text-lighter)]">Legal Info</h3>
 
-            <div className="space-y-4 text-sm text-[var(--color-public-text-lighter)]">
+            <div className="space-y-4 text-sm tracking-wider text-[var(--color-public-text-lighter)]">
               {company?.press_registration_number && (
                 <div>
-                  <p className="font-semibold text-slate-350 text-xs">Press Registration No.</p>
+                  <p className="font-semibold text-slate-350 text-sm">Press Registration No.</p>
                   <p className="text-xs text-slate-450 mt-0.5">{company.press_registration_number}</p>
                 </div>
               )}
 
               {company?.company_registration_number && (
                 <div>
-                  <p className="font-semibold text-slate-350 text-xs">
+                  <p className="font-semibold text-slate-350 text-sm">
                     Company Registration No.
                   </p>
                   <p className="text-xs text-slate-450 mt-0.5">{company.company_registration_number}</p>
@@ -164,7 +164,7 @@ function Footer() {
 
               {company?.vat_number && (
                 <div>
-                  <p className="font-semibold text-slate-350 text-xs">VAT No.</p>
+                  <p className="font-semibold text-slate-350 text-sm">VAT No.</p>
                   <p className="text-xs text-slate-455 mt-0.5">{company.vat_number}</p>
                 </div>
               )}

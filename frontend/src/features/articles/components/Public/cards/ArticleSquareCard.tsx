@@ -25,8 +25,8 @@ function ArticleSquareCard({ article }: any) {
           {article?.title}
         </p>
 
-        <div className="flex items-center text-sm  gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-450">
-          <Clock size={12} />
+        <div className="flex items-center text-xs  gap-1.5 font-semibold uppercase tracking-wider text-slate-400">
+          <Clock size={12} strokeWidth={3}/>
           <span>{article?.published_at?.split("T")[0]}</span>
         </div>
       </div>

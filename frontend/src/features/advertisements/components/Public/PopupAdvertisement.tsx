@@ -3,17 +3,16 @@ import SidebarAdvertisement from "./SidebarAdvertisement";
 import { useEffect, useRef } from "react";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 
-function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
-{
-    const tracked = useRef(false);
- const advertisementHook=useAdvertisementHooks();
- const trackAdImpression=advertisementHook.useTrackPublicAdImpression();
+function PopupAdvertisement({ advertisements, showPopup, setShowPopup }: any) {
+  const tracked = useRef(false);
+  const advertisementHook = useAdvertisementHooks();
+  const trackAdImpression = advertisementHook.useTrackPublicAdImpression();
   useEffect(() => {
     if (showPopup && advertisements?.id && !tracked.current) {
       tracked.current = true;
-      trackAdImpression.mutate(advertisements.id,{
+      trackAdImpression.mutate(advertisements.id, {
         onSuccess: (res) => {
-// toast.success(res?.message||"Impression tracked successfully");
+          // toast.success(res?.message||"Impression tracked successfully");
         },
       });
     }
@@ -22,24 +21,31 @@ function PopupAdvertisement({advertisements,showPopup,setShowPopup}:any)
   useEffect(() => {
     tracked.current = false;
   }, [advertisements?.id]);
- return (
-          <Dialog open={showPopup} onOpenChange={setShowPopup}>
-        <DialogContent
-          className=" 
+  return (
+    <Dialog open={showPopup} onOpenChange={setShowPopup}>
+      <DialogContent
+        className=" 
     flex justify-center items-center !max-w-none p-10 h-[100%] !max-w-[100vw] overflow-y-auto bg-gray-200/50 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]"
-         showCloseButton={false}>
-          <div className=" flex flex-col h-[70%] lg:w-[50%] items-center justify-center">
-            <div className="flex justify-between h-[10%] w-full items-center">
-              <p className="uppercase tracking-wider font-semibold">Advertisement</p>
-              <DialogClose asChild>
+        showCloseButton={false}  
+onPointerDown={()=>setShowPopup(false)}
+      >
+        <div className=" flex flex-col h-[70%] lg:w-[50%] items-center justify-center" >
+          <div className="flex justify-between h-[10%] w-full items-center">
+            <p className="uppercase tracking-wider font-semibold">
+              {/* Advertisement */}
+            </p>
+            <DialogClose asChild>
               <button className="h-[30px] w-30 rounded-md bg-white  shadow-lg cursor-pointer focus-visible:outline-none">
-                <p className=" text-blue-900" >Skip this</p>
+                <p className=" text-blue-900">Skip this</p>
               </button>
-            </DialogClose></div>
-            <div className="h-[90%] w-full "><SidebarAdvertisement Ad={advertisements} /></div>
+            </DialogClose>
           </div>
-        </DialogContent>
-      </Dialog>
- )
+          <div className="h-[90%] w-full " onPointerDown={(e)=>e.stopPropagation()}>
+            <SidebarAdvertisement Ad={advertisements} />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 }
-export default PopupAdvertisement
+export default PopupAdvertisement;

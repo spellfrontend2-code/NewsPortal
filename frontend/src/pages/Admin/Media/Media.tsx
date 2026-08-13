@@ -69,7 +69,7 @@ function Media() {
   //   });
   // }, [media, searchQuery]);
   return (
-    <div className="w-full h-full p-20 flex flex-col gap-5">
+    <div className="w-full h-full px-20 py-10 flex flex-col gap-5">
                 <div className="flex justify-between items-end rounded-xl ">
         <div className="flex flex-col  text-gray-800 ">
           <p className="text-3xl font-bold ">
@@ -211,7 +211,7 @@ function Media() {
           )}
 
           <div className="flex items-center justify-between mt-4 w-full h-[40px]">
-            <span className="shadow-md flex items-center justify-center w-[110px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
+            <span className="shadow-md flex items-center justify-center w-[150px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
               Page {pagination.pageIndex + 1} of {lastPage}
             </span>
             <div className="shadow-md  relative flex justify-between items-center overflow-hidden w-[150px] h-full border-1 border-[var(--color-primary)] bg-gray-100/90 text-gray-400  cursor-pointer rounded-2xl group">

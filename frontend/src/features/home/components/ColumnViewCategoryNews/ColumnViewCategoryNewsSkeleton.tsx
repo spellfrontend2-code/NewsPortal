@@ -1,55 +1,51 @@
+function ArticleRectangleCardSkeleton() {
+  return (
+    <div className="h-[105px] rounded-md bg-white border border-slate-100 flex overflow-hidden animate-pulse">
+      {/* Image 55% */}
+      <div className="w-[55%] bg-gray-200" />
+      {/* Content 45% */}
+      <div className="w-[45%] p-4 flex flex-col justify-center gap-2">
+        <div className="h-4 w-[85%] rounded bg-gray-200" />
+        <div className="h-4 w-[65%] rounded bg-gray-200" />
+        <div className="h-3 w-16 rounded bg-gray-200 mt-1" />
+      </div>
+    </div>
+  );
+}
+
 function ColumnViewCategoryNewsSkeleton({
   hasSidebarAds = true,
 }: {
   hasSidebarAds?: boolean;
 }) {
   return (
-    <div className="w-screen animate-pulse">
-           <div className="w-[92%] sm:w-[85%] md:w-[70%] mx-auto">
- {/* Category Title */}
-      <div className="h-8 w-56 rounded bg-[var(--color-public-bg-skeleton)] mb-4" />
+    <div className="w-full flex flex-col gap-2 py-5 animate-pulse">
+      {/* Category Title */}
+      <div className="h-8 w-56 rounded bg-gray-200 mb-2" />
 
-      <div className="flex w-full gap-4">
-        {/* Articles */}
+      <div className="flex lg:flex-row flex-col gap-4 w-full">
+        {/* Articles — 2-col grid of rectangle cards */}
         <div
-          className={`grid grid-cols-2 gap-2 ${
-            hasSidebarAds ? "w-2/3" : "w-full"
-          }`}
+          className={`${hasSidebarAds ? "lg:w-2/3 w-full" : "w-full"} grid grid-cols-1 md:grid-cols-2 gap-4`}
         >
           {Array.from({ length: 6 }).map((_, index) => (
-            <div
-              key={index}
-              className="h-[105px] rounded-xl bg-[var(--color-public-bg-main)] shadow-sm p-2 flex gap-3"
-            >
-              {/* Thumbnail */}
-              <div className="w-[120px] h-full rounded-lg bg-[var(--color-public-bg-skeleton)] shrink-0" />
-
-              {/* Content */}
-              <div className="flex-1 flex flex-col justify-between py-1">
-                <div className="space-y-2">
-                  <div className="h-4 w-full rounded bg-[var(--color-public-bg-skeleton)]" />
-                  <div className="h-4 w-5/6 rounded bg-[var(--color-public-bg-skeleton)]" />
-                  <div className="h-4 w-2/3 rounded bg-[var(--color-public-bg-skeleton)]" />
-                </div>
-
-                <div className="h-3 w-20 rounded bg-[var(--color-public-bg-skeleton)]" />
-              </div>
-            </div>
+            <ArticleRectangleCardSkeleton key={index} />
           ))}
         </div>
 
         {/* Sidebar Ads */}
         {hasSidebarAds && (
-          <div className="w-1/3 flex flex-col gap-4">
-            {Array.from({ length: 2 }).map((_, index) => (
-              <div
-                key={index}
-                className="h-[160px] w-full rounded-2xl bg-[var(--color-public-bg-skeleton)]"
-              />
-            ))}
+          <div className="lg:w-1/3 w-full">
+            <div className="h-full w-full flex flex-col md:flex-row lg:flex-col gap-4">
+              {Array.from({ length: 2 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-[160px] w-full rounded-md border border-slate-100 bg-gray-200"
+                />
+              ))}
+            </div>
           </div>
         )}
-      </div>
       </div>
     </div>
   );

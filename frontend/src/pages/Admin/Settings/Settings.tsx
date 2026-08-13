@@ -75,7 +75,7 @@ if (isLoading) {
   }
   return (
    
-    <div className="w-full flex flex-col gap-5 p-15">
+    <div className="w-full flex flex-col gap-5 px-20 py-10">
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col">
           <p className="text-xl font-bold text-[var(--color-primary)] ">

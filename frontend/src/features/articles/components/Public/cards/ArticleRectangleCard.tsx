@@ -43,14 +43,14 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
                 {article?.excerpt}
               </p>
             )}
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-450 mt-1">
-              <Clock size={14} />
+            <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-400 mt-1">
+              <Clock size={14} strokeWidth={3}/>
               <span>{article?.published_at?.split("T")[0]}</span>
             </div>
           </>
         ) : (
-          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">
-            <Clock size={12} />
+          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mt-0.5">
+            <Clock size={12} strokeWidth={3}/>
             <span>{article?.published_at?.split("T")[0]}</span>
           </div>
         )}

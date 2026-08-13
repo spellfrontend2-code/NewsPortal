@@ -15,7 +15,7 @@ return (
 
         onValueChange={(value) => setStatus(value)}
       >
-        <SelectTrigger className={`${inputStyle} w-[120px]`}>
+        <SelectTrigger className={`${inputStyle} w-fit`}>
           <SelectValue placeholder={`Select ${name}`} />
         </SelectTrigger>
 

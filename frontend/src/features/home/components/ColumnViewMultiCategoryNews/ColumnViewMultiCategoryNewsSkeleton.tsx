@@ -1,73 +1,65 @@
+function ArticleRectangleCardSkeleton() {
+  return (
+    <div className="h-[105px] rounded-md bg-white border border-slate-100 flex overflow-hidden animate-pulse">
+      {/* Image 55% */}
+      <div className="w-[55%] bg-gray-200" />
+      {/* Content 45% */}
+      <div className="w-[45%] p-4 flex flex-col justify-center gap-2">
+        <div className="h-4 w-[85%] rounded bg-gray-200" />
+        <div className="h-4 w-[65%] rounded bg-gray-200" />
+        <div className="h-3 w-16 rounded bg-gray-200 mt-1" />
+      </div>
+    </div>
+  );
+}
+
 function ColumnViewMultiCategoryNewsSkeleton({
   hasSidebarAds = true,
 }: {
   hasSidebarAds?: boolean;
 }) {
-  const ArticleSkeleton = ({ count = 6 }: { count?: number }) => (
-    <div className="grid grid-cols-1 gap-1">
-      {Array.from({ length: count }).map((_, index) => (
-        <div
-          key={index}
-          className="flex gap-3 rounded-xl border border-[var(--color-public-border-main)] p-3"
-        >
-          {/* Image */}
-          <div className="h-24 w-32 shrink-0 animate-pulse rounded-lg bg-[var(--color-public-bg-muted)]" />
-
-          {/* Content */}
-          <div className="flex flex-1 flex-col justify-between">
-            <div className="space-y-2">
-              <div className="h-4 w-3/4 animate-pulse rounded bg-[var(--color-public-bg-muted)]" />
-              <div className="h-4 w-full animate-pulse rounded bg-[var(--color-public-bg-muted)]" />
-              <div className="h-4 w-2/3 animate-pulse rounded bg-[var(--color-public-bg-muted)]" />
-            </div>
-
-            <div className="mt-2 h-3 w-24 animate-pulse rounded bg-[var(--color-public-bg-muted)]" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
-  const CategoryHeadingSkeleton = () => (
-    <div className="mb-3 h-8 w-52 animate-pulse rounded bg-[var(--color-public-bg-muted)]" />
-  );
-
   return (
-    <div className="flex gap-4 w-full space-y-8">
-      {/* Category One */}
-      <section className="w-1/2">
-        <CategoryHeadingSkeleton />
+    <div className="w-full h-full flex lg:flex-row flex-col animate-pulse">
+      {/* Category One — lg:w-2/3 */}
+      <div className="w-full lg:w-2/3 h-full flex flex-col gap-2 py-5">
+        {/* Category title */}
+        <div className="h-8 w-52 rounded bg-gray-200 mb-2" />
 
-        <div className="flex w-full gap-4">
-          {/* Articles */}
-          <div
-            className={`grid grid-cols-1 gap-1 ${
-              hasSidebarAds ? "w-2/3" : "w-full"
-            }`}
-          >
-            <ArticleSkeleton count={3} />
+        <div className="flex lg:flex-row flex-col gap-5 w-full">
+          {/* Article list */}
+          <div className={`${hasSidebarAds ? "lg:w-2/3 w-full" : "w-full"} grid grid-cols-1 gap-1`}>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <ArticleRectangleCardSkeleton key={index} />
+            ))}
           </div>
 
           {/* Sidebar Ads */}
           {hasSidebarAds && (
-            <div className="w-1/3 space-y-4">
-              {Array.from({ length: 2 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="h-[160px] w-full animate-pulse rounded-2xl bg-[var(--color-public-bg-muted)]"
-                />
-              ))}
+            <div className="lg:w-1/4 w-full">
+              <div className="h-full w-full flex flex-col md:flex-row lg:flex-col gap-4">
+                {Array.from({ length: 2 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-[160px] w-full rounded-md border border-slate-100 bg-gray-200"
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>
-      </section>
+      </div>
 
-      {/* Category Two */}
-      <section className="w-1/2">
-        <CategoryHeadingSkeleton />
+      {/* Category Two — lg:w-1/3 */}
+      <div className="flex flex-col lg:w-1/3 w-full h-full mt-4">
+        {/* Category title */}
+        <div className="h-8 w-52 rounded bg-gray-200 mb-2" />
 
-        <ArticleSkeleton count={3} />
-      </section>
+        <div className="w-full grid grid-cols-1 gap-1">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <ArticleRectangleCardSkeleton key={index} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

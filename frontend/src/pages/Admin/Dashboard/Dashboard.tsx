@@ -156,7 +156,7 @@ const dashboardHooks = useDashboardHooks();
   const hasCategories = dashboard?.top_categories.length > 0;
 
   return (
-    <div className="flex w-full h-screen overflow-y-auto flex-col gap-6 p-15">
+    <div className="flex w-full h-screen overflow-y-auto flex-col gap-6 px-20 py-10">
         <div className="flex flex-col  text-gray-800 ">
 <p className="text-3xl font-bold ">Dashboard
         </p>

@@ -43,10 +43,10 @@ function NewsContent({ Data, commentRef }: any) {
     });
   };
   return (
-    <div className="h-full overflow-y-auto flex flex-col lg:flex-row w-full gap-8">
+    <div className="h-full overflow-y-auto flex flex-col lg:flex-row w-full gap-5">
       {/* Main Content Area */}
       <div
-        className={`${advertisementData?.sidebar?.length > 0 ? "lg:w-3/4 w-full" : "w-full"} flex flex-col gap-6`}
+        className={`${advertisementData?.sidebar?.length > 0 ? "lg:w-4/5 w-full" : "w-full"} flex flex-col gap-6 `}
       >
         {/* Media Block */}
         <div className="w-full rounded-md overflow-hidden shadow-md">
@@ -85,8 +85,8 @@ function NewsContent({ Data, commentRef }: any) {
 
         {/* Article Body Content */}
         <div
-          className=" text-justify prose prose-slate max-w-none text-slate-800 leading-relaxed text-lg 
-            [&_p]:mb-6 [&_p]:leading-relaxed [&_p]:text-slate-700
+          className=" text-justify prose prose-slate max-w-none text-slate-800 text-lg 
+            [&_p]:my-6 [&_p]:leading-relaxed [&_p]:text-slate-700
             [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-slate-900 
             [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-slate-900 
             [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6
@@ -111,13 +111,13 @@ function NewsContent({ Data, commentRef }: any) {
 
         {/* Tags */}
         {articleData?.tags && articleData?.tags?.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-200/60">
+          <div className="flex flex-wrap items-center gap-2 pt-6 border-t border-slate-200/60">
             {articleData?.tags?.map((tag: any) => (
               <span
                 key={tag?.id}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-950 transition-colors duration-150 cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-full border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-950 transition-colors duration-150 cursor-pointer"
               >
-                <Tag size={12} className="text-slate-400" />
+                <Tag size={14} className="text-slate-400" />
                 {tag?.name}
               </span>
             ))}
@@ -198,11 +198,11 @@ function NewsContent({ Data, commentRef }: any) {
 
       {/* Sidebar Area */}
       {advertisementData?.sidebar?.length > 0 && (
-        <div className="lg:w-1/4 w-full flex flex-col gap-6">
+        <div className="lg:w-1/5 w-full flex flex-col gap-6">
           {advertisementData.sidebar.map((ad: any, index: number) => (
             <div
               key={ad.id ?? index}
-              className="h-[160px] w-full overflow-hidden rounded-md border border-slate-200/60 shadow-sm"
+              className="w-full aspect-square overflow-hidden rounded-md border border-slate-200/60 shadow-sm"
             >
               <SidebarAdvertisement Ad={ad} />
             </div>

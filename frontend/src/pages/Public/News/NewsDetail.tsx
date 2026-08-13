@@ -114,7 +114,7 @@ function NewsDetail() {
               <div className="w-full h-px bg-slate-200/60 my-1"></div>
 
               {/* Layout: Sidebar + Main Content */}
-              <div className="flex flex-col xl:flex-row gap-6 xl:gap-8 w-full relative ">
+              <div className="flex flex-col xl:flex-row gap-5 w-full relative ">
                 {/* Responsive Interaction Bar (Mobile: Horizontal under header, Desktop: Vertical sticky left) */}
                 <div className="xl:w-[65px] shrink-0 order-1 z-20">
                   <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-md shadow-sm text-slate-600 w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">

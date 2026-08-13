@@ -55,10 +55,9 @@ body,
   height: 100%;
 }
 
-body {
-font-family: "Inter", sans-serif;
-  background-color: var(--color-public-bg-secondary);
-  color: var(--color-public-text-secondary);
+.admin {
+font-family:sans-serif;
+
 }
 
 /* ── Breaking news ticker scroll animation ── */
@@ -76,5 +75,7 @@ font-family: "Inter", sans-serif;
 }
 
 .public{
+    background-color: var(--color-public-bg-secondary);
+  color: var(--color-public-text-secondary);
   font-family:"Mukta", sans-serif;;
 }

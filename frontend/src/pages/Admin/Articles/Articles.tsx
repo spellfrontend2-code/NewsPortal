@@ -102,7 +102,7 @@ const statuses = [
 }
   return (
     
-   <div className="w-full h-full overflow-y-auto p-20 flex flex-col gap-5">
+   <div className="w-full h-full overflow-y-auto px-20 py-10 flex flex-col gap-5">
 {
   addOpen ? (
     <AddArticle

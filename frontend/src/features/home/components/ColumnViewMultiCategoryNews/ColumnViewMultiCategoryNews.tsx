@@ -71,12 +71,12 @@ function ColumnViewMultiCategoryNews({
           </div>
           {hasSidebarAds && (
             <div className="lg:w-1/4 w-full">
-              <div className="h-full w-full flex flex-col gap-4 ">
+              <div className="h-full w-full flex flex-col md:flex-row lg:flex-col gap-4 ">
                 {sidebarAds.map((ad: any, index: number) => {
                   return (
                     <div
                       key={ad.id ?? index}
-                      className=" h-[160px] w-full overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
+                      className=" aspect-square overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
                     >
                       <SidebarAdvertisement Ad={ad} />
                     </div>

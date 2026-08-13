@@ -161,19 +161,19 @@ function NavbarCategories() {
   }, []);
 
   const navLinkClass = ({ isActive }) =>
-    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-[var(--color-public-text-inverse)] whitespace-nowrap p-1  ${
+    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs sm:text-sm md:text-base lg:text-xl  uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-[var(--color-public-text-inverse)] whitespace-nowrap p-1  ${
       isActive
         ? "text-[var(--color-public-text-inverse)] border-[var(--color-public-border-accent)] bg-[var(--color-public-bg-main)]/5"
         : "border-transparent text-[var(--color-public-text-lighter)] hover:bg-[var(--color-public-bg-main)]/5"
     }`;
 
   const mobileLinkClass = ({ isActive }) =>
-    `flex-1 flex items-center px-5 py-3 text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wider transition-colors ${
+    `flex-1 flex items-center px-5 py-3 text-sm sm:text-base uppercase tracking-wider transition-colors ${
       isActive ? "text-[var(--color-public-text-inverse)]" : "text-[var(--color-public-text-lighter)] group-hover:text-[var(--color-public-text-inverse)]"
     }`;
 
   const mobileChildLinkClass = ({ isActive }) =>
-    `w-full flex items-center pl-9 pr-5 py-2.5 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider transition-colors border-l-4 ${
+    `w-full flex items-center pl-9 pr-5 py-2.5 text-xs sm:text-sm md:text-base lg:font-bold uppercase tracking-wider transition-colors border-l-4 ${
       isActive
         ? "text-[var(--color-public-text-inverse)] border-[var(--color-public-border-accent)] bg-[var(--color-public-bg-main)]/5"
         : "text-[var(--color-public-text-lighter)] border-transparent hover:text-[var(--color-public-text-inverse)] hover:bg-[var(--color-public-bg-main)]/5"
@@ -186,7 +186,7 @@ function NavbarCategories() {
   const overflowCategories = updatedCategories.slice(visibleCount);
 
   return (
-    <div className="w-full bg-[var(--color-public-bg-dark)]/95 backdrop-blur-md shadow-sm border-b border-[var(--color-public-border-darker)] sticky top-0 z-50">
+    <div className="w-full bg-[var(--color-public-bg-dark)] backdrop-blur-md shadow-sm border-b border-[var(--color-public-border-darker)] sticky top-0 z-50">
       {/* ── Main bar ── */}
       <div className="flex h-[54px] w-[92%] sm:w-[85%] md:w-[80%] mx-auto items-center gap-2 md:gap-4">
         {/* Mobile: hamburger toggle (leftmost on small screens) */}
@@ -247,7 +247,7 @@ function NavbarCategories() {
                     <NavLink
                       key={child.id}
                       to={`/news-list/category/${child.slug}`}
-                      className="block px-4 py-2 text-xs sm:text-sm md:text-base font-bold rounded-md hover:bg-[var(--color-public-bg-main)]/10 text-[var(--color-public-text-inverse)] transition-colors"
+                      className="block px-4 py-2 text-xs sm:text-base lg:text-lg rounded-md  hover:bg-[var(--color-public-bg-main)]/10 text-[var(--color-public-text-inverse)] transition-colors"
                       onClick={() => setOpenCategory(null)}
                     >
                       {child.name}
@@ -269,7 +269,7 @@ function NavbarCategories() {
                   setOpenOthersChild(null);
                 }}
                 className={
-    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-[var(--color-public-text-inverse)] whitespace-nowrap p-1  ${
+    `inline-flex items-center justify-between gap-1.5 h-full px-2.5 lg:px-3.5 text-xs sm:text-sm md:text-base lg:text-lg  uppercase tracking-wider transition-all duration-200 border-b-2 hover:text-[var(--color-public-text-inverse)] whitespace-nowrap p-1  ${
                   openOthers
                     ? "text-[var(--color-public-text-inverse)] border-[var(--color-public-border-accent)] bg-[var(--color-public-bg-main)]/5"
                     : "border-transparent text-[var(--color-public-text-lighter)] hover:text-[var(--color-public-text-inverse)] hover:bg-[var(--color-public-bg-main)]/5"
@@ -295,7 +295,7 @@ function NavbarCategories() {
                               ? "/"
                               : `/news-list/category/${category.slug}`
                           }
-                          className="flex-1 block px-4 py-2 text-xs sm:text-sm md:text-base font-bold text-[var(--color-public-text-inverse)] transition-colors"
+                          className="flex-1 block px-4 py-2 text-xs sm:text-sm md:text-base text-[var(--color-public-text-inverse)] transition-colors"
                           onClick={() => {
                             setOpenOthers(false);
                             setOpenOthersChild(null);
@@ -334,7 +334,7 @@ function NavbarCategories() {
                             <NavLink
                               key={child.id}
                               to={`/news-list/category/${child.slug}`}
-                              className="pl-7 pr-4 py-1.5 text-xs sm:text-sm md:text-base font-bold text-[var(--color-public-text-inverse)] transition-colors"
+                              className="pl-7 pr-4 py-1.5 text-xs sm:text-sm md:text-base  text-[var(--color-public-text-inverse)] transition-colors"
                               onClick={() => {
                                 setOpenOthers(false);
                                 setOpenOthersChild(null);
@@ -395,7 +395,7 @@ function NavbarCategories() {
               className="text-[var(--color-public-text-lighter)] group-focus-within:text-[var(--color-public-text-main)] transition-colors shrink-0"
             />
             <input
-              className="border-none bg-transparent text-xs text-[var(--color-public-text-inverse)] outline-none w-full focus:text-[var(--color-public-text-main)] transition-colors placeholder-public-text-muted min-w-0"
+              className="border-none bg-transparent text-sm text-[var(--color-public-text-inverse)] outline-none w-full focus:text-[var(--color-public-text-main)] transition-colors placeholder-public-text-muted min-w-0"
               placeholder="Search news..."
               onChange={(e) => setSearch(e.target.value)}
               value={search}

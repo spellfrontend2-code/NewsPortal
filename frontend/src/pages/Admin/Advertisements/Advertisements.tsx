@@ -41,14 +41,12 @@ const placements = [
   { name: "Footer", value: "footer" },
 ];
   const approvalStatus = [
-    {name:"All",value:undefined},{
-      name: "Approved",
-      value: 1,
-    },
-    { name: "Rejected", value: 0 },
+    { name: "All", value: "" },
+    { name: "Approved", value: "1" },
+    { name: "Rejected", value: "0" },
   ];
   
-  const [approved, setApproved] = useState(undefined);
+  const [approved, setApproved] = useState("");
   const [status, setStatus] = useState("");
   const [placement, setPlacement] = useState("");
   const { data, isLoading, error } = advertisementHook.useFetchAdvertisements({
@@ -56,7 +54,7 @@ const placements = [
     per_page: pagination.pageSize,
     search,
     status,
-    is_approved:approved,
+    is_approved: approved === "" ? undefined : Number(approved),
     placement,
   });
  
@@ -110,6 +108,7 @@ const columns = generateColumns(
       "advertiser_email",
       "cta_text",
       "created_at",
+      "priority"
     ],
     (action, row) => {
       setSelectedAdvertisement(row);
@@ -134,7 +133,7 @@ PERMISSIONS.ADS,
 "advertisement"  );
   if (error) toast.error(error?.message);
   return (
-    <div className="w-full h-screen overflow-y-auto p-20 flex flex-col gap-5">
+    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5">
         {addOpen ? (
         <AddAdvertisement open={addOpen} setOpen={setAddOpen} type="add" />
       ) : editOpen ? (
@@ -146,7 +145,7 @@ PERMISSIONS.ADS,
         />
       ) : (
         <>
-          <div className="flex justify-between items-end rounded-xl ">
+          <div className="flex justify-between items-center rounded-xl ">
             <div className="flex flex-col  text-gray-800 ">
               <p className="text-3xl font-bold ">Advertisements</p>
               <p className="text-gray-500">Manage your advertisements</p>
