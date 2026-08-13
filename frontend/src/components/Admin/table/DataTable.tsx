@@ -130,9 +130,9 @@ function DataTable({
                     <TableHead
                       onClick={header.column.getToggleSortingHandler()}
                       key={header.id}
-                      className="px-6 py-3 bg-gray-100/90 border-b border-[var(--color-secondary)]"
+                      className=" py-3 bg-gray-100/90 border-b border-[var(--color-secondary)]"
                     >
-                      <p className="cursor-pointer text-center text-gray-400 ">
+                      <p className="cursor-pointer text-center text-gray-400 text-left ">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -155,13 +155,13 @@ function DataTable({
             {data.length > 0 ? (
               <TableBody>
                 {table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} className="hover:bg-gray-100/30">
+                  <TableRow key={row.id} className="hover:bg-gray-100/30 ">
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        className="px-6 p-3 border-[var(--color-secondary)] border-b "
+                        className="px-6 p-3 border-[var(--color-secondary)] border-b"
                       >
-                        <p className="line-clamp-3 text-sm text-center">
+                        <p className="line-clamp-3 text-sm text-left">
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext(),

@@ -38,11 +38,11 @@ function LatestNews() {
       ) : articles?.length > 0 ? (
         <div className="flex flex-col lg:flex-row w-full h-[95%] gap-6">
           <div className="flex flex-col lg:flex-row lg:w-4/5 gap-6">
-            <div className="lg:flex-[3] min-w-0 h-[350px] lg:h-auto">
+            <div className="lg:flex-[2] min-w-0 h-[350px] lg:h-auto">
               <ArticleSquareHoverCard article={articles[0]} />
             </div>
 
-            <div className="flex lg:flex-[2] min-w-0 flex-col gap-4 justify-between">
+            <div className="flex lg:flex-[1] min-w-0 flex-col gap-4 justify-between">
               <div className="flex flex-col gap-3">
                 {articles.slice(1).map((article: any) => (
                   <div key={article.id} className="h-[105px]">

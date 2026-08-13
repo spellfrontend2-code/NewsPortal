@@ -25,7 +25,7 @@ const Field = ({
       children
     ) : (
       <div className={`${inputStyle} border-[var(--color-primary)]`}>
-        {value || "-"}
+        {value === "null" ? "-" : (value || "-")}
       </div>
     )}
   </div>
@@ -39,14 +39,14 @@ function Profile() {
   const updateProfile = profileHook.useUpdateProfile();
   const user = data?.data ?? {};
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { register, handleSubmit, reset, watch, setValue } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
-      name: "",
-      email: "",
-      country_code: "",
-      language: "",
-      timezone: "",
-      image: null,
+     name: user.name ?? "",
+      email: user.email ?? "",
+      country_code: user.country_code ?? "",
+      language: user.language ?? "",
+      timezone: user.timezone ?? "",
+      image: user.profile_image ?? null,
     },
   });
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -118,56 +118,56 @@ function Profile() {
             <div className="absolute inset-0 h-[150px] rounded-t-2xl overflow-hidden bg-[var(--color-primary)]"></div>
 
             {/* Profile Image */}
-          <div className="absolute left-10 bottom-10 z-10">
-  {/* Profile Image */}
-  <div className="relative h-[180px] w-[180px] rounded-full border-4 border-white bg-[rgb(var(--color-primary-rgb)/0.1)] shadow-lg flex items-center justify-center overflow-hidden">
-    {profileImage ? (
-      <img
-        src={profileImage}
-        alt="Profile"
-        className="h-full w-full rounded-full object-cover"
-      />
-    ) : (
-      <label className="h-full w-full flex items-center justify-center cursor-pointer bg-gray-100">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
+            <div className="absolute left-10 bottom-10 z-10">
+              {/* Profile Image */}
+              <div className="relative h-[180px] w-[180px] rounded-full border-4 border-white bg-[rgb(var(--color-primary-rgb)/0.1)] shadow-lg flex items-center justify-center overflow-hidden">
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                ) : (
+                  <label className="h-full w-full flex items-center justify-center cursor-pointer bg-gray-100">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
 
-            if (file) {
-              setValue("image", file);
+                        if (file) {
+                          setValue("image", file);
 
-              const preview = URL.createObjectURL(file);
-              setProfileImage(preview);
-            }
-          }}
-        />
+                          const preview = URL.createObjectURL(file);
+                          setProfileImage(preview);
+                        }
+                      }}
+                    />
 
-        <Upload
-          color="var(--color-primary)"
-          strokeWidth={1.5}
-          size={50}
-        />
-      </label>
-    )}
-  </div>
+                    <Upload
+                      color="var(--color-primary)"
+                      strokeWidth={1.5}
+                      size={50}
+                    />
+                  </label>
+                )}
+              </div>
 
-  {/* Remove Image Button - Outside Image */}
-  {isEditing && profileImage && (
-    <button
-      type="button"
-      onClick={() => {
-        setValue("image", null);
-        setProfileImage(null);
+              {/* Remove Image Button - Outside Image */}
+              {isEditing && profileImage && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setValue("image", null);
+                    setProfileImage(null);
 
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-      }}
-      className="
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+                  }}
+                  className="
       cursor-pointer
         absolute
         top-4
@@ -183,11 +183,11 @@ function Profile() {
         justify-center
         hover:bg-gray-100
       "
-    >
-      <X className="text-red-500" size={18} />
-    </button>
-  )}
-</div>
+                >
+                  <X className="text-red-500" size={18} />
+                </button>
+              )}
+            </div>
 
             {/* Role Badge */}
             <div className="absolute right-10 bottom-20 z-10">

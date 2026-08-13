@@ -59,7 +59,7 @@ const statuses = [
       "youtube_url",
       "media_caption",
       "scheduled_for",
-      "published_at",
+      // "published_at",
       "meta_title",
       "meta_description",
       "canonical_url",
@@ -78,6 +78,7 @@ const statuses = [
       "comments",
       "advertisements",
       "created_at",
+      "is_headline_news",
     ],
     (action,row) => {
         setSelectedArticle(row)

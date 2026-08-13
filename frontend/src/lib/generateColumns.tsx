@@ -40,6 +40,12 @@ export function generateColumns(
       cell: (info) => {
         const value = info.getValue();
         const row = info.row.original;
+        if(key==="headline")
+        {
+          return <div className="flex gap-2">
+           {value?.display_type? <span className="bg-green-100 border border-green-500 text-green-500 p-1 rounded-lg">{value?.display_type}</span>:"-"}
+           {value?.order? <span className="bg-blue-100 border border-blue-500 text-blue-500 p-1 rounded-lg">order:{value?.order}</span>:""}</div>
+        }
         if (module === "authors" && key === "status") {
           const row = info.row.original;
           const isUpdating = updatingStatusId === row.id;
