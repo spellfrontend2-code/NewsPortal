@@ -47,7 +47,7 @@ function MultiCategoryInOneRow({
      return <MultiCategoryInOneRowSkeleton/>
   return (
     <div className="flex  gap-4 w-full">
-      <div className="flex gap-4 w-full ">
+      <div className="flex gap-6 w-full ">
         <div className="w-2/3">
           <h1
             className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}

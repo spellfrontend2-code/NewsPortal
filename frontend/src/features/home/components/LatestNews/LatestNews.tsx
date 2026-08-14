@@ -14,7 +14,7 @@ function LatestNews() {
   const { data: allArticles, isLoading } =
     articleHook.useFetchPublicLatestArticles({
       page: 1,
-      per_page: 8,
+      per_page: 6,
     });
   const articles =
     allArticles?.data?.filter((article: any) => article?.type==="article").map((article: any) => article?.data) ?? [];
@@ -22,7 +22,7 @@ function LatestNews() {
   const { data: advertisements, isLoading: advertisementsLoading } =
     advertisementHook.useFetchPublicAdvertisements();
   const advertisementsList = advertisements?.data ?? [];
-  const sidebarAds = advertisementsList?.sidebar?.slice(0, 3);
+  const sidebarAds = advertisementsList?.sidebar?.slice(0, 2);
   return (
     <div className="w-full flex flex-col  h-full">
       {articles?.length > 0 && (
@@ -42,8 +42,7 @@ function LatestNews() {
               <ArticleSquareHoverCard article={articles[0]} />
             </div>
 
-            <div className="flex lg:flex-[1] min-w-0 flex-col gap-4 justify-between">
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-1">
                 {articles.slice(1).map((article: any) => (
                   <div key={article.id} className="h-[105px]">
                     <ArticleRectangleCard article={article} />
@@ -51,17 +50,7 @@ function LatestNews() {
                 ))}
               </div>
 
-              {/* <Button
-                variant="outline"
-                className="w-full rounded-md border border-[var(--color-public-border-main)] hover:border-[var(--color-public-border-strong)] hover:bg-[var(--color-public-bg-secondary)] text-[var(--color-public-text-tertiary)] font-bold py-3 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
-                onClick={() => {
-                  navigate("/news-list/latest-news");
-                }}
-              >
-                <Clock size={14} />
-                <span>24-Hour Archive</span>
-              </Button> */}
-            </div>
+    
           </div>
           <div className="lg:w-1/5 w-full">
             <div className="w-full flex flex-col md:flex-row lg:flex-col gap-4">

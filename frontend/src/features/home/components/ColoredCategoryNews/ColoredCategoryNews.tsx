@@ -15,7 +15,7 @@ function ColoredCategoryNews({
   const { data: allArticles, isLoading: articleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
-      per_page: 6,
+      per_page: 5,
       slug: category?.slug,
     });
   const articles =
@@ -43,12 +43,12 @@ function ColoredCategoryNews({
           </h1>
 
         <div className="flex flex-col lg:flex-row w-full h-[95%] gap-6">
-            <div className="lg:flex-[3] min-w-0 h-[350px] lg:h-auto">
+            <div className="lg:flex-[2] min-w-0 lg:h-[450px]">
               <ArticleSquareCard article={articles[0]} />
             </div>
 
-          <div className="lg:w-1/4 w-full ">
-            <div className="w-full h-full flex flex-col gap-2  justify-between">
+          <div className="lg:w-1/3 w-full ">
+            <div className="w-full h-full flex flex-col gap-2  ">
                 {slicedArticles.map((article: any) => (
                   <div key={article.id} className="h-[105px]">
                     <ArticleRectangleCard article={article} />

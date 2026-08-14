@@ -13,7 +13,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
         navigate(`/news/${article?.slug}`);
       }}
     >
-      <div className="w-[55%] overflow-hidden relative">
+      <div className="w-[53%] overflow-hidden relative">
         <img
           src={article?.media_type === "image" ? article?.featured_image : article?.thumbnail}
           alt={article?.title}
@@ -25,7 +25,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
         className={`${type === "detailed"
           ? "bg-slate-50/50 p-6 md:p-8"
           : "p-4"
-          } w-[45%] flex flex-col justify-center gap-2`}
+          } w-[47%] flex flex-col justify-center gap-2`}
       >
         <p
           className={`${type === "detailed"

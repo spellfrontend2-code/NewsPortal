@@ -16,7 +16,7 @@ function ColumnViewMultiCategoryNews({
   const { data: categoryOneArticles, isLoading: categoryOneArticleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
-      per_page: 6,
+      per_page: 5,
       slug: categoryOne?.slug,
     });
   const categoryOneArticlesList =
@@ -34,7 +34,7 @@ function ColumnViewMultiCategoryNews({
   const { data: categoryTwoArticles, isLoading: categoryTwoArticleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
-      per_page: 6,
+      per_page: 5,
       slug: categoryTwo?.slug,
     });
   const categoryTwoArticlesList =
@@ -51,59 +51,79 @@ function ColumnViewMultiCategoryNews({
     return <ColumnViewMultiCategoryNewsSkeleton />;
   }
   return (
-    <div className="w-full h-full flex lg:flex-row flex-col">
-      <div className="w-full lg:w-2/3 h-full flex flex-col  gap-2 py-5">
-        <h1
-          className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
-          onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
+  <div className="w-full flex lg:flex-row flex-col gap-6">
+    {/* Category One */}
+    <div className="w-full lg:w-2/3 flex flex-col">
+      <h1
+        className="text-2xl pb-2 mb-3 cursor-pointer uppercase font-bold
+        hover:text-[var(--color-public-text-accent-hover)]
+        text-[var(--color-public-text-accent)]
+        transition-all duration-200 tracking-tight"
+        onClick={() =>
+          navigate(`/news-list/category/${categoryOne?.slug}`)
+        }
+      >
+        {categoryOne?.name}
+      </h1>
+
+      <div className="flex lg:flex-row flex-col gap-6 w-full">
+        {/* Articles */}
+        <div
+          className={`${
+            hasSidebarAds ? "lg:w-2/3" : "w-full"
+          } w-full flex flex-col gap-2`}
         >
-          {categoryOne?.name}
-        </h1>
-        <div className="flex lg:flex-row flex-col gap-5 w-full h-full  ">
-          <div
-            className={` ${hasSidebarAds ? "lg:w-2/3 w-full" : "w-full"} grid grid-cols-1 gap-1`}
-          >
-            {slicedCategoryOneArticles.map((article: any) => (
-              <div key={article.id} className="h-[105px]">
-                <ArticleRectangleCard article={article} />
-              </div>
-            ))}
-          </div>
-          {hasSidebarAds && (
-            <div className="lg:w-1/4 w-full">
-              <div className="h-full w-full flex flex-col md:flex-row lg:flex-col gap-4 ">
-                {sidebarAds.map((ad: any, index: number) => {
-                  return (
-                    <div
-                      key={ad.id ?? index}
-                      className=" aspect-square overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
-                    >
-                      <SidebarAdvertisement Ad={ad} />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col lg:w-1/3 w-full h-full  mt-4">
-        <h1
-          className={`h-[5%] text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
-          onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
-        >
-          {categoryTwo?.name}
-        </h1>
-        <div className={`w-full grid grid-cols-1 gap-1`}>
-          {slicedCategoryTwoArticles.map((article: any) => (
-            <div key={article.id} className="h-[105px]">
+          {slicedCategoryOneArticles.map((article: any) => (
+            <div key={article.id} className="h-[120px]">
               <ArticleRectangleCard article={article} />
             </div>
           ))}
         </div>
+
+        {/* Ads */}
+        {hasSidebarAds && (
+          <div className="lg:w-1/3 w-full">
+            <div className="w-full flex flex-col gap-5">
+              {sidebarAds.map((ad: any, index: number) => (
+                <div
+                  key={ad.id ?? index}
+                  className="aspect-square overflow-hidden rounded-md
+                  border border-[var(--color-public-border-light)]
+                  shadow-sm"
+                >
+                  <SidebarAdvertisement Ad={ad} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  );
+
+    {/* Category Two */}
+    <div className="w-full lg:w-1/3 flex flex-col">
+      <h1
+        className="text-2xl pb-2 mb-3 cursor-pointer uppercase font-bold
+        hover:text-[var(--color-public-text-accent-hover)]
+        text-[var(--color-public-text-accent)]
+        transition-all duration-200 tracking-tight"
+        onClick={() =>
+          navigate(`/news-list/category/${categoryTwo?.slug}`)
+        }
+      >
+        {categoryTwo?.name}
+      </h1>
+
+      <div className="w-full flex flex-col gap-2">
+        {slicedCategoryTwoArticles.map((article: any) => (
+          <div key={article.id} className="h-[120px]">
+            <ArticleRectangleCard article={article} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
 }
 
 export default ColumnViewMultiCategoryNews;

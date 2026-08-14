@@ -139,6 +139,10 @@ export function generateColumns(
             </DropdownMenu>
           );
         }
+        if(key==="published_at")
+        {
+          return <span>{value.split("T")[0]}</span>
+        }
         if (key === "icon") {
           return <i className={value}></i>;
         }
