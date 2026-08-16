@@ -4,7 +4,7 @@ export type AdvertisementForm = {
   advertiser_email: string;
   advertiser_website: string;
 
-  ad_type: string;
+  ad_type: "image" | "video" | "html" | "text";
 
   image_url: File | null;
   video_url: File | null;
@@ -16,7 +16,7 @@ export type AdvertisementForm = {
   target_url: string;
   target_blank: string;
   cta_text: string;
-  
+
   page_type: string;
   placement: string;
 

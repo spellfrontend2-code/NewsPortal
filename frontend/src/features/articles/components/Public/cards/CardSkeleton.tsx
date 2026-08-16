@@ -1,17 +1,14 @@
 function ArticleRectangleCardSkeleton() {
   return (
-    <div className="flex h-full w-full overflow-hidden rounded-md animate-pulse border border-slate-100 bg-white">
-      {/* Image — 55% to match ArticleRectangleCard */}
-      <div className="w-[55%] bg-gray-200" />
+    <div className="flex h-full w-full items-center gap-3 border-b border-slate-100 animate-pulse bg-white py-1">
+      {/* Thumbnail 4:3 */}
+      <div className="h-full aspect-[4/3] max-w-[40%] rounded-md bg-slate-200 shrink-0" />
 
-      {/* Content — 45% */}
-      <div className="w-[45%] p-4 flex flex-col justify-center gap-2">
-        {/* Title */}
-        <div className="h-4 w-[90%] rounded bg-gray-200" />
-        <div className="h-4 w-[70%] rounded bg-gray-200" />
-
-        {/* Read time */}
-        <div className="h-3 w-20 rounded bg-gray-200 mt-1" />
+      {/* Content Area */}
+      <div className="flex-1 min-w-0 h-full flex flex-col justify-between py-1 gap-2">
+        <div className="h-4 w-[92%] rounded bg-slate-200" />
+        <div className="h-4 w-[65%] rounded bg-slate-200" />
+        <div className="h-3 w-16 rounded bg-slate-200 mt-1" />
       </div>
     </div>
   );
@@ -19,19 +16,17 @@ function ArticleRectangleCardSkeleton() {
 
 function ArticleSquareCardSkeleton() {
   return (
-    <div className="flex flex-col h-full w-full overflow-hidden rounded-md animate-pulse border border-slate-100 bg-white">
-      {/* Image — 70% to match ArticleSquareCard */}
-      <div className="h-[70%] w-full bg-gray-200" />
+    <div className="flex flex-col h-full w-full overflow-hidden animate-pulse bg-transparent">
+      {/* Image Container */}
+      <div className="h-[72%] sm:h-[75%] w-full rounded-t-md bg-slate-200 shrink-0" />
 
-      {/* Content — flex-1 to match */}
-      <div className="p-4 flex flex-col justify-between flex-1 gap-2">
-        {/* Title lines */}
-        <div className="flex flex-col gap-2">
-          <div className="h-4 w-[90%] rounded bg-gray-200" />
-          <div className="h-4 w-[70%] rounded bg-gray-200" />
+      {/* Content */}
+      <div className="h-[28%] sm:h-[25%] pt-2.5 pb-1 flex flex-col justify-end flex-1 gap-1.5 min-w-0">
+        <div className="flex flex-col gap-1.5">
+          <div className="h-4 w-[90%] rounded bg-slate-200" />
+          <div className="h-4 w-[70%] rounded bg-slate-200" />
         </div>
-        {/* Date row */}
-        <div className="h-3 w-20 rounded bg-gray-200" />
+        <div className="h-3 w-20 rounded bg-slate-200" />
       </div>
     </div>
   );
@@ -39,19 +34,22 @@ function ArticleSquareCardSkeleton() {
 
 function ArticleSquareHoverCardSkeleton() {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-md animate-pulse border border-slate-200/80 bg-slate-950">
-      {/* Image */}
-      <div className="h-full w-full bg-gray-700" />
+    <div className="relative h-full w-full min-h-[350px] overflow-hidden rounded-lg animate-pulse bg-slate-900">
+      {/* Category Pill Placeholder */}
+      <div className="absolute top-4 left-4 h-5 w-16 rounded bg-slate-700" />
 
-      {/* Gradient overlay placeholder */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-2.5">
-        <div className="h-7 w-[75%] rounded bg-gray-500/60" />
-        <div className="h-7 w-[55%] rounded bg-gray-500/60" />
-        {/* Date row */}
-        <div className="h-3 w-24 rounded bg-gray-500/50 mt-1" />
+      {/* Bottom Content Placeholders */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 flex flex-col gap-2.5">
+        <div className="h-7 w-[80%] rounded bg-slate-700/80" />
+        <div className="h-7 w-[60%] rounded bg-slate-700/80" />
+        <div className="h-3.5 w-24 rounded bg-slate-700/60 mt-1" />
       </div>
     </div>
   );
 }
 
-export { ArticleRectangleCardSkeleton, ArticleSquareCardSkeleton, ArticleSquareHoverCardSkeleton };
+export {
+  ArticleRectangleCardSkeleton,
+  ArticleSquareCardSkeleton,
+  ArticleSquareHoverCardSkeleton,
+};

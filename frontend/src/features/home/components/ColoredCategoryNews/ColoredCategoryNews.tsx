@@ -43,8 +43,11 @@ function ColoredCategoryNews({
           </h1>
 
         <div className="flex flex-col lg:flex-row w-full h-[95%] gap-6">
-            <div className="lg:flex-[2] min-w-0 lg:h-[450px]">
-              <ArticleSquareCard article={articles[0]} />
+            <div className="lg:flex-[2] min-w-0 lg:h-[600px]">
+              <ArticleSquareCard
+                article={articles[0]}
+                titleClassName="text-xl sm:text-2xl md:text-3xl lg:text-5xl"
+              />
             </div>
 
           <div className="lg:w-1/3 w-full ">

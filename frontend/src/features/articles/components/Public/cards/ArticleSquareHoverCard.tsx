@@ -5,33 +5,51 @@ import { useNavigate } from "react-router-dom";
 function ArticleSquareHoverCard({ article }: any) {
   const navigate = useNavigate();
   const { viewPublicArticle } = useArticleView();
+  const imageSrc =
+    article?.featured_image || article?.thumbnail || "/placeholder-news.jpg";
+  const publishedDate = article?.published_at?.split("T")[0] || "";
+
   return (
-    <div
-      className="relative h-full w-full group overflow-hidden cursor-pointer rounded-md border border-slate-200/80 shadow-md bg-slate-950"
+    <article
+      className="@container relative h-full w-full group overflow-hidden cursor-pointer rounded-md bg-slate-950 shadow-md"
       onClick={() => {
-        viewPublicArticle(article?.id);
-        navigate(`/news/${article?.slug}`);
+        if (article?.id) viewPublicArticle(article.id);
+        if (article?.slug) navigate(`/news/${article.slug}`);
       }}
     >
+      {/* Background Image */}
       <img
-        src={article?.featured_image}
-        alt={article?.title}
-        className="h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-75"
+        src={imageSrc}
+        alt={article?.title || "Lead news"}
+        loading="lazy"
+        className="h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-80"
       />
-      <div className="bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent absolute inset-0 w-full h-full" />
 
-      <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col gap-2.5">
-        <p className=" font-bold text-xl md:text-2xl lg:text-3xl text-white tracking-tight leading-tight transition-colors duration-200 group-hover:text-[var(--color-public-text-lightest)]">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none" />
+
+
+      {/* Headline & Meta Bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 flex flex-col gap-2.5 z-10">
+        <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl @md:text-2xl @lg:text-3xl @xl:text-4xl text-white tracking-tight leading-tight transition-colors duration-200 group-hover:text-[var(--color-public-text-lightest)] line-clamp-3 drop-shadow">
           {article?.title}
-        </p>
+        </h2>
 
-        <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-300">
-          <Clock size={12} strokeWidth={3}/>
-          <span>{article?.published_at?.split("T")[0]}</span>
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+          {article?.author?.name && (
+            <>
+              <span className="text-white font-bold">{article.author.name}</span>
+              <span className="text-slate-400">•</span>
+            </>
+          )}
+          <div className="flex items-center gap-1.5 text-slate-300">
+            <Clock size={12} strokeWidth={2.5} />
+            <span>{publishedDate}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
 export default ArticleSquareHoverCard;
+

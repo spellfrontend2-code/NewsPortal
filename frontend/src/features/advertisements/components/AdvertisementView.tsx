@@ -132,7 +132,7 @@ console.log("ADTYPE",advertisement.ad_type)
           Media Information
         </h2>
 
-        {((advertisement.ad_type === "image" || advertisement.ad_type === "native") && advertisement.image_url) && (
+        {(advertisement.ad_type === "image" && advertisement.image_url) && (
           <div className="space-y-1">
             <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
               Image
@@ -180,7 +180,7 @@ console.log("ADTYPE",advertisement.ad_type)
           </div>
         )}
 
-        {(advertisement.ad_type === "text" || advertisement.ad_type === "native") && <Field label="Text Content" value={advertisement.text_content} />}
+        {advertisement.ad_type === "text" && <Field label="Text Content" value={advertisement.text_content} />}
       </div>
 
       {/* CALL TO ACTION */}
@@ -192,7 +192,6 @@ console.log("ADTYPE",advertisement.ad_type)
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <Field label="Target URL" value={advertisement.target_url} />
           <Field label="Target Blank" value={advertisement.target_blank} />
-         {advertisement?.ad_type==="native" && <Field label="CTA Text" value={advertisement.cta_text} />}
         </div>
       </div>
 

@@ -53,31 +53,6 @@ function SidebarAdvertisement({ Ad }: { Ad: any }) {
           </div>
         ) : Ad?.type === "html" ? (
           <HtmlAd html={Ad?.html} />
-        ) : Ad?.type === "native" ? (
-          <div className="flex flex-col h-full w-full justify-between rounded-md bg-white shadow-sm hover:shadow-md transition overflow-hidden">
-            <img
-              src={Ad?.image}
-              alt={Ad?.title}
-              className="h-2/3 object-cover "
-            />
-
-            <div className="h-1/3 px-4 flex flex-col justify-between py-2">
-              <h3 className="mt-2 text-lg font-semibold text-gray-900 line-clamp-2">
-                {Ad?.title}
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-600 line-clamp-3">
-                {Ad?.text}
-              </p>
-
-              <button
-                type="button"
-                className="mt-4 w-full rounded-md bg-blue-600 py-2 text-white text-sm font-medium"
-              >
-                {Ad?.cta}{" "}
-              </button>
-            </div>
-          </div>
         ) : null}
       </Link>
     </div>

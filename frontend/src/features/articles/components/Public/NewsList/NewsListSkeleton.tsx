@@ -17,11 +17,11 @@ function NewsListSkeleton({ show = "all" }: { show?: "all" | "list" }) {
       <div>
         {/* Featured Article — ArticleRectangleCard with type="detailed" at h-[300px] */}
         {show === "all" && (
-          <div className="h-[300px] w-full rounded-md overflow-hidden animate-pulse flex border border-slate-100 bg-white">
-            {/* Image 55% */}
-            <div className="w-[55%] bg-gray-200" />
-            {/* Content 45% */}
-            <div className="w-[45%] p-6 md:p-8 bg-slate-50/50 flex flex-col justify-center gap-4">
+          <div className="h-[300px] w-full rounded-md overflow-hidden animate-pulse flex flex-col md:flex-row border border-slate-100 bg-white">
+            {/* Image 50% */}
+            <div className="md:w-1/2 w-full h-full bg-gray-200" />
+            {/* Content 50% */}
+            <div className="md:w-1/2 w-full p-6 md:p-8 bg-slate-50/50 flex flex-col justify-center gap-4">
               <div className="h-9 w-[85%] rounded bg-gray-200" />
               <div className="h-9 w-[65%] rounded bg-gray-200" />
               <div className="h-4 w-full rounded bg-gray-200" />
@@ -40,12 +40,12 @@ function NewsListSkeleton({ show = "all" }: { show?: "all" | "list" }) {
           {Array.from({ length: show === "all" ? 9 : 6 }).map((_, index) => (
             <div
               key={index}
-              className="h-[320px] w-full rounded-md overflow-hidden animate-pulse flex flex-col border border-slate-100 bg-white"
+              className="w-full overflow-hidden animate-pulse flex flex-col bg-white"
             >
-              {/* Image 70% */}
-              <div className="h-[70%] w-full bg-gray-200" />
+              {/* Image 16:9 Aspect Video */}
+              <div className="w-full aspect-video rounded-md bg-gray-200" />
               {/* Content */}
-              <div className="p-4 flex flex-col justify-between flex-1 gap-2">
+              <div className="pt-3 pb-2 flex flex-col justify-between flex-1 gap-2.5">
                 <div className="flex flex-col gap-2">
                   <div className="h-4 w-[90%] rounded bg-gray-200" />
                   <div className="h-4 w-[70%] rounded bg-gray-200" />

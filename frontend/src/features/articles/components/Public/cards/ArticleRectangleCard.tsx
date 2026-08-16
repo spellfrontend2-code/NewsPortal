@@ -5,58 +5,109 @@ import { useNavigate } from "react-router-dom";
 function ArticleRectangleCard({ article, type = "view" }: any) {
   const navigate = useNavigate();
   const { viewPublicArticle } = useArticleView();
+
+  const categoryName =
+    article?.categories?.[0]?.name || article?.category?.name || null;
+  const imageSrc =
+    article?.media_type === "image"
+      ? article?.featured_image
+      : article?.featured_image || article?.thumbnail || "/placeholder-news.jpg";
+  const publishedDate = article?.published_at?.split("T")[0] || "";
+
+  // Detailed Card (Featured Top Banner Variant)
+  if (type === "detailed") {
+    return (
+      <article
+        className="group flex flex-col md:flex-row h-full w-full cursor-pointer overflow-hidden rounded-md bg-white transition-all duration-300"
+        onClick={() => {
+          if (article?.id) viewPublicArticle(article.id);
+          if (article?.slug) navigate(`/news/${article.slug}`);
+        }}
+      >
+        {/* Balanced 50% Image Container */}
+        <div className="md:w-1/2 w-full h-48 md:h-full overflow-hidden relative bg-slate-100 shrink-0 rounded-md">
+          <img
+            src={imageSrc}
+            alt={article?.title || "Featured news"}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+
+        {/* Content Side */}
+        <div className="md:w-1/2 w-full p-4 sm:p-6 md:p-8 flex flex-col justify-center gap-2 sm:gap-3 bg-slate-50/40 flex-1 min-w-0">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold tracking-tight leading-tight text-slate-900 transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)] line-clamp-2 md:line-clamp-3">
+            {article?.title}
+          </h2>
+
+          {article?.excerpt && (
+            <p className="text-xs sm:text-sm md:text-base text-slate-600 font-normal leading-relaxed line-clamp-2">
+              {article.excerpt}
+            </p>
+          )}
+
+          <div className="flex items-center gap-3 text-xs sm:text-sm font-medium text-slate-500 mt-1">
+            {article?.author?.name && (
+              <>
+                <span className="font-semibold text-slate-700">
+                  {article.author.name}
+                </span>
+                <span className="text-slate-300">•</span>
+              </>
+            )}
+            <div className="flex items-center gap-1.5 text-slate-400">
+              <Clock size={14} strokeWidth={2.5} />
+              <span>{publishedDate}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  // Standard Compact List Card (Consistent 4:3 Row Style)
   return (
-    <div
-      className="flex h-full w-full group overflow-hidden cursor-pointer items-stretch rounded-md bg-white border border-slate-100 hover:shadow-md hover:border-slate-200 transition-all duration-300"
+    <article
+      className=" group flex h-full w-full cursor-pointer items-center gap-3 border-b border-slate-100 last:border-b-0 overflow-hidden transition-all duration-200 py-1"
       onClick={() => {
-        viewPublicArticle(article?.id);
-        navigate(`/news/${article?.slug}`);
+        if (article?.id) viewPublicArticle(article.id);
+        if (article?.slug) navigate(`/news/${article.slug}`);
       }}
     >
-      <div className="w-[53%] overflow-hidden relative">
+      {/* Consistent 4:3 Thumbnail matching container height */}
+      <div className="h-full aspect-[4/3] max-w-[40%] shrink-0 overflow-hidden rounded-md bg-slate-100 relative">
         <img
-          src={article?.media_type === "image" ? article?.featured_image : article?.thumbnail}
-          alt={article?.title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          src={imageSrc}
+          alt={article?.title || "News thumbnail"}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 
-      <div
-        className={`${type === "detailed"
-          ? "bg-slate-50/50 p-6 md:p-8"
-          : "p-4"
-          } w-[47%] flex flex-col justify-center gap-2`}
-      >
-        <p
-          className={`${type === "detailed"
-            ? "text-xl md:text-2xl lg:text-3xl font-black tracking-tight leading-tight text-slate-900"
-            : "text-sm md:text-base font-bold text-slate-900 line-clamp-2 leading-snug"
-            } transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]`}
-        >
+      {/* Content Area with Dynamic Typography Scaling */}
+      <div className="flex-1 min-w-0 h-full flex flex-col justify-center py-1">
+        <h4 className="text-sm sm:text-base md:text-lg sm:text-base font-bold text-slate-900 line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
           {article?.title}
-        </p>
+        </h4>
 
-        {type === "detailed" ? (
-          <>
-            {article?.excerpt && (
-              <p className="text-sm text-slate-500 font-normal leading-relaxed line-clamp-2 mt-1">
-                {article?.excerpt}
-              </p>
-            )}
-            <div className="flex items-center gap-1.5 text-sm font-semibold text-slate-400 mt-1">
-              <Clock size={14} strokeWidth={3}/>
-              <span>{article?.published_at?.split("T")[0]}</span>
-            </div>
-          </>
-        ) : (
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mt-0.5">
-            <Clock size={12} strokeWidth={3}/>
-            <span>{article?.published_at?.split("T")[0]}</span>
+        <div className="flex items-center gap-2 text-[11px] sm:text-xs font-medium text-slate-400 mt-1">
+          {article?.author?.name && (
+            <>
+              <span className="font-semibold text-slate-600 truncate max-w-[100px]">
+                {article.author.name}
+              </span>
+              <span className="text-slate-300">•</span>
+            </>
+          )}
+          <div className="flex items-center gap-1">
+            <Clock size={11} strokeWidth={2.5} />
+            <span>{publishedDate}</span>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </article>
   );
 }
 
 export default ArticleRectangleCard;
+
