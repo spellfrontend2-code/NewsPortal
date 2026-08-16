@@ -3,15 +3,16 @@ import { Button } from "@/components/ui/button";
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
 import { generateColumns } from "@/lib/generateColumns";
-import RolesAndPermissionManagement from "@/features/roles-and-permissions/components/RolesAndPermissionManagement";
 import { Plus } from "lucide-react";
-import {  useState } from "react";
+import { useState } from "react";
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
+import { useNavigate } from "react-router-dom";
 
 function RolesAndPermissions() {
+  const navigate = useNavigate();
   const permissionHook = usePermissionHooks();
-    const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const { data, isLoading } = permissionHook.useFetchRoleBasedPermissions();
   const roleBasedPermissions = data?.data ?? [];
@@ -19,12 +20,14 @@ function RolesAndPermissions() {
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [editOpen,setEditOpen]=useState(false)
-  const filteredRoleBasedPermissions=roleBasedPermissions.filter((roleBasedPermission) => !roleBasedPermission.name.toLowerCase().includes("admin"));
-const [selectedRole, setSelectedRole] = useState<{
-  name: string;
-  permissions: string[];
-} | null>(null);  
+  const filteredRoleBasedPermissions = roleBasedPermissions.filter(
+    (roleBasedPermission) =>
+      !roleBasedPermission.name.toLowerCase().includes("admin")
+  );
+  const [selectedRole, setSelectedRole] = useState<{
+    name: string;
+    permissions: string[];
+  } | null>(null);
   const columns = generateColumns(
     filteredRoleBasedPermissions,
     [],
@@ -35,7 +38,14 @@ const [selectedRole, setSelectedRole] = useState<{
           setDeleteOpen(true);
           break;
         case "edit":
-          setEditOpen(true)
+          navigate(
+            `/admin/roles-and-permissions/${encodeURIComponent(
+              row.slug || row.name || row.id
+            )}/edit`,
+            {
+              state: { role: row },
+            }
+          );
           break;
       }
     },
@@ -45,32 +55,26 @@ const [selectedRole, setSelectedRole] = useState<{
     "roles"
   );
 
-  const {hasPermission}=usePermission();
-  const [addOpen, setAddOpen] = useState(false);
-  if(addOpen)
-  {
-    return <RolesAndPermissionManagement setOpen={setAddOpen} open={addOpen} role={""} type="add"/>
-  }
-  if(editOpen)
-  {
-    return <RolesAndPermissionManagement setOpen={setEditOpen} open={editOpen} role={selectedRole} type="edit"/>
-  }
+  const { hasPermission } = usePermission();
+
   return (
     <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5">
-       <div className="flex justify-between items-end rounded-xl ">
-            <div className="flex flex-col  text-gray-800 ">
-              <p className="text-3xl font-bold ">Roles and Permissions</p>
-              <p className="text-gray-500">Manage your roles and permissions</p>
-            </div>
-           {hasPermission(PERMISSIONS?.PERMISSION?.ASSIGN?.name) && <Button
-              variant="submit"
-              className="h-10 flex items-center gap-2"
-              onClick={() => setAddOpen(true)}
-            >
-              <Plus />
-              Add Role
-            </Button>}
-          </div>
+      <div className="flex justify-between items-end rounded-xl">
+        <div className="flex flex-col text-gray-800">
+          <p className="text-3xl font-bold">Roles and Permissions</p>
+          <p className="text-gray-500">Manage your roles and permissions</p>
+        </div>
+        {hasPermission(PERMISSIONS?.PERMISSION?.ASSIGN?.name) && (
+          <Button
+            variant="submit"
+            className="h-10 flex items-center gap-2"
+            onClick={() => navigate("/admin/roles-and-permissions/create")}
+          >
+            <Plus />
+            Add Role
+          </Button>
+        )}
+      </div>
       <DataTable
         data={filteredRoleBasedPermissions}
         columns={columns}
@@ -91,7 +95,7 @@ const [selectedRole, setSelectedRole] = useState<{
         setDeleteOpen={setDeleteOpen}
         selectedField={selectedRole}
         deleteField={deleteRole}
-        />
+      />
     </div>
   );
 }

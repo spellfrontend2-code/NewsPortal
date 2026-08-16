@@ -1,5 +1,6 @@
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
+import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +13,25 @@ function NewsList({
   lastPage,
   show = "all",
 }: any) {
-  
-  const currentPage = pagination.pageIndex + 1;
-  const slicedArticles = show === "all" ? articles.slice(1) : articles;
+  const currentPage = pagination?.pageIndex ? pagination.pageIndex + 1 : 1;
+  const items = articles || [];
+
+  // Determine top featured item and remaining list
+  const firstArticleIndex = items.findIndex(
+    (item: any) => !item.type || item.type === "article"
+  );
+  const firstArticle =
+    firstArticleIndex !== -1
+      ? items[firstArticleIndex]?.data || items[firstArticleIndex]
+      : null;
+
+  const slicedItems =
+    show === "all" && firstArticleIndex !== -1
+      ? items.filter((_: any, idx: number) => idx !== firstArticleIndex)
+      : items;
+
   const goToPage = (page: number) => {
-    if (page < 1 || page > lastPage) return;
+    if (!setPagination || page < 1 || page > lastPage) return;
 
     setPagination((prev: any) => ({
       ...prev,
@@ -27,11 +42,12 @@ function NewsList({
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
 
+    if (!lastPage || lastPage <= 1) return [];
+
     if (lastPage <= 5) {
       for (let i = 1; i <= lastPage; i++) {
         pages.push(i);
       }
-
       return pages;
     }
 
@@ -53,6 +69,7 @@ function NewsList({
       lastPage,
     ];
   };
+
   useEffect(() => {
     if (show !== "list") {
       window.scrollTo({
@@ -60,43 +77,75 @@ function NewsList({
         behavior: "smooth",
       });
     }
-  }, [pagination.pageIndex, show]);
+  }, [pagination?.pageIndex, show]);
+
   const navigate = useNavigate();
+
   return (
-    <div className={`w-full flex flex-col gap-5 `}>
-      {articles?.length > 0 && (
+    <div className="w-full flex flex-col gap-5">
+      {items.length > 0 && page_headline && (
         <div
-          className={`relative h-15 w-full flex items-center ${show === "all" ? "py-8" : ""}  `}
+          className={`relative h-15 w-full flex items-center ${
+            show === "all" ? "py-8" : ""
+          }`}
         >
-             {articles?.length > 0 && show === "all" && (
+          {show === "all" && (
             <div className="absolute inset-0 w-2 h-full rounded-l-md bg-[var(--color-public-bg-accent)]" />
           )}
           <h1
-            className={`${show === "all" ? "ml-3 text-5xl text-[var(--color-public-text-secondary)]" : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"} cursor-pointer uppercase font-bold  `}
+            className={`${
+              show === "all"
+                ? "ml-3 text-4xl sm:text-5xl text-[var(--color-public-text-secondary)]"
+                : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"
+            } cursor-pointer uppercase font-bold`}
             onClick={() => navigate(`/news-list/category/${page_headline}`)}
           >
             {page_headline}
           </h1>
-       
         </div>
       )}
-      {articles?.length > 0 && (
+
+      {items.length > 0 && (
         <div>
-          {show === "all" && (
-            <div className="h-[300px] w-full">
-              <ArticleRectangleCard article={articles[0]} type="detailed" />
+          {/* Top Featured Article on Full List View */}
+          {show === "all" && firstArticle && (
+            <div className="h-[300px] w-full mb-8">
+              <ArticleRectangleCard article={firstArticle} type="detailed" />
             </div>
           )}
+
+          {/* Grid loop rendering both articles and mixed ads in order */}
           <div
-            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 w-full gap-6 ${show === "all" ? "pt-10" : ""}`}
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-6 ${
+              show === "all" ? "pt-2" : ""
+            }`}
           >
-            {slicedArticles.map((article: any) => (
-              <div key={article.id} className="h-[320px] w-full bg-transparent">
-                <ArticleSquareCard article={article} />
-              </div>
-            ))}
+            {slicedItems.map((item: any, idx: number) => {
+              if (item?.type === "advertisement") {
+                return (
+                  <div
+                    key={`ad-${item?.data?.id ?? idx}-${idx}`}
+                    className="col-span-full my-2 w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-50/50 shadow-sm"
+                  >
+                    <BannerAdvertisement item={item} />
+                  </div>
+                );
+              }
+
+              const articleData = item?.data || item;
+              return (
+                <div
+                  key={`art-${articleData?.id ?? idx}-${idx}`}
+                  className="h-[320px] w-full bg-transparent"
+                >
+                  <ArticleSquareCard article={articleData} />
+                </div>
+              );
+            })}
           </div>
-          {show === "all" ? (
+
+          {/* Pagination Toolbar */}
+          {show === "all" && lastPage > 1 && (
             <div className="flex items-center justify-center gap-2 pt-10">
               <button
                 disabled={currentPage === 1}
@@ -126,7 +175,7 @@ function NewsList({
                   >
                     {page}
                   </button>
-                ),
+                )
               )}
 
               <button
@@ -137,7 +186,7 @@ function NewsList({
                 <ChevronRight size={16} strokeWidth={2.5} />
               </button>
             </div>
-          ) : null}
+          )}
         </div>
       )}
     </div>

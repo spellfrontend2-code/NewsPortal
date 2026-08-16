@@ -38,14 +38,38 @@ export const advertisementsApi = () => {
         };
       }
     },
+
+    fetchFormOptions: async (params?: { article_search?: string; article_id?: any }) => {
+      try {
+        const response = await axiosInstance.get("/admin/advertisements/form-options", {
+          params,
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data || error;
+      }
+    },
+
+    fetchArticlesForAd: async (params?: { search?: string; per_page?: number; article_id?: any }) => {
+      try {
+        const response = await axiosInstance.get("/admin/advertisements/articles", {
+          params,
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data || error;
+      }
+    },
+
     fetchSingleAdvertisement: async (id: any) => {
-      try{
+      try {
         const response = await axiosInstance.get(`/admin/advertisements/${id}`);
         return response.data;
-      }catch(error:any){
+      } catch (error: any) {
         throw error?.response?.data;
       }
     },
+
     createAdvertisement: async (data: any) => {
       try {
         const response = await axiosInstance.post(
@@ -57,6 +81,7 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
+
     updateAdvertisement: async (id: any, data: any) => {
       try {
         const response = await axiosInstance.put(
@@ -68,6 +93,7 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
+
     updateAdvertisementApproval: async (id: any) => {
       try {
         const response = await axiosInstance.patch(
@@ -78,6 +104,7 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
+
     deleteAdvertisement: async (id: any) => {
       try {
         const response = await axiosInstance.delete(
@@ -88,26 +115,34 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchPublicAdvertisements: async () => {
+
+    fetchPublicAdvertisements: async (params?: {
+      page_type?: string;
+      section_id?: number | string;
+      section_type?: string;
+    }) => {
       try {
-        const response = await axiosInstance.get("/advertisements");
+        const response = await axiosInstance.get("/advertisements", {
+          params,
+        });
         return response.data;
       } catch (error: any) {
-    if (error.response) {
-      throw error.response.data;
-    }
+        if (error.response) {
+          throw error.response.data;
+        }
 
-    if (error.request) {
-      throw {
-        message: "Unable to connect to the server. Please try again later.",
-      };
-    }
+        if (error.request) {
+          throw {
+            message: "Unable to connect to the server. Please try again later.",
+          };
+        }
 
-    throw {
-      message: error.message || "Something went wrong.",
-    };
-  }
+        throw {
+          message: error.message || "Something went wrong.",
+        };
+      }
     },
+
     trackPublicAdClick: async (advertisement_id: any) => {
       try {
         const response = await axiosInstance.post(
@@ -118,6 +153,7 @@ export const advertisementsApi = () => {
         throw error?.response?.data;
       }
     },
+
     trackPublicAdImpression: async (advertisement_id: any) => {
       try {
         const response = await axiosInstance.post(
@@ -127,6 +163,6 @@ export const advertisementsApi = () => {
       } catch (error: any) {
         throw error?.response?.data;
       }
-    }
+    },
   };
 };

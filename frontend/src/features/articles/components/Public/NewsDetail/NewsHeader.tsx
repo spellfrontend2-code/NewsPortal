@@ -4,6 +4,7 @@ import { Clock } from "lucide-react";
 function NewsHeader({ Data }: any) {
   const articleData = Data?.article;
   const advertisementData = Data?.advertisements;
+
   return (
     <div className="flex flex-col gap-6 w-full pb-2">
       {/* Category Tag & Title */}
@@ -13,10 +14,14 @@ function NewsHeader({ Data }: any) {
         </h1>
       </div>
 
-      {/* Top Banner Advertisement */}
-      {advertisementData?.top?.length>0 && (
-        <div className="w-full my-2 overflow-hidden rounded-md border border-slate-100/80 shadow-sm bg-slate-50/50">
-          <BannerAdvertisement Ad={advertisementData?.top[0]} />
+      {/* Top Banner Advertisement (Takes whole banner width & height without spaces) */}
+      {advertisementData?.top?.length > 0 && (
+        <div className="w-full my-3 overflow-hidden rounded-md shadow-sm">
+          {advertisementData.top.map((ad: any, index: number) => (
+            <div key={ad.id ?? index} className="w-full">
+              <BannerAdvertisement Ad={ad} />
+            </div>
+          ))}
         </div>
       )}
 
@@ -31,21 +36,26 @@ function NewsHeader({ Data }: any) {
       <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-200/60 text-slate-600 text-sm">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <img
-              src={articleData?.author?.image}
-              alt={articleData?.author?.name}
-              className="h-11 w-11 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-slate-100"
-            />
+            {articleData?.author?.image && (
+              <img
+                src={articleData?.author?.image}
+                alt={articleData?.author?.name}
+                className="h-11 w-11 rounded-full object-cover border-2 border-white shadow-md ring-2 ring-slate-100"
+              />
+            )}
           </div>
           <div>
-            <p className="font-semibold text-slate-900 text-base">{articleData?.author?.name}</p>
-            {/* <p className="text-xs text-slate-400 font-medium">Contributor</p> */}
+            <p className="font-semibold text-slate-900 text-base">
+              {articleData?.author?.name}
+            </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-[var(--color-public-text-main)]">
-          <Clock size={15}  />
-          <span className="font-semibold text-xs tracking-wider uppercase">{articleData?.published_at?.split("T")[0]}</span>
+          <Clock size={15} />
+          <span className="font-semibold text-xs tracking-wider uppercase">
+            {articleData?.published_at?.split("T")[0]}
+          </span>
         </div>
       </div>
     </div>

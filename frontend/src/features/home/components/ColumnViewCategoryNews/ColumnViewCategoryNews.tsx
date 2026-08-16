@@ -1,3 +1,4 @@
+import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import SidebarAdvertisement from "@/features/advertisements/components/Public/SidebarAdvertisement";
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
@@ -12,23 +13,23 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
       per_page: 8,
+      categoryId: category?.id,
       slug: category?.slug,
+      section_type: "category",
+      section_id: category?.id,
     });
 
-  const articles =
-    allArticles?.data
-      ?.filter((item: any) => item.type === "article")
-      .map((item: any) => item.data) ?? [];
-
-  const slicedArticles = articles.slice(0, 8);
+  const items = (allArticles?.data ?? []).slice(0, 8);
 
   const advertisementHook = useAdvertisementHooks();
 
   const { data: advertisements, isLoading: advertisementsLoading } =
-    advertisementHook.useFetchPublicAdvertisements();
+    advertisementHook.useFetchPublicAdvertisements({
+      page_type: "home",
+      section_id: category?.id,
+    });
 
-  const advertisementsList = advertisements?.data ?? [];
-  const sidebarAds = advertisementsList?.sidebar?.slice(0, 2);
+  const sidebarAds = advertisements?.data?.sidebar ?? [];
   const hasSidebarAds = sidebarAds?.length > 0;
 
   const navigate = useNavigate();
@@ -54,20 +55,34 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
 
       {/* Content */}
       <div className="flex lg:flex-row flex-col gap-6 w-full">
-        {/* Articles */}
+        {/* Articles & In-feed Ads */}
         <div
           className={`${
             hasSidebarAds ? "lg:w-4/5" : "w-full"
-          }h-full w-full grid grid-cols-1 md:grid-cols-2 gap-1`}
+          } h-full w-full grid grid-cols-1 md:grid-cols-2 gap-3`}
         >
-          {slicedArticles.map((article: any) => (
-            <div key={article.id} className="h-[120px]">
-              <ArticleRectangleCard article={article} />
-            </div>
-          ))}
+          {items.map((item: any, idx: number) => {
+            if (item?.type === "advertisement") {
+              return (
+                <div
+                  key={`ad-${item?.data?.id ?? idx}-${idx}`}
+                  className="col-span-full my-2 w-full overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
+                >
+                  <BannerAdvertisement item={item} />
+                </div>
+              );
+            }
+
+            const article = item?.data || item;
+            return (
+              <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[120px]">
+                <ArticleRectangleCard article={article} />
+              </div>
+            );
+          })}
         </div>
 
-        {/* Advertisements */}
+        {/* Advertisements Sidebar */}
         {hasSidebarAds && (
           <div className="lg:w-1/5 w-full">
             <div className="w-full flex flex-col md:flex-row lg:flex-col gap-5">

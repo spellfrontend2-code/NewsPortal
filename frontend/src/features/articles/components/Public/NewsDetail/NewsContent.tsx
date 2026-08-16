@@ -11,42 +11,71 @@ import NewsComment from "./NewsComment";
 function NewsContent({ Data, commentRef }: any) {
   const articleData = Data?.article;
   const advertisementData = Data?.advertisements;
+  const contentBlocks = Data?.content_blocks;
+
   const articleHook = useArticlesHooks();
   const likeArticle = articleHook.useLikePublicArticle();
   const dislikeArticle = articleHook.useDislikePublicArticle();
   const reportArticle = articleHook.useReportPublicArticle();
   const { checkAuth, open, setOpen } = useAuthChecker();
+
   const handleLike = () => {
     if (!checkAuth("Please login to like this article")) return;
-    likeArticle.mutate({id:articleData?.id,slug:articleData?.slug}, {
-      onSuccess: (res) => {
-        toast.success(res?.message || "Liked successfully");
-      },
-    });
+    likeArticle.mutate(
+      { id: articleData?.id, slug: articleData?.slug },
+      {
+        onSuccess: (res) => {
+          toast.success(res?.message || "Liked successfully");
+        },
+      }
+    );
   };
+
   const handleDislike = () => {
     if (!checkAuth("Please login to dislike this article")) return;
-
-    dislikeArticle.mutate({id:articleData?.id,slug:articleData?.slug}, {
-      onSuccess: (res) => {
-        toast.success(res?.message || "Disliked successfully");
-      },
-    });
+    dislikeArticle.mutate(
+      { id: articleData?.id, slug: articleData?.slug },
+      {
+        onSuccess: (res) => {
+          toast.success(res?.message || "Disliked successfully");
+        },
+      }
+    );
   };
+
   const handleReport = () => {
     if (!checkAuth("Please login to report this article")) return;
-
     reportArticle.mutate(articleData?.id, {
       onSuccess: (res) => {
         toast.success(res?.message || "Reported successfully");
       },
     });
   };
+
+  const hasSidebarAds = advertisementData?.sidebar?.length > 0;
+
+  // Track ad IDs rendered in body to prevent duplicate rendering at the bottom
+  const renderedContentAdIds = new Set<number>();
+  if (Array.isArray(contentBlocks)) {
+    contentBlocks.forEach((block: any) => {
+      if (block?.type === "advertisement" && block?.data?.id) {
+        renderedContentAdIds.add(Number(block.data.id));
+      }
+    });
+  }
+
+  // Filter bottom ads to exclude any ad already rendered inside content_blocks or paragraph ads
+  const bottomAdsToRender = (advertisementData?.bottom || []).filter(
+    (ad: any) => !ad?.id || !renderedContentAdIds.has(Number(ad.id))
+  );
+
   return (
-    <div className="h-full overflow-y-auto flex flex-col lg:flex-row w-full gap-5">
+    <div className="h-full overflow-y-auto flex flex-col lg:flex-row w-full gap-6">
       {/* Main Content Area */}
       <div
-        className={`${advertisementData?.sidebar?.length > 0 ? "lg:w-4/5 w-full" : "w-full"} flex flex-col gap-6 `}
+        className={`${
+          hasSidebarAds ? "lg:w-4/5 w-full" : "w-full"
+        } flex flex-col gap-6`}
       >
         {/* Media Block */}
         <div className="w-full rounded-md overflow-hidden shadow-md">
@@ -83,9 +112,9 @@ function NewsContent({ Data, commentRef }: any) {
           </div>
         </div>
 
-        {/* Article Body Content */}
+        {/* Article Body Content (content_blocks or HtmlParser) */}
         <div
-          className=" text-justify prose prose-slate max-w-none text-slate-800 text-lg 
+          className="text-justify prose prose-slate max-w-none text-slate-800 text-lg 
             [&_p]:my-6 [&_p]:leading-relaxed [&_p]:text-slate-700
             [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-slate-900 
             [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-slate-900 
@@ -93,19 +122,56 @@ function NewsContent({ Data, commentRef }: any) {
             [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6
             [&_li]:mb-2 [&_li]:text-slate-700
             [&_blockquote]:border-l-4 [&_blockquote]:border-slate-800 [&_blockquote]:pl-6 [&_blockquote]:italic
-            [&_blockquote]:text-slate-700  [&_blockquote]:text-xl [&_blockquote]:my-8
-            [&_a]:text-[var(--color-public-newsText)] [&_a]:underline hover:[&_a]:opacity-80 "
+            [&_blockquote]:text-slate-700 [&_blockquote]:text-xl [&_blockquote]:my-8
+            [&_a]:text-[var(--color-public-newsText)] [&_a]:underline hover:[&_a]:opacity-80"
         >
-          <HtmlParser
-            content={articleData?.content || ""}
-            ad={advertisementData?.middle}
-          />
+          {Array.isArray(contentBlocks) && contentBlocks.length > 0 ? (
+            <div>
+              {contentBlocks.map((block: any, idx: number) => {
+                if (block.type === "paragraph") {
+                  return (
+                    <div
+                      key={`p-${idx}`}
+                      dangerouslySetInnerHTML={{
+                        __html: block.data?.html || block.data || "",
+                      }}
+                    />
+                  );
+                }
+                if (block.type === "advertisement") {
+                  return (
+                    <div
+                      key={`ad-${block.data?.id ?? idx}-${idx}`}
+                      className="my-6 w-full overflow-hidden rounded-md shadow-sm"
+                    >
+                      <BannerAdvertisement item={block} Ad={block.data} />
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          ) : (
+            <HtmlParser
+              content={articleData?.content || ""}
+              paragraphAds={advertisementData?.paragraphs || []}
+              middleAds={advertisementData?.middle || []}
+              ad={advertisementData?.middle}
+            />
+          )}
         </div>
 
-        {/* Bottom Advertisement */}
-        {advertisementData?.bottom?.length > 0 && (
-          <div className=" w-full rounded-md overflow-hidden border border-slate-100/80 shadow-sm bg-slate-50/30 my-2">
-            <BannerAdvertisement Ad={advertisementData?.bottom[0]} />
+        {/* Bottom In-Article Advertisements (Only if not already rendered in content) */}
+        {bottomAdsToRender.length > 0 && (
+          <div className="w-full my-6 flex flex-col gap-4">
+            {bottomAdsToRender.map((ad: any, index: number) => (
+              <div
+                key={ad.id ?? index}
+                className="w-full overflow-hidden rounded-md shadow-sm"
+              >
+                <BannerAdvertisement Ad={ad} />
+              </div>
+            ))}
           </div>
         )}
 
@@ -127,7 +193,7 @@ function NewsContent({ Data, commentRef }: any) {
         {/* Feedback Section */}
         <div className="my-8 w-full flex justify-center">
           <div className="flex flex-col md:flex-row gap-6 items-center justify-between bg-slate-50 border border-slate-200/60 rounded-md p-6 md:p-8 w-full shadow-sm">
-            <p className="font-semibold text-lg text-slate-800 ">
+            <p className="font-semibold text-lg text-slate-800">
               Was this article helpful?
             </p>
             <div className="flex flex-wrap items-center gap-3">
@@ -187,7 +253,7 @@ function NewsContent({ Data, commentRef }: any) {
           </div>
         </div>
 
-        {/*Comments Section */}
+        {/* Comments Section */}
         <div ref={commentRef} className="w-full">
           <NewsComment
             articleId={articleData?.id}
@@ -196,13 +262,13 @@ function NewsContent({ Data, commentRef }: any) {
         </div>
       </div>
 
-      {/* Sidebar Area */}
-      {advertisementData?.sidebar?.length > 0 && (
+      {/* Right Column Sidebar Advertisements */}
+      {hasSidebarAds && (
         <div className="lg:w-1/5 w-full flex flex-col gap-6">
           {advertisementData.sidebar.map((ad: any, index: number) => (
             <div
               key={ad.id ?? index}
-              className="w-full aspect-square overflow-hidden rounded-md border border-slate-200/60 shadow-sm"
+              className="w-full aspect-square overflow-hidden rounded-md shadow-sm"
             >
               <SidebarAdvertisement Ad={ad} />
             </div>
@@ -214,4 +280,5 @@ function NewsContent({ Data, commentRef }: any) {
     </div>
   );
 }
+
 export default NewsContent;

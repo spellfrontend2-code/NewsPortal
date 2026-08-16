@@ -15,26 +15,45 @@ function CategoryWithChildren({ category }: { category: any }) {
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
       per_page: defaultPageSize,
+      categoryId: category?.id,
       slug: category?.slug,
+      section_type: "category",
+      section_id: category?.id,
     });
-  const articles =
-    allArticles?.data
-      ?.filter((item: any) => item.type === "article")
-      .map((item: any) => item.data) ?? [];
 
-  const slicedArticles = articles.slice(1);
+  const items = allArticles?.data ?? [];
+
+  // Find first article for top detailed card
+  const firstArticleIndex = items.findIndex(
+    (item: any) => !item.type || item.type === "article"
+  );
+  const firstArticle =
+    firstArticleIndex !== -1
+      ? items[firstArticleIndex]?.data || items[firstArticleIndex]
+      : null;
+
+  const remainingItems =
+    firstArticleIndex !== -1
+      ? items.filter((_: any, idx: number) => idx !== firstArticleIndex)
+      : items;
+
   const advertisementHook = useAdvertisementHooks();
   const { data: advertisements, isLoading: advertisementsLoading } =
-    advertisementHook.useFetchPublicAdvertisements();
-  const advertisementsList = advertisements?.data ?? [];
-  const sidebarAds = advertisementsList?.sidebar?.slice(3, 4);
+    advertisementHook.useFetchPublicAdvertisements({
+      page_type: "home",
+      section_id: category?.id,
+    });
+
+  const sidebarAds = advertisements?.data?.sidebar ?? [];
   const hasSidebarAds = sidebarAds?.length > 0;
+
   if (articleLoading || advertisementsLoading)
     return <CategoryWithChildrenSkeleton />;
+
   return (
-    <div className="flex  gap-4 w-full ">
+    <div className="flex gap-4 w-full">
       <div
-        className={`flex flex-col gap-4 ${hasSidebarAds ? "w-3/4" : "w-full"}`}
+        className={`flex flex-col gap-4 ${hasSidebarAds ? "lg:w-3/4 w-full" : "w-full"}`}
       >
         <div className="h-[10%] flex items-center gap-10 w-full">
           <div className="h-full px-2 w-fit flex">
@@ -46,7 +65,7 @@ function CategoryWithChildren({ category }: { category: any }) {
             </h1>
           </div>
           {category?.children?.length > 0 && (
-            <div className=" border-l border-[var(--color-public-border-strong)] h-full w-4/5 flex gap-4 flex-wrap items-center pl-5">
+            <div className="border-l border-[var(--color-public-border-strong)] h-full w-4/5 flex gap-4 flex-wrap items-center pl-5">
               {category?.children?.map((child: any) => (
                 <h1
                   key={child?.id}
@@ -63,29 +82,43 @@ function CategoryWithChildren({ category }: { category: any }) {
             </div>
           )}
         </div>
+
         <div>
-          <div className="h-[300px] w-full">
-            <ArticleRectangleCard article={articles[0]} type="detailed" />
-          </div>
+          {firstArticle && (
+            <div className="h-[300px] w-full">
+              <ArticleRectangleCard article={firstArticle} type="detailed" />
+            </div>
+          )}
+
           <div
             className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 w-full gap-6 pt-10`}
           >
-            {slicedArticles.map((article: any) => (
-              <div key={article.id} className="h-[320px] w-full bg-transparent">
-                <ArticleSquareCard article={article} />
-              </div>
-            ))}
+            {remainingItems.map((item: any, idx: number) => {
+              if (item?.type === "article") {
+               
+
+              const articleData = item?.data || item;
+              return (
+                <div
+                  key={`art-${articleData?.id ?? idx}-${idx}`}
+                  className="h-[320px] w-full bg-transparent"
+                >
+                  <ArticleSquareCard article={articleData} />
+                </div>
+              );}
+            })}
           </div>
         </div>
       </div>
+
       {hasSidebarAds && (
         <div className="lg:w-1/4 w-full">
-          <div className="h-full w-full flex flex-row lg:flex-col gap-4 ">
+          <div className="h-full w-full flex flex-row lg:flex-col gap-4">
             {sidebarAds.map((ad: any, index: number) => {
               return (
                 <div
                   key={ad.id ?? index}
-                  className=" h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
+                  className="h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
                 >
                   <SidebarAdvertisement Ad={ad} />
                 </div>

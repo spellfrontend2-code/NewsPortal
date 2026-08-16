@@ -1,8 +1,11 @@
 import { useSettingHooks } from "@/features/settings/hooks/useSettings";
+import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
+import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 function Footer() {
   const settingHook = useSettingHooks();
+  const advertisementHook = useAdvertisementHooks();
 
   const { data: companyData, isLoading } = settingHook.useFetchPublicSettings();
 
@@ -11,7 +14,9 @@ function Footer() {
   if (isLoading) return null;
 
   return (
-    <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex justify-center ">
+    <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex flex-col items-center justify-center">
+     
+
       <footer className="w-[80%]">
         {/* Main Footer */}
         <div className="mx-auto grid grid-cols-1 gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">

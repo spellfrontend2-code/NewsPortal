@@ -5,48 +5,77 @@ import { useParams } from "react-router-dom";
 import NewsListSkeleton from "./NewsListSkeleton";
 import { Newspaper } from "lucide-react";
 
-function CategoryBasedNewsList({categorySlug}:{categorySlug?:string}) {
+function CategoryBasedNewsList({
+  categorySlug,
+  categoryId,
+}: {
+  categorySlug?: string;
+  categoryId?: number | string;
+}) {
   const { slug } = useParams();
   const articleHook = useArticlesHooks();
-const defaultPageSize = categorySlug ? 3 : 12;
+  const defaultPageSize = categorySlug ? 3 : 12;
 
-const [pagination, setPagination] = useState({
-  pageIndex: 0,
-  pageSize: defaultPageSize,
-});  const { data: allArticles,isLoading } =articleHook.useFetchPublicArticlesByCategory({
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: defaultPageSize,
+  });
+
+  const effectiveSlug = categorySlug || slug;
+
+  const { data: allArticles, isLoading } =
+    articleHook.useFetchPublicArticlesByCategory({
       page: pagination?.pageIndex + 1,
       per_page: pagination?.pageSize,
-      slug: categorySlug?categorySlug:slug,
+      categoryId,
+      slug: effectiveSlug,
+      section_type: categoryId ? "category" : undefined,
+      section_id: categoryId,
     });
-const articles =
-  allArticles?.data
-    ?.filter((item:any) => item.type === "article")
-    .map((item: any) => item.data) ?? [];
-const name=articles[0]?.categories?.filter((category)=>slug===category.slug || categorySlug===category.slug)[0]?.name
-  if (!isLoading && articles.length === 0 && categorySlug) return null;
+
+  const items = allArticles?.data ?? [];
+
+  // Find category name from first article item
+  const firstArticleItem = items.find(
+    (item: any) => !item.type || item.type === "article"
+  );
+  const firstArticle = firstArticleItem?.data || firstArticleItem;
+  const categoryObj = firstArticle?.categories?.find(
+    (c: any) => c.slug === effectiveSlug || c.slug === slug || c.slug === categorySlug
+  );
+  const name = categoryObj?.name || firstArticle?.category?.name || effectiveSlug;
+
+  if (!isLoading && items.length === 0 && categorySlug) return null;
 
   return (
-    <div className={categorySlug ? " pb-3 border-b border-slate-100 last:border-b-0" : ""}>
+    <div
+      className={
+        categorySlug
+          ? "pb-3 border-b border-slate-100 last:border-b-0 w-full"
+          : "w-full"
+      }
+    >
       {isLoading ? (
         <NewsListSkeleton show={categorySlug ? "list" : "all"} />
-      ) : 
-        articles?.length>0 ? <NewsList
-          articles={articles}
-          page_headline={ name}
+      ) : items.length > 0 ? (
+        <NewsList
+          articles={items}
+          page_headline={name}
           pagination={pagination}
           setPagination={setPagination}
           lastPage={allArticles?.pagination?.last_page}
           show={categorySlug ? "list" : "all"}
-        />:
-        ( <div className="flex flex-col items-center justify-center py-12 px-4"> 
-        <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-slate-100"> 
-          <Newspaper className="w-8 h-8 text-slate-400" /> 
-          </div> 
-          <h3 className="text-lg font-semibold text-slate-700"> No news available </h3> 
-          <p className="mt-1 text-sm text-slate-500 text-center max-w-sm"> 
+        />
+      ) : (
+        <div className="flex flex-col items-center justify-center py-12 px-4">
+          <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-slate-100">
+            <Newspaper className="w-8 h-8 text-slate-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-slate-700">No news available</h3>
+          <p className="mt-1 text-sm text-slate-500 text-center max-w-sm">
             There are currently no news articles available in this category. Please check back later.
-             </p> 
-             </div> 
+          </p>
+        </div>
       )}
     </div>
   );

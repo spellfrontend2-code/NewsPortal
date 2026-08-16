@@ -8,6 +8,9 @@ import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 import Media from "@/pages/Admin/Media/Media";
 import Tags from "@/pages/Admin/Tags/Tags";
 import Advertisements from "@/pages/Admin/Advertisements/Advertisements";
+import AddArticle from "@/features/articles/components/Admin/AddArticle";
+import AddAdvertisement from "@/features/advertisements/components/AddAdvertisement";
+import RolesAndPermissionManagement from "@/features/roles-and-permissions/components/RolesAndPermissionManagement";
 import Settings from "@/pages/Admin/Settings/Settings";
 import RolesAndPermissions from "@/pages/Admin/RolesAndPermissons/RolesAndPermissions";
 import Authors from "@/pages/Admin/Authors/Authors";
@@ -52,6 +55,18 @@ export const router = createBrowserRouter([
             element: <Articles />,
           },
           {
+            path: "articles/create",
+            element: <AddArticle type="add" />,
+          },
+          {
+            path: "articles/:slug/edit",
+            element: <AddArticle type="edit" />,
+          },
+          {
+            path: "articles/edit/:slug",
+            element: <AddArticle type="edit" />,
+          },
+          {
             path: "categories",
             element: <Categories />,
           },
@@ -68,13 +83,36 @@ export const router = createBrowserRouter([
             element: <Advertisements />,
           },
           {
+            path: "advertisements/create",
+            element: <AddAdvertisement type="add" />,
+          },
+          {
+            path: "advertisements/:slug/edit",
+            element: <AddAdvertisement type="edit" />,
+          },
+          {
+            path: "advertisements/edit/:slug",
+            element: <AddAdvertisement type="edit" />,
+          },
+          {
             path: "settings",
             element: <Settings />,
           },
-
           {
             path: "roles-and-permissions",
             element: <RolesAndPermissions />,
+          },
+          {
+            path: "roles-and-permissions/create",
+            element: <RolesAndPermissionManagement type="add" />,
+          },
+          {
+            path: "roles-and-permissions/:slug/edit",
+            element: <RolesAndPermissionManagement type="edit" />,
+          },
+          {
+            path: "roles-and-permissions/edit/:slug",
+            element: <RolesAndPermissionManagement type="edit" />,
           },
           { path: "authors", element: <Authors /> },
           {

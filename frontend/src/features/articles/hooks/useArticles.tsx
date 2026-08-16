@@ -16,6 +16,13 @@ export const useArticlesHooks = () => {
             status,
           }),
         retry: false,
+      })
+    },
+    useFetchAdminSingleArticle: (id: any) => {
+      return useQuery({
+        queryKey: ["admin_single_article", id],
+        queryFn: () => articles.fetchSingleArticle(id),
+        enabled: !!id,
       });
     },
     useCreateArticles: () => {
@@ -103,15 +110,36 @@ export const useArticlesHooks = () => {
       page,
       per_page,
       slug,
+      categoryId,
+      section_type,
+      section_id,
     }: {
       page: number;
       per_page: number;
       slug?: string;
+      categoryId?: number | string;
+      section_type?: string;
+      section_id?: number | string;
     }) => {
       return useQuery({
-        queryKey: ["public_articles_by_category", page, per_page, slug],
+        queryKey: [
+          "public_articles_by_category",
+          page,
+          per_page,
+          slug,
+          categoryId,
+          section_type,
+          section_id,
+        ],
         queryFn: () =>
-          articles.fetchPublicArticlesByCategory({ page, per_page, slug }),
+          articles.fetchPublicArticlesByCategory({
+            page,
+            per_page,
+            slug,
+            categoryId,
+            section_type,
+            section_id,
+          }),
       });
     },
     useFetchPublicSingleArticle: (slug) => {

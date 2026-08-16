@@ -199,7 +199,10 @@ function Sidebar() {
           <hr className="my-4 border-t border-gray-300" />
           <section className="space-y-1.5 flex flex-col w-full ">
             {filteredNavItems?.map((item) => {
-              const isActive = location?.pathname === item?.path ? true : false;
+              const isActive =
+                location?.pathname === item?.path ||
+                (item?.path !== "/admin" &&
+                  location?.pathname?.startsWith(item?.path + "/"));
               return (
                 <Link key={item?.label} to={item?.path}>
                   <div

@@ -24,9 +24,17 @@ export const articleApi = () => {
     };
   }
 },
-    createArticle:async (data) => {
+    fetchSingleArticle: async (id: any) => {
       try {
-        const response = await axiosInstance.post("/admin/articles",data);
+        const response = await axiosInstance.get(`/admin/articles/${id}`);
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
+    createArticle: async (data: any) => {
+      try {
+        const response = await axiosInstance.post("/admin/articles", data);
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;
@@ -87,10 +95,37 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchPublicArticlesByCategory: async ({ page, per_page,slug }: { page: number; per_page: number,slug?:string }) => {
+    fetchPublicArticlesByCategory: async ({
+      page,
+      per_page,
+      slug,
+      categoryId,
+      section_type,
+      section_id,
+    }: {
+      page: number;
+      per_page: number;
+      slug?: string;
+      categoryId?: number | string;
+      section_type?: string;
+      section_id?: number | string;
+    }) => {
       try {
-        const response = await axiosInstance.get(`/articles/category/${slug}`,{
-          params: { page, per_page ,slug}
+        if (section_type === "category" || categoryId || section_id) {
+          const secId = section_id || categoryId;
+          const response = await axiosInstance.get("/articles", {
+            params: {
+              page,
+              per_page,
+              section_type: "category",
+              section_id: secId,
+            },
+          });
+          return response.data;
+        }
+
+        const response = await axiosInstance.get(`/articles/category/${slug}`, {
+          params: { page, per_page, slug },
         });
         return response.data;
       } catch (error: any) {

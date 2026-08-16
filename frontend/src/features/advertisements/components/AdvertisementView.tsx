@@ -1,20 +1,17 @@
-
-import { toDateTimeLocal } from "@/features/articles/utils/toDateTimeLocal";
-
-type Advertisement = any;
+import { ExternalLink, CheckCircle, XCircle, Calendar, Clock, Layers, Maximize2 } from "lucide-react";
 
 interface Props {
-  advertisement: Advertisement;
+  advertisement: any;
 }
 
 function Field({ label, value }: { label: string; value?: any }) {
   return (
     <div className="space-y-1">
-      <p className="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">
+      <p className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
         {label}
       </p>
-      <p className="text-sm text-slate-800 break-words">
-        {value ?? "-"}
+      <p className="text-sm text-gray-800 font-medium break-words">
+        {value !== null && value !== undefined && value !== "" ? String(value) : "—"}
       </p>
     </div>
   );
@@ -23,265 +20,183 @@ function Field({ label, value }: { label: string; value?: any }) {
 export default function AdvertisementView({ advertisement }: Props) {
   if (!advertisement) return null;
 
-  // const advertisementHook = useAdvertisementHooks();
+  const ad = advertisement;
+  const placementObj = ad?.placement && typeof ad.placement === "object" ? ad.placement : {};
 
-  // const statuses = [
-  //   { name: "Active", value: "active" },
-  //   { name: "Paused", value: "paused" },
-  //   { name: "Pending", value: "pending" },
-  //   { name: "Expired", value: "expired" },
-  //   { name: "Completed", value: "completed" },
-  //   { name: "Rejected", value: "rejected" },
-  //   { name: "Draft", value: "draft" },
-  // ];
+  const name = ad?.name || ad?.title || "Untitled Advertisement";
+  const advertiser = ad?.advertiser_name || "—";
+  const mediaType = ad?.media_type || ad?.type || ad?.ad_type || "image";
 
-  // const { control, handleSubmit } = useForm({
-  //   defaultValues: {
-  //     status: advertisement?.status || "pending",
-  //   },
-  // });
+  const imageUrl = ad?.image_url || ad?.image;
+  const videoUrl = ad?.video_url || ad?.video;
+  const videoThumbnail = ad?.video_thumbnail || ad?.thumbnail;
+  const htmlCode = ad?.html_code || ad?.html;
+  const textContent = ad?.text_content || ad?.text;
 
-  // const updateStatus = advertisementHook.useUpdateAdvertisementStatus();
+  const clickUrl = ad?.click_url || ad?.url || ad?.target_url || "";
+  const buttonText = ad?.button_text || ad?.cta || ad?.cta_text || "";
 
-  // const onSubmit = (data: any) => {
-  //   updateStatus.mutate(
-  //     { id: advertisement.id, data },
-  //     {
-  //       onSuccess: (res) => {
-  //         toast.success(res?.message || "Status updated successfully");
-  //       },
-  //       onError: (err) => {
-  //         toast.error(err?.message || "Something went wrong");
-  //       },
-  //     }
-  //   );
-  // };
-console.log("ADTYPE",advertisement.ad_type)
+  const page = ad?.page || placementObj.page || "—";
+  const section = ad?.section || placementObj.section || "—";
+  const where = ad?.where || placementObj.where || ad?.slot?.position_type || "—";
+
+  const categoryId = ad?.category_id ?? placementObj.category_id;
+  const articleId = ad?.article_id ?? placementObj.article_id;
+  const articleNumber = ad?.article_number ?? placementObj.article_number ?? ad?.slot?.article_position;
+  const paragraphNumber = ad?.paragraph_number ?? placementObj.paragraph_number ?? ad?.slot?.paragraph_position;
+
+  const size =
+    ad?.size ||
+    (ad?.slot?.width && ad?.slot?.height ? `${ad.slot.width}×${ad.slot.height} px` : "—");
+
+  const mobileSize =
+    ad?.mobile_size ||
+    (ad?.slot?.mobile_width && ad?.slot?.mobile_height
+      ? `${ad.slot.mobile_width}×${ad.slot.mobile_height} px`
+      : "—");
+
+  const startDate = ad?.start_date || ad?.starts_at?.slice(0, 10) || "—";
+  const endDate = ad?.end_date || ad?.ends_at?.slice(0, 10) || "—";
+  const startTime = ad?.start_time?.slice(0, 5) || ad?.daily_start_time?.slice(0, 5) || "00:00";
+  const endTime = ad?.end_time?.slice(0, 5) || ad?.daily_end_time?.slice(0, 5) || "23:59";
+  const status = ad?.status || "active";
+  const approved = Boolean(ad?.approved);
+
   return (
-    <div className="border border-slate-200 rounded-2xl max-w-5xl mx-auto p-6 space-y-6 bg-slate-50 shadow-sm">
-      {/* <div className="flex items-end gap-3">
-        <div className="flex-1">
-          <label className="text-[11px] text-black uppercase tracking-wider font-bold">
-            Status
-          </label>
-          <Controller
-            control={control}
-            name="status"
-            render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className={inputStyle}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  {statuses.map((status) => (
-                    <SelectItem key={status.value} value={status.value}>
-                      {status.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-
-        <Button
-          type="button"
-          variant="submit"
-          onClick={handleSubmit(onSubmit)}
-          disabled={updateStatus.isPending}
-          className="rounded-md"
-        >
-          {updateStatus.isPending ? "Updating..." : "Update status"}
-        </Button>
-      </div> */}
-
-      {/* HEADER */}
-      <div className="rounded-xl p-6 bg-white shadow-sm space-y-3">
-        <Field label="Title" value={advertisement.title} />
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
-          <Field label="Status" value={advertisement.status} />
-          <Field label="Ad Type" value={advertisement.ad_type} />
-          <Field label="Placement" value={advertisement.placement} />
-          <Field label="Priority" value={advertisement.priority} />
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
-          <Field
-            label="Approved"
-            value={advertisement.approved ? "Yes" : "No"}
-          />
-        </div>
-      </div>
-
-      {/* ADVERTISER */}
-      <div className="rounded-xl p-6 bg-white shadow-sm space-y-3">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black mb-1">
-          Advertiser Information
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <Field label="Advertiser Name" value={advertisement.advertiser_name} />
-          <Field label="Advertiser Email" value={advertisement.advertiser_email} />
-          <Field label="Advertiser Website" value={advertisement.advertiser_website} />
-        </div>
-      </div>
-
-      {/* MEDIA */}
-      <div className="rounded-xl p-6 bg-white shadow-sm space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black">
-          Media Information
-        </h2>
-
-        {(advertisement.ad_type === "image" && advertisement.image_url) && (
-          <div className="space-y-1">
-            <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
-              Image
+    <div className="rounded-2xl max-w-4xl mx-auto space-y-6">
+      {/* Header Info */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">{name}</h2>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Advertiser: <span className="font-semibold text-gray-700">{advertiser}</span>
             </p>
-            <img
-              src={advertisement.image_url}
-              className="rounded-xl max-h-[400px] object-cover w-full border border-slate-200"
-            />
           </div>
-        )}
-
-        {(advertisement.ad_type === "video" && advertisement.video_url) && (
-          <div className="space-y-1">
-            <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
-              Video
-            </p>
-            <video
-              src={advertisement.video_url}
-              className="rounded-xl max-h-[400px] object-cover w-full border border-slate-200"
-              controls
-            />
+          <div className="flex items-center gap-2">
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                status === "active"
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  : status === "paused"
+                  ? "bg-amber-50 text-amber-700 border border-amber-200"
+                  : "bg-gray-100 text-gray-700 border border-gray-200"
+              }`}
+            >
+              {status}
+            </span>
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${
+                approved
+                  ? "bg-blue-50 text-blue-700 border border-blue-200"
+                  : "bg-rose-50 text-rose-700 border border-rose-200"
+              }`}
+            >
+              {approved ? <CheckCircle size={13} /> : <XCircle size={13} />}
+              {approved ? "Approved" : "Pending / Rejected"}
+            </span>
           </div>
-        )}
+        </div>
 
-        {(advertisement.ad_type === "video" && advertisement.video_thumbnail) && (
-          <div className="space-y-1">
-            <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
-              Video Thumbnail
-            </p>
-            <img
-              src={advertisement.video_thumbnail}
-              className="rounded-xl max-h-[400px] object-cover w-full border border-slate-200"
-            />
-          </div>
-        )}
+        {/* Media Preview */}
+        <div className="pt-2 border-t border-gray-100">
+          <p className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+            Creative Preview ({mediaType})
+          </p>
 
-        {(advertisement.ad_type === "html" && advertisement.html_code) && (
-          <div className="space-y-1">
-            <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
-              HTML Code
-            </p>
-            <pre className="text-xs bg-slate-50 border border-slate-200 rounded-xl p-4 overflow-x-auto whitespace-pre-wrap break-words">
-              {advertisement.html_code}
+          {mediaType === "image" && imageUrl && (
+            <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center p-2 max-h-[300px]">
+              <img
+                src={typeof imageUrl === "string" ? imageUrl : imageUrl.file_url}
+                alt={name}
+                className="max-h-[280px] object-contain rounded-lg"
+              />
+            </div>
+          )}
+
+          {mediaType === "video" && videoUrl && (
+            <div className="rounded-xl overflow-hidden border border-gray-200 bg-black flex items-center justify-center max-h-[300px]">
+              <video
+                src={typeof videoUrl === "string" ? videoUrl : videoUrl.file_url}
+                poster={
+                  videoThumbnail
+                    ? typeof videoThumbnail === "string"
+                      ? videoThumbnail
+                      : videoThumbnail.file_url
+                    : undefined
+                }
+                controls
+                className="max-h-[280px] w-full"
+              />
+            </div>
+          )}
+
+          {mediaType === "html" && htmlCode && (
+            <pre className="text-xs bg-gray-900 text-emerald-400 p-4 rounded-xl font-mono overflow-x-auto max-h-[200px]">
+              {htmlCode}
             </pre>
-          </div>
-        )}
+          )}
 
-        {advertisement.ad_type === "text" && <Field label="Text Content" value={advertisement.text_content} />}
-      </div>
+          {mediaType === "text" && textContent && (
+            <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-800">
+              {textContent}
+            </div>
+          )}
 
-      {/* CALL TO ACTION */}
-      <div className="rounded-xl p-6 bg-white shadow-sm space-y-3">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black">
-          Call To Action
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <Field label="Target URL" value={advertisement.target_url} />
-          <Field label="Target Blank" value={advertisement.target_blank} />
+          {/* Click URL */}
+          {clickUrl && (
+            <div className="mt-3 flex items-center gap-2 text-xs">
+              <span className="font-semibold text-gray-500">Destination:</span>
+              <a
+                href={clickUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 hover:underline flex items-center gap-1 font-medium"
+              >
+                {clickUrl}
+                <ExternalLink size={12} />
+              </a>
+              {buttonText && (
+                <span className="ml-auto px-2 py-0.5 rounded bg-gray-100 text-gray-700 font-semibold text-[11px]">
+                  CTA: {buttonText}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* TARGETING */}
-      <div className="rounded-xl p-6 bg-white shadow-sm space-y-3">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black">
-          Targeting Information
-        </h2>
+      {/* Placement Details */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+          <Layers size={14} className="text-purple-600" />
+          Placement Configuration
+        </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Field
-            label="Target Countries"
-            value={
-              advertisement.target_countries?.length
-                ? advertisement.target_countries.join(", ")
-                : "-"
-            }
-          />
-          <Field
-            label="Target Devices"
-            value={
-              advertisement.target_devices?.length
-                ? advertisement.target_devices.join(", ")
-                : "-"
-            }
-          />
-          <Field
-            label="Target Audiences"
-            value={
-              advertisement.target_audiences?.length
-                ? advertisement.target_audiences.join(", ")
-                : "-"
-            }
-          />
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <Field label="Page" value={page} />
+          <Field label="Section" value={section} />
+          <Field label="Placement (Where)" value={where} />
+          {categoryId && <Field label="Category ID" value={categoryId} />}
+          {articleId && <Field label="Article ID" value={articleId} />}
+          {articleNumber && <Field label="Article Number (#)" value={articleNumber} />}
+          {paragraphNumber && <Field label="Paragraph Number (#)" value={paragraphNumber} />}
         </div>
       </div>
 
-      {/* SCHEDULE */}
-      <div className="rounded-xl p-6 bg-white shadow-sm space-y-3">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black">
-          Schedule
-        </h2>
+      {/* Sizing & Schedule */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+        <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+          <Calendar size={14} className="text-emerald-600" />
+          Size & Schedule
+        </h3>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Field
-            label="Starts At"
-            value={
-              advertisement.starts_at
-                ? toDateTimeLocal(advertisement.starts_at).replace("T", " ")
-                : "-"
-            }
-          />
-          <Field
-            label="Ends At"
-            value={
-              advertisement.ends_at
-                ? toDateTimeLocal(advertisement.ends_at).replace("T", " ")
-                : "-"
-            }
-          />
-          <Field
-            label="Daily Start Time"
-            value={
-              advertisement.daily_start_time
-                ? advertisement.daily_start_time.slice(0, 5)
-                : "-"
-            }
-          />
-          <Field
-            label="Daily End Time"
-            value={
-              advertisement.daily_end_time
-                ? advertisement.daily_end_time.slice(0, 5)
-                : "-"
-            }
-          />
-        </div>
-      </div>
-
-      {/* PRICING */}
-      <div className="rounded-xl p-6 bg-white shadow-sm">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-black mb-4">
-          Pricing Information
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Field label="Pricing Model" value={advertisement.pricing_model} />
-          <Field label="Price" value={advertisement.price} />
-          <Field label="Daily Budget" value={advertisement.daily_budget} />
-          <Field label="Total Budget" value={advertisement.total_budget} />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <Field label="Primary Size" value={size} />
+          <Field label="Mobile Size" value={mobileSize || "Default"} />
+          <Field label="Start Date" value={startDate} />
+          <Field label="End Date" value={endDate} />
+          <Field label="Daily Window" value={`${startTime} — ${endTime}`} />
         </div>
       </div>
     </div>

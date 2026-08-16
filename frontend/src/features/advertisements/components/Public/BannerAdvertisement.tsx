@@ -1,57 +1,113 @@
-import { Link } from "react-router-dom";
-import HtmlAd from "./HtmlAd";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
-import { toast } from "sonner";
 import { useAdImpression } from "../../hooks/useAdImpression";
+import HtmlAd from "./HtmlAd";
 
-function BannerAdvertisement({ Ad }: { Ad: any }) {
+interface BannerAdvertisementProps {
+  Ad?: any;
+  item?: any;
+  className?: string;
+  objectFit?: "cover" | "contain" | "fill";
+}
+
+function BannerAdvertisement({
+  Ad: propAd,
+  item,
+  className = "",
+  objectFit = "cover",
+}: BannerAdvertisementProps) {
+  // Normalize Ad data whether passed directly or wrapped in feed item
+  const rawAd = item?.data || propAd;
+  if (!rawAd) return null;
+
+  const slot = item?.slot || rawAd?.slot || {};
+
+  const adId = rawAd.id;
+  const adType = rawAd.type || rawAd.media_type || "image";
+  const title = rawAd.title || rawAd.name || "Advertisement";
+  const destinationUrl = rawAd.url || rawAd.click_url || "#";
+  const target = rawAd.target || (rawAd.open_in_new_tab ? "_blank" : "_blank");
+  const ctaText = rawAd.cta || rawAd.button_text || "";
+
+  const imageUrl = rawAd.image || rawAd.image_url;
+  const videoUrl = rawAd.video || rawAd.video_url;
+  const videoThumbnail = rawAd.thumbnail || rawAd.video_thumbnail;
+  const htmlCode = rawAd.html || rawAd.html_code;
+  const textContent = rawAd.text || rawAd.text_content;
+
   const adRef = useAdImpression({
-    adId: Ad?.id,
+    adId,
   });
+
   const advertisementHook = useAdvertisementHooks();
   const trackAdClick = advertisementHook.useTrackPublicAdClick();
-  const handleAdClick = (advertisement_id: number) => {
-    trackAdClick.mutate(advertisement_id, {
-      onSuccess: (res) => {
-        // toast.success(res?.message || "Advertisement clicked successfully");
-      },
+
+  const handleAdClick = () => {
+    if (!adId) return;
+    trackAdClick.mutate(adId, {
       onError: (e: any) => {
-        toast.error(e?.message || "Something went wrong");
+        console.warn("Click tracking error:", e);
       },
     });
   };
+
+  const fitClass =
+    objectFit === "fill"
+      ? "object-fill"
+      : objectFit === "contain"
+      ? "object-contain"
+      : "object-cover";
+
   return (
-    <div className="h-full w-full" ref={adRef}>
-      <Link
-        to={Ad?.url}
-        target={Ad?.target}
-        onClick={() => handleAdClick(Ad?.id)}
+    <div
+      ref={adRef}
+      className={`w-full h-full overflow-hidden flex items-center justify-center relative ${className}`}
+    >
+      <a
+        href={destinationUrl}
+        target={target}
+        rel="noopener noreferrer"
+        onClick={handleAdClick}
+        className="w-full h-full flex items-center justify-center group block"
       >
-        {Ad?.type === "image" && (
+        {adType === "image" && imageUrl && (
           <img
-            src={Ad?.image}
-            alt={Ad?.title}
-            className="h-[100px] w-full object-fill"
+            src={imageUrl}
+            alt={title}
+            className={`w-full h-auto max-h-[300px] ${fitClass} rounded-md transition-opacity duration-200 group-hover:opacity-95 block`}
+            style={slot?.height ? { maxHeight: `${slot.height}px` } : undefined}
           />
         )}
 
-        {Ad?.type === "video" && (
+        {adType === "video" && videoUrl && (
           <video
-            src={Ad?.video}
+            src={videoUrl}
+            poster={videoThumbnail || undefined}
             autoPlay
             muted
             loop
+            playsInline
             disablePictureInPicture
-            className="h-[100px] w-full object-fill "
+            className={`w-full h-full ${fitClass} rounded-md block`}
           />
         )}
 
-        {Ad?.type === "html" && <HtmlAd html={Ad?.html} />}
-
-        {Ad?.type === "text" && (
-          <p className="bg-gray-100 h-[100px] w-full">{Ad?.text}</p>
+        {adType === "html" && htmlCode && (
+          <div className="w-full h-full">
+            <HtmlAd html={htmlCode} />
+          </div>
         )}
-      </Link>
+
+        {adType === "text" && textContent && (
+          <div className="w-full h-full p-4 rounded-md bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-800">
+            <p className="text-sm font-medium leading-relaxed">{textContent}</p>
+            {ctaText && (
+              <span className="px-4 py-1.5 rounded-lg bg-[var(--color-primary)] text-white text-xs font-semibold shrink-0 group-hover:opacity-90 transition-opacity">
+                {ctaText}
+              </span>
+            )}
+          </div>
+        )}
+      </a>
     </div>
   );
 }

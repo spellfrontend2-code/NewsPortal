@@ -15,14 +15,36 @@ import { FormProvider } from "react-hook-form";
 import ArticleMediaSection from "./forms/ArticleMediaSection";
 import { toast } from "sonner";
 import UploadDialogBox from "@/features/media/components/UploadDialogBox";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-function AddArticle({ setOpen, article, type }: any) {
-const methods = useArticleForm({article,type});
+function AddArticle({ setOpen, article: propArticle, type: propType }: any) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { slug, id } = useParams();
+  const paramIdentifier = slug || id;
+
   const articleHook = useArticlesHooks();
+  const type =
+    propType ||
+    (paramIdentifier || location.pathname.includes("/edit") ? "edit" : "add");
+
+  const { data: fetchedArticleData, isLoading: isFetchingArticle } =
+    articleHook.useFetchAdminSingleArticle(
+      type === "edit" && !propArticle && !location.state?.article ? paramIdentifier : undefined
+    );
+
+  const article =
+    propArticle ||
+    location.state?.article ||
+    fetchedArticleData?.data?.article ||
+    fetchedArticleData?.data ||
+    fetchedArticleData;
+
+  const methods = useArticleForm({ article, type });
   const createArticle = articleHook.useCreateArticles();
   const updateArticle = articleHook.useUpdateArticles();
   const [uploadOpen, setUploadOpen] = useState(false);
-    const [uploadType, setUploadType] = useState<"image" | "video">("image");
+  const [uploadType, setUploadType] = useState<"image" | "video">("image");
 
   const isPending =
     type === "edit" ? updateArticle.isPending : createArticle.isPending;
@@ -38,6 +60,14 @@ const methods = useArticleForm({article,type});
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleBack = () => {
+    if (setOpen) {
+      setOpen(false);
+    } else {
+      navigate("/admin/articles");
+    }
+  };
 
   useEffect(() => {
     if (!article) return;
@@ -64,27 +94,35 @@ const methods = useArticleForm({article,type});
         : "",
     });
   }, [article, methods.reset]);
+
   const onSubmit = (data: any) => {
     const payload = {
       ...data,
-      is_head_line_news: data?.is_headline_news===true?1:0,
+      is_head_line_news: data?.is_headline_news === true ? 1 : 0,
       display_type: data?.headline_display_type,
       order: data?.headline_order,
-      thumbnail:(data?.media_type==="video" || data?.media_type==="youtube")? data?.thumbnail?.file_path:null,
-      featured_image:data?.media_type==="image"? data?.featured_image?.file_path:null,
-      video_url:data?.media_type==="video"? data?.video_url?.file_path:null,
-      youtube_url:data?.media_type==="youtube"? data?.youtube_url:null,
+      thumbnail:
+        data?.media_type === "video" || data?.media_type === "youtube"
+          ? data?.thumbnail?.file_path
+          : null,
+      featured_image:
+        data?.media_type === "image" ? data?.featured_image?.file_path : null,
+      video_url:
+        data?.media_type === "video" ? data?.video_url?.file_path : null,
+      youtube_url:
+        data?.media_type === "youtube" ? data?.youtube_url : null,
       tags: (selectedTags ?? []).map((tag: any) => tag.id),
       categories: (selectedCategories ?? []).map(
         (category: any) => category.id,
       ),
     };
     if (type === "edit") {
+      const targetId = article?.id || location.state?.article?.id || paramIdentifier;
       updateArticle.mutate(
-        { id: article?.id, data: payload },
+        { id: targetId, data: payload },
         {
           onSuccess: (res) => {
-            setOpen(false);
+            handleBack();
             toast.success(res?.message || "Article updated successfully");
           },
           onError: (e) => {
@@ -95,7 +133,7 @@ const methods = useArticleForm({article,type});
     } else {
       createArticle.mutate(payload, {
         onSuccess: (res) => {
-          setOpen(false);
+          handleBack();
           toast.success(res?.message || "Article added successfully");
         },
         onError: (e) => {
@@ -105,53 +143,79 @@ const methods = useArticleForm({article,type});
     }
   };
 
+  if (type === "edit" && isFetchingArticle && !article) {
+    return (
+      <div className="w-full h-full flex items-center justify-center p-20">
+        <div className="flex flex-col items-center gap-3">
+          <span className="h-8 w-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-500 font-medium">Loading article details...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div >
-            <div className="flex items-center gap-5 rounded-lg p-4">
+    <div className="w-full h-full overflow-y-auto px-20 py-10 flex flex-col gap-5">
+      <div className="flex items-center gap-5 rounded-lg p-4">
         <Button
           variant="ghost"
           className="h-8 w-8 cursor-pointer border border-[var(--color-secondary)] rounded-full text-[var(--color-primary)] hover:border-[var(--color-primary)] hover:shadow-md hover:shadow-[rgb(var(--color-primary-rgb)/0.3)]"
-          onClick={() => setOpen(false)}
+          onClick={handleBack}
         >
           <ArrowLeft />
         </Button>
-        <div><p className="text-2xl font-bold text-[var(--color-primary)]">
-          {type === "edit" ? "Edit Article":type==="view"?"View Article" : "Add Article"}
-        </p>
-        <p className="text-sm text-[rgb(var(--color-gray-rgb)/0.7)]">
-          {type === "edit"
-            ? "Edit an existing article.":type==="view"?"View an existing article."
-            : "Create a new article."}
-        </p>
+        <div>
+          <p className="text-2xl font-bold text-[var(--color-primary)]">
+            {type === "edit"
+              ? "Edit Article"
+              : type === "view"
+                ? "View Article"
+                : "Add Article"}
+          </p>
+          <p className="text-sm text-[rgb(var(--color-gray-rgb)/0.7)]">
+            {type === "edit"
+              ? "Edit an existing article."
+              : type === "view"
+                ? "View an existing article."
+                : "Create a new article."}
+          </p>
         </div>
       </div>
       <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="shadow-lg rounded-xl p-10">
-        <ArticleBasicInfo />
-        <ArticleContent   />
-        <ArticleMediaSection setUploadType={setUploadType} setUploadOpen={setUploadOpen}/>
-        <ArticleHeadlineSection/>
-        <ArticleExtraInfo     />
-        <ArticleSeoSection   />
-        <ArticleCategoriesTags
-          selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-        />
-       {type!=="view" && <ArticleActions
-          isPending={isPending}
-          buttonText={buttonText}
-          onCancel={() => setOpen(false)}
-        />}
-      </form>
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="shadow-lg rounded-xl p-10 bg-white"
+        >
+          <ArticleBasicInfo />
+          <ArticleContent />
+          <ArticleMediaSection
+            setUploadType={setUploadType}
+            setUploadOpen={setUploadOpen}
+          />
+          <ArticleHeadlineSection />
+          <ArticleExtraInfo />
+          <ArticleSeoSection />
+          <ArticleCategoriesTags
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+          />
+          {type !== "view" && (
+            <ArticleActions
+              isPending={isPending}
+              buttonText={buttonText}
+              onCancel={handleBack}
+            />
+          )}
+        </form>
       </FormProvider>
-        <UploadDialogBox
-          openUpload={uploadOpen}
-          setOpenUpload={setUploadOpen}
-          quantity="single"
-          type={uploadType}
-        />
+      <UploadDialogBox
+        openUpload={uploadOpen}
+        setOpenUpload={setUploadOpen}
+        quantity="single"
+        type={uploadType}
+      />
     </div>
   );
 }
