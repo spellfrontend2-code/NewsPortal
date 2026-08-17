@@ -61,14 +61,15 @@ function BannerAdvertisement({
   // Dimensions from backend, with slot fallback
   const adWidth = rawAd.width || slot?.width;
   const adHeight = rawAd.height || slot?.height;
+  const adMobileWidth = rawAd.mobile_width;
+  const adMobileHeight = rawAd.mobile_height;
 
   // The inner ad is sized by backend dimensions; max-w-full keeps
-  // it responsive horizontally, and max-h-[150px] caps the height.
+  // it responsive horizontally, and aspect-ratio keeps the height proportional.
   const innerStyle: React.CSSProperties = {
-    ...(adWidth ? { width: `${adWidth}px` } : { width: "100%" }),
-    ...(adHeight ? { height: `${adHeight}px` } : { height: "100%" }),
-    maxWidth: "100%",
-    maxHeight: "150px",
+    ...(adWidth ? { width: "100%", maxWidth: `${adWidth}px` } : { width: "100%" }),
+    ...(adHeight ? { height: "auto", maxHeight: `${adHeight}px` } : { height: "100%" }),
+    ...(adWidth && adHeight ? { aspectRatio: `${adWidth} / ${adHeight}` } : {}),
   };
 
   return (
@@ -82,7 +83,7 @@ function BannerAdvertisement({
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="flex items-center justify-center overflow-hidden block"
+        className="flex items-center justify-center overflow-hidden"
         style={innerStyle}
       >
         {adType === "image" && imageUrl && (
