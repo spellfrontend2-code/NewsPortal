@@ -75,7 +75,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
       }}
     >
       {/* Consistent 4:3 Thumbnail matching container height */}
-      <div className="h-full aspect-[4/3] max-w-[40%] shrink-0 overflow-hidden rounded-md bg-slate-100 relative">
+      <div className="h-full aspect-[4/3] w-[120px] sm:w-[160px] shrink-0 overflow-hidden rounded-md bg-slate-100 relative">
         <img
           src={imageSrc}
           alt={article?.title || "News thumbnail"}
@@ -86,7 +86,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
 
       {/* Content Area with Dynamic Typography Scaling */}
       <div className="flex-1 min-w-0 h-full flex flex-col justify-center py-1">
-        <h4 className="text-sm sm:text-base md:text-lg sm:text-base font-bold text-slate-900 line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
+        <h4 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
           {article?.title}
         </h4>
 

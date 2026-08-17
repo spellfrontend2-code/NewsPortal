@@ -3,6 +3,7 @@ import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvert
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CategoryWithChildrenSkeleton from "./CategoryWithChildrenSkeleton";
 
@@ -48,18 +49,19 @@ function CategoryWithChildren({ category }: { category: any }) {
     return <CategoryWithChildrenSkeleton />;
 
   return (
-    <div className="flex gap-4 w-full">
+    <div className="flex flex-col lg:flex-row gap-6 w-full">
       <div
         className={`flex flex-col gap-4 ${hasSidebarAds ? "lg:w-3/4 w-full" : "w-full"}`}
       >
         <div className="h-[10%] flex items-center gap-10 w-full">
-          <div className="h-full px-2 w-fit flex">
+          <div className="h-full px-2 w-fit flex items-center gap-3">
             <h1
               className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
               onClick={() => navigate(`/news-list/category/${category?.slug}`)}
             >
               {category?.name}
             </h1>
+         
           </div>
           {category?.children?.length > 0 && (
             <div className="border-l border-[var(--color-public-border-strong)] h-full w-4/5 flex gap-4 flex-wrap items-center pl-5">
@@ -78,11 +80,17 @@ function CategoryWithChildren({ category }: { category: any }) {
               ))}
             </div>
           )}
+             <button
+              onClick={() => navigate(`/news-list/category/${category?.slug}`)}
+              className="cursor-pointer flex items-center justify-center w-8 h-8 mb-2 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+            >
+              <ChevronRight size={20} strokeWidth={2.5} />
+            </button>
         </div>
 
         <div>
           {firstArticle && (
-            <div className="h-[300px] w-full">
+            <div className="h-auto md:h-[300px] w-full">
               <ArticleRectangleCard article={firstArticle} type="detailed" />
             </div>
           )}
@@ -115,7 +123,7 @@ function CategoryWithChildren({ category }: { category: any }) {
               return (
                 <div
                   key={ad.id ?? index}
-                  className="h-[160px] w-full overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
+                  className="w-full aspect-square overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
                 >
                   <SidebarAdvertisement Ad={ad} />
                 </div>

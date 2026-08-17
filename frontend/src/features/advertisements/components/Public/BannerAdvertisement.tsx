@@ -1,3 +1,4 @@
+import React from "react";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 import { useAdImpression } from "../../hooks/useAdImpression";
 import HtmlAd from "./HtmlAd";
@@ -57,24 +58,38 @@ function BannerAdvertisement({
       ? "object-contain"
       : "object-cover";
 
+  // Dimensions from backend, with slot fallback
+  const adWidth = rawAd.width || slot?.width;
+  const adHeight = rawAd.height || slot?.height;
+
+  // The inner ad is sized by backend dimensions; max-w-full keeps
+  // it responsive horizontally, and max-h-[150px] caps the height.
+  const innerStyle: React.CSSProperties = {
+    ...(adWidth ? { width: `${adWidth}px` } : { width: "100%" }),
+    ...(adHeight ? { height: `${adHeight}px` } : { height: "100%" }),
+    maxWidth: "100%",
+    maxHeight: "150px",
+  };
+
   return (
+    // Outer: full width/height, centers the fixed-size ad horizontally/vertically
     <div
       ref={adRef}
-      className={`w-full h-full overflow-hidden flex items-center justify-center relative ${className}`}
+      className={`w-full h-full flex flex-col items-center justify-center relative ${className}`}
     >
       <a
         href={destinationUrl}
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="w-full h-full flex items-center justify-center group block"
+        className="flex items-center justify-center overflow-hidden block"
+        style={innerStyle}
       >
         {adType === "image" && imageUrl && (
           <img
             src={imageUrl}
             alt={title}
-            className={`w-full h-auto max-h-[300px] ${fitClass} rounded-md transition-opacity duration-200 group-hover:opacity-95 block`}
-            style={slot?.height ? { maxHeight: `${slot.height}px` } : undefined}
+            className={`w-full h-full ${fitClass} rounded-md transition-opacity duration-200 group-hover:opacity-95 block`}
           />
         )}
 

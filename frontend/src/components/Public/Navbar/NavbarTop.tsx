@@ -27,11 +27,21 @@ function NavbarTop() {
         </div>
 
         {/* Header Ad  */}
-        {headerAd && (
-          <div className=" sm:flex h-full flex-1 overflow-hidden rounded-md border border-[var(--color-public-border-light)]">
-            <BannerAdvertisement Ad={headerAd} />
-          </div>
-        )}
+   {headerAd && (
+  // <div
+  //   className="flex w-[var(--ad-mobile-width)] h-[var(--ad-mobile-height)] md:w-[var(--ad-width)] md:h-[var(--ad-height)] overflow-hidden rounded-md border border-[var(--color-public-border-light)]"
+  //   style={
+  //     {
+  //       "--ad-width": `${headerAd?.width}px`,
+  //       "--ad-height": `${headerAd?.height}px`,
+  //       "--ad-mobile-width": `${headerAd?.mobile_width}px`,
+  //       "--ad-mobile-height": `${headerAd?.mobile_height}px`,
+  //     } as React.CSSProperties
+  //   }
+  // >
+    <BannerAdvertisement Ad={headerAd} />
+  // </div>
+)}
       </div>
     </div>
   );

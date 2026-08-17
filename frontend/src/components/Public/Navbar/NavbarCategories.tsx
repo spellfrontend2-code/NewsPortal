@@ -24,7 +24,13 @@ function NavbarCategories() {
   const { setAuthData } = useAuthStore();
   const [search, setSearch] = useState("");
   const authHook = useAuthHooks();
-  const { data: profile } = authHook.useFetchProfile();
+const authData = JSON.parse(localStorage.getItem("auth") || "null");
+const accessToken = authData?.accessToken;
+
+const { data: profile } = authHook.useFetchProfile({
+  enabled: !!accessToken,
+});
+
   const profileData = profile?.data ?? [];
   const categoryHook = useCategoriesHooks();
   const [loginOpen, setLoginOpen] = useState(false);

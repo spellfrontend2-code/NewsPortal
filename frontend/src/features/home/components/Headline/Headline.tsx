@@ -29,12 +29,23 @@ function Headline() {
           ))
         : rawItems.map((item: any, idx: number) => {
             if (item?.type === "advertisement") {
+              const ad = item?.data;
+
               return (
                 <div
-                  key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                  className="w-full my-2 overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
+                  key={`ad-${ad?.id ?? idx}-${idx}`}
+                  className="flex w-full justify-center overflow-hidden rounded-md"
+                  style={
+                    {
+                      "--ad-width": `${ad?.width}px`,
+                      "--ad-height": `${ad?.height}px`,
+                      "--ad-mobile-width": `${ad?.mobile_width}px`,
+                      "--ad-mobile-height": `${ad?.mobile_height}px`,
+                    } as React.CSSProperties
+                  }
                 >
-                  <BannerAdvertisement item={item} />
+             
+                    <BannerAdvertisement item={item} />
                 </div>
               );
             }

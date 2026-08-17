@@ -30,12 +30,17 @@ export const useAuthHooks = () => {
         },
       });
     },
-    useFetchProfile: () => {
-      return useQuery({
-        queryFn: () => auth.FetchProfile(),
-        queryKey: ["user"],
-      });
-    },
+useFetchProfile: (options = {}) => {
+  const authData = JSON.parse(localStorage.getItem("auth") || "null");
+  const hasAccessToken = !!authData?.accessToken;
+
+  return useQuery({
+    ...options,
+    queryKey: ["profile"],
+    queryFn: auth.FetchProfile,
+    enabled: hasAccessToken && (options.enabled ?? true),
+  });
+},
     useCreatePublicUser: () => {
       return useMutation({
         mutationFn: (data: any) => auth.CreatePublicUser(data),

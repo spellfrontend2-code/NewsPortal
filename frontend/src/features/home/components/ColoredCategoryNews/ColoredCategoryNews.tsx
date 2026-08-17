@@ -1,6 +1,7 @@
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ColoredCategoryNewsSkeleton from "./ColoredCategoryNewsSkeleton";
 
@@ -48,15 +49,23 @@ function ColoredCategoryNews({
       }}
     >
       <div className="w-full flex flex-col h-full">
-        <h1
-          className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
-          onClick={() => navigate(`/news-list/category/${category?.slug}`)}
-        >
-          {category?.name}
-        </h1>
+        <div className="flex items-center justify-between pb-2">
+          <h1
+            className={`text-2xl cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
+            onClick={() => navigate(`/news-list/category/${category?.slug}`)}
+          >
+            {category?.name}
+          </h1>
+          <button
+            onClick={() => navigate(`/news-list/category/${category?.slug}`)}
+            className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+          >
+            <ChevronRight size={20} strokeWidth={2.5} />
+          </button>
+        </div>
 
-        <div className="flex flex-col lg:flex-row w-full h-[95%] gap-6">
-          <div className="lg:flex-[2] min-w-0 lg:h-[600px]">
+        <div className="flex flex-col lg:flex-row w-full gap-6">
+          <div className="lg:flex-[2] min-w-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
             {firstArticle && (
               <ArticleSquareCard
                 article={firstArticle}
@@ -73,7 +82,7 @@ function ColoredCategoryNews({
 
                 const article = item?.data || item;
                 return (
-                  <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[105px]">
+                  <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[100px] sm:h-[120px] lg:h-[115px]">
                     <ArticleRectangleCard article={article} />
                   </div>
                 );}

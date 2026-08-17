@@ -1,5 +1,6 @@
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import MultiCategoryInOneRowSkeleton from "./MultiCategoryInOneRowSkeleton";
@@ -42,16 +43,24 @@ function MultiCategoryInOneRow({
   if (categoryOneArticlesLoading || categoryTwoArticlesLoading)
     return <MultiCategoryInOneRowSkeleton />;
   return (
-    <div className="flex gap-4 w-full">
-      <div className="flex gap-6 w-full">
-        <div className="w-2/3">
-          <h1
-            className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
-            onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
-          >
-            {categoryOne?.name}
-          </h1>
-          <div className="grid grid-cols-2 gap-4">
+    <div className="w-full">
+      <div className="flex flex-col lg:flex-row gap-6 w-full">
+        <div className="w-full lg:w-2/3">
+          <div className="flex items-center justify-between pb-2">
+            <h1
+              className={`text-2xl cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
+              onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
+            >
+              {categoryOne?.name}
+            </h1>
+            <button
+              onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
+              className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+            >
+              <ChevronRight size={20} strokeWidth={2.5} />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {itemsOne.map((item: any, idx: number) => {
               if (item?.type === "article") {
               
@@ -66,13 +75,21 @@ function MultiCategoryInOneRow({
           </div>
         </div>
 
-        <div className="w-1/3">
-          <h1
-            className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
-            onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
-          >
-            {categoryTwo?.name}
-          </h1>
+        <div className="w-full lg:w-1/3">
+          <div className="flex items-center justify-between pb-2">
+            <h1
+              className={`text-2xl cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
+              onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
+            >
+              {categoryTwo?.name}
+            </h1>
+            <button
+              onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
+              className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+            >
+              <ChevronRight size={20} strokeWidth={2.5} />
+            </button>
+          </div>
           <div className="flex flex-col gap-4">
             {itemsTwo.map((item: any, idx: number) => {
               if (item?.type === "article") {

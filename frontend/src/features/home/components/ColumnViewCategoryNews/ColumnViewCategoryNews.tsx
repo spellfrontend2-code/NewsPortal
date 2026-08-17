@@ -2,6 +2,7 @@ import SidebarAdvertisement from "@/features/advertisements/components/Public/Si
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ColumnViewCategoryNewsSkeleton from "./ColumnViewCategoryNewsSkeleton";
 
@@ -35,19 +36,28 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
   }
 
   return (
-    <div className="w-full flex flex-col gap-3 py-5">
+    <div className="w-full flex flex-col lg:flex-row gap-6 py-5">
+      <div className="w-full flex flex-col gap-3 py-5">
       {/* Category Heading */}
-      <h1
-        className="text-2xl pb-2 cursor-pointer uppercase font-bold
-        hover:text-[var(--color-public-text-accent-hover)]
-        text-[var(--color-public-text-accent)]
-        transition-all duration-200 tracking-tight"
-        onClick={() =>
-          navigate(`/news-list/category/${category?.slug}`)
-        }
-      >
-        {category?.name}
-      </h1>
+      <div className="flex items-center justify-between pb-2">
+        <h1
+          className="text-2xl cursor-pointer uppercase font-bold
+          hover:text-[var(--color-public-text-accent-hover)]
+          text-[var(--color-public-text-accent)]
+          transition-all duration-200 tracking-tight"
+          onClick={() =>
+            navigate(`/news-list/category/${category?.slug}`)
+          }
+        >
+          {category?.name}
+        </h1>
+        <button
+          onClick={() => navigate(`/news-list/category/${category?.slug}`)}
+          className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+        >
+          <ChevronRight size={20} strokeWidth={2.5} />
+        </button>
+      </div>
 
       {/* Content */}
       <div className="flex lg:flex-row flex-col gap-6 w-full">
@@ -70,7 +80,10 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
           })}
         </div>
 
-        {/* Advertisements Sidebar */}
+        
+      </div>
+    </div>
+    {/* Advertisements Sidebar */}
         {hasSidebarAds && (
           <div className="lg:w-1/5 w-full">
             <div className="w-full flex flex-col md:flex-row lg:flex-col gap-5">
@@ -87,7 +100,6 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
             </div>
           </div>
         )}
-      </div>
     </div>
   );
 }

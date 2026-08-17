@@ -5,6 +5,7 @@ import CategoryBasedNewsList from "@/features/articles/components/Public/NewsLis
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
 import CategoryWithChildren from "@/features/home/components/CategoryWithChildren/CategoryWithChildren";
 import ColoredCategoryNews from "@/features/home/components/ColoredCategoryNews/ColoredCategoryNews";
+import ColoredHoverCategoryNews from "@/features/home/components/ColoredHoverCategoryNews/ColoredHoverCategoryNews";
 import ColumnViewCategoryNews from "@/features/home/components/ColumnViewCategoryNews/ColumnViewCategoryNews";
 import ColumnViewMultiCategoryNews from "@/features/home/components/ColumnViewMultiCategoryNews/ColumnViewMultiCategoryNews";
 import Headline from "@/features/home/components/Headline/Headline";
@@ -45,19 +46,24 @@ function Home() {
             <ColoredCategoryNews category={categories?.data[3]} color="#D2E7FE" />
           </CategorySectionBanner>
           <CategorySectionBanner category={categories?.data[4]}>
-            <ColumnViewCategoryNews category={categories?.data[4]} />
+            <ColoredHoverCategoryNews category={categories?.data[4]} color="transparent" />
           </CategorySectionBanner>
           <CategorySectionBanner category={categories?.data[5]}>
+            <ColumnViewCategoryNews category={categories?.data[5]} />
+          </CategorySectionBanner>
+          <CategorySectionBanner category={categories?.data[6]}>
             <ColumnViewMultiCategoryNews
-              categoryOne={categories?.data[5]}
-              categoryTwo={categories?.data[6]}
+              categoryOne={categories?.data[6]}
+              categoryTwo={categories?.data[7]}
             />
           </CategorySectionBanner>
-
-          {categories?.data?.length > 7 && (
+ <CategorySectionBanner category={categories?.data[8]}>
+            <ColoredHoverCategoryNews category={categories?.data[8]} color="#1f1e1e" />
+          </CategorySectionBanner>
+          {categories?.data?.length > 9 && (
             <div className="flex flex-col w-full">
               <div>
-                {categories?.data?.slice(7)?.map((category: any) => (
+                {categories?.data?.slice(9)?.map((category: any) => (
                   <CategorySectionBanner key={category?.id} category={category}>
                     <CategoryBasedNewsList
                       categorySlug={category?.slug}

@@ -86,23 +86,33 @@ function NewsList({
     <div className="w-full flex flex-col gap-5">
       {items.length > 0 && page_headline && (
         <div
-          className={`relative h-15 w-full flex items-center ${
+          className={`relative h-15 w-full flex items-center justify-between ${
             show === "all" ? "py-8" : ""
           }`}
         >
-          {show === "all" && (
-            <div className="absolute inset-0 w-2 h-full rounded-l-md bg-[var(--color-public-bg-accent)]" />
+          <div className="flex items-center">
+            {show === "all" && (
+              <div className="absolute inset-y-0 left-0 w-2 rounded-l-md bg-[var(--color-public-bg-accent)]" />
+            )}
+            <h1
+              className={`${
+                show === "all"
+                  ? "ml-3 text-4xl sm:text-5xl text-[var(--color-public-text-secondary)]"
+                  : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"
+              } cursor-pointer uppercase font-bold`}
+              onClick={() => navigate(`/news-list/category/${slug}`)}
+            >
+              {page_headline}
+            </h1>
+          </div>
+          {show === "list" && (
+            <button
+              onClick={() => navigate(`/news-list/category/${slug}`)}
+              className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+            >
+              <ChevronRight size={20} strokeWidth={2.5} />
+            </button>
           )}
-          <h1
-            className={`${
-              show === "all"
-                ? "ml-3 text-4xl sm:text-5xl text-[var(--color-public-text-secondary)]"
-                : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"
-            } cursor-pointer uppercase font-bold`}
-            onClick={() => navigate(`/news-list/category/${slug}`)}
-          >
-            {page_headline}
-          </h1>
         </div>
       )}
 

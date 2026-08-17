@@ -2,6 +2,7 @@ import SidebarAdvertisement from "@/features/advertisements/components/Public/Si
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
+import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ColumnViewMultiCategoryNewsSkeleton from "./ColumnViewMultiCategoryNewsSkeleton";
 
@@ -53,17 +54,25 @@ function ColumnViewMultiCategoryNews({
     <div className="w-full flex lg:flex-row flex-col gap-6">
       {/* Category One */}
       <div className="w-full lg:w-2/3 flex flex-col">
-        <h1
-          className="text-2xl pb-2 mb-3 cursor-pointer uppercase font-bold
-          hover:text-[var(--color-public-text-accent-hover)]
-          text-[var(--color-public-text-accent)]
-          transition-all duration-200 tracking-tight"
-          onClick={() =>
-            navigate(`/news-list/category/${categoryOne?.slug}`)
-          }
-        >
-          {categoryOne?.name}
-        </h1>
+        <div className="flex items-center justify-between pb-2 mb-3">
+          <h1
+            className="text-2xl cursor-pointer uppercase font-bold
+            hover:text-[var(--color-public-text-accent-hover)]
+            text-[var(--color-public-text-accent)]
+            transition-all duration-200 tracking-tight"
+            onClick={() =>
+              navigate(`/news-list/category/${categoryOne?.slug}`)
+            }
+          >
+            {categoryOne?.name}
+          </h1>
+          <button
+            onClick={() => navigate(`/news-list/category/${categoryOne?.slug}`)}
+            className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+          >
+            <ChevronRight size={20} strokeWidth={2.5} />
+          </button>
+        </div>
 
         <div className="flex lg:flex-row flex-col gap-6 w-full">
           {/* Articles & Ads */}
@@ -107,17 +116,25 @@ function ColumnViewMultiCategoryNews({
 
       {/* Category Two */}
       <div className="w-full lg:w-1/3 flex flex-col">
-        <h1
-          className="text-2xl pb-2 mb-3 cursor-pointer uppercase font-bold
-          hover:text-[var(--color-public-text-accent-hover)]
-          text-[var(--color-public-text-accent)]
-          transition-all duration-200 tracking-tight"
-          onClick={() =>
-            navigate(`/news-list/category/${categoryTwo?.slug}`)
-          }
-        >
-          {categoryTwo?.name}
-        </h1>
+        <div className="flex items-center justify-between pb-2 mb-3">
+          <h1
+            className="text-2xl cursor-pointer uppercase font-bold
+            hover:text-[var(--color-public-text-accent-hover)]
+            text-[var(--color-public-text-accent)]
+            transition-all duration-200 tracking-tight"
+            onClick={() =>
+              navigate(`/news-list/category/${categoryTwo?.slug}`)
+            }
+          >
+            {categoryTwo?.name}
+          </h1>
+          <button
+            onClick={() => navigate(`/news-list/category/${categoryTwo?.slug}`)}
+            className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-white text-[var(--color-public-text-accent)] shadow-sm hover:bg-slate-50 transition-colors"
+          >
+            <ChevronRight size={20} strokeWidth={2.5} />
+          </button>
+        </div>
 
         <div className="w-full flex flex-col gap-2">
           {categoryTwoItems.map((item: any, idx: number) => {

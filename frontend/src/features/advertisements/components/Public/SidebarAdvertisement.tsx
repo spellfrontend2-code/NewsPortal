@@ -1,3 +1,4 @@
+import React from "react";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 import { useAdImpression } from "../../hooks/useAdImpression";
 import HtmlAd from "./HtmlAd";
@@ -18,6 +19,8 @@ function SidebarAdvertisement({
   const rawAd = item?.data || propAd;
   if (!rawAd) return null;
 
+  const slot = item?.slot || rawAd?.slot || {};
+
   const adId = rawAd.id;
   const adType = rawAd.type || rawAd.media_type || "image";
   const title = rawAd.title || rawAd.name || "Advertisement";
@@ -31,9 +34,7 @@ function SidebarAdvertisement({
   const htmlCode = rawAd.html || rawAd.html_code;
   const textContent = rawAd.text || rawAd.text_content;
 
-  const adRef = useAdImpression({
-    adId,
-  });
+  const adRef = useAdImpression({ adId });
 
   const advertisementHook = useAdvertisementHooks();
   const trackAdClick = advertisementHook.useTrackPublicAdClick();
@@ -54,23 +55,39 @@ function SidebarAdvertisement({
       ? "object-contain"
       : "object-cover";
 
+  // Dimensions from backend, with slot fallback
+  const adWidth = rawAd.width || slot?.width;
+  const adHeight = rawAd.height || slot?.height;
+
+  // The inner ad is sized by backend dimensions; max-w-full / max-h-full keeps
+  // it responsive inside the square wrapper (never overflows).
+  const innerStyle: React.CSSProperties = {
+    ...(adWidth ? { width: `${adWidth}px` } : { width: "100%" }),
+    ...(adHeight ? { height: `${adHeight}px` } : { height: "100%" }),
+    maxWidth: "100%",
+    maxHeight: "100%",
+  };
+
   return (
+    // Outer: fills the square placeholder set by the caller (w-full h-full),
+    // centers the inner ad both horizontally and vertically.
     <div
       ref={adRef}
-      className={`h-full w-full flex flex-col overflow-hidden ${className}`}
+      className={`w-full h-full flex items-center justify-center ${className}`}
     >
       <a
         href={destinationUrl}
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="h-full w-full flex flex-col justify-center items-center group block"
+        className="flex items-center justify-center overflow-hidden"
+        style={innerStyle}
       >
         {adType === "image" && imageUrl ? (
           <img
             src={imageUrl}
             alt={title}
-            className={`h-full w-full ${fitClass} rounded-md transition-opacity duration-200 group-hover:opacity-95 block`}
+            className={`w-full h-full ${fitClass} rounded-md transition-opacity duration-200 group-hover:opacity-95 block`}
           />
         ) : adType === "video" && videoUrl ? (
           <video
@@ -81,10 +98,10 @@ function SidebarAdvertisement({
             loop
             playsInline
             disablePictureInPicture
-            className={`h-full w-full ${fitClass} rounded-md block`}
+            className={`w-full h-full ${fitClass} rounded-md block`}
           />
         ) : adType === "text" && textContent ? (
-          <div className="bg-slate-50 border border-slate-200 p-4 h-full w-full rounded-md flex flex-col items-center justify-center text-center gap-2">
+          <div className="bg-slate-50 border border-slate-200 p-4 w-full h-full rounded-md flex flex-col items-center justify-center text-center gap-2">
             <p className="text-xs font-semibold text-slate-800 leading-snug">
               {textContent}
             </p>

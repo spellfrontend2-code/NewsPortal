@@ -2,7 +2,7 @@ import { useArticleView } from "@/features/articles/hooks/useArticleView";
 import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-function ArticleSquareHoverCard({ article }: any) {
+function ArticleSquareHoverCard({ article, hideMeta = false, titleClassName }: any) {
   const navigate = useNavigate();
   const { viewPublicArticle } = useArticleView();
   const imageSrc =
@@ -30,22 +30,24 @@ function ArticleSquareHoverCard({ article }: any) {
 
       {/* Headline & Meta Bottom */}
       <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 flex flex-col gap-2.5 z-10">
-        <h2 className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl @md:text-2xl @lg:text-3xl @xl:text-4xl text-white tracking-tight leading-tight transition-colors duration-200 group-hover:text-[var(--color-public-text-lightest)] line-clamp-3 drop-shadow">
+        <h2 className={`font-bold text-white tracking-tight leading-tight transition-colors duration-200 group-hover:text-[var(--color-public-text-lightest)] line-clamp-3 drop-shadow ${titleClassName || "text-xl sm:text-2xl md:text-3xl lg:text-4xl @md:text-2xl @lg:text-3xl @xl:text-4xl"}`}>
           {article?.title}
         </h2>
 
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
-          {article?.author?.name && (
-            <>
-              <span className="text-white font-bold">{article.author.name}</span>
-              <span className="text-slate-400">•</span>
-            </>
-          )}
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <Clock size={12} strokeWidth={2.5} />
-            <span>{publishedDate}</span>
+        {!hideMeta && (
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+            {article?.author?.name && (
+              <>
+                <span className="text-white font-bold">{article.author.name}</span>
+                <span className="text-slate-400">•</span>
+              </>
+            )}
+            <div className="flex items-center gap-1.5 text-slate-300">
+              <Clock size={12} strokeWidth={2.5} />
+              <span>{publishedDate}</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </article>
   );
