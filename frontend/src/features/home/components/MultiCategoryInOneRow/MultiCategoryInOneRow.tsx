@@ -1,4 +1,3 @@
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { useState } from "react";
@@ -26,20 +25,14 @@ function MultiCategoryInOneRow({
     articleHook.useFetchPublicArticlesByCategory({
       page: categoryOnePagination.pageIndex + 1,
       per_page: categoryOnePagination.pageSize,
-      categoryId: categoryOne?.id,
       slug: categoryOne?.slug,
-      section_type: "category",
-      section_id: categoryOne?.id,
     });
 
   const { data: categoryTwoArticles, isLoading: categoryTwoArticlesLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: categoryTwoPagination.pageIndex + 1,
       per_page: categoryTwoPagination.pageSize,
-      categoryId: categoryTwo?.id,
       slug: categoryTwo?.slug,
-      section_type: "category",
-      section_id: categoryTwo?.id,
     });
 
   const itemsOne = categoryOneArticles?.data ?? [];
@@ -61,7 +54,7 @@ function MultiCategoryInOneRow({
           <div className="grid grid-cols-2 gap-4">
             {itemsOne.map((item: any, idx: number) => {
               if (item?.type === "article") {
-            
+              
 
               const article = item?.data || item;
               return (
@@ -82,23 +75,15 @@ function MultiCategoryInOneRow({
           </h1>
           <div className="flex flex-col gap-4">
             {itemsTwo.map((item: any, idx: number) => {
-              if (item?.type === "advertisement") {
-                return (
-                  <div
-                    key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                    className="w-full my-2 overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
-                  >
-                    <BannerAdvertisement item={item} />
-                  </div>
-                );
-              }
+              if (item?.type === "article") {
+                
 
               const article = item?.data || item;
               return (
                 <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[320px] w-full bg-transparent">
                   <ArticleSquareCard article={article} />
                 </div>
-              );
+              );}
             })}
           </div>
         </div>

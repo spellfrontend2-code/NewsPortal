@@ -293,46 +293,33 @@ export default function AdvertisementPlacementBlock({
 
       {/* Target Article for Single Page */}
       {showArticleSelector && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <label className="flex items-center gap-1 font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
-            Target Article Scope
+            Target Article
+            <Asterisk className="text-red-500" size={12} />
           </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="all_articles"
-              checked={Boolean(allEntitiesValue)}
-              onChange={(e) => {
-                const checked = e.target.checked;
-                setValue("all_entities", checked, { shouldDirty: true });
-                if (checked) {
-                  setValue("article_id", null, { shouldDirty: true });
-                }
-              }}
-              className="h-4 w-4 rounded border-gray-300 text-[var(--color-primary)]"
-            />
-            <label
-              htmlFor="all_articles"
-              className="text-sm font-semibold text-gray-700 cursor-pointer"
-            >
-              Apply to All Articles (Global Article Banner)
-            </label>
-          </div>
-
-          {!allEntitiesValue && (
-            <div className="flex flex-col gap-2">
-              <ArticleDropdownInput
-                selectedArticleId={watch("article_id")}
-                setSelectedArticleId={(id) => {
-                  setValue("article_id", id, {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-                }}
-                placeholder="Search and select specific article..."
-              />
-            </div>
-          )}
+          <ArticleDropdownInput
+            selectedArticleId={watch("article_id")}
+            allEntities={Boolean(watch("all_entities"))}
+            initialArticles={formOptionsData?.data?.articles || formOptionsData?.articles || []}
+            onSelectArticle={(articleId, isAll) => {
+              if (isAll) {
+                setValue("all_entities", true, { shouldDirty: true });
+                setValue("article_id", null, { shouldDirty: true });
+              } else {
+                setValue("all_entities", false, { shouldDirty: true });
+                setValue("article_id", articleId, { shouldDirty: true, shouldValidate: true });
+              }
+            }}
+            placeholder="Select specific article or All articles"
+          />
+          <p className="text-xs text-gray-500">
+            {watch("all_entities")
+              ? "This advertisement will appear on all article detail pages."
+              : watch("article_id")
+              ? `Bound to selected article #${watch("article_id")}.`
+              : "Search by title or choose All articles."}
+          </p>
         </div>
       )}
 

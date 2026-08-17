@@ -1,6 +1,6 @@
+import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ function NewsList({
   pagination,
   setPagination,
   lastPage,
+  slug,
   show = "all",
 }: any) {
   const currentPage = pagination?.pageIndex ? pagination.pageIndex + 1 : 1;
@@ -98,7 +99,7 @@ function NewsList({
                 ? "ml-3 text-4xl sm:text-5xl text-[var(--color-public-text-secondary)]"
                 : "text-2xl hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight"
             } cursor-pointer uppercase font-bold`}
-            onClick={() => navigate(`/news-list/category/${page_headline}`)}
+            onClick={() => navigate(`/news-list/category/${slug}`)}
           >
             {page_headline}
           </h1>
@@ -121,17 +122,28 @@ function NewsList({
             }`}
           >
             {slicedItems.map((item: any, idx: number) => {
-              if (item?.type === "advertisement") {
+              // Render before_article / after_article banner ads — category page only
+              if (
+                show === "all" &&
+                item?.type === "advertisement" &&
+                (item?.placement?.where === "before_article" ||
+                  item?.placement?.where === "after_article" ||
+                  item?.data?.placement?.where === "before_article" ||
+                  item?.data?.placement?.where === "after_article")
+              ) {
+                const adId = item?.data?.id ?? idx;
                 return (
                   <div
-                    key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                    className="col-span-full my-2 w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-50/50 shadow-sm"
+                    key={`cat-ad-${adId}-${idx}`}
+                    className="col-span-full w-full overflow-hidden rounded-md border border-[var(--color-public-border-darker)]"
                   >
                     <BannerAdvertisement item={item} />
                   </div>
                 );
               }
 
+              if (item?.type === "article") {
+              
               const articleData = item?.data || item;
               return (
                 <div
@@ -140,7 +152,7 @@ function NewsList({
                 >
                   <ArticleSquareCard article={articleData} />
                 </div>
-              );
+              );}
             })}
           </div>
 

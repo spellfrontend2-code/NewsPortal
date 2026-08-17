@@ -110,16 +110,11 @@ export const useArticlesHooks = () => {
       page,
       per_page,
       slug,
-      categoryId,
-      section_type,
-      section_id,
     }: {
       page: number;
       per_page: number;
       slug?: string;
-      categoryId?: number | string;
-      section_type?: string;
-      section_id?: number | string;
+      
     }) => {
       return useQuery({
         queryKey: [
@@ -127,18 +122,14 @@ export const useArticlesHooks = () => {
           page,
           per_page,
           slug,
-          categoryId,
-          section_type,
-          section_id,
+         
         ],
         queryFn: () =>
           articles.fetchPublicArticlesByCategory({
             page,
             per_page,
             slug,
-            categoryId,
-            section_type,
-            section_id,
+           
           }),
       });
     },

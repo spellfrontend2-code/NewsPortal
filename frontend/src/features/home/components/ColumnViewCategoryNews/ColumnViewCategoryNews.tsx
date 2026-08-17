@@ -1,4 +1,3 @@
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import SidebarAdvertisement from "@/features/advertisements/components/Public/SidebarAdvertisement";
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
@@ -13,10 +12,7 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
       per_page: 8,
-      categoryId: category?.id,
       slug: category?.slug,
-      section_type: "category",
-      section_id: category?.id,
     });
 
   const items = (allArticles?.data ?? []).slice(0, 8);
@@ -62,23 +58,15 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
           } h-full w-full grid grid-cols-1 md:grid-cols-2 gap-3`}
         >
           {items.map((item: any, idx: number) => {
-            if (item?.type === "advertisement") {
-              return (
-                <div
-                  key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                  className="col-span-full my-2 w-full overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
-                >
-                  <BannerAdvertisement item={item} />
-                </div>
-              );
-            }
+            if (item?.type === "article") {
+             
 
             const article = item?.data || item;
             return (
               <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[120px]">
                 <ArticleRectangleCard article={article} />
               </div>
-            );
+            );}
           })}
         </div>
 

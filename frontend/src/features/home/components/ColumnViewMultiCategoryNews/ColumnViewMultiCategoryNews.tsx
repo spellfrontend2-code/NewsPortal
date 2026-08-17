@@ -1,4 +1,3 @@
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import SidebarAdvertisement from "@/features/advertisements/components/Public/SidebarAdvertisement";
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
@@ -17,11 +16,8 @@ function ColumnViewMultiCategoryNews({
   const { data: categoryOneArticles, isLoading: categoryOneArticleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
-      per_page: 6,
-      categoryId: categoryOne?.id,
+      per_page: 5,
       slug: categoryOne?.slug,
-      section_type: "category",
-      section_id: categoryOne?.id,
     });
   const categoryOneItems = (categoryOneArticles?.data ?? []).slice(0, 6);
 
@@ -38,11 +34,8 @@ function ColumnViewMultiCategoryNews({
   const { data: categoryTwoArticles, isLoading: categoryTwoArticleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
-      per_page: 6,
-      categoryId: categoryTwo?.id,
+      per_page: 5,
       slug: categoryTwo?.slug,
-      section_type: "category",
-      section_id: categoryTwo?.id,
     });
   const categoryTwoItems = (categoryTwoArticles?.data ?? []).slice(0, 6);
 
@@ -80,23 +73,15 @@ function ColumnViewMultiCategoryNews({
             } w-full flex flex-col gap-2`}
           >
             {categoryOneItems.map((item: any, idx: number) => {
-              if (item?.type === "advertisement") {
-                return (
-                  <div
-                    key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                    className="w-full my-1 overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
-                  >
-                    <BannerAdvertisement item={item} />
-                  </div>
-                );
-              }
+              if (item?.type === "article") {
+               
 
               const article = item?.data || item;
               return (
                 <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[120px]">
                   <ArticleRectangleCard article={article} />
                 </div>
-              );
+              );}
             })}
           </div>
 
@@ -136,23 +121,15 @@ function ColumnViewMultiCategoryNews({
 
         <div className="w-full flex flex-col gap-2">
           {categoryTwoItems.map((item: any, idx: number) => {
-            if (item?.type === "advertisement") {
-              return (
-                <div
-                  key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                  className="w-full my-1 overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
-                >
-                  <BannerAdvertisement item={item} />
-                </div>
-              );
-            }
+            if (item?.type === "article") {
+              
 
             const article = item?.data || item;
             return (
               <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[120px]">
                 <ArticleRectangleCard article={article} />
               </div>
-            );
+            );}
           })}
         </div>
       </div>

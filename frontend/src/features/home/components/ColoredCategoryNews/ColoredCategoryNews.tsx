@@ -1,4 +1,3 @@
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import ArticleRectangleCard from "@/features/articles/components/Public/cards/ArticleRectangleCard";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
@@ -17,10 +16,7 @@ function ColoredCategoryNews({
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
       per_page: 6,
-      categoryId: category?.id,
       slug: category?.slug,
-      section_type: "category",
-      section_id: category?.id,
     });
 
   const items = allArticles?.data ?? [];
@@ -72,23 +68,15 @@ function ColoredCategoryNews({
           <div className="lg:w-1/3 w-full">
             <div className="w-full h-full flex flex-col gap-2">
               {remainingItems.map((item: any, idx: number) => {
-                if (item?.type === "advertisement") {
-                  return (
-                    <div
-                      key={`ad-${item?.data?.id ?? idx}-${idx}`}
-                      className="w-full my-1 overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-[var(--color-public-bg-secondary)]"
-                    >
-                      <BannerAdvertisement item={item} />
-                    </div>
-                  );
-                }
+                if (item?.type === "article") {
+                 
 
                 const article = item?.data || item;
                 return (
                   <div key={`art-${article?.id ?? idx}-${idx}`} className="h-[105px]">
                     <ArticleRectangleCard article={article} />
                   </div>
-                );
+                );}
               })}
             </div>
           </div>

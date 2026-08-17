@@ -7,14 +7,13 @@ import { Newspaper } from "lucide-react";
 
 function CategoryBasedNewsList({
   categorySlug,
-  categoryId,
 }: {
   categorySlug?: string;
   categoryId?: number | string;
 }) {
   const { slug } = useParams();
   const articleHook = useArticlesHooks();
-  const defaultPageSize = categorySlug ? 3 : 12;
+  const defaultPageSize = categorySlug ? 3 : 13;
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -22,15 +21,11 @@ function CategoryBasedNewsList({
   });
 
   const effectiveSlug = categorySlug || slug;
-
   const { data: allArticles, isLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: pagination?.pageIndex + 1,
       per_page: pagination?.pageSize,
-      categoryId,
       slug: effectiveSlug,
-      section_type: categoryId ? "category" : undefined,
-      section_id: categoryId,
     });
 
   const items = allArticles?.data ?? [];
@@ -61,6 +56,7 @@ function CategoryBasedNewsList({
         <NewsList
           articles={items}
           page_headline={name}
+          slug={effectiveSlug}
           pagination={pagination}
           setPagination={setPagination}
           lastPage={allArticles?.pagination?.last_page}

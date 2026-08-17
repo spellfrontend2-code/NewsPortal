@@ -1,11 +1,9 @@
 import { useSettingHooks } from "@/features/settings/hooks/useSettings";
-import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
+// import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 function Footer() {
   const settingHook = useSettingHooks();
-  const advertisementHook = useAdvertisementHooks();
 
   const { data: companyData, isLoading } = settingHook.useFetchPublicSettings();
 

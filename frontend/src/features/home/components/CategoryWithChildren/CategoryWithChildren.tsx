@@ -9,16 +9,13 @@ import CategoryWithChildrenSkeleton from "./CategoryWithChildrenSkeleton";
 function CategoryWithChildren({ category }: { category: any }) {
   const navigate = useNavigate();
   const articleHook = useArticlesHooks();
-  const defaultPageSize = 12;
+  const defaultPageSize = 7;
 
   const { data: allArticles, isLoading: articleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
       per_page: defaultPageSize,
-      categoryId: category?.id,
       slug: category?.slug,
-      section_type: "category",
-      section_id: category?.id,
     });
 
   const items = allArticles?.data ?? [];
@@ -95,7 +92,7 @@ function CategoryWithChildren({ category }: { category: any }) {
           >
             {remainingItems.map((item: any, idx: number) => {
               if (item?.type === "article") {
-               
+            
 
               const articleData = item?.data || item;
               return (

@@ -52,7 +52,19 @@ function NewsContent({ Data, commentRef }: any) {
     });
   };
 
-  const hasSidebarAds = advertisementData?.sidebar?.length > 0;
+  const sidebarOrder: Record<string, number> = {
+    sidebar_top: 1,
+    sidebar_middle: 2,
+    sidebar_bottom: 3,
+  };
+
+  const sortedSidebarAds = (advertisementData?.sidebar || []).slice().sort((a: any, b: any) => {
+    const whereA = a?.placement?.where || a?.where || "";
+    const whereB = b?.placement?.where || b?.where || "";
+    return (sidebarOrder[whereA] || 99) - (sidebarOrder[whereB] || 99);
+  });
+
+  const hasSidebarAds = sortedSidebarAds.length > 0;
 
   // Track ad IDs rendered in body to prevent duplicate rendering at the bottom
   const renderedContentAdIds = new Set<number>();
@@ -265,7 +277,7 @@ function NewsContent({ Data, commentRef }: any) {
       {/* Right Column Sidebar Advertisements */}
       {hasSidebarAds && (
         <div className="lg:w-1/5 w-full flex flex-col gap-6">
-          {advertisementData.sidebar.map((ad: any, index: number) => (
+          {sortedSidebarAds.map((ad: any, index: number) => (
             <div
               key={ad.id ?? index}
               className="w-full aspect-square overflow-hidden rounded-md shadow-sm"

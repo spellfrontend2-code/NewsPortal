@@ -1,5 +1,5 @@
 import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
-import PopupAdvertisement from "@/features/advertisements/components/Public/PopupAdvertisement";
+import CategorySectionBanner from "@/features/advertisements/components/Public/CategorySectionBanner";
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
@@ -10,12 +10,10 @@ import ColumnViewMultiCategoryNews from "@/features/home/components/ColumnViewMu
 import Headline from "@/features/home/components/Headline/Headline";
 import LatestNews from "@/features/home/components/LatestNews/LatestNews";
 import MultiCategoryInOneRow from "@/features/home/components/MultiCategoryInOneRow/MultiCategoryInOneRow";
-import { useEffect, useState } from "react";
 
 function Home() {
-  const [showPopup, setShowPopup] = useState(false);
   const advertisementHook = useAdvertisementHooks();
-  const { data: advertisements, isLoading: adLoading } =
+  const { data: advertisements } =
     advertisementHook.useFetchPublicAdvertisements({
       page_type: "home",
     });
@@ -27,10 +25,6 @@ function Home() {
   });
   const footerAd = advertisements?.data?.footer;
 
-  useEffect(() => {
-    if (advertisements?.data?.popup) setShowPopup(true);
-  }, [advertisements?.data?.popup]);
-
   return (
     <div className="flex flex-col gap-10 justify-center items-center w-full">
       <Headline />
@@ -38,46 +32,49 @@ function Home() {
       
       {categories?.data?.length > 0 && (
         <>
-          <MultiCategoryInOneRow
-            categoryOne={categories?.data[0]}
-            categoryTwo={categories?.data[1]}
-          />
-          <CategoryWithChildren category={categories?.data[2]} />
-          <ColoredCategoryNews category={categories?.data[3]} color="#D2E7FE" />
-          <ColumnViewCategoryNews category={categories?.data[4]} />
-          <ColumnViewMultiCategoryNews
-            categoryOne={categories?.data[5]}
-            categoryTwo={categories?.data[6]}
-          />
+          <CategorySectionBanner category={categories?.data[0]}>
+            <MultiCategoryInOneRow
+              categoryOne={categories?.data[0]}
+              categoryTwo={categories?.data[1]}
+            />
+          </CategorySectionBanner>
+          <CategorySectionBanner category={categories?.data[2]}>
+            <CategoryWithChildren category={categories?.data[2]} />
+          </CategorySectionBanner>
+          <CategorySectionBanner category={categories?.data[3]}>
+            <ColoredCategoryNews category={categories?.data[3]} color="#D2E7FE" />
+          </CategorySectionBanner>
+          <CategorySectionBanner category={categories?.data[4]}>
+            <ColumnViewCategoryNews category={categories?.data[4]} />
+          </CategorySectionBanner>
+          <CategorySectionBanner category={categories?.data[5]}>
+            <ColumnViewMultiCategoryNews
+              categoryOne={categories?.data[5]}
+              categoryTwo={categories?.data[6]}
+            />
+          </CategorySectionBanner>
 
           {categories?.data?.length > 7 && (
             <div className="flex flex-col w-full">
               <div>
                 {categories?.data?.slice(7)?.map((category: any) => (
-                  <CategoryBasedNewsList
-                    key={category?.id}
-                    categorySlug={category?.slug}
-                    categoryId={category?.id}
-                  />
+                  <CategorySectionBanner key={category?.id} category={category}>
+                    <CategoryBasedNewsList
+                      categorySlug={category?.slug}
+                    />
+                  </CategorySectionBanner>
                 ))}
               </div>
             </div>
           )}
         </>
       )}
- {footerAd && (
+      {footerAd && (
         <div className="w-full pt-8 pb-2 flex items-center justify-center">
           <div className="w-full overflow-hidden rounded-md border border-[var(--color-public-border-darker)]">
             <BannerAdvertisement Ad={footerAd} />
           </div>
         </div>
-      )}
-      {!adLoading && advertisements?.data?.popup?.id && (
-        <PopupAdvertisement
-          advertisements={advertisements?.data?.popup}
-          showPopup={showPopup}
-          setShowPopup={setShowPopup}
-        />
       )}
     </div>
   );

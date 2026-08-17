@@ -99,33 +99,17 @@ export const articleApi = () => {
       page,
       per_page,
       slug,
-      categoryId,
-      section_type,
-      section_id,
+    
     }: {
       page: number;
       per_page: number;
       slug?: string;
-      categoryId?: number | string;
-      section_type?: string;
-      section_id?: number | string;
+  
     }) => {
       try {
-        if (section_type === "category" || categoryId || section_id) {
-          const secId = section_id || categoryId;
-          const response = await axiosInstance.get("/articles", {
-            params: {
-              page,
-              per_page,
-              section_type: "category",
-              section_id: secId,
-            },
-          });
-          return response.data;
-        }
-
+      
         const response = await axiosInstance.get(`/articles/category/${slug}`, {
-          params: { page, per_page, slug },
+          params: { page, per_page, category_slug: slug },
         });
         return response.data;
       } catch (error: any) {

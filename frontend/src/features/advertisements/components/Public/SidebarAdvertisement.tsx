@@ -22,7 +22,7 @@ function SidebarAdvertisement({
   const adType = rawAd.type || rawAd.media_type || "image";
   const title = rawAd.title || rawAd.name || "Advertisement";
   const destinationUrl = rawAd.url || rawAd.click_url || "#";
-  const target = rawAd.target || (rawAd.open_in_new_tab ? "_blank" : "_blank");
+  const target = rawAd.target || (rawAd.open_in_new_tab ? "_blank" : "_blank") || "_blank";
   const ctaText = rawAd.cta || rawAd.button_text || "";
 
   const imageUrl = rawAd.image || rawAd.image_url;
