@@ -2,14 +2,75 @@ import { useSettingHooks } from "@/features/settings/hooks/useSettings";
 // import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { Mail, MapPin, Phone } from "lucide-react";
 
+function FooterSkeleton() {
+  return (
+    <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex flex-col items-center justify-center animate-pulse">
+      <footer className="w-[80%]">
+        <div className="mx-auto grid grid-cols-1 gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
+          {/* Company Info */}
+          <div className="space-y-6">
+            <div className="h-12 w-32 rounded bg-white/20" />
+            <div className="h-8 w-44 rounded bg-white/20" />
+            <div className="h-4 w-52 rounded bg-white/15" />
+            <div className="flex gap-2.5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-9 w-9 rounded-full bg-white/20" />
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Information */}
+          <div className="flex flex-col gap-5">
+            <div className="h-5 w-28 rounded bg-white/20" />
+            <div className="space-y-4">
+              <div className="h-4 w-40 rounded bg-white/15" />
+              <div className="h-4 w-36 rounded bg-white/15" />
+              <div className="h-4 w-32 rounded bg-white/15" />
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex flex-col gap-5">
+            <div className="h-5 w-28 rounded bg-white/20" />
+            <div className="space-y-3">
+              <div className="h-4 w-20 rounded bg-white/15" />
+              <div className="h-4 w-24 rounded bg-white/15" />
+              <div className="h-4 w-24 rounded bg-white/15" />
+            </div>
+          </div>
+
+          {/* Legal Info */}
+          <div className="flex flex-col gap-5">
+            <div className="h-5 w-28 rounded bg-white/20" />
+            <div className="space-y-4">
+              <div className="h-4 w-36 rounded bg-white/15" />
+              <div className="h-4 w-40 rounded bg-white/15" />
+              <div className="h-4 w-28 rounded bg-white/15" />
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="border-t border-[var(--color-public-border-light)]/20 py-6">
+          <div className="mx-auto flex flex-col items-center justify-between gap-3 md:flex-row">
+            <div className="h-4 w-48 rounded bg-white/15" />
+            <div className="flex gap-4">
+              <div className="h-4 w-24 rounded bg-white/15" />
+              <div className="h-4 w-28 rounded bg-white/15" />
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
 function Footer() {
   const settingHook = useSettingHooks();
-
   const { data: companyData, isLoading } = settingHook.useFetchPublicSettings();
-
   const company = companyData?.data ?? companyData;
 
-  if (isLoading) return null;
+  if (isLoading) return <FooterSkeleton />;
 
   return (
     <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex flex-col items-center justify-center">

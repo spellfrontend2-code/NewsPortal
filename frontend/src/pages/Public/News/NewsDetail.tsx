@@ -1,5 +1,6 @@
 import PopupAdvertisement from "@/features/advertisements/components/Public/PopupAdvertisement";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
+import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
 import NewsContent from "@/features/articles/components/Public/NewsDetail/NewsContent";
 import NewsDetailSkeleton from "@/features/articles/components/Public/NewsDetail/NewsDetailSkeleton";
 import NewsHeader from "@/features/articles/components/Public/NewsDetail/NewsHeader";
@@ -55,8 +56,11 @@ function NewsDetail() {
     .slice(0, 3);
 
   useEffect(() => {
-    if (Data?.advertisements?.popup) {
+    const popup = Data?.advertisements?.popup;
+    if (popup && ((Array.isArray(popup) && popup.length > 0) || popup?.id)) {
       setShowPopup(true);
+    } else {
+      setShowPopup(false);
     }
   }, [Data?.advertisements?.popup]);
   const handleCopyLink = async () => {
@@ -199,7 +203,13 @@ function NewsDetail() {
                 </h1>
               </div>
               {relatednewsLoading ? (
-                <p>Loading</p>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div key={index} className="h-[320px] w-full bg-transparent">
+                      <ArticleSquareCardSkeleton />
+                    </div>
+                  ))}
+                </div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {relatedNews?.map((news: any, index: number) => (
@@ -211,9 +221,9 @@ function NewsDetail() {
           </div>
         )
       )}
-      {Data?.advertisements?.popup?.length > 0 && (
+      {Boolean(Data?.advertisements?.popup && ((Array.isArray(Data.advertisements.popup) && Data.advertisements.popup.length > 0) || Data.advertisements.popup?.id)) && (
         <PopupAdvertisement
-          advertisements={Data?.advertisements?.popup[0]}
+          advertisements={Data?.advertisements?.popup}
           showPopup={showPopup}
           setShowPopup={setShowPopup}
         />

@@ -77,6 +77,15 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         default_size: "728x90",
         suggested_mobile_size: "320x100",
       },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
+      },
     ],
   },
   {
@@ -131,6 +140,16 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         default_size: "728x90",
         suggested_mobile_size: "320x100",
       },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        needs_category: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
+      },
     ],
   },
   {
@@ -183,6 +202,15 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         default_size: "728x90",
         suggested_mobile_size: "320x100",
       },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
+      },
     ],
   },
   {
@@ -229,6 +257,15 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         sizes: ["728x90", "970x250", "custom"],
         default_size: "728x90",
         suggested_mobile_size: "320x100",
+      },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
       },
     ],
   },
@@ -278,6 +315,15 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         default_size: "728x90",
         suggested_mobile_size: "320x100",
       },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
+      },
     ],
   },
   {
@@ -326,6 +372,15 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         default_size: "728x90",
         suggested_mobile_size: "320x100",
       },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
+      },
     ],
   },
   {
@@ -373,16 +428,24 @@ export const DEFAULT_FORM_PAGES: FormPageOption[] = [
         default_size: "728x90",
         suggested_mobile_size: "320x100",
       },
+      {
+        value: "popup",
+        label: "Popup Modal",
+        hide_where: true,
+        where: [{ value: "popup", label: "Popup Modal" }],
+        sizes: ["600x400", "300x250", "400x300", "728x90", "custom"],
+        default_size: "600x400",
+        suggested_mobile_size: "300x250",
+      },
     ],
   },
 ];
 
 export const MOBILE_SIZES = [
-  { value: "", label: "None / Default" },
   { value: "320x100", label: "320×100 (Large Mobile Banner)" },
   { value: "300x250", label: "300×250 (Medium Rectangle)" },
   { value: "320x50", label: "320×50 (Standard Mobile Banner)" },
-  { value: "custom", label: "Custom mobile size" },
+  { value: "custom", label: "Custom Dimensions (W x H)" },
 ];
 
 export const STATUS_OPTIONS = [

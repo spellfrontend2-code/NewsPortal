@@ -1,17 +1,4 @@
-function ArticleRectangleCardSkeleton() {
-  return (
-    <div className="h-[105px] rounded-md bg-white border border-slate-100 flex overflow-hidden animate-pulse">
-      {/* Image 55% */}
-      <div className="w-[55%] bg-gray-200" />
-      {/* Content 45% */}
-      <div className="w-[45%] p-4 flex flex-col justify-center gap-2">
-        <div className="h-4 w-[85%] rounded bg-gray-200" />
-        <div className="h-4 w-[65%] rounded bg-gray-200" />
-        <div className="h-3 w-16 rounded bg-gray-200 mt-1" />
-      </div>
-    </div>
-  );
-}
+import { ArticleRectangleCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
 
 function ColumnViewMultiCategoryNewsSkeleton({
   hasSidebarAds = true,
@@ -19,28 +6,37 @@ function ColumnViewMultiCategoryNewsSkeleton({
   hasSidebarAds?: boolean;
 }) {
   return (
-    <div className="w-full h-full flex lg:flex-row flex-col animate-pulse">
+    <div className="w-full flex lg:flex-row flex-col gap-6 animate-pulse">
       {/* Category One — lg:w-2/3 */}
-      <div className="w-full lg:w-2/3 h-full flex flex-col gap-2 py-5">
-        {/* Category title */}
-        <div className="h-8 w-52 rounded bg-gray-200 mb-2" />
+      <div className="w-full lg:w-2/3 flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-2 mb-3">
+          <div className="h-7 sm:h-8 w-36 sm:w-48 rounded bg-slate-200" />
+          <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0" />
+        </div>
 
-        <div className="flex lg:flex-row flex-col gap-5 w-full">
+        <div className="flex lg:flex-row flex-col gap-6 w-full">
           {/* Article list */}
-          <div className={`${hasSidebarAds ? "lg:w-2/3 w-full" : "w-full"} grid grid-cols-1 gap-1`}>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <ArticleRectangleCardSkeleton key={index} />
+          <div
+            className={`${
+              hasSidebarAds ? "lg:w-2/3" : "w-full"
+            } w-full flex flex-col gap-2`}
+          >
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="h-[120px]">
+                <ArticleRectangleCardSkeleton />
+              </div>
             ))}
           </div>
 
           {/* Sidebar Ads */}
           {hasSidebarAds && (
-            <div className="lg:w-1/4 w-full">
-              <div className="h-full w-full flex flex-col md:flex-row lg:flex-col gap-4">
+            <div className="lg:w-1/3 w-full lg:sticky lg:top-20 self-start">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                 {Array.from({ length: 2 }).map((_, index) => (
                   <div
                     key={index}
-                    className="h-[160px] w-full rounded-md border border-slate-100 bg-gray-200"
+                    className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-md border border-[var(--color-public-border-light)] bg-slate-200"
                   />
                 ))}
               </div>
@@ -50,13 +46,18 @@ function ColumnViewMultiCategoryNewsSkeleton({
       </div>
 
       {/* Category Two — lg:w-1/3 */}
-      <div className="flex flex-col lg:w-1/3 w-full h-full mt-4">
-        {/* Category title */}
-        <div className="h-8 w-52 rounded bg-gray-200 mb-2" />
+      <div className="w-full lg:w-1/3 flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-2 mb-3">
+          <div className="h-7 sm:h-8 w-36 sm:w-48 rounded bg-slate-200" />
+          <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0" />
+        </div>
 
-        <div className="w-full grid grid-cols-1 gap-1">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <ArticleRectangleCardSkeleton key={index} />
+        <div className="w-full flex flex-col gap-2">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div key={index} className="h-[120px]">
+              <ArticleRectangleCardSkeleton />
+            </div>
           ))}
         </div>
       </div>

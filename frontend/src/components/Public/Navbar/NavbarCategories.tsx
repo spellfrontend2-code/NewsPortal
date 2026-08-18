@@ -19,6 +19,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "sonner";
+import NavbarSkeleton from "./NavbarSkeleton";
 
 function NavbarCategories() {
   const { setAuthData } = useAuthStore();
@@ -35,7 +36,7 @@ const { data: profile } = authHook.useFetchProfile({
   const categoryHook = useCategoriesHooks();
   const [loginOpen, setLoginOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { data: CategoryList } = categoryHook.useFetchPublicCategories({
+  const { data: CategoryList, isLoading: categoryLoading } = categoryHook.useFetchPublicCategories({
     page: 1,
     per_page: 5,
   });
@@ -46,14 +47,23 @@ const { data: profile } = authHook.useFetchProfile({
       ? [{ id: 0, name: "गृहपृष्ठ", slug: "" }, ...categories]
       : [{ id: 0, name: "गृहपृष्ठ", slug: "" }];
 
-  const debouncedSearch = useDebounce(search, 1000);
   const articleHook = useArticlesHooks();
-  const { data: searchedArticlesData, isLoading: searchLoading } =
-    articleHook.useSearchPublicArticles({
+  const debouncedSearch = useDebounce(search, 1000);
+
+const {
+  data: searchedArticlesData,
+  isLoading: searchLoading,
+} =
+  articleHook.useSearchPublicArticles(
+    {
       page: 1,
       per_page: 5,
       search: debouncedSearch,
-    });
+    },
+    {
+      enabled: !!debouncedSearch.trim(),
+    }
+  );
   const searchedArticles = searchedArticlesData?.data?.filter((article) => article.type === "article") ?? [];
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -190,6 +200,10 @@ const { data: profile } = authHook.useFetchProfile({
 
   const visibleCategories = updatedCategories.slice(0, visibleCount);
   const overflowCategories = updatedCategories.slice(visibleCount);
+
+  if (categoryLoading && !CategoryList) {
+    return <NavbarSkeleton />;
+  }
 
   return (
     <div className="w-full bg-[var(--color-public-bg-dark)] backdrop-blur-md shadow-sm border-b border-[var(--color-public-border-darker)] sticky top-0 z-50">

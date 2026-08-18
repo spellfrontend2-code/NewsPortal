@@ -34,18 +34,9 @@ function Headline() {
               return (
                 <div
                   key={`ad-${ad?.id ?? idx}-${idx}`}
-                  className="flex w-full justify-center overflow-hidden rounded-md"
-                  style={
-                    {
-                      "--ad-width": `${ad?.width}px`,
-                      "--ad-height": `${ad?.height}px`,
-                      "--ad-mobile-width": `${ad?.mobile_width}px`,
-                      "--ad-mobile-height": `${ad?.mobile_height}px`,
-                    } as React.CSSProperties
-                  }
+                  className="w-full overflow-hidden rounded-md mb-4"
                 >
-             
-                    <BannerAdvertisement item={item} />
+                  <BannerAdvertisement item={item} />
                 </div>
               );
             }

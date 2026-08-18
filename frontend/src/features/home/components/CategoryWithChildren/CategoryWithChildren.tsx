@@ -117,13 +117,13 @@ function CategoryWithChildren({ category }: { category: any }) {
       </div>
 
       {hasSidebarAds && (
-        <div className="lg:w-1/4 w-full">
-          <div className="h-full w-full flex flex-row lg:flex-col gap-4">
+        <div className="lg:w-1/4 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
             {sidebarAds.map((ad: any, index: number) => {
               return (
                 <div
                   key={ad.id ?? index}
-                  className="w-full aspect-square overflow-hidden rounded-2xl border border-[var(--color-public-border-light)] shadow-sm"
+                  className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-xl border border-[var(--color-public-border-light)] shadow-sm bg-white"
                 >
                   <SidebarAdvertisement Ad={ad} />
                 </div>

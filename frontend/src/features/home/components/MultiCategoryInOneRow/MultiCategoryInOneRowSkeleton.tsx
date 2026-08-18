@@ -1,43 +1,41 @@
-function ArticleSquareCardSkeleton() {
-  return (
-    <div className="h-[320px] w-full rounded-md overflow-hidden bg-white border border-slate-100 animate-pulse flex flex-col">
-      {/* Image — 70% */}
-      <div className="h-[70%] w-full bg-gray-200" />
-
-      {/* Content */}
-      <div className="p-4 flex flex-col justify-between flex-1 gap-2">
-        <div className="flex flex-col gap-2">
-          <div className="h-4 w-[90%] rounded bg-gray-200" />
-          <div className="h-4 w-[70%] rounded bg-gray-200" />
-        </div>
-        <div className="h-3 w-20 rounded bg-gray-200" />
-      </div>
-    </div>
-  );
-}
+import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
 
 function MultiCategoryInOneRowSkeleton() {
   return (
-    <div className="flex gap-4 w-full animate-pulse">
-      <div className="flex gap-4 w-full">
-        {/* Left — 2/3 width, 4 cards in 2×2 grid */}
-        <div className="w-2/3">
-          {/* Category title */}
-          <div className="h-8 w-52 rounded bg-gray-200 pb-2 mb-2" />
-          <div className="grid grid-cols-2 gap-4">
+    <div className="w-full animate-pulse">
+      <div className="flex flex-col lg:flex-row gap-6 w-full">
+        {/* Category One — w-full lg:w-2/3 */}
+        <div className="w-full lg:w-2/3">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-2 mb-1">
+            <div className="h-7 sm:h-8 w-36 sm:w-48 rounded bg-slate-200" />
+            <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0" />
+          </div>
+
+          {/* 4 Cards in 2x2 grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4">
             {Array.from({ length: 4 }).map((_, index) => (
-              <ArticleSquareCardSkeleton key={index} />
+              <div key={index} className="h-[320px] w-full bg-transparent">
+                <ArticleSquareCardSkeleton />
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Right — 1/3 width, 2 cards stacked */}
-        <div className="w-1/3">
-          {/* Category title */}
-          <div className="h-8 w-52 rounded bg-gray-200 pb-2 mb-2" />
-          <div className="flex flex-col gap-4">
+        {/* Category Two — w-full lg:w-1/3 */}
+        <div className="w-full lg:w-1/3">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-2 mb-1">
+            <div className="h-7 sm:h-8 w-36 sm:w-48 rounded bg-slate-200" />
+            <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0" />
+          </div>
+
+          {/* 2 Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
             {Array.from({ length: 2 }).map((_, index) => (
-              <ArticleSquareCardSkeleton key={index} />
+              <div key={index} className="h-[320px] w-full bg-transparent">
+                <ArticleSquareCardSkeleton />
+              </div>
             ))}
           </div>
         </div>

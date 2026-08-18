@@ -33,6 +33,7 @@ export default function AdvertisementPlacementBlock({
     control,
     watch,
     setValue,
+    unregister,
     formState: { errors },
   } = useFormContext();
 
@@ -54,14 +55,29 @@ export default function AdvertisementPlacementBlock({
 
   const categoriesData = categoriesList?.data ?? [];
 
-  // Resolve pages configuration
+  // Resolve pages configuration - merge with DEFAULT_FORM_PAGES so popup section is preserved across all pages
   const pages: FormPageOption[] = useMemo(() => {
     const apiPages =
       formOptionsData?.data?.form?.pages ||
       formOptionsData?.data?.pages ||
       formOptionsData?.form?.pages;
     if (apiPages && Array.isArray(apiPages) && apiPages.length > 0) {
-      return apiPages;
+      return DEFAULT_FORM_PAGES.map((defPage) => {
+        const apiPage = apiPages.find((p: any) => p.value === defPage.value);
+        if (!apiPage) return defPage;
+
+        const mergedSections = [...(apiPage.sections || [])];
+        for (const defSec of defPage.sections) {
+          if (!mergedSections.some((s: any) => s.value === defSec.value)) {
+            mergedSections.push(defSec);
+          }
+        }
+        return {
+          ...defPage,
+          ...apiPage,
+          sections: mergedSections,
+        };
+      });
     }
     return DEFAULT_FORM_PAGES;
   }, [formOptionsData]);
@@ -134,16 +150,26 @@ export default function AdvertisementPlacementBlock({
     const newSections = newPageConfig?.sections ?? [];
     const defaultSection = newSections[0]?.value || "";
 
-    setValue("section", defaultSection, { shouldDirty: true });
+    setValue("section", defaultSection, { shouldDirty: true, shouldValidate: true });
 
     const defaultSecConfig = newSections[0];
     if (defaultSecConfig?.hide_where) {
       setValue("where", defaultSecConfig.default_where || defaultSecConfig.value, {
         shouldDirty: true,
       });
+      unregister("where");
     } else {
       const defaultWhere = defaultSecConfig?.where?.[0]?.value || "";
       setValue("where", defaultWhere, { shouldDirty: true });
+    }
+
+    const defaultSize = defaultSecConfig?.default_size || (defaultSecConfig?.sizes && defaultSecConfig.sizes[0]) || "728x90";
+    setValue("size", defaultSize, { shouldDirty: true, shouldValidate: true });
+
+    if (defaultSecConfig?.suggested_mobile_size) {
+      setValue("mobile_size", defaultSecConfig.suggested_mobile_size, {
+        shouldDirty: true,
+      });
     }
 
     // Reset entities and numbers
@@ -157,6 +183,8 @@ export default function AdvertisementPlacementBlock({
     setValue("author_id", null);
     setValue("article_number", null);
     setValue("paragraph_number", null);
+    unregister("article_number");
+    unregister("paragraph_number");
   };
 
   // Handle Section change
@@ -168,17 +196,25 @@ export default function AdvertisementPlacementBlock({
       setValue("where", secConfig.default_where || secConfig.value, {
         shouldDirty: true,
       });
+      unregister("where");
     } else {
       const defaultWhere = secConfig?.where?.[0]?.value || "";
       setValue("where", defaultWhere, { shouldDirty: true });
     }
 
-    if (secConfig?.sizes && secConfig.sizes.length > 0) {
-      setValue("size", secConfig.sizes[0], { shouldDirty: true });
+    const newSize = secConfig?.default_size || (secConfig?.sizes && secConfig.sizes.length > 0 ? secConfig.sizes[0] : (newSection === "popup" ? "600x400" : "728x90"));
+    setValue("size", newSize, { shouldDirty: true, shouldValidate: true });
+
+    if (secConfig?.suggested_mobile_size) {
+      setValue("mobile_size", secConfig.suggested_mobile_size, { shouldDirty: true });
+    } else if (newSection === "popup") {
+      setValue("mobile_size", "300x250", { shouldDirty: true });
     }
 
     setValue("article_number", null);
     setValue("paragraph_number", null);
+    unregister("article_number");
+    unregister("paragraph_number");
   };
 
   return (

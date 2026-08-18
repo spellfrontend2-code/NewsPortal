@@ -1,55 +1,42 @@
+import {
+  ArticleRectangleDetailedCardSkeleton,
+  ArticleSquareCardSkeleton,
+} from "@/features/articles/components/Public/cards/CardSkeleton";
+
 function CategoryWithChildrenSkeleton({
   hasSidebarAds = true,
 }: {
   hasSidebarAds?: boolean;
 }) {
   return (
-    <div className="flex gap-4 w-full animate-pulse">
+    <div className="flex flex-col lg:flex-row gap-6 w-full animate-pulse">
       {/* Main Content */}
-      <div className={`flex flex-col gap-4 ${hasSidebarAds ? "w-3/4" : "w-full"}`}>
+      <div
+        className={`flex flex-col gap-4 ${hasSidebarAds ? "lg:w-3/4 w-full" : "w-full"}`}
+      >
         {/* Header: category title + child tabs */}
-        <div className="flex items-center gap-4 h-[10%]">
-          <div className="flex items-center px-2 border-r border-[var(--color-public-border-strong)]">
-            <div className="h-8 w-40 rounded bg-gray-200" />
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full pb-2">
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="h-8 w-36 sm:w-44 rounded bg-slate-200" />
+            <div className="hidden sm:flex items-center gap-2 pl-4 border-l border-slate-200">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-6 w-16 sm:w-20 rounded-md bg-slate-200" />
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-4 w-4/5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-5 w-20 rounded bg-gray-200" />
-            ))}
-          </div>
+          <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0" />
         </div>
 
-        {/* Featured Article — ArticleRectangleCard detailed at h-[300px] */}
-        <div className="h-[300px] w-full rounded-md overflow-hidden flex border border-slate-100 bg-white">
-          {/* Image 55% */}
-          <div className="w-[55%] bg-gray-200" />
-          {/* Content 45% */}
-          <div className="w-[45%] p-6 md:p-8 bg-slate-50/50 flex flex-col justify-center gap-4">
-            <div className="h-9 w-[85%] rounded bg-gray-200" />
-            <div className="h-9 w-[65%] rounded bg-gray-200" />
-            <div className="h-4 w-full rounded bg-gray-200" />
-            <div className="h-4 w-5/6 rounded bg-gray-200" />
-            <div className="h-4 w-20 rounded bg-gray-200 mt-1" />
-          </div>
+        {/* Featured Article — ArticleRectangleCard detailed */}
+        <div className="h-auto md:h-[300px] w-full">
+          <ArticleRectangleDetailedCardSkeleton />
         </div>
 
-        {/* Square Card Grid — 3 cols matching grid-cols-3, h-[320px] */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 w-full gap-6 pt-6">
+        {/* Square Card Grid — matching grid-cols-1 sm:grid-cols-2 md:grid-cols-3 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 w-full gap-6 pt-6 sm:pt-10">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-[320px] w-full rounded-md overflow-hidden flex flex-col border border-slate-100 bg-white"
-            >
-              {/* Image 70% */}
-              <div className="h-[70%] w-full bg-gray-200" />
-              {/* Content */}
-              <div className="p-4 flex flex-col justify-between flex-1 gap-2">
-                <div className="flex flex-col gap-2">
-                  <div className="h-4 w-[90%] rounded bg-gray-200" />
-                  <div className="h-4 w-[70%] rounded bg-gray-200" />
-                </div>
-                <div className="h-3 w-20 rounded bg-gray-200" />
-              </div>
+            <div key={i} className="h-[320px] w-full bg-transparent">
+              <ArticleSquareCardSkeleton />
             </div>
           ))}
         </div>
@@ -57,10 +44,13 @@ function CategoryWithChildrenSkeleton({
 
       {/* Sidebar Ads */}
       {hasSidebarAds && (
-        <div className="lg:w-1/4 w-full">
-          <div className="h-full w-full flex flex-row lg:flex-col gap-4">
-            {Array.from({ length: 1 }).map((_, i) => (
-              <div key={i} className="h-[160px] w-full rounded-2xl bg-gray-200" />
+        <div className="lg:w-1/4 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div
+                key={i}
+                className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-xl border border-[var(--color-public-border-light)] bg-slate-200"
+              />
             ))}
           </div>
         </div>

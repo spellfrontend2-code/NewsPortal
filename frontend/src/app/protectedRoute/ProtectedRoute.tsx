@@ -16,7 +16,9 @@ function ProtectedRoute({ navigateRoute }) {
 
   // 1. Backend request is still loading
   if (rolesLoading) {
-    return <div>Checking permissions...</div>;
+    return (<div className="flex h-full items-center justify-center">
+  <div className="size-10 animate-spin rounded-full border-4 border-gray-200 border-t-[var(--color-primary)]" />
+</div>)
   }
 
   // 2. Backend is unavailable

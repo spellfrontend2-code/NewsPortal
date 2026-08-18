@@ -86,12 +86,12 @@ function LatestNews() {
           </div>
 
           {hasSidebarAds && (
-            <div className="lg:w-1/5 w-full">
-              <div className="w-full flex flex-col md:flex-row lg:flex-col gap-4">
+            <div className="lg:w-1/5 w-full lg:sticky lg:top-20 self-start">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                 {sidebarAds.map((ad: any, index: number) => (
                   <div
                     key={ad.id ?? index}
-                    className="w-full aspect-square overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm"
+                    className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-md border border-[var(--color-public-border-light)] shadow-sm bg-white"
                   >
                     <SidebarAdvertisement Ad={ad} />
                   </div>

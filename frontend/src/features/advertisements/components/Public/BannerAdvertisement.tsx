@@ -83,7 +83,7 @@ function BannerAdvertisement({
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="flex items-center justify-center overflow-hidden"
+        className="group flex items-center justify-center overflow-hidden"
         style={innerStyle}
       >
         {adType === "image" && imageUrl && (

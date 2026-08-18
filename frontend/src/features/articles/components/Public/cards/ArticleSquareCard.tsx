@@ -45,20 +45,31 @@ function ArticleSquareCard({
         </h3>
 
         {/* Metadata Footer */}
-        <div className="flex items-center gap-2 text-xs sm:text-sm  font-medium text-slate-500">
-          {article?.author?.name && (
-            <>
-              <span className="font-semibold text-slate-700 truncate max-w-[140px]">
-                {article.author.name}
-              </span>
-              <span className="text-slate-300">•</span>
-            </>
-          )}
-          <div className="flex items-center gap-1 text-slate-400">
-            <Clock size={12} className="sm:w-3.5 sm:h-3.5" strokeWidth={2.5} />
-            <span>{publishedDate}</span>
-          </div>
-        </div>
+      {/* <div className="flex gap-4 items-center text-sm font-semibold text-[var(--color-public-text-muted)]">
+                          <p className="flex items-center gap-1.5">
+                            {article?.author?.image && (
+                              <img
+                                src={article?.author?.image}
+                                alt={article?.author?.name}
+                                className="h-6 w-6 rounded-full object-cover border border-[var(--color-public-border-main)]"
+                              />
+                            )}
+                            <span className="text-slate-500">
+                              {article?.author?.name}
+                            </span>
+                          </p>
+                          <span className="text-slate-500">•</span>
+                          <div className="flex items-center text-sm gap-2 text-slate-500">
+                            <Clock
+                              size={15}
+                              className="text-slate-500"
+                              strokeWidth={3}
+                            />
+                            <span className="font-semibold tracking-wider uppercase">
+                              {article?.published_at?.split("T")[0]}
+                            </span>
+                          </div>
+                        </div> */}
       </div>
     </article>
   );

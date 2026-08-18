@@ -1,10 +1,15 @@
 import { useSettingHooks } from "@/features/settings/hooks/useSettings";
 import { MapPin, Phone, PhoneCall, Mail, Globe } from "lucide-react";
+import ContactUsSkeleton from "./ContactUsSkeleton";
 
 function ContactUs() {
   const settingsHook = useSettingHooks();
-  const { data: settings } = settingsHook.useFetchPublicSettings();
+  const { data: settings, isLoading } = settingsHook.useFetchPublicSettings();
   const companyData = settings?.data || [];
+
+  if (isLoading) {
+    return <ContactUsSkeleton />;
+  }
 
   const cards = [
     {

@@ -364,25 +364,45 @@ export default function AdvertisementCreativeBlock({
       {/* Click Destination URL and Button Text */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+          <label className="flex items-center gap-1 font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
             Click Destination URL
+            <Asterisk className="text-red-500" size={12} />
           </label>
           <input
-            {...register("click_url")}
+            {...register("click_url", {
+              required: "Click destination URL is required",
+            })}
             placeholder="https://example.com/landing-page"
-            className={inputStyle}
+            className={`${inputStyle} ${
+              errors.click_url ? "border-red-500" : ""
+            }`}
           />
+          {errors.click_url && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors.click_url.message as string}
+            </p>
+          )}
         </div>
 
         <div>
-          <label className="font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+          <label className="flex items-center gap-1 font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
             Button Text (CTA)
+            <Asterisk className="text-red-500" size={12} />
           </label>
           <input
-            {...register("button_text")}
+            {...register("button_text", {
+              required: "Button text is required",
+            })}
             placeholder="e.g. Learn More, Order Now"
-            className={inputStyle}
+            className={`${inputStyle} ${
+              errors.button_text ? "border-red-500" : ""
+            }`}
           />
+          {errors.button_text && (
+            <p className="text-xs text-red-500 mt-1">
+              {errors.button_text.message as string}
+            </p>
+          )}
         </div>
       </div>
 

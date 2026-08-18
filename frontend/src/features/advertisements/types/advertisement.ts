@@ -30,6 +30,8 @@ export type AdvertisementForm = {
   custom_width?: number | string | null;
   custom_height?: number | string | null;
   mobile_size: string;
+  custom_mobile_width?: number | string | null;
+  custom_mobile_height?: number | string | null;
   start_date: string;
   end_date: string;
   start_time: string;

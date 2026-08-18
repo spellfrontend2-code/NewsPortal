@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 function ArticleRectangleCard({ article, type = "view" }: any) {
   const navigate = useNavigate();
   const { viewPublicArticle } = useArticleView();
-
-  const categoryName =
-    article?.categories?.[0]?.name || article?.category?.name || null;
   const imageSrc =
     article?.media_type === "image"
       ? article?.featured_image
@@ -46,20 +43,30 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
             </p>
           )}
 
-          <div className="flex items-center gap-3 text-xs sm:text-sm font-medium text-slate-500 mt-1">
-            {article?.author?.name && (
-              <>
-                <span className="font-semibold text-slate-700">
-                  {article.author.name}
-                </span>
-                <span className="text-slate-300">•</span>
-              </>
-            )}
-            <div className="flex items-center gap-1.5 text-slate-400">
-              <Clock size={14} strokeWidth={2.5} />
-              <span>{publishedDate}</span>
-            </div>
-          </div>
+     {/* <div className="flex gap-4 items-center text-sm font-semibold text-[var(--color-public-text-muted)]">
+                          <p className="flex items-center gap-1.5">
+                            {article?.author?.image && (
+                              <img
+                                src={article?.author?.image}
+                                alt={article?.author?.name}
+                                className="h-6 w-6 rounded-full object-cover border border-[var(--color-public-border-main)]"
+                              />
+                            )}
+                            <span className="text-slate-500">
+                              {article?.author?.name}
+                            </span>
+                          </p>
+                          <div className="flex items-center text-sm gap-2 text-slate-500">
+                            <Clock
+                              size={15}
+                              className="text-slate-500"
+                              strokeWidth={3}
+                            />
+                            <span className="font-semibold tracking-wider uppercase">
+                              {article?.published_at?.split("T")[0]}
+                            </span>
+                          </div>
+                        </div> */}
         </div>
       </article>
     );
@@ -89,21 +96,31 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
         <h4 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)]">
           {article?.title}
         </h4>
-
-        <div className="flex items-center gap-2 text-[11px] sm:text-xs font-medium text-slate-400 mt-1">
-          {article?.author?.name && (
-            <>
-              <span className="font-semibold text-slate-600 truncate max-w-[100px]">
-                {article.author.name}
-              </span>
-              <span className="text-slate-300">•</span>
-            </>
-          )}
-          <div className="flex items-center gap-1">
-            <Clock size={11} strokeWidth={2.5} />
-            <span>{publishedDate}</span>
-          </div>
-        </div>
+{/* 
+       <div className="flex gap-4 items-center text-xs font-semibold text-[var(--color-public-text-muted)]">
+                          <p className="flex items-center gap-1.5">
+                            {article?.author?.image && (
+                              <img
+                                src={article?.author?.image}
+                                alt={article?.author?.name}
+                                className="h-6 w-6 rounded-full object-cover border border-[var(--color-public-border-main)]"
+                              />
+                            )}
+                            <span className="text-slate-500">
+                              {article?.author?.name}
+                            </span>
+                          </p>
+                          <div className="flex items-center text-xs gap-2 text-slate-500">
+                            <Clock
+                              size={15}
+                              className="text-slate-500"
+                              strokeWidth={3}
+                            />
+                            <span className="font-semibold tracking-wider uppercase">
+                              {article?.published_at?.split("T")[0]}
+                            </span>
+                          </div>
+                        </div> */}
       </div>
     </article>
   );

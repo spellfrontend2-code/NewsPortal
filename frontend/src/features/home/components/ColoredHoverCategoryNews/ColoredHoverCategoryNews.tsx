@@ -2,7 +2,7 @@ import ArticleSquareHoverCard from "@/features/articles/components/Public/cards/
 import { useArticlesHooks } from "@/features/articles/hooks/useArticles";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ColoredCategoryNewsSkeleton from "../ColoredCategoryNews/ColoredCategoryNewsSkeleton";
+import ColoredHoverCategoryNewsSkeleton from "./ColoredHoverCategoryNewsSkeleton";
 
 function ColoredHoverCategoryNews({
   category,
@@ -30,7 +30,7 @@ function ColoredHoverCategoryNews({
 
   const navigate = useNavigate();
 
-  if (articleLoading) return <ColoredCategoryNewsSkeleton color={color} />;
+  if (articleLoading) return <ColoredHoverCategoryNewsSkeleton color={color} />;
 
   return (
     <div

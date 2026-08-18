@@ -1,3 +1,8 @@
+import {
+  ArticleRectangleCardSkeleton,
+  ArticleSquareCardSkeleton,
+} from "@/features/articles/components/Public/cards/CardSkeleton";
+
 function ColoredCategoryNewsSkeleton({
   color,
 }: {
@@ -13,40 +18,27 @@ function ColoredCategoryNewsSkeleton({
       }}
     >
       <div className="w-full flex flex-col h-full">
-        {/* Category Title */}
-        <div className="mb-2 h-8 w-52 rounded bg-[var(--color-public-bg-skeleton)]" />
+        {/* Header */}
+        <div className="flex items-center justify-between pb-2 mb-1">
+          <div className="h-7 sm:h-8 w-36 sm:w-48 rounded bg-slate-300/70" />
+          <div className="h-8 w-8 rounded-full bg-white/80 shrink-0" />
+        </div>
 
-        <div className="flex flex-col lg:flex-row w-full h-[95%] gap-6">
-          {/* Left — ArticleSquareCard at flex-[3], h-[350px] */}
-          <div className="lg:flex-[3] min-w-0 h-[350px] lg:h-auto rounded-md overflow-hidden flex flex-col border border-slate-100 bg-white">
-            {/* Image 70% */}
-            <div className="h-[70%] w-full bg-[var(--color-public-bg-skeleton)]" />
-            {/* Content */}
-            <div className="p-4 flex flex-col justify-between flex-1 gap-2">
-              <div className="flex flex-col gap-2">
-                <div className="h-4 w-[90%] rounded bg-[var(--color-public-bg-skeleton)]" />
-                <div className="h-4 w-[70%] rounded bg-[var(--color-public-bg-skeleton)]" />
-              </div>
-              <div className="h-3 w-20 rounded bg-[var(--color-public-bg-skeleton)]" />
-            </div>
+        <div className="flex flex-col lg:flex-row w-full gap-6">
+          {/* Left — Big ArticleSquareCard at lg:flex-[2] */}
+          <div className="lg:flex-[2] min-w-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+            <ArticleSquareCardSkeleton />
           </div>
 
-          {/* Right — ArticleRectangleCards at lg:w-1/4 */}
-          <div className="lg:w-1/4 w-full">
-            <div className="w-full h-full flex flex-col gap-2 justify-between">
+          {/* Right — 5 ArticleRectangleCards at lg:w-1/3 */}
+          <div className="lg:w-1/3 w-full">
+            <div className="w-full h-full flex flex-col gap-2">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div
                   key={index}
-                  className="h-[105px] rounded-md bg-white border border-slate-100 flex overflow-hidden"
+                  className="h-[100px] sm:h-[120px] lg:h-[115px]"
                 >
-                  {/* Image 55% */}
-                  <div className="w-[55%] bg-[var(--color-public-bg-skeleton)]" />
-                  {/* Content 45% */}
-                  <div className="w-[45%] p-4 flex flex-col justify-center gap-2">
-                    <div className="h-4 w-[85%] rounded bg-[var(--color-public-bg-skeleton)]" />
-                    <div className="h-4 w-[65%] rounded bg-[var(--color-public-bg-skeleton)]" />
-                    <div className="h-3 w-16 rounded bg-[var(--color-public-bg-skeleton)]" />
-                  </div>
+                  <ArticleRectangleCardSkeleton />
                 </div>
               ))}
             </div>

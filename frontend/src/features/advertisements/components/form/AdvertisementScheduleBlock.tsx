@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
 import {
@@ -21,6 +21,7 @@ export default function AdvertisementScheduleBlock() {
     register,
     control,
     watch,
+    setValue,
     formState: { errors },
   } = useFormContext();
 
@@ -30,6 +31,7 @@ export default function AdvertisementScheduleBlock() {
   const pageValue = watch("page") || "home";
   const sectionValue = watch("section") || "";
   const sizeValue = watch("size") || "728x90";
+  const mobileSizeValue = watch("mobile_size") || "";
 
   // Find section-specific sizes
   const pages = useMemo(() => {
@@ -38,7 +40,22 @@ export default function AdvertisementScheduleBlock() {
       formOptionsData?.data?.pages ||
       formOptionsData?.form?.pages;
     if (apiPages && Array.isArray(apiPages) && apiPages.length > 0) {
-      return apiPages;
+      return DEFAULT_FORM_PAGES.map((defPage) => {
+        const apiPage = apiPages.find((p: any) => p.value === defPage.value);
+        if (!apiPage) return defPage;
+
+        const mergedSections = [...(apiPage.sections || [])];
+        for (const defSec of defPage.sections) {
+          if (!mergedSections.some((s: any) => s.value === defSec.value)) {
+            mergedSections.push(defSec);
+          }
+        }
+        return {
+          ...defPage,
+          ...apiPage,
+          sections: mergedSections,
+        };
+      });
     }
     return DEFAULT_FORM_PAGES;
   }, [formOptionsData]);
@@ -66,11 +83,60 @@ export default function AdvertisementScheduleBlock() {
       "300x600",
       "468x60",
       "320x100",
+      "600x400",
+      "400x300",
       "custom",
     ];
   }, [selectedSection]);
 
+  // Ensure size is always synchronized with available options
+  useEffect(() => {
+    const currentSize = watch("size");
+    if (!currentSize && availableSizes.length > 0) {
+      const fallback = selectedSection?.default_size || availableSizes[0] || "728x90";
+      setValue("size", fallback, { shouldValidate: true, shouldDirty: true });
+    }
+  }, [selectedSection, availableSizes, watch, setValue]);
+
+  // If the stored size is not in the available list and not already "custom",
+  // treat it as a custom dimension: set size -> "custom" and parse W/H.
+  useEffect(() => {
+    if (
+      sizeValue &&
+      sizeValue !== "custom" &&
+      availableSizes.length > 0 &&
+      !availableSizes.includes(sizeValue)
+    ) {
+      const match = sizeValue.match(/^(\d+)x(\d+)$/i);
+      if (match) {
+        setValue("custom_width", Number(match[1]), { shouldDirty: false });
+        setValue("custom_height", Number(match[2]), { shouldDirty: false });
+      }
+      setValue("size", "custom", { shouldDirty: false });
+    }
+  }, [sizeValue, availableSizes, setValue]);
+
+  // If the stored mobile_size is not in the known list and not already "custom" or "none",
+  // treat it as a custom dimension: set mobile_size -> "custom" and parse W/H.
+  const KNOWN_MOBILE_SIZES = ["", "none", "320x100", "300x250", "320x50", "custom"];
+  useEffect(() => {
+    if (
+      mobileSizeValue &&
+      mobileSizeValue !== "custom" &&
+      mobileSizeValue !== "none" &&
+      !KNOWN_MOBILE_SIZES.includes(mobileSizeValue)
+    ) {
+      const match = mobileSizeValue.match(/^(\d+)x(\d+)$/i);
+      if (match) {
+        setValue("custom_mobile_width", Number(match[1]), { shouldDirty: false });
+        setValue("custom_mobile_height", Number(match[2]), { shouldDirty: false });
+      }
+      setValue("mobile_size", "custom", { shouldDirty: false });
+    }
+  }, [mobileSizeValue, setValue]);
+
   const isCustomSize = sizeValue === "custom";
+  const isCustomMobileSize = mobileSizeValue === "custom";
 
   return (
     <div className="flex flex-col gap-4">
@@ -91,11 +157,15 @@ export default function AdvertisementScheduleBlock() {
           <Controller
             name="size"
             control={control}
+            defaultValue={selectedSection?.default_size || availableSizes[0] || "728x90"}
             rules={{ required: "Size is required" }}
             render={({ field }) => (
               <Select
-                value={field.value || "728x90"}
-                onValueChange={field.onChange}
+                value={field.value || selectedSection?.default_size || availableSizes[0] || "728x90"}
+                onValueChange={(val) => {
+                  field.onChange(val);
+                  setValue("size", val, { shouldDirty: true, shouldValidate: true });
+                }}
               >
                 <SelectTrigger className={`${inputStyle} py-5 text-base bg-white`}>
                   <SelectValue placeholder="Select primary size" />
@@ -142,7 +212,7 @@ export default function AdvertisementScheduleBlock() {
         </div>
       </div>
 
-      {/* Custom Dimension Inputs if "custom" selected */}
+      {/* Custom Dimension Inputs if "custom" selected for primary size */}
       {isCustomSize && (
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -177,6 +247,47 @@ export default function AdvertisementScheduleBlock() {
                 valueAsNumber: true,
               })}
               placeholder="e.g. 120"
+              className={inputStyle}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Custom Mobile Dimension Inputs if "custom" selected for mobile size */}
+      {isCustomMobileSize && (
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="flex items-center gap-1 font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+              Mobile Width (px)
+              <Asterisk className="text-red-500" size={12} />
+            </label>
+            <input
+              type="number"
+              min={50}
+              max={2500}
+              {...register("custom_mobile_width", {
+                required: isCustomMobileSize ? "Custom mobile width is required" : false,
+                valueAsNumber: true,
+              })}
+              placeholder="e.g. 320"
+              className={inputStyle}
+            />
+          </div>
+
+          <div>
+            <label className="flex items-center gap-1 font-semibold text-[rgb(var(--color-gray-rgb)/0.7)]">
+              Mobile Height (px)
+              <Asterisk className="text-red-500" size={12} />
+            </label>
+            <input
+              type="number"
+              min={20}
+              max={2500}
+              {...register("custom_mobile_height", {
+                required: isCustomMobileSize ? "Custom mobile height is required" : false,
+                valueAsNumber: true,
+              })}
+              placeholder="e.g. 100"
               className={inputStyle}
             />
           </div>

@@ -59,17 +59,20 @@ function SidebarAdvertisement({
   const adWidth = rawAd.width || slot?.width;
   const adHeight = rawAd.height || slot?.height;
 
-  // The inner ad is sized by backend dimensions; max-w-full / max-h-full keeps
-  // it responsive inside the square wrapper (never overflows).
+  // Compute aspect ratio if explicit dimensions are provided
+  const aspectRatio =
+    adWidth && adHeight ? `${adWidth} / ${adHeight}` : undefined;
+
+  // The inner ad is sized by backend dimensions while remaining fluid and responsive
   const innerStyle: React.CSSProperties = {
-    ...(adWidth ? { width: `${adWidth}px` } : { width: "100%" }),
-    ...(adHeight ? { height: `${adHeight}px` } : { height: "100%" }),
-    maxWidth: "100%",
-    maxHeight: "100%",
+    width: "100%",
+    ...(adWidth ? { maxWidth: `${adWidth}px` } : {}),
+    ...(adHeight ? { maxHeight: `${adHeight}px` } : {}),
+    ...(aspectRatio ? { aspectRatio } : {}),
   };
 
   return (
-    // Outer: fills the square placeholder set by the caller (w-full h-full),
+    // Outer: fills the placeholder set by the caller,
     // centers the inner ad both horizontally and vertically.
     <div
       ref={adRef}
@@ -80,7 +83,7 @@ function SidebarAdvertisement({
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="flex items-center justify-center overflow-hidden"
+        className="group w-full h-full flex items-center justify-center overflow-hidden"
         style={innerStyle}
       >
         {adType === "image" && imageUrl ? (

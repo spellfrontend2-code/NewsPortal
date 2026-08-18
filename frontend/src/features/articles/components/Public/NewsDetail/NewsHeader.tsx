@@ -16,7 +16,7 @@ function NewsHeader({ Data }: any) {
 
       {/* Top Banner Advertisement (Takes whole banner width & height without spaces) */}
       {advertisementData?.top?.length > 0 && (
-        <div className="w-full my-3 overflow-hidden rounded-md shadow-sm">
+        <div className="w-full my-3 overflow-hidden rounded-md ">
           {advertisementData.top.map((ad: any, index: number) => (
             <div key={ad.id ?? index} className="w-full">
               <BannerAdvertisement Ad={ad} />

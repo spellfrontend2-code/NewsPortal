@@ -139,26 +139,32 @@ export const useArticlesHooks = () => {
         queryFn: () => articles.fetchPublicSingleArticle(slug),
       });
     },
-    useSearchPublicArticles: ({
-      page,
-      per_page,
-      search,
-    }: {
-      page: number;
-      per_page: number;
-      search?: string;
-    }) => {
-      return useQuery({
-        queryKey: ["public_search_articles", page, per_page, search],
-        queryFn: () => {
-          return articles.searchPublicArticles({
-            page,
-            per_page,
-            search,
-          });
-        },
+   useSearchPublicArticles: (
+  {
+    page,
+    per_page,
+    search,
+  }: {
+    page: number;
+    per_page: number;
+    search?: string;
+  },
+  options?: {
+    enabled?: boolean;
+  }
+) => {
+  return useQuery({
+    queryKey: ["public_search_articles", page, per_page, search],
+    queryFn: () => {
+      return articles.searchPublicArticles({
+        page,
+        per_page,
+        search,
       });
     },
+    enabled: options?.enabled ?? !!search?.trim(),
+  });
+},
     useFetchRelatedArticles:(slug?:string)=>{
       return useQuery({
         queryKey:["related_articles",slug],

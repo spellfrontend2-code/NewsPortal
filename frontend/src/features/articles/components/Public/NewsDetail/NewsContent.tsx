@@ -135,7 +135,7 @@ function NewsContent({ Data, commentRef }: any) {
             [&_li]:mb-2 [&_li]:text-slate-700
             [&_blockquote]:border-l-4 [&_blockquote]:border-slate-800 [&_blockquote]:pl-6 [&_blockquote]:italic
             [&_blockquote]:text-slate-700 [&_blockquote]:text-xl [&_blockquote]:my-8
-            [&_a]:text-[var(--color-public-newsText)] [&_a]:underline hover:[&_a]:opacity-80"
+            [&_a]:text-[var(--color-public-newsText)] [&_a]:underline [&_a:hover]:opacity-80"
         >
           {Array.isArray(contentBlocks) && contentBlocks.length > 0 ? (
             <div>
@@ -154,7 +154,7 @@ function NewsContent({ Data, commentRef }: any) {
                   return (
                     <div
                       key={`ad-${block.data?.id ?? idx}-${idx}`}
-                      className="my-6 w-full overflow-hidden rounded-md shadow-sm"
+                      className="my-6 w-full overflow-hidden rounded-md"
                     >
                       <BannerAdvertisement item={block} Ad={block.data} />
                     </div>
@@ -276,15 +276,17 @@ function NewsContent({ Data, commentRef }: any) {
 
       {/* Right Column Sidebar Advertisements */}
       {hasSidebarAds && (
-        <div className="lg:w-1/5 w-full flex flex-col gap-6">
-          {sortedSidebarAds.map((ad: any, index: number) => (
-            <div
-              key={ad.id ?? index}
-              className="w-full aspect-square overflow-hidden rounded-md shadow-sm"
-            >
-              <SidebarAdvertisement Ad={ad} />
-            </div>
-          ))}
+        <div className="lg:w-1/5 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+            {sortedSidebarAds.map((ad: any, index: number) => (
+              <div
+                key={ad.id ?? index}
+                className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-md shadow-sm border border-[var(--color-public-border-light)] bg-white"
+              >
+                <SidebarAdvertisement Ad={ad} />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

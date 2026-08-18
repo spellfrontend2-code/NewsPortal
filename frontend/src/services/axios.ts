@@ -1,22 +1,5 @@
 import axios from "axios";
 
-const getSessionId = () => {
-  try {
-    let sessionId = localStorage.getItem("news_session_id");
-    if (!sessionId) {
-      sessionId =
-        "session-" +
-        Math.random().toString(36).substring(2, 9) +
-        "-" +
-        Date.now();
-      localStorage.setItem("news_session_id", sessionId);
-    }
-    return sessionId;
-  } catch {
-    return "session-default";
-  }
-};
-
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
 });
@@ -28,9 +11,6 @@ axiosInstance.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-
-  // Stable session identifier for frequency & impression tracking
-  config.headers["X-Session-Id"] = getSessionId();
 
   return config;
 });

@@ -99,7 +99,41 @@ export default function AddAdvertisement({
       ad?.mobile_size ||
       (ad?.slot?.mobile_width && ad?.slot?.mobile_height
         ? `${ad.slot.mobile_width}x${ad.slot.mobile_height}`
-        : "");
+        : (ad?.mobile_width && ad?.mobile_height
+          ? `${ad.mobile_width}x${ad.mobile_height}`
+          : ""));
+
+    // Detect non-standard sizes (not in the known list) and map to "custom"
+    const KNOWN_SIZES = [
+      "728x90", "970x250", "300x250", "300x600",
+      "468x60", "320x50", "320x100", "600x400", "400x300", "custom",
+    ];
+    const sizeIsKnown = KNOWN_SIZES.includes(resolvedSize);
+    const customSizeMatch = !sizeIsKnown
+      ? resolvedSize.match(/^(\d+)x(\d+)$/i)
+      : null;
+    const finalSize = sizeIsKnown ? resolvedSize : "custom";
+    const finalCustomWidth = customSizeMatch
+      ? Number(customSizeMatch[1])
+      : (ad?.custom_width || null);
+    const finalCustomHeight = customSizeMatch
+      ? Number(customSizeMatch[2])
+      : (ad?.custom_height || null);
+
+    const KNOWN_MOBILE_SIZES = [
+      "320x100", "300x250", "320x50", "custom", "none", "",
+    ];
+    const mobileSizeIsKnown = !resolvedMobileSize || KNOWN_MOBILE_SIZES.includes(resolvedMobileSize);
+    const customMobileSizeMatch = !mobileSizeIsKnown
+      ? resolvedMobileSize.match(/^(\d+)x(\d+)$/i)
+      : null;
+    const finalMobileSize = mobileSizeIsKnown ? (resolvedMobileSize || "") : "custom";
+    const finalCustomMobileWidth = customMobileSizeMatch
+      ? Number(customMobileSizeMatch[1])
+      : (ad?.custom_mobile_width || (resolvedMobileSize === "custom" ? (ad?.mobile_width || null) : null));
+    const finalCustomMobileHeight = customMobileSizeMatch
+      ? Number(customMobileSizeMatch[2])
+      : (ad?.custom_mobile_height || (resolvedMobileSize === "custom" ? (ad?.mobile_height || null) : null));
 
     // Resolve Category objects for UI
     const targetCategoryId = ad?.category_id ?? placementObj.category_id;
@@ -123,33 +157,51 @@ export default function AddAdvertisement({
       }
     }
 
-    methods.reset({
-      name: ad?.name || ad?.title || "",
-      advertiser_name: ad?.advertiser_name || "",
-      media_type: ad?.media_type || ad?.type || ad?.ad_type || "image",
-
-      image_url: ad?.image_url || ad?.image || null,
-      video_url: ad?.video_url || ad?.video || null,
-      video_thumbnail: ad?.video_thumbnail || ad?.thumbnail || null,
-      html_code: ad?.html_code || ad?.html || "",
-      text_content: ad?.text_content || ad?.text || "",
-
-      click_url: ad?.click_url || ad?.url || ad?.target_url || "",
-      button_text: ad?.button_text || ad?.cta || ad?.cta_text || "",
-
-      page: ad?.page || placementObj.page || "home",
-      section: ad?.section || placementObj.section || "article_list",
-      where:
+      const resolvedPage = ad?.page || placementObj.page || "home";
+      const resolvedSection =
+        ad?.section ||
+        placementObj.section ||
+        (ad?.where === "popup" ||
+        placementObj.where === "popup" ||
+        ad?.slot?.position_type === "popup" ||
+        ad?.placement === "popup"
+          ? "popup"
+          : resolvedPage === "single"
+          ? "article_content"
+          : "article_list");
+      const resolvedWhere =
         ad?.where ||
         placementObj.where ||
         ad?.slot?.position_type ||
-        "after_article",
+        (resolvedSection === "popup"
+          ? "popup"
+          : resolvedPage === "single"
+          ? "after_paragraph"
+          : "after_article");
 
-      category_id: targetCategoryId ?? null,
-      article_id: ad?.article_id ?? placementObj.article_id ?? null,
-      tag_id: ad?.tag_id ?? placementObj.tag_id ?? null,
-      author_id: ad?.author_id ?? placementObj.author_id ?? null,
-      all_entities: Boolean(ad?.all_entities ?? placementObj.all_entities),
+      methods.reset({
+        name: ad?.name || ad?.title || "",
+        advertiser_name: ad?.advertiser_name || "",
+        media_type: ad?.media_type || ad?.type || ad?.ad_type || "image",
+
+        image_url: ad?.image_url || ad?.image || null,
+        video_url: ad?.video_url || ad?.video || null,
+        video_thumbnail: ad?.video_thumbnail || ad?.thumbnail || null,
+        html_code: ad?.html_code || ad?.html || "",
+        text_content: ad?.text_content || ad?.text || "",
+
+        click_url: ad?.click_url || ad?.url || ad?.target_url || "",
+        button_text: ad?.button_text || ad?.cta || ad?.cta_text || "",
+
+        page: resolvedPage,
+        section: resolvedSection,
+        where: resolvedWhere,
+
+        category_id: targetCategoryId ?? null,
+        article_id: ad?.article_id ?? placementObj.article_id ?? null,
+        tag_id: ad?.tag_id ?? placementObj.tag_id ?? null,
+        author_id: ad?.author_id ?? placementObj.author_id ?? null,
+        all_entities: Boolean(ad?.all_entities ?? placementObj.all_entities),
 
       article_number:
         ad?.article_number ??
@@ -162,10 +214,12 @@ export default function AddAdvertisement({
         ad?.slot?.paragraph_position ??
         null,
 
-      size: resolvedSize,
-      custom_width: ad?.custom_width || null,
-      custom_height: ad?.custom_height || null,
-      mobile_size: resolvedMobileSize,
+      size: finalSize,
+      custom_width: finalCustomWidth,
+      custom_height: finalCustomHeight,
+      mobile_size: finalMobileSize,
+      custom_mobile_width: finalCustomMobileWidth,
+      custom_mobile_height: finalCustomMobileHeight,
 
       start_date: startDate,
       end_date: endDate,
@@ -186,12 +240,25 @@ export default function AddAdvertisement({
     };
 
     let finalSize = formData.size;
-    if (
+    if (!finalSize || finalSize === "") {
+      finalSize = formData.section === "popup" ? "600x400" : "728x90";
+    } else if (
       formData.size === "custom" &&
       formData.custom_width &&
       formData.custom_height
     ) {
       finalSize = `${formData.custom_width}x${formData.custom_height}`;
+    }
+
+    let finalMobileSize = formData.mobile_size || null;
+    if (
+      formData.mobile_size === "custom" &&
+      formData.custom_mobile_width &&
+      formData.custom_mobile_height
+    ) {
+      finalMobileSize = `${formData.custom_mobile_width}x${formData.custom_mobile_height}`;
+    } else if (finalMobileSize === "none" || finalMobileSize === "") {
+      finalMobileSize = null;
     }
 
     const payload: any = {
@@ -203,10 +270,10 @@ export default function AddAdvertisement({
 
       page: formData.page,
       section: formData.section,
-      where: formData.where,
+      where: formData.where || (formData.section === "popup" ? "popup" : "after_article"),
 
       size: finalSize,
-      mobile_size: formData.mobile_size || null,
+      mobile_size: finalMobileSize,
       start_date: formData.start_date,
       end_date: formData.end_date || null,
       start_time: formData.start_time || "00:00",
@@ -359,7 +426,18 @@ export default function AddAdvertisement({
 
       {/* Form Body */}
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+        <form
+          onSubmit={methods.handleSubmit(onSubmit, (formErrors) => {
+            console.error("Advertisement Form Errors:", formErrors);
+            const firstError = Object.values(formErrors)[0]?.message;
+            toast.error(
+              typeof firstError === "string"
+                ? firstError
+                : "Please fill in all required fields."
+            );
+          })}
+          className="flex flex-col gap-6"
+        >
           <AdvertisementCreativeBlock
             setUploadOpen={setUploadOpen}
             setUploadType={setUploadType}

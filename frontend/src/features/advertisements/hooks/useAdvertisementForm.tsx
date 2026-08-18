@@ -29,7 +29,12 @@ export function useAdvertisementForm({ advertisement }: { advertisement?: any; t
     return "23:59";
   };
 
-  const getInitialSize = () => {
+  const KNOWN_SIZES = [
+    "728x90", "970x250", "300x250", "300x600",
+    "468x60", "320x50", "320x100", "600x400", "400x300", "custom",
+  ];
+
+  const getRawSize = () => {
     if (advertisement?.size) return advertisement.size;
     if (advertisement?.slot?.width && advertisement?.slot?.height) {
       return `${advertisement.slot.width}x${advertisement.slot.height}`;
@@ -40,7 +45,27 @@ export function useAdvertisementForm({ advertisement }: { advertisement?: any; t
     return "728x90";
   };
 
-  const getInitialMobileSize = () => {
+  const rawSize = getRawSize();
+  const sizeIsKnown = KNOWN_SIZES.includes(rawSize);
+  const customSizeMatch = !sizeIsKnown ? rawSize.match(/^(\d+)x(\d+)$/i) : null;
+
+  const getInitialSize = () => (sizeIsKnown ? rawSize : "custom");
+
+  const getInitialCustomWidth = () => {
+    if (customSizeMatch) return Number(customSizeMatch[1]);
+    return advertisement?.custom_width || null;
+  };
+
+  const getInitialCustomHeight = () => {
+    if (customSizeMatch) return Number(customSizeMatch[2]);
+    return advertisement?.custom_height || null;
+  };
+
+  const KNOWN_MOBILE_SIZES = [
+    "320x100", "300x250", "320x50", "custom", "none", "",
+  ];
+
+  const getRawMobileSize = () => {
     if (advertisement?.mobile_size) return advertisement.mobile_size;
     if (advertisement?.slot?.mobile_width && advertisement?.slot?.mobile_height) {
       return `${advertisement.slot.mobile_width}x${advertisement.slot.mobile_height}`;
@@ -51,15 +76,50 @@ export function useAdvertisementForm({ advertisement }: { advertisement?: any; t
     return "320x100";
   };
 
+  const rawMobileSize = getRawMobileSize();
+  const mobileSizeIsKnown = !rawMobileSize || KNOWN_MOBILE_SIZES.includes(rawMobileSize);
+  const customMobileSizeMatch = !mobileSizeIsKnown ? rawMobileSize.match(/^(\d+)x(\d+)$/i) : null;
+
+  const getInitialMobileSize = () => (mobileSizeIsKnown ? (rawMobileSize || "") : "custom");
+
+  const getInitialCustomMobileWidth = () => {
+    if (customMobileSizeMatch) return Number(customMobileSizeMatch[1]);
+    return advertisement?.custom_mobile_width || (rawMobileSize === "custom" ? (advertisement?.mobile_width || null) : null);
+  };
+
+  const getInitialCustomMobileHeight = () => {
+    if (customMobileSizeMatch) return Number(customMobileSizeMatch[2]);
+    return advertisement?.custom_mobile_height || (rawMobileSize === "custom" ? (advertisement?.mobile_height || null) : null);
+  };
+
   const placementObj = advertisement?.placement && typeof advertisement.placement === "object"
     ? advertisement.placement
     : {};
 
   const initialPage = advertisement?.page || placementObj.page || "home";
-  const initialSection = advertisement?.section || placementObj.section || (initialPage === "single" ? "article_content" : "article_list");
-  const initialWhere = advertisement?.where || placementObj.where || advertisement?.slot?.position_type || (initialPage === "single" ? "after_paragraph" : "after_article");
+  const initialSection =
+    advertisement?.section ||
+    placementObj.section ||
+    (advertisement?.where === "popup" ||
+    placementObj.where === "popup" ||
+    advertisement?.slot?.position_type === "popup" ||
+    advertisement?.placement === "popup"
+      ? "popup"
+      : initialPage === "single"
+      ? "article_content"
+      : "article_list");
+  const initialWhere =
+    advertisement?.where ||
+    placementObj.where ||
+    advertisement?.slot?.position_type ||
+    (initialSection === "popup"
+      ? "popup"
+      : initialPage === "single"
+      ? "after_paragraph"
+      : "after_article");
 
   const formMethods = useForm<AdvertisementForm>({
+    shouldUnregister: true,
     defaultValues: {
       name: advertisement?.name || advertisement?.title || "",
       advertiser_name: advertisement?.advertiser_name || "",
@@ -88,9 +148,11 @@ export function useAdvertisementForm({ advertisement }: { advertisement?: any; t
       paragraph_number: advertisement?.paragraph_number ?? placementObj.paragraph_number ?? advertisement?.slot?.paragraph_position ?? (initialWhere === "after_paragraph" ? 3 : null),
 
       size: getInitialSize(),
-      custom_width: advertisement?.custom_width || null,
-      custom_height: advertisement?.custom_height || null,
+      custom_width: getInitialCustomWidth(),
+      custom_height: getInitialCustomHeight(),
       mobile_size: getInitialMobileSize(),
+      custom_mobile_width: getInitialCustomMobileWidth(),
+      custom_mobile_height: getInitialCustomMobileHeight(),
 
       start_date: getInitialStartDate(),
       end_date: getInitialEndDate(),
