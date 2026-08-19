@@ -7,9 +7,11 @@ import { Newspaper } from "lucide-react";
 
 function CategoryBasedNewsList({
   categorySlug,
+  color = "transparent",
 }: {
   categorySlug?: string;
   categoryId?: number | string;
+  color?: string;
 }) {
   const { slug } = useParams();
   const articleHook = useArticlesHooks();
@@ -44,14 +46,19 @@ function CategoryBasedNewsList({
 
   return (
     <div
-      className={
+      className={`relative w-full ${
         categorySlug
-          ? "pb-3 border-b border-slate-100 last:border-b-0 w-full"
-          : "w-full"
-      }
+          ? "pb-3 border-b border-slate-100 last:border-b-0"
+          : ""
+      } ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
     >
       {isLoading ? (
-        <NewsListSkeleton show={categorySlug ? "list" : "all"} />
+        <NewsListSkeleton show={categorySlug ? "list" : "all"} color={color} />
       ) : items.length > 0 ? (
         <NewsList
           articles={items}

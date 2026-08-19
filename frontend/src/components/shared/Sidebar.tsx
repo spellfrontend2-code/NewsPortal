@@ -139,12 +139,12 @@ function Sidebar() {
   const filteredNavItems = permissionLoading
     ? []
     : navItems.filter((item) => {
-        if (!item.permissions) return true;
+      if (!item.permissions) return true;
 
-        return item.permissions.some(
-          (permission) => permission && hasPermission(permission),
-        );
-      });
+      return item.permissions.some(
+        (permission) => permission && hasPermission(permission),
+      );
+    });
   const handleLogout = () => {
     logout.mutate(
       {},
@@ -184,7 +184,7 @@ function Sidebar() {
       className={`relative h-screen w-[280px] overflow-auto transition-all duration-300 shadow-lg `}
     >
       <nav
-        className={`relative flex flex-col justify-between  overflow-y-auto scrollbar-none transition-all duration-300 w-full h-screen`}
+        className={`relative flex flex-col justify-between overflow-y-auto scrollbar-none transition-all duration-300 w-full h-full`}
       >
         <div>
           <Link to="/" className="flex items-center gap-2">

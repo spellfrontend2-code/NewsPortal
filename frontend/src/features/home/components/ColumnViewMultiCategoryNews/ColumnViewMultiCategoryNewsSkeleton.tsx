@@ -2,11 +2,20 @@ import { ArticleRectangleCardSkeleton } from "@/features/articles/components/Pub
 
 function ColumnViewMultiCategoryNewsSkeleton({
   hasSidebarAds = true,
+  color = "transparent",
 }: {
   hasSidebarAds?: boolean;
+  color?: string;
 }) {
   return (
-    <div className="w-full flex lg:flex-row flex-col gap-6 animate-pulse">
+    <div
+      className={`relative w-full flex lg:flex-row flex-col gap-6 animate-pulse ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
       {/* Category One — lg:w-2/3 */}
       <div className="w-full lg:w-2/3 flex flex-col">
         {/* Header */}

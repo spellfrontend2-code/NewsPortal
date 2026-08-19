@@ -1,4 +1,5 @@
 import PopupAdvertisement from "@/features/advertisements/components/Public/PopupAdvertisement";
+import { usePagePopup } from "@/features/advertisements/hooks/usePagePopup";
 import ArticleSquareCard from "@/features/articles/components/Public/cards/ArticleSquareCard";
 import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
 import NewsContent from "@/features/articles/components/Public/NewsDetail/NewsContent";
@@ -9,7 +10,7 @@ import UserLogin from "@/features/auth/components/UserLogin";
 import { useAuthChecker } from "@/features/auth/hooks/useAuthChecker";
 import { shareArticle } from "@/lib/shareHandler";
 import { Bookmark, MessageCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {  useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 const socialMedias = [
@@ -47,7 +48,6 @@ function NewsDetail() {
   const sharePublicArticle = articleHook.useSharePublicArticle();
   const bookmarkPublicArticle = articleHook.useBookmarkPublicArticle();
   const Data = articles?.data ?? [];
-  const [showPopup, setShowPopup] = useState(false);
   const { checkAuth, open, setOpen } = useAuthChecker();
   const { data: relatedNewsList, isLoading: relatednewsLoading } =
     articleHook.useFetchRelatedArticles(slug);
@@ -55,18 +55,23 @@ function NewsDetail() {
     ?.filter((item: any) => item.type === "article")
     .slice(0, 3);
 
-  useEffect(() => {
-    const popup = Data?.advertisements?.popup;
-    if (popup && ((Array.isArray(popup) && popup.length > 0) || popup?.id)) {
-      setShowPopup(true);
-    } else {
-      setShowPopup(false);
-    }
-  }, [Data?.advertisements?.popup]);
+  const popupAd = Data?.advertisements?.popup;
+  const hasValidArticlePopup = Boolean(
+    !isLoading &&
+      popupAd &&
+      ((Array.isArray(popupAd) &&
+        popupAd.length > 0 &&
+        (popupAd[0]?.id || popupAd[0]?.data?.id || popupAd[0])) ||
+        popupAd?.id)
+  );
+
+  const { showPopup, setShowPopup } = usePagePopup({
+    pageKey: slug ? `/news/${slug}` : undefined,
+    hasPopup: hasValidArticlePopup,
+  });
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard!");
     } catch (error) {
       toast.error("Failed to copy link.");
     }
@@ -221,9 +226,9 @@ function NewsDetail() {
           </div>
         )
       )}
-      {Boolean(Data?.advertisements?.popup && ((Array.isArray(Data.advertisements.popup) && Data.advertisements.popup.length > 0) || Data.advertisements.popup?.id)) && (
+      {hasValidArticlePopup && (
         <PopupAdvertisement
-          advertisements={Data?.advertisements?.popup}
+          advertisements={popupAd}
           showPopup={showPopup}
           setShowPopup={setShowPopup}
         />

@@ -1,17 +1,17 @@
 import { ArticleSquareHoverCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
 
 function ColoredHoverCategoryNewsSkeleton({
-  color,
+  color = "transparent",
 }: {
-  color: string;
+  color?: string;
 }) {
   return (
     <div
       className="relative w-full py-8 animate-pulse"
       style={{
         backgroundColor: color,
-        boxShadow: `0 0 0 100vmax ${color}`,
-        clipPath: "inset(0 -100vmax)",
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
       }}
     >
       <div className="w-full flex flex-col h-full gap-5">

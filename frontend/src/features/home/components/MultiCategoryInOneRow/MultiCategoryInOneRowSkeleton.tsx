@@ -1,8 +1,19 @@
 import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public/cards/CardSkeleton";
 
-function MultiCategoryInOneRowSkeleton() {
+function MultiCategoryInOneRowSkeleton({
+  color = "transparent",
+}: {
+  color?: string;
+}) {
   return (
-    <div className="w-full animate-pulse">
+    <div
+      className={`relative w-full animate-pulse ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         {/* Category One — w-full lg:w-2/3 */}
         <div className="w-full lg:w-2/3">

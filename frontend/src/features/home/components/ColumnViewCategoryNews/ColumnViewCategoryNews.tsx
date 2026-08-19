@@ -6,7 +6,13 @@ import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ColumnViewCategoryNewsSkeleton from "./ColumnViewCategoryNewsSkeleton";
 
-function ColumnViewCategoryNews({ category }: { category: any }) {
+function ColumnViewCategoryNews({
+  category,
+  color = "transparent",
+}: {
+  category: any;
+  color?: string;
+}) {
   const articleHook = useArticlesHooks();
 
   const { data: allArticles, isLoading: articleLoading } =
@@ -32,11 +38,18 @@ function ColumnViewCategoryNews({ category }: { category: any }) {
   const navigate = useNavigate();
 
   if (articleLoading || advertisementsLoading) {
-    return <ColumnViewCategoryNewsSkeleton />;
+    return <ColumnViewCategoryNewsSkeleton hasSidebarAds={hasSidebarAds} color={color} />;
   }
 
   return (
-    <div className="w-full flex flex-col lg:flex-row gap-6 py-5">
+    <div
+      className="relative w-full flex flex-col lg:flex-row gap-6 py-5"
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
       <div className="w-full flex flex-col gap-3 py-5">
       {/* Category Heading */}
       <div className="flex items-center justify-between pb-2">

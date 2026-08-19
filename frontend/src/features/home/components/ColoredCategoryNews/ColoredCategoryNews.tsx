@@ -7,10 +7,10 @@ import ColoredCategoryNewsSkeleton from "./ColoredCategoryNewsSkeleton";
 
 function ColoredCategoryNews({
   category,
-  color,
+  color = "transparent",
 }: {
   category: any;
-  color: string;
+  color?: string;
 }) {
   const articleHook = useArticlesHooks();
   const { data: allArticles, isLoading: articleLoading } =
@@ -44,8 +44,8 @@ function ColoredCategoryNews({
       className={`relative w-full py-5`}
       style={{
         backgroundColor: color,
-        boxShadow: `0 0 0 100vmax ${color}`,
-        clipPath: "inset(0 -100vmax)",
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
       }}
     >
       <div className="w-full flex flex-col h-full">

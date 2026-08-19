@@ -6,8 +6,11 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UploadDialogBox from "@/features/media/components/UploadDialogBox";
 import { useAdvertisementHooks } from "../hooks/useAdvertisements";
-import { useAdvertisementForm } from "../hooks/useAdvertisementForm";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
+import {
+  useAdvertisementForm,
+  normalizeAdvertisementData,
+} from "../hooks/useAdvertisementForm";
 import AdvertisementCreativeBlock from "./form/AdvertisementCreativeBlock";
 import AdvertisementPlacementBlock from "./form/AdvertisementPlacementBlock";
 import AdvertisementScheduleBlock from "./form/AdvertisementScheduleBlock";
@@ -41,18 +44,26 @@ export default function AddAdvertisement({
     propType ||
     (paramIdentifier || location.pathname.includes("/edit") ? "edit" : "add");
 
-  const { data: fetchedAdData, isLoading: isFetchingAd, error: fetchError } =
+  const targetId =
+    paramIdentifier ||
+    propAdvertisement?.id ||
+    propAdvertisement?.slug ||
+    location.state?.advertisement?.id ||
+    location.state?.advertisement?.slug;
+
+  const { data: fetchedAdData, isLoading: isFetchingAd } =
     advertisementHook.useFetchSingleAdvertisement(
-      type === "edit" && !propAdvertisement && !location.state?.advertisement
-        ? paramIdentifier
-        : undefined
+      type === "edit" ? targetId : undefined
     );
 
   const rawAdvertisement =
-    propAdvertisement ||
-    location.state?.advertisement ||
+    fetchedAdData?.data?.advertisement ||
+    fetchedAdData?.data?.ad ||
     fetchedAdData?.data ||
-    fetchedAdData;
+    fetchedAdData?.advertisement ||
+    fetchedAdData ||
+    location.state?.advertisement ||
+    propAdvertisement;
 
   const methods = useAdvertisementForm({
     advertisement: rawAdvertisement,
@@ -74,169 +85,98 @@ export default function AddAdvertisement({
     }
   };
 
-  // Rehydrate form and selectedCategories when editing
+  // Rehydrate form and selectedCategories when editing or when advertisement data arrives
   useEffect(() => {
     if (!rawAdvertisement) return;
 
-    const ad = rawAdvertisement;
-    const placementObj =
-      ad?.placement && typeof ad.placement === "object" ? ad.placement : {};
-
-    const startDate = ad?.start_date || ad?.starts_at?.slice(0, 10) || "";
-    const endDate = ad?.end_date || ad?.ends_at?.slice(0, 10) || "";
-    const startTime =
-      ad?.start_time?.slice(0, 5) || ad?.daily_start_time?.slice(0, 5) || "00:00";
-    const endTime =
-      ad?.end_time?.slice(0, 5) || ad?.daily_end_time?.slice(0, 5) || "23:59";
-
-    const resolvedSize =
-      ad?.size ||
-      (ad?.slot?.width && ad?.slot?.height
-        ? `${ad.slot.width}x${ad.slot.height}`
-        : "728x90");
-
-    const resolvedMobileSize =
-      ad?.mobile_size ||
-      (ad?.slot?.mobile_width && ad?.slot?.mobile_height
-        ? `${ad.slot.mobile_width}x${ad.slot.mobile_height}`
-        : (ad?.mobile_width && ad?.mobile_height
-          ? `${ad.mobile_width}x${ad.mobile_height}`
-          : ""));
-
-    // Detect non-standard sizes (not in the known list) and map to "custom"
-    const KNOWN_SIZES = [
-      "728x90", "970x250", "300x250", "300x600",
-      "468x60", "320x50", "320x100", "600x400", "400x300", "custom",
-    ];
-    const sizeIsKnown = KNOWN_SIZES.includes(resolvedSize);
-    const customSizeMatch = !sizeIsKnown
-      ? resolvedSize.match(/^(\d+)x(\d+)$/i)
-      : null;
-    const finalSize = sizeIsKnown ? resolvedSize : "custom";
-    const finalCustomWidth = customSizeMatch
-      ? Number(customSizeMatch[1])
-      : (ad?.custom_width || null);
-    const finalCustomHeight = customSizeMatch
-      ? Number(customSizeMatch[2])
-      : (ad?.custom_height || null);
-
-    const KNOWN_MOBILE_SIZES = [
-      "320x100", "300x250", "320x50", "custom", "none", "",
-    ];
-    const mobileSizeIsKnown = !resolvedMobileSize || KNOWN_MOBILE_SIZES.includes(resolvedMobileSize);
-    const customMobileSizeMatch = !mobileSizeIsKnown
-      ? resolvedMobileSize.match(/^(\d+)x(\d+)$/i)
-      : null;
-    const finalMobileSize = mobileSizeIsKnown ? (resolvedMobileSize || "") : "custom";
-    const finalCustomMobileWidth = customMobileSizeMatch
-      ? Number(customMobileSizeMatch[1])
-      : (ad?.custom_mobile_width || (resolvedMobileSize === "custom" ? (ad?.mobile_width || null) : null));
-    const finalCustomMobileHeight = customMobileSizeMatch
-      ? Number(customMobileSizeMatch[2])
-      : (ad?.custom_mobile_height || (resolvedMobileSize === "custom" ? (ad?.mobile_height || null) : null));
+    const normalized = normalizeAdvertisementData(
+      rawAdvertisement,
+      allCategoriesData
+    );
 
     // Resolve Category objects for UI
-    const targetCategoryId = ad?.category_id ?? placementObj.category_id;
-    if (ad.categories && Array.isArray(ad.categories) && ad.categories.length > 0) {
-      setSelectedCategories(
-        ad.categories.map((c: any) => ({
-          id: c.id,
-          name: c.name,
-        }))
-      );
-    } else if (ad.category) {
-      setSelectedCategories([
-        { id: ad.category.id, name: ad.category.name },
-      ]);
-    } else if (targetCategoryId && allCategoriesData.length > 0) {
-      const match = allCategoriesData.find(
-        (c: any) => Number(c.id) === Number(targetCategoryId)
-      );
-      if (match) {
-        setSelectedCategories([{ id: match.id, name: match.name }]);
+    const targetCategoryIds: number[] = [];
+    if (
+      Array.isArray(rawAdvertisement.categories) &&
+      rawAdvertisement.categories.length > 0
+    ) {
+      rawAdvertisement.categories.forEach((c: any) => {
+        const catId = typeof c === "object" ? c?.id : c;
+        if (catId !== undefined && catId !== null && !isNaN(Number(catId))) {
+          targetCategoryIds.push(Number(catId));
+        }
+      });
+    } else if (
+      Array.isArray(rawAdvertisement.target_category_ids) &&
+      rawAdvertisement.target_category_ids.length > 0
+    ) {
+      rawAdvertisement.target_category_ids.forEach((cId: any) => {
+        if (cId !== undefined && cId !== null && !isNaN(Number(cId))) {
+          targetCategoryIds.push(Number(cId));
+        }
+      });
+    } else if (rawAdvertisement.category) {
+      const catId =
+        typeof rawAdvertisement.category === "object"
+          ? rawAdvertisement.category.id
+          : rawAdvertisement.category;
+      if (catId !== undefined && catId !== null && !isNaN(Number(catId))) {
+        targetCategoryIds.push(Number(catId));
       }
+    } else if (
+      normalized.category_id !== null &&
+      normalized.category_id !== undefined &&
+      !isNaN(Number(normalized.category_id))
+    ) {
+      targetCategoryIds.push(Number(normalized.category_id));
     }
 
-      const resolvedPage = ad?.page || placementObj.page || "home";
-      const resolvedSection =
-        ad?.section ||
-        placementObj.section ||
-        (ad?.where === "popup" ||
-        placementObj.where === "popup" ||
-        ad?.slot?.position_type === "popup" ||
-        ad?.placement === "popup"
-          ? "popup"
-          : resolvedPage === "single"
-          ? "article_content"
-          : "article_list");
-      const resolvedWhere =
-        ad?.where ||
-        placementObj.where ||
-        ad?.slot?.position_type ||
-        (resolvedSection === "popup"
-          ? "popup"
-          : resolvedPage === "single"
-          ? "after_paragraph"
-          : "after_article");
+    if (targetCategoryIds.length > 0) {
+      const resolvedCategories = targetCategoryIds.map((catId) => {
+        if (Array.isArray(rawAdvertisement.categories)) {
+          const foundObj = rawAdvertisement.categories.find(
+            (c: any) =>
+              typeof c === "object" &&
+              Number(c.id) === Number(catId) &&
+              c.name
+          );
+          if (foundObj) return { id: Number(foundObj.id), name: foundObj.name };
+        }
+        if (
+          rawAdvertisement.category &&
+          typeof rawAdvertisement.category === "object" &&
+          Number(rawAdvertisement.category.id) === Number(catId) &&
+          rawAdvertisement.category.name
+        ) {
+          return {
+            id: Number(rawAdvertisement.category.id),
+            name: rawAdvertisement.category.name,
+          };
+        }
+        const match = allCategoriesData.find(
+          (c: any) => Number(c.id) === Number(catId)
+        );
+        if (match) return { id: Number(match.id), name: match.name };
+        return { id: catId, name: `Category #${catId}` };
+      });
+      setSelectedCategories(resolvedCategories);
+    }
 
-      methods.reset({
-        name: ad?.name || ad?.title || "",
-        advertiser_name: ad?.advertiser_name || "",
-        media_type: ad?.media_type || ad?.type || ad?.ad_type || "image",
-
-        image_url: ad?.image_url || ad?.image || null,
-        video_url: ad?.video_url || ad?.video || null,
-        video_thumbnail: ad?.video_thumbnail || ad?.thumbnail || null,
-        html_code: ad?.html_code || ad?.html || "",
-        text_content: ad?.text_content || ad?.text || "",
-
-        click_url: ad?.click_url || ad?.url || ad?.target_url || "",
-        button_text: ad?.button_text || ad?.cta || ad?.cta_text || "",
-
-        page: resolvedPage,
-        section: resolvedSection,
-        where: resolvedWhere,
-
-        category_id: targetCategoryId ?? null,
-        article_id: ad?.article_id ?? placementObj.article_id ?? null,
-        tag_id: ad?.tag_id ?? placementObj.tag_id ?? null,
-        author_id: ad?.author_id ?? placementObj.author_id ?? null,
-        all_entities: Boolean(ad?.all_entities ?? placementObj.all_entities),
-
-      article_number:
-        ad?.article_number ??
-        placementObj.article_number ??
-        ad?.slot?.article_position ??
-        null,
-      paragraph_number:
-        ad?.paragraph_number ??
-        placementObj.paragraph_number ??
-        ad?.slot?.paragraph_position ??
-        null,
-
-      size: finalSize,
-      custom_width: finalCustomWidth,
-      custom_height: finalCustomHeight,
-      mobile_size: finalMobileSize,
-      custom_mobile_width: finalCustomMobileWidth,
-      custom_mobile_height: finalCustomMobileHeight,
-
-      start_date: startDate,
-      end_date: endDate,
-      start_time: startTime,
-      end_time: endTime,
-
-      status: ad?.status || "active",
-      priority: ad?.priority ?? 0,
-      approved: ad?.approved ?? true,
-    });
-  }, [rawAdvertisement, allCategoriesData.length, methods.reset]);
+    methods.reset(normalized);
+  }, [rawAdvertisement, allCategoriesData, methods.reset]);
 
   const onSubmit = (formData: AdvertisementForm) => {
     const extractMediaUrl = (val: any) => {
       if (!val) return "";
       if (typeof val === "string") return val;
-      return val.file_path || val.file_url || "";
+      return (
+        val.file_path ||
+        val.file_url ||
+        val.url ||
+        val.path ||
+        val.original_url ||
+        ""
+      );
     };
 
     let finalSize = formData.size;
@@ -261,6 +201,26 @@ export default function AddAdvertisement({
       finalMobileSize = null;
     }
 
+    const parsedDims =
+      finalSize && finalSize !== "custom" ? finalSize.split("x") : null;
+    const width = parsedDims
+      ? Number(parsedDims[0])
+      : Number(formData.custom_width) || null;
+    const height = parsedDims
+      ? Number(parsedDims[1])
+      : Number(formData.custom_height) || null;
+
+    const parsedMobileDims =
+      finalMobileSize && finalMobileSize !== "custom" && finalMobileSize !== "none"
+        ? finalMobileSize.split("x")
+        : null;
+    const mobileWidth = parsedMobileDims
+      ? Number(parsedMobileDims[0])
+      : Number(formData.custom_mobile_width) || null;
+    const mobileHeight = parsedMobileDims
+      ? Number(parsedMobileDims[1])
+      : Number(formData.custom_mobile_height) || null;
+
     const payload: any = {
       name: formData.name,
       advertiser_name: formData.advertiser_name,
@@ -270,15 +230,25 @@ export default function AddAdvertisement({
 
       page: formData.page,
       section: formData.section,
-      where: formData.where || (formData.section === "popup" ? "popup" : "after_article"),
+      where:
+        formData.where ||
+        (formData.section === "popup" ? "popup" : "after_article"),
+      placement: formData.section || formData.page,
 
       size: finalSize,
       mobile_size: finalMobileSize,
+      width,
+      height,
+      mobile_width: mobileWidth,
+      mobile_height: mobileHeight,
+
       start_date: formData.start_date,
       end_date: formData.end_date || null,
       start_time: formData.start_time || "00:00",
       end_time: formData.end_time || "23:59",
       status: formData.status || "active",
+      priority: formData.priority ?? 0,
+      approved: formData.approved ?? true,
     };
 
     // Attach type-specific media
@@ -359,13 +329,13 @@ export default function AddAdvertisement({
         },
       });
     } else {
-      const targetId =
+      const editId =
         rawAdvertisement?.id ||
         location.state?.advertisement?.id ||
         paramIdentifier;
 
       updateAdvertisement.mutate(
-        { id: targetId, data: payload },
+        { id: editId, data: payload },
         {
           onSuccess: (res) => {
             toast.success(res?.message || "Advertisement updated successfully");
@@ -396,7 +366,7 @@ export default function AddAdvertisement({
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto px-20 py-10 flex flex-col gap-5">
+    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5">
       {/* Header */}
       <div className="flex items-center gap-5 rounded-lg p-4">
         <Button

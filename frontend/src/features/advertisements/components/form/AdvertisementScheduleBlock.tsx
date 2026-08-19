@@ -40,9 +40,9 @@ export default function AdvertisementScheduleBlock() {
       formOptionsData?.data?.pages ||
       formOptionsData?.form?.pages;
     if (apiPages && Array.isArray(apiPages) && apiPages.length > 0) {
-      return DEFAULT_FORM_PAGES.map((defPage) => {
-        const apiPage = apiPages.find((p: any) => p.value === defPage.value);
-        if (!apiPage) return defPage;
+      const mergedList = apiPages.map((apiPage: any) => {
+        const defPage = DEFAULT_FORM_PAGES.find((p) => p.value === apiPage.value);
+        if (!defPage) return apiPage;
 
         const mergedSections = [...(apiPage.sections || [])];
         for (const defSec of defPage.sections) {
@@ -56,6 +56,14 @@ export default function AdvertisementScheduleBlock() {
           sections: mergedSections,
         };
       });
+
+      for (const defPage of DEFAULT_FORM_PAGES) {
+        if (!mergedList.some((p: any) => p.value === defPage.value)) {
+          mergedList.push(defPage);
+        }
+      }
+
+      return mergedList;
     }
     return DEFAULT_FORM_PAGES;
   }, [formOptionsData]);
@@ -157,7 +165,6 @@ export default function AdvertisementScheduleBlock() {
           <Controller
             name="size"
             control={control}
-            defaultValue={selectedSection?.default_size || availableSizes[0] || "728x90"}
             rules={{ required: "Size is required" }}
             render={({ field }) => (
               <Select

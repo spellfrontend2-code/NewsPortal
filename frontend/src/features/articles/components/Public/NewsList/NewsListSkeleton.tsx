@@ -3,9 +3,22 @@ import {
   ArticleSquareCardSkeleton,
 } from "@/features/articles/components/Public/cards/CardSkeleton";
 
-function NewsListSkeleton({ show = "all" }: { show?: "all" | "list" }) {
+function NewsListSkeleton({
+  show = "all",
+  color = "transparent",
+}: {
+  show?: "all" | "list";
+  color?: string;
+}) {
   return (
-    <div className={`w-full flex flex-col gap-5 ${show === "all" ? "py-6 sm:py-10" : ""}`}>
+    <div
+      className={`relative w-full flex flex-col gap-5 ${show === "all" ? "py-6 sm:py-10" : ""} ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
       {/* Heading */}
       <div
         className={`relative w-full flex items-center justify-between ${

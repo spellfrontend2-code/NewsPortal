@@ -9,9 +9,11 @@ import ColumnViewMultiCategoryNewsSkeleton from "./ColumnViewMultiCategoryNewsSk
 function ColumnViewMultiCategoryNews({
   categoryOne,
   categoryTwo,
+  color = "transparent",
 }: {
   categoryOne: any;
   categoryTwo: any;
+  color?: string;
 }) {
   const articleHook = useArticlesHooks();
   const { data: categoryOneArticles, isLoading: categoryOneArticleLoading } =
@@ -47,11 +49,18 @@ function ColumnViewMultiCategoryNews({
     categoryTwoArticleLoading ||
     advertisementsLoading
   ) {
-    return <ColumnViewMultiCategoryNewsSkeleton />;
+    return <ColumnViewMultiCategoryNewsSkeleton hasSidebarAds={hasSidebarAds} color={color} />;
   }
 
   return (
-    <div className="w-full flex lg:flex-row flex-col gap-6">
+    <div
+      className={`relative w-full flex lg:flex-row flex-col gap-6 ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
       {/* Category One */}
       <div className="w-full lg:w-2/3 flex flex-col">
         <div className="flex items-center justify-between pb-2 mb-3">

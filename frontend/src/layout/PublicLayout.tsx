@@ -5,12 +5,12 @@ import ScrollToTop from "@/lib/ScrollToTop";
 import PopupAdvertisement from "@/features/advertisements/components/Public/PopupAdvertisement";
 import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
+import { usePagePopup } from "@/features/advertisements/hooks/usePagePopup";
 import { Outlet, useLocation } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 
 function PublicLayout() {
   const location = useLocation();
-  const [showPopup, setShowPopup] = useState(false);
 
   const categoriesHook = useCategoriesHooks();
   const { data: categoriesData } = categoriesHook.useFetchPublicCategories({
@@ -37,30 +37,29 @@ function PublicLayout() {
     {
       page_type: pageType,
       section_id: sectionId,
-    },
-    {
-      enabled: !!pageType,
     }
   );
 
   const popupAd = advertisements?.data?.popup;
-
-  useEffect(() => {
-    if (
+  const isArticlePage = location.pathname.startsWith("/news/");
+  const isContactPage = location.pathname === "/contact-us";
+  const hasValidPopupAd = Boolean(
+    !isLoading &&
       pageType &&
-      location.pathname !== "/contact-us" &&
+      !isArticlePage &&
+      !isContactPage &&
       popupAd &&
       (popupAd.id ||
         (Array.isArray(popupAd) && popupAd.length > 0 && (popupAd[0]?.id || popupAd[0]?.data?.id)))
-    ) {
-      setShowPopup(true);
-    } else {
-      setShowPopup(false);
-    }
-  }, [popupAd, location.pathname, pageType]);
+  );
+
+  const { showPopup, setShowPopup } = usePagePopup({
+    pageKey: location.pathname,
+    hasPopup: hasValidPopupAd,
+  });
 
   return (
-    <div className="public">
+    <div className="public h-screen w-full overflow-y-auto">
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <NavbarTop />
@@ -73,7 +72,7 @@ function PublicLayout() {
         <Footer />
       </div>
 
-      {!isLoading && pageType && location.pathname !== "/contact-us" && popupAd && (
+      {hasValidPopupAd && (
         <PopupAdvertisement
           advertisements={popupAd}
           showPopup={showPopup}

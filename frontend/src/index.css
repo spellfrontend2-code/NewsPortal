@@ -17,7 +17,7 @@
 
   /* --- Public Pages Semantic Colors --- */
   /* Backgrounds */
-  --color-public-bg-main: #ffffff;
+  --color-public-bg-main: #F5F5F5;
   --color-public-bg-secondary: #f8fafc;
   --color-public-bg-tertiary: #f1f5f9;
   --color-public-bg-muted: #e2e8f0;
@@ -27,7 +27,10 @@
   --color-public-bg-dark: #2261bf;
   --color-public-bg-accent: #2261bf;
   --color-public-bg-accent-hover: #2261bf;
-  
+  --color-public-bg-tint-one: #E3EEFD;  /* Light powder blue (matches #D2E7FE in ColoredCategoryNews) */
+  --color-public-bg-tint-two: #F0F6FF;  /* Very soft sky mist */
+ 
+
   /* Text */
   --color-public-text-main: #161A25;
   --color-public-text-secondary: #1e293b;
@@ -53,6 +56,7 @@ html,
 body,
 #root {
   height: 100%;
+  overflow:hidden
 }
 
 .admin {

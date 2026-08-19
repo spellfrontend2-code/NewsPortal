@@ -24,43 +24,97 @@ export default function AdvertisementView({ advertisement }: Props) {
   const placementObj = ad?.placement && typeof ad.placement === "object" ? ad.placement : {};
 
   const name = ad?.name || ad?.title || "Untitled Advertisement";
-  const advertiser = ad?.advertiser_name || "—";
+  const advertiser =
+    ad?.advertiser_name ||
+    ad?.advertiser ||
+    ad?.brand_name ||
+    ad?.advertiser_website ||
+    "—";
   const mediaType = ad?.media_type || ad?.type || ad?.ad_type || "image";
 
-  const imageUrl = ad?.image_url || ad?.image;
-  const videoUrl = ad?.video_url || ad?.video;
-  const videoThumbnail = ad?.video_thumbnail || ad?.thumbnail;
+  const imageUrl = ad?.image_url || ad?.image || ad?.file_path;
+  const videoUrl = ad?.video_url || ad?.video || ad?.video_path;
+  const videoThumbnail = ad?.video_thumbnail || ad?.thumbnail || ad?.poster;
   const htmlCode = ad?.html_code || ad?.html;
   const textContent = ad?.text_content || ad?.text;
 
-  const clickUrl = ad?.click_url || ad?.url || ad?.target_url || "";
-  const buttonText = ad?.button_text || ad?.cta || ad?.cta_text || "";
+  const clickUrl =
+    ad?.click_url ||
+    ad?.url ||
+    ad?.target_url ||
+    ad?.link_url ||
+    ad?.advertiser_website ||
+    "";
+  const buttonText =
+    ad?.button_text || ad?.cta || ad?.cta_text || ad?.button_label || "";
 
-  const page = ad?.page || placementObj.page || "—";
-  const section = ad?.section || placementObj.section || "—";
-  const where = ad?.where || placementObj.where || ad?.slot?.position_type || "—";
+  const page = ad?.page || placementObj.page || ad?.slot?.page || "—";
+  const section =
+    ad?.section ||
+    placementObj.section ||
+    ad?.slot?.section ||
+    (typeof ad?.placement === "string" ? ad.placement : "—");
+  const where =
+    ad?.where ||
+    placementObj.where ||
+    ad?.slot?.position_type ||
+    ad?.slot?.where ||
+    "—";
 
-  const categoryId = ad?.category_id ?? placementObj.category_id;
-  const articleId = ad?.article_id ?? placementObj.article_id;
-  const articleNumber = ad?.article_number ?? placementObj.article_number ?? ad?.slot?.article_position;
-  const paragraphNumber = ad?.paragraph_number ?? placementObj.paragraph_number ?? ad?.slot?.paragraph_position;
+  const categoryId =
+    ad?.category_id ??
+    placementObj.category_id ??
+    ad?.category?.id ??
+    (Array.isArray(ad?.categories) && ad.categories[0]
+      ? typeof ad.categories[0] === "object"
+        ? ad.categories[0].id
+        : ad.categories[0]
+      : undefined);
+  const articleId =
+    ad?.article_id ?? placementObj.article_id ?? ad?.article?.id;
+  const articleNumber =
+    ad?.article_number ??
+    placementObj.article_number ??
+    ad?.slot?.article_position;
+  const paragraphNumber =
+    ad?.paragraph_number ??
+    placementObj.paragraph_number ??
+    ad?.slot?.paragraph_position;
 
   const size =
     ad?.size ||
-    (ad?.slot?.width && ad?.slot?.height ? `${ad.slot.width}×${ad.slot.height} px` : "—");
+    (ad?.slot?.width && ad?.slot?.height
+      ? `${ad.slot.width}×${ad.slot.height} px`
+      : ad?.width && ad?.height
+      ? `${ad.width}×${ad.height} px`
+      : "—");
 
   const mobileSize =
     ad?.mobile_size ||
     (ad?.slot?.mobile_width && ad?.slot?.mobile_height
       ? `${ad.slot.mobile_width}×${ad.slot.mobile_height} px`
+      : ad?.mobile_width && ad?.mobile_height
+      ? `${ad.mobile_width}×${ad.mobile_height} px`
       : "—");
 
-  const startDate = ad?.start_date || ad?.starts_at?.slice(0, 10) || "—";
-  const endDate = ad?.end_date || ad?.ends_at?.slice(0, 10) || "—";
-  const startTime = ad?.start_time?.slice(0, 5) || ad?.daily_start_time?.slice(0, 5) || "00:00";
-  const endTime = ad?.end_time?.slice(0, 5) || ad?.daily_end_time?.slice(0, 5) || "23:59";
+  const startDate =
+    (ad?.start_date || ad?.starts_at)
+      ? String(ad.start_date || ad.starts_at).slice(0, 10)
+      : "—";
+  const endDate =
+    (ad?.end_date || ad?.ends_at)
+      ? String(ad.end_date || ad.ends_at).slice(0, 10)
+      : "—";
+  const startTime =
+    (ad?.start_time || ad?.daily_start_time)
+      ? String(ad.start_time || ad.daily_start_time).slice(0, 5)
+      : "00:00";
+  const endTime =
+    (ad?.end_time || ad?.daily_end_time)
+      ? String(ad.end_time || ad.daily_end_time).slice(0, 5)
+      : "23:59";
   const status = ad?.status || "active";
-  const approved = Boolean(ad?.approved);
+  const approved = Boolean(ad?.approved ?? ad?.is_approved);
 
   return (
     <div className="rounded-2xl max-w-4xl mx-auto space-y-6">

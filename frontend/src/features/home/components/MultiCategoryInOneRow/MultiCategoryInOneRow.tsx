@@ -8,9 +8,11 @@ import MultiCategoryInOneRowSkeleton from "./MultiCategoryInOneRowSkeleton";
 function MultiCategoryInOneRow({
   categoryOne,
   categoryTwo,
+  color = "transparent",
 }: {
   categoryOne: any;
   categoryTwo: any;
+  color?: string;
 }) {
   const articleHook = useArticlesHooks();
   const [categoryOnePagination] = useState({
@@ -63,12 +65,19 @@ if (articleItemsOne.length > 0 && articleItemsTwo.length > 0) {
   // Only category two exists
   itemsTwo = articleItemsTwo.slice(0, 6);
 }
-
+console.log(color)
   const navigate = useNavigate();
   if (categoryOneArticlesLoading || categoryTwoArticlesLoading)
-    return <MultiCategoryInOneRowSkeleton />;
+    return <MultiCategoryInOneRowSkeleton color={color} />;
   return (
-    <div className="w-full">
+    <div
+      className={`relative w-full ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
       <div className="flex flex-col lg:flex-row gap-6 w-full">
        {itemsOne.length > 0 && <div className={`${itemsTwo.length > 0 ? "w-full lg:w-2/3" : "w-full"}`}>
           <div className="flex items-center justify-between pb-2">

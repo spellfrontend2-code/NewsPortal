@@ -6,6 +6,10 @@ function ScrollToTop() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    const publicContainer = document.querySelector(".public");
+    if (publicContainer) {
+      publicContainer.scrollTo({ top: 0, behavior: "instant" });
+    }
   }, [pathname]);
 
   return null;

@@ -5,6 +5,7 @@ import BannerAdvertisement from "./BannerAdvertisement";
 interface CategorySectionBannerProps {
   category: any;
   children: React.ReactNode;
+  color?: string;
 }
 
 /**
@@ -17,6 +18,7 @@ interface CategorySectionBannerProps {
 function CategorySectionBanner({
   category,
   children,
+  color="transparent",
 }: CategorySectionBannerProps) {
   const categoryId = category?.id;
 
@@ -53,6 +55,14 @@ function CategorySectionBanner({
   );
 
   return (
+        <div
+      className={`relative w-full ${color && color !== "transparent" ? "py-6" : ""}`}
+      style={{
+        backgroundColor: color,
+        boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
+        clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
+      }}
+    >
     <div className="w-full flex flex-col gap-0">
       {/* Before-section banner ads */}
       {beforeSectionAds.map((item: any, idx: number) => {
@@ -60,7 +70,7 @@ function CategorySectionBanner({
         return (
           <div
             key={`before-section-ad-${adId}-${idx}`}
-            className="w-full overflow-hidden rounded-md border border-[var(--color-public-border-darker)] mb-4"
+            className="w-full overflow-hidden rounded-md  mb-4"
           >
             <BannerAdvertisement item={item} />
           </div>
@@ -76,12 +86,13 @@ function CategorySectionBanner({
         return (
           <div
             key={`after-section-ad-${adId}-${idx}`}
-            className="w-full overflow-hidden rounded-md border border-[var(--color-public-border-darker)] mt-4"
+            className="w-full overflow-hidden rounded-md mt-4"
           >
             <BannerAdvertisement item={item} />
           </div>
         );
       })}
+    </div>
     </div>
   );
 }

@@ -20,6 +20,7 @@ import LatestNews from "@/features/home/components/LatestNews/LatestNews";
 import MultiCategoryInOneRow from "@/features/home/components/MultiCategoryInOneRow/MultiCategoryInOneRow";
 import MultiCategoryInOneRowSkeleton from "@/features/home/components/MultiCategoryInOneRow/MultiCategoryInOneRowSkeleton";
 
+
 function Home() {
   const advertisementHook = useAdvertisementHooks();
   const { data: advertisements } =
@@ -32,22 +33,27 @@ function Home() {
 
   const footerAd = advertisements?.data?.footer;
 
-  let categoryIndex = 0;
+const categoryData = categories?.data ?? [];
 
-  const getCategory = () => categories?.data?.[categoryIndex++];
+const categoryOne = categoryData[0];
+const categoryTwo = categoryData[1];
+const categoryThree = categoryData[2];
+const categoryFour = categoryData[3];
+const categoryFive = categoryData[4];
+const categorySix = categoryData[5];
+const categorySeven = categoryData[6];
+const categoryEight = categoryData[7];
+const categoryNine = categoryData[8];
 
-  const categoryOne = getCategory();
-  const categoryTwo = getCategory();
-  const categoryThree = getCategory();
-  const categoryFour = getCategory();
-  const categoryFive = getCategory();
-  const categorySix = getCategory();
-  const categorySeven = getCategory();
-  const categoryEight = getCategory();
-  const categoryNine = getCategory();
+const remainingCategories = categoryData.slice(9);
+
+const getBgColor = (index: number) =>
+  index % 2 === 0
+    ? "var(--color-public-bg-tint-two)"
+    : "var(--color-public-bg-tint-one)";
 
   return (
-    <div className="flex flex-col gap-10 justify-center items-center w-full">
+    <div className="flex flex-col  justify-center items-center w-full">
       <Headline />
       <LatestNews />
 
@@ -55,14 +61,15 @@ function Home() {
         <>
           {categoryOne && (
             <LazyViewport
-              fallback={<MultiCategoryInOneRowSkeleton />}
+              fallback={<MultiCategoryInOneRowSkeleton color="transparent" />}
               minHeight="350px"
               rootMargin="400px"
             >
-              <CategorySectionBanner category={categoryOne}>
+              <CategorySectionBanner category={categoryOne} color={getBgColor(0)}>
                 <MultiCategoryInOneRow
                   categoryOne={categoryOne}
                   categoryTwo={categoryTwo}
+                  color={getBgColor(0)}
                 />
               </CategorySectionBanner>
             </LazyViewport>
@@ -70,41 +77,43 @@ function Home() {
 
           {categoryThree && (
             <LazyViewport
-              fallback={<CategoryWithChildrenSkeleton />}
+              fallback={<CategoryWithChildrenSkeleton color="transparent" />}
               minHeight="400px"
               rootMargin="350px"
             >
-              <CategorySectionBanner category={categoryThree}>
-                <CategoryWithChildren category={categoryThree} />
+              <CategorySectionBanner category={categoryThree} color={getBgColor(1)}>
+                <CategoryWithChildren
+                  category={categoryThree}
+                  color={getBgColor(1)}
+                />
               </CategorySectionBanner>
             </LazyViewport>
           )}
 
           {categoryFour && (
             <LazyViewport
-              fallback={<ColoredCategoryNewsSkeleton color="#D2E7FE" />}
+              fallback={<ColoredCategoryNewsSkeleton color="#e1e9cb" />}
               minHeight="350px"
               rootMargin="350px"
             >
-              <CategorySectionBanner category={categoryFour}>
-                <ColoredCategoryNews
-                  category={categoryFour}
-                  color="#D2E7FE"
-                />
+              <CategorySectionBanner category={categoryFour} color="#e1e9cb">
+                <ColoredCategoryNews category={categoryFour} color="#e1e9cb" />
               </CategorySectionBanner>
             </LazyViewport>
           )}
 
           {categoryFive && (
             <LazyViewport
-              fallback={<ColoredHoverCategoryNewsSkeleton color="transparent" />}
+              fallback={
+                <ColoredHoverCategoryNewsSkeleton color="transparent" />
+              }
               minHeight="350px"
               rootMargin="350px"
             >
-              <CategorySectionBanner category={categoryFive}>
+              <CategorySectionBanner category={categoryFive} color={getBgColor(2)}>
                 <ColoredHoverCategoryNews
                   category={categoryFive}
-                  color="transparent"
+                  color={getBgColor(2)}
                 />
               </CategorySectionBanner>
             </LazyViewport>
@@ -112,26 +121,32 @@ function Home() {
 
           {categorySix && (
             <LazyViewport
-              fallback={<ColumnViewCategoryNewsSkeleton />}
+              fallback={<ColumnViewCategoryNewsSkeleton color="transparent" />}
               minHeight="350px"
               rootMargin="350px"
             >
-              <CategorySectionBanner category={categorySix}>
-                <ColumnViewCategoryNews category={categorySix} />
+              <CategorySectionBanner category={categorySix} color={getBgColor(3)}>
+                <ColumnViewCategoryNews
+                  category={categorySix}
+                  color={getBgColor(3)}
+                />
               </CategorySectionBanner>
             </LazyViewport>
           )}
 
           {categorySeven && (
             <LazyViewport
-              fallback={<ColumnViewMultiCategoryNewsSkeleton />}
+              fallback={
+                <ColumnViewMultiCategoryNewsSkeleton color="transparent" />
+              }
               minHeight="350px"
               rootMargin="350px"
             >
-              <CategorySectionBanner category={categorySeven}>
+              <CategorySectionBanner category={categorySeven} color={getBgColor(4)}>
                 <ColumnViewMultiCategoryNews
                   categoryOne={categorySeven}
                   categoryTwo={categoryEight}
+                  color={getBgColor(4)}
                 />
               </CategorySectionBanner>
             </LazyViewport>
@@ -143,7 +158,7 @@ function Home() {
               minHeight="350px"
               rootMargin="350px"
             >
-              <CategorySectionBanner category={categoryNine}>
+              <CategorySectionBanner category={categoryNine} color="#1f1e1e">
                 <ColoredHoverCategoryNews
                   category={categoryNine}
                   color="#1f1e1e"
@@ -152,15 +167,18 @@ function Home() {
             </LazyViewport>
           )}
 
-          {categories?.data?.slice(categoryIndex).map((category: any) => (
+          {remainingCategories?.map((category: any,i) => (
             <LazyViewport
               key={category?.id}
-              fallback={<NewsListSkeleton show="list" />}
+              fallback={<NewsListSkeleton show="list" color="transparent" />}
               minHeight="300px"
               rootMargin="300px"
             >
-              <CategorySectionBanner category={category}>
-                <CategoryBasedNewsList categorySlug={category?.slug} />
+              <CategorySectionBanner category={category} color={getBgColor(i+1)}>
+                <CategoryBasedNewsList
+                  categorySlug={category?.slug}
+                  color={getBgColor(i+1)}
+                />
               </CategorySectionBanner>
             </LazyViewport>
           ))}
@@ -170,7 +188,7 @@ function Home() {
       {footerAd && (
         <LazyViewport minHeight="100px" rootMargin="200px">
           <div className="w-full pt-8 pb-2 flex items-center justify-center">
-            <div className="w-full overflow-hidden rounded-md border border-[var(--color-public-border-darker)]">
+            <div className="w-full overflow-hidden rounded-md ">
               <BannerAdvertisement Ad={footerAd} />
             </div>
           </div>
@@ -180,4 +198,3 @@ function Home() {
   );
 }
 export default Home;
-

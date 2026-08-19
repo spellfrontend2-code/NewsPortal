@@ -78,7 +78,15 @@ export default function AdvertisementCreativeBlock({
   const getMediaSrc = (val: any) => {
     if (!val) return "";
     if (typeof val === "string") return val;
-    return val.file_url || val.file_path || "";
+    return (
+      val.file_url ||
+      val.file_path ||
+      val.url ||
+      val.path ||
+      val.original_url ||
+      val.preview_url ||
+      ""
+    );
   };
 
   return (

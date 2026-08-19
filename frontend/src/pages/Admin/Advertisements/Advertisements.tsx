@@ -141,8 +141,8 @@ function Advertisements() {
   );
   if (error) toast.error(error?.message);
   return (
-    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5">
-      <div className="flex justify-between items-center rounded-xl">
+    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5 ">
+      <div className=" flex justify-between items-center rounded-xl">
         <div className="flex flex-col text-gray-800">
           <p className="text-3xl font-bold">Advertisements</p>
           <p className="text-gray-500">Manage your advertisements</p>

@@ -62,9 +62,9 @@ export default function AdvertisementPlacementBlock({
       formOptionsData?.data?.pages ||
       formOptionsData?.form?.pages;
     if (apiPages && Array.isArray(apiPages) && apiPages.length > 0) {
-      return DEFAULT_FORM_PAGES.map((defPage) => {
-        const apiPage = apiPages.find((p: any) => p.value === defPage.value);
-        if (!apiPage) return defPage;
+      const mergedList = apiPages.map((apiPage: any) => {
+        const defPage = DEFAULT_FORM_PAGES.find((p) => p.value === apiPage.value);
+        if (!defPage) return apiPage;
 
         const mergedSections = [...(apiPage.sections || [])];
         for (const defSec of defPage.sections) {
@@ -78,6 +78,14 @@ export default function AdvertisementPlacementBlock({
           sections: mergedSections,
         };
       });
+
+      for (const defPage of DEFAULT_FORM_PAGES) {
+        if (!mergedList.some((p: any) => p.value === defPage.value)) {
+          mergedList.push(defPage);
+        }
+      }
+
+      return mergedList;
     }
     return DEFAULT_FORM_PAGES;
   }, [formOptionsData]);
@@ -124,8 +132,8 @@ export default function AdvertisementPlacementBlock({
   const showTagSelector = Boolean(pageValue === "tag");
   const showAuthorSelector = Boolean(pageValue === "author");
 
-  const showArticleNumber = selectedWhere?.needs === "article_number";
-  const showParagraphNumber = selectedWhere?.needs === "paragraph_number";
+  const showArticleNumber = selectedWhere?.needs === "article_number" || (!selectedWhere && whereValue === "after_article");
+  const showParagraphNumber = selectedWhere?.needs === "paragraph_number" || (!selectedWhere && whereValue === "after_paragraph");
 
   // Article search state for Single page
   const [articleSearchQuery, setArticleSearchQuery] = useState("");
@@ -157,7 +165,6 @@ export default function AdvertisementPlacementBlock({
       setValue("where", defaultSecConfig.default_where || defaultSecConfig.value, {
         shouldDirty: true,
       });
-      unregister("where");
     } else {
       const defaultWhere = defaultSecConfig?.where?.[0]?.value || "";
       setValue("where", defaultWhere, { shouldDirty: true });
@@ -183,8 +190,6 @@ export default function AdvertisementPlacementBlock({
     setValue("author_id", null);
     setValue("article_number", null);
     setValue("paragraph_number", null);
-    unregister("article_number");
-    unregister("paragraph_number");
   };
 
   // Handle Section change
@@ -196,7 +201,6 @@ export default function AdvertisementPlacementBlock({
       setValue("where", secConfig.default_where || secConfig.value, {
         shouldDirty: true,
       });
-      unregister("where");
     } else {
       const defaultWhere = secConfig?.where?.[0]?.value || "";
       setValue("where", defaultWhere, { shouldDirty: true });
@@ -213,8 +217,6 @@ export default function AdvertisementPlacementBlock({
 
     setValue("article_number", null);
     setValue("paragraph_number", null);
-    unregister("article_number");
-    unregister("paragraph_number");
   };
 
   return (
@@ -313,11 +315,21 @@ export default function AdvertisementPlacementBlock({
             </div>
           )}
           <CategoryDropdownInput
-            selectedCategoryIds={selectedCategories.map((c) => c.id)}
+            selectedCategoryIds={selectedCategories
+              .map((c) => Number(c.id))
+              .filter((id) => !isNaN(id))}
             setSelectedCategoryIds={(ids: number[]) => {
-              const selected = categoriesData.filter((c: any) =>
-                ids.includes(c.id)
-              );
+              const selected = ids.map((id) => {
+                const existing = selectedCategories.find(
+                  (c) => Number(c.id) === Number(id)
+                );
+                if (existing) return existing;
+                const match = categoriesData.find(
+                  (c: any) => Number(c.id) === Number(id)
+                );
+                if (match) return { id: match.id, name: match.name };
+                return { id, name: `Category #${id}` };
+              });
               setSelectedCategories(selected);
               setValue("category_id", ids.length > 0 ? ids[0] : null, {
                 shouldDirty: true,
