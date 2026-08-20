@@ -12,21 +12,26 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
 function Authors() {
   const { hasPermission } = usePermission();
-    const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const [addAuthor, setAddAuthor] = useState(false);
   const [editAuthor, setEditAuthor] = useState(false);
-    const [search, setSearch] = useState("");
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const [search, setSearch] = useState("");
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
+  });
   const authorHook = useAuthorHooks();
-      const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("");
 
   const { data, isLoading } = authorHook.useFetchAuthors({
-    page: pagination.pageIndex + 1,
-    per_page: pagination.pageSize,
+    page,
+    per_page: pageSize,
     search,
-  status});
+    status,
+  });
   const authors = data?.data ?? [];
   const deleteAuthor=authorHook.useDeleteAuthors()
   const [sorting, setSorting] = useState([]);

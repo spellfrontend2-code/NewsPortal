@@ -9,12 +9,21 @@ import { generateColumns } from "@/lib/generateColumns"
 import { Plus } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useAdminPagination } from "@/hooks/useAdminPagination"
+
 function Tags(){
   const {hasPermission}=usePermission()
   const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
     const tagsHook=useTagsHooks()
         const [search,setSearch]=useState("")
-    const {data,isLoading,error}=tagsHook.useFetchTags({page:1,per_page:10,search})
+    const { page, pageSize, pagination, setPagination } = useAdminPagination({
+      defaultPageSize: 10,
+    })
+    const {data,isLoading,error}=tagsHook.useFetchTags({
+      page,
+      per_page: pageSize,
+      search,
+    })
     const tagsData=data?.data??[]
     const [selectedTag,setSelectedTag]=useState(null)
     const [deleteOpen,setDeleteOpen]=useState(false)
@@ -22,10 +31,6 @@ function Tags(){
     const [isEdit,setIsEdit]=useState(false)
     const deleteTag=tagsHook.useDeleteTag()
     const [sorting,setSorting]=useState([])
-    const [pagination,setPagination]=useState({
-        pageIndex:0,
-        pageSize:10
-    })
     const columns=generateColumns(
         tagsData,
         [],(action,row)=>{

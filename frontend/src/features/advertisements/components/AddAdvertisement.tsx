@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FormProvider } from "react-hook-form";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ export default function AddAdvertisement({
   const navigate = useNavigate();
   const location = useLocation();
   const { slug, id } = useParams();
-  const paramIdentifier = slug || id;
+  const paramIdentifier = id || slug;
 
   const advertisementHook = useAdvertisementHooks();
   const categoryHook = useCategoriesHooks();
@@ -38,32 +38,35 @@ export default function AddAdvertisement({
     page: 1,
     per_page: 100,
   });
-  const allCategoriesData = categoriesList?.data ?? [];
+  const allCategoriesData = useMemo(
+    () => categoriesList?.data ?? [],
+    [categoriesList?.data]
+  );
 
   const type =
     propType ||
     (paramIdentifier || location.pathname.includes("/edit") ? "edit" : "add");
 
   const targetId =
-    paramIdentifier ||
     propAdvertisement?.id ||
-    propAdvertisement?.slug ||
     location.state?.advertisement?.id ||
-    location.state?.advertisement?.slug;
+    paramIdentifier;
 
   const { data: fetchedAdData, isLoading: isFetchingAd } =
     advertisementHook.useFetchSingleAdvertisement(
-      type === "edit" ? targetId : undefined
+      type === "edit" && !propAdvertisement && !location.state?.advertisement
+        ? targetId
+        : undefined
     );
 
   const rawAdvertisement =
+    propAdvertisement ||
+    location.state?.advertisement ||
     fetchedAdData?.data?.advertisement ||
     fetchedAdData?.data?.ad ||
     fetchedAdData?.data ||
     fetchedAdData?.advertisement ||
-    fetchedAdData ||
-    location.state?.advertisement ||
-    propAdvertisement;
+    fetchedAdData;
 
   const methods = useAdvertisementForm({
     advertisement: rawAdvertisement,
@@ -73,6 +76,7 @@ export default function AddAdvertisement({
   const [uploadOpen, setUploadOpen] = useState(false);
   const [uploadType, setUploadType] = useState<"image" | "video">("image");
   const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
+  const hasInitializedRef = useRef<string | number | null>(null);
 
   const createAdvertisement = advertisementHook.useCreateAdvertisement();
   const updateAdvertisement = advertisementHook.useUpdateAdvertisement();
@@ -80,6 +84,8 @@ export default function AddAdvertisement({
   const handleBack = () => {
     if (setOpen) {
       setOpen(false);
+    } else if (window.history.length > 1) {
+      navigate(-1);
     } else {
       navigate("/admin/advertisements");
     }
@@ -88,6 +94,13 @@ export default function AddAdvertisement({
   // Rehydrate form and selectedCategories when editing or when advertisement data arrives
   useEffect(() => {
     if (!rawAdvertisement) return;
+
+    const adIdentifier =
+      rawAdvertisement.id || rawAdvertisement.slug || "initialized";
+    if (hasInitializedRef.current === adIdentifier) {
+      return;
+    }
+    hasInitializedRef.current = adIdentifier;
 
     const normalized = normalizeAdvertisementData(
       rawAdvertisement,
@@ -163,7 +176,7 @@ export default function AddAdvertisement({
     }
 
     methods.reset(normalized);
-  }, [rawAdvertisement, allCategoriesData, methods.reset]);
+  }, [rawAdvertisement, allCategoriesData, methods]);
 
   const onSubmit = (formData: AdvertisementForm) => {
     const extractMediaUrl = (val: any) => {
@@ -361,6 +374,20 @@ export default function AddAdvertisement({
             Loading advertisement details...
           </p>
         </div>
+      </div>
+    );
+  }
+
+  if (type === "edit" && !rawAdvertisement && !isFetchingAd && targetId) {
+    return (
+      <div className="w-full h-full min-h-[400px] flex flex-col items-center justify-center p-20 gap-4">
+        <p className="text-xl font-bold text-gray-800">Advertisement Not Found</p>
+        <p className="text-sm text-gray-500">
+          The requested advertisement could not be loaded or does not exist.
+        </p>
+        <Button variant="submit" onClick={handleBack}>
+          Back to Advertisements
+        </Button>
       </div>
     );
   }

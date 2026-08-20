@@ -9,11 +9,15 @@ import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { useNavigate } from "react-router-dom";
 
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
 function RolesAndPermissions() {
   const navigate = useNavigate();
   const permissionHook = usePermissionHooks();
   const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const { pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
+  });
   const { data, isLoading } = permissionHook.useFetchRoleBasedPermissions();
   const roleBasedPermissions = data?.data ?? [];
   const deleteRole = permissionHook.useDeleteRole();

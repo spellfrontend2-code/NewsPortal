@@ -16,6 +16,18 @@ import {
 } from "../../constants/formOptions";
 import { useAdvertisementHooks } from "../../hooks/useAdvertisements";
 
+const DEFAULT_AVAILABLE_SIZES = [
+  "728x90",
+  "970x250",
+  "300x250",
+  "300x600",
+  "468x60",
+  "320x100",
+  "600x400",
+  "400x300",
+  "custom",
+];
+
 export default function AdvertisementScheduleBlock() {
   const {
     register,
@@ -84,64 +96,8 @@ export default function AdvertisementScheduleBlock() {
       if (!sizes.includes("custom")) sizes.push("custom");
       return sizes;
     }
-    return [
-      "728x90",
-      "970x250",
-      "300x250",
-      "300x600",
-      "468x60",
-      "320x100",
-      "600x400",
-      "400x300",
-      "custom",
-    ];
+    return DEFAULT_AVAILABLE_SIZES;
   }, [selectedSection]);
-
-  // Ensure size is always synchronized with available options
-  useEffect(() => {
-    const currentSize = watch("size");
-    if (!currentSize && availableSizes.length > 0) {
-      const fallback = selectedSection?.default_size || availableSizes[0] || "728x90";
-      setValue("size", fallback, { shouldValidate: true, shouldDirty: true });
-    }
-  }, [selectedSection, availableSizes, watch, setValue]);
-
-  // If the stored size is not in the available list and not already "custom",
-  // treat it as a custom dimension: set size -> "custom" and parse W/H.
-  useEffect(() => {
-    if (
-      sizeValue &&
-      sizeValue !== "custom" &&
-      availableSizes.length > 0 &&
-      !availableSizes.includes(sizeValue)
-    ) {
-      const match = sizeValue.match(/^(\d+)x(\d+)$/i);
-      if (match) {
-        setValue("custom_width", Number(match[1]), { shouldDirty: false });
-        setValue("custom_height", Number(match[2]), { shouldDirty: false });
-      }
-      setValue("size", "custom", { shouldDirty: false });
-    }
-  }, [sizeValue, availableSizes, setValue]);
-
-  // If the stored mobile_size is not in the known list and not already "custom" or "none",
-  // treat it as a custom dimension: set mobile_size -> "custom" and parse W/H.
-  const KNOWN_MOBILE_SIZES = ["", "none", "320x100", "300x250", "320x50", "custom"];
-  useEffect(() => {
-    if (
-      mobileSizeValue &&
-      mobileSizeValue !== "custom" &&
-      mobileSizeValue !== "none" &&
-      !KNOWN_MOBILE_SIZES.includes(mobileSizeValue)
-    ) {
-      const match = mobileSizeValue.match(/^(\d+)x(\d+)$/i);
-      if (match) {
-        setValue("custom_mobile_width", Number(match[1]), { shouldDirty: false });
-        setValue("custom_mobile_height", Number(match[2]), { shouldDirty: false });
-      }
-      setValue("mobile_size", "custom", { shouldDirty: false });
-    }
-  }, [mobileSizeValue, setValue]);
 
   const isCustomSize = sizeValue === "custom";
   const isCustomMobileSize = mobileSizeValue === "custom";
@@ -171,7 +127,13 @@ export default function AdvertisementScheduleBlock() {
                 value={field.value || selectedSection?.default_size || availableSizes[0] || "728x90"}
                 onValueChange={(val) => {
                   field.onChange(val);
-                  setValue("size", val, { shouldDirty: true, shouldValidate: true });
+                  if (val && val !== "custom") {
+                    const match = val.match(/^(\d+)x(\d+)$/i);
+                    if (match) {
+                      setValue("custom_width", Number(match[1]), { shouldDirty: true });
+                      setValue("custom_height", Number(match[2]), { shouldDirty: true });
+                    }
+                  }
                 }}
               >
                 <SelectTrigger className={`${inputStyle} py-5 text-base bg-white`}>
@@ -200,7 +162,17 @@ export default function AdvertisementScheduleBlock() {
             render={({ field }) => (
               <Select
                 value={field.value || "none"}
-                onValueChange={(val) => field.onChange(val === "none" ? "" : val)}
+                onValueChange={(val) => {
+                  const finalVal = val === "none" ? "" : val;
+                  field.onChange(finalVal);
+                  if (finalVal && finalVal !== "custom") {
+                    const match = finalVal.match(/^(\d+)x(\d+)$/i);
+                    if (match) {
+                      setValue("custom_mobile_width", Number(match[1]), { shouldDirty: true });
+                      setValue("custom_mobile_height", Number(match[2]), { shouldDirty: true });
+                    }
+                  }
+                }}
               >
                 <SelectTrigger className={`${inputStyle} py-5 text-base bg-white`}>
                   <SelectValue placeholder="Select mobile size" />

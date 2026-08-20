@@ -76,16 +76,18 @@ function BannerAdvertisement({
     // Outer: full width/height, centers the fixed-size ad horizontally/vertically
     <div
       ref={adRef}
-      className={`w-full h-full flex flex-col items-center justify-center relative ${className}`}
+      className={` w-full h-full flex flex-col items-center justify-center relative ${className}`}
     >
       <a
         href={destinationUrl}
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="group flex items-center justify-center overflow-hidden"
+        className="relative group flex items-center justify-center overflow-hidden"
         style={innerStyle}
       >
+              <p className="absolute right-0 top-0 text-slate-100 uppercase tracking-widest text-[8px] p-2">Advertisement</p>
+
         {adType === "image" && imageUrl && (
           <img
             src={imageUrl}

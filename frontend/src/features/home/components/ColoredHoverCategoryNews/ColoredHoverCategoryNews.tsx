@@ -34,7 +34,7 @@ function ColoredHoverCategoryNews({
 
   return (
     <div
-      className={`relative w-full py-8`}
+      className={`relative w-full py-6`}
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,

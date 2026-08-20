@@ -18,7 +18,7 @@ function ColumnViewCategoryNews({
   const { data: allArticles, isLoading: articleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
       page: 1,
-      per_page: 8,
+      per_page: 6,
       slug: category?.slug,
     });
 
@@ -32,7 +32,8 @@ function ColumnViewCategoryNews({
       section_id: category?.id,
     });
 
-  const sidebarAds = advertisements?.data?.sidebar ?? [];
+  const AllSidebarAds = advertisements?.data?.sidebar ?? [];
+const sidebarAds=items?.length<=2?AllSidebarAds?.slice(0,1):AllSidebarAds;
   const hasSidebarAds = sidebarAds?.length > 0;
 
   const navigate = useNavigate();
@@ -43,14 +44,14 @@ function ColumnViewCategoryNews({
 
   return (
     <div
-      className="relative w-full flex flex-col lg:flex-row gap-6 py-5"
+      className="relative w-full flex flex-col lg:flex-row gap-6 py-6"
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
         clipPath: color && color !== "transparent" ? "inset(0 -100vmax)" : undefined,
       }}
     >
-      <div className="w-full flex flex-col gap-3 py-5">
+      <div className="flex-1 min-w-0 flex flex-col gap-3 ">
       {/* Category Heading */}
       <div className="flex items-center justify-between pb-2">
         <h1
@@ -73,12 +74,10 @@ function ColumnViewCategoryNews({
       </div>
 
       {/* Content */}
-      <div className="flex lg:flex-row flex-col gap-6 w-full">
+      <div className="flex lg:flex-row flex-col gap-6">
         {/* Articles & In-feed Ads */}
         <div
-          className={`${
-            hasSidebarAds ? "lg:w-4/5" : "w-full"
-          } h-full w-full grid grid-cols-1 md:grid-cols-2 gap-3`}
+          className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-3"
         >
           {items.map((item: any, idx: number) => {
             if (item?.type === "article") {
@@ -98,14 +97,12 @@ function ColumnViewCategoryNews({
     </div>
     {/* Advertisements Sidebar */}
         {hasSidebarAds && (
-          <div className="lg:w-1/5 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
               {sidebarAds.map((ad: any, index: number) => (
                 <div
                   key={ad.id ?? index}
-                  className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-md
-                  border border-[var(--color-public-border-light)]
-                  shadow-sm bg-white"
+                  className="w-full max-w-[300px] aspect-[300/250] mx-auto overflow-hidden rounded-md"
                 >
                   <SidebarAdvertisement Ad={ad} />
                 </div>

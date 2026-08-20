@@ -1,7 +1,5 @@
 import LazyViewport from "@/components/shared/LazyViewport";
-import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import CategorySectionBanner from "@/features/advertisements/components/Public/CategorySectionBanner";
-import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import CategoryBasedNewsList from "@/features/articles/components/Public/NewsList/CategoryBasedNewsList";
 import NewsListSkeleton from "@/features/articles/components/Public/NewsList/NewsListSkeleton";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
@@ -22,16 +20,10 @@ import MultiCategoryInOneRowSkeleton from "@/features/home/components/MultiCateg
 
 
 function Home() {
-  const advertisementHook = useAdvertisementHooks();
-  const { data: advertisements } =
-    advertisementHook.useFetchPublicAdvertisements({
-      page_type: "home",
-    });
-
+ 
   const categoriesHook = useCategoriesHooks();
   const { data: categories } = categoriesHook.useFetchPublicCategories({});
 
-  const footerAd = advertisements?.data?.footer;
 
 const categoryData = categories?.data ?? [];
 
@@ -53,7 +45,7 @@ const getBgColor = (index: number) =>
     : "var(--color-public-bg-tint-one)";
 
   return (
-    <div className="flex flex-col  justify-center items-center w-full">
+    <div className="flex flex-col items-center w-full">
       <Headline />
       <LatestNews />
 
@@ -185,15 +177,7 @@ const getBgColor = (index: number) =>
         </>
       )}
 
-      {footerAd && (
-        <LazyViewport minHeight="100px" rootMargin="200px">
-          <div className="w-full pt-8 pb-2 flex items-center justify-center">
-            <div className="w-full overflow-hidden rounded-md ">
-              <BannerAdvertisement Ad={footerAd} />
-            </div>
-          </div>
-        </LazyViewport>
-      )}
+
     </div>
   );
 }

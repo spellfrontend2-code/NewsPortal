@@ -27,7 +27,6 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
     per_page: articlePagination.pageSize,
     file_type
   });
-  console.log("articleMediaData",articleMediaData)
   const { data: advertisementMediaData, isLoading: advertisementMediaLoading } = mediaHook.useFetchMedia({
     search: "advertisements",
     page: advertisementPagination.pageIndex + 1,
@@ -60,7 +59,6 @@ function SelectMediaDialogBox({setUploadType,setUploadOpen, open, onOpenChange ,
     } else {
       setArticleMedia((prev) => [...prev, ...medias]);
     }
-        console.log("updated")
 
   }, [articleMediaData, articlePagination.pageIndex,file_type]);
 

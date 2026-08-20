@@ -56,7 +56,7 @@ function CategoryWithChildren({
 
   return (
     <div
-      className={`relative w-full ${color && color !== "transparent" ? "py-6" : ""}`}
+      className={`relative w-full py-6`}
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
@@ -64,9 +64,7 @@ function CategoryWithChildren({
       }}
     >
       <div className="flex flex-col lg:flex-row gap-6 w-full">
-        <div
-          className={`flex flex-col gap-4 ${hasSidebarAds ? "lg:w-3/4 w-full" : "w-full"}`}
-        >
+        <div className="flex-1 min-w-0 flex flex-col gap-4">
           <div className="h-[10%] flex items-center gap-10 w-full">
             <div className="h-full px-2 w-fit flex items-center gap-3">
               <h1
@@ -131,13 +129,13 @@ function CategoryWithChildren({
         </div>
 
         {hasSidebarAds && (
-          <div className="lg:w-1/4 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
               {sidebarAds.map((ad: any, index: number) => {
                 return (
                   <div
                     key={ad.id ?? index}
-                    className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-xl border border-[var(--color-public-border-light)] shadow-sm bg-white"
+                    className="w-full max-w-[300px] aspect-[300/250] mx-auto overflow-hidden rounded-xl"
                   >
                     <SidebarAdvertisement Ad={ad} />
                   </div>

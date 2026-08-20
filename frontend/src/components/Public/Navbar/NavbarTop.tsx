@@ -29,9 +29,11 @@ function NavbarTop() {
 
         {/* Header Ad  */}
         {headerAd && (
-          <div className="w-full md:w-auto flex justify-center items-center overflow-hidden">
-            <BannerAdvertisement Ad={headerAd} />
-          </div>
+                   <div className="w-full flex items-center justify-center">
+                     <div className="w-full overflow-hidden rounded-md ">
+                       <BannerAdvertisement Ad={headerAd} />
+                     </div>
+                   </div>
         )}
       </div>
     </div>

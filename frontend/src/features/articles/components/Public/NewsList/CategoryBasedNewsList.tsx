@@ -50,7 +50,7 @@ function CategoryBasedNewsList({
         categorySlug
           ? "pb-3 border-b border-slate-100 last:border-b-0"
           : ""
-      } ${color && color !== "transparent" ? "py-6" : ""}`}
+      } py-6`}
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,

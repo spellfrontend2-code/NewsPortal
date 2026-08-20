@@ -56,7 +56,7 @@ function CategorySectionBanner({
 
   return (
         <div
-      className={`relative w-full ${color && color !== "transparent" ? "py-6" : ""}`}
+      className={`relative w-full `}
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
@@ -70,7 +70,7 @@ function CategorySectionBanner({
         return (
           <div
             key={`before-section-ad-${adId}-${idx}`}
-            className="w-full overflow-hidden rounded-md  mb-4"
+            className="w-full overflow-hidden rounded-md pt-6"
           >
             <BannerAdvertisement item={item} />
           </div>
@@ -86,7 +86,7 @@ function CategorySectionBanner({
         return (
           <div
             key={`after-section-ad-${adId}-${idx}`}
-            className="w-full overflow-hidden rounded-md mt-4"
+            className="w-full overflow-hidden rounded-md pb-6"
           >
             <BannerAdvertisement item={item} />
           </div>

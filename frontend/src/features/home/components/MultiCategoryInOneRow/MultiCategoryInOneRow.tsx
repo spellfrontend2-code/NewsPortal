@@ -65,13 +65,12 @@ if (articleItemsOne.length > 0 && articleItemsTwo.length > 0) {
   // Only category two exists
   itemsTwo = articleItemsTwo.slice(0, 6);
 }
-console.log(color)
   const navigate = useNavigate();
   if (categoryOneArticlesLoading || categoryTwoArticlesLoading)
     return <MultiCategoryInOneRowSkeleton color={color} />;
   return (
     <div
-      className={`relative w-full ${color && color !== "transparent" ? "py-6" : ""}`}
+      className={`relative w-full py-6`}
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,

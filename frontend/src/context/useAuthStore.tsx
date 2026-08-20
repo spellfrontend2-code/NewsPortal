@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
     return stored ? JSON.parse(stored) : initialAuth;
   });
 
-  const setAuthData = (data) => {
+  const setAuthData = (data: any) => {
     setAuthDataState(data);
     localStorage.setItem("auth", JSON.stringify(data));
   };

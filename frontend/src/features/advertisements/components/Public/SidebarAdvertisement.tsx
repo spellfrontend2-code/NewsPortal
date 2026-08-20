@@ -25,7 +25,8 @@ function SidebarAdvertisement({
   const adType = rawAd.type || rawAd.media_type || "image";
   const title = rawAd.title || rawAd.name || "Advertisement";
   const destinationUrl = rawAd.url || rawAd.click_url || "#";
-  const target = rawAd.target || (rawAd.open_in_new_tab ? "_blank" : "_blank") || "_blank";
+  const target =
+    rawAd.target || (rawAd.open_in_new_tab ? "_blank" : "_blank") || "_blank";
   const ctaText = rawAd.cta || rawAd.button_text || "";
 
   const imageUrl = rawAd.image || rawAd.image_url;
@@ -52,8 +53,8 @@ function SidebarAdvertisement({
     objectFit === "fill"
       ? "object-fill"
       : objectFit === "contain"
-      ? "object-contain"
-      : "object-cover";
+        ? "object-contain"
+        : "object-cover";
 
   // Dimensions from backend, with slot fallback
   const adWidth = rawAd.width || slot?.width;
@@ -72,8 +73,6 @@ function SidebarAdvertisement({
   };
 
   return (
-    // Outer: fills the placeholder set by the caller,
-    // centers the inner ad both horizontally and vertically.
     <div
       ref={adRef}
       className={`w-full h-full flex items-center justify-center ${className}`}
@@ -83,9 +82,13 @@ function SidebarAdvertisement({
         target={target}
         rel="noopener noreferrer"
         onClick={handleAdClick}
-        className="group w-full h-full flex items-center justify-center overflow-hidden"
+        className="relative group w-full h-full flex items-center justify-center overflow-hidden"
         style={innerStyle}
       >
+        <p className="absolute right-0 top-0 text-slate-100 uppercase tracking-widest text-[8px] p-2">
+          Advertisement
+        </p>
+
         {adType === "image" && imageUrl ? (
           <img
             src={imageUrl}

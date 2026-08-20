@@ -41,7 +41,7 @@ function ColoredCategoryNews({
 
   return (
     <div
-      className={`relative w-full py-5`}
+      className={`relative w-full py-6`}
       style={{
         backgroundColor: color,
         boxShadow: color && color !== "transparent" ? `0 0 0 100vmax ${color}` : undefined,
@@ -65,7 +65,7 @@ function ColoredCategoryNews({
         </div>
 
         <div className="flex flex-col lg:flex-row w-full gap-6">
-          <div className="lg:flex-[2] min-w-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+          <div className="lg:flex-[2] min-w-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px]">
             {firstArticle && (
               <ArticleSquareCard
                 article={firstArticle}

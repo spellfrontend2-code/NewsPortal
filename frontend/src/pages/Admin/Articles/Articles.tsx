@@ -11,21 +11,22 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
 function Articles() {
   const navigate = useNavigate();
   const { hasPermission } = usePermission();
   const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const useArticlesHook = useArticlesHooks();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
   });
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
 
   const { data, isLoading, error } = useArticlesHook.useFetchArticles({
-    page: pagination.pageIndex + 1,
-    per_page: pagination.pageSize,
+    page,
+    per_page: pageSize,
     search,
     status,
   });

@@ -84,6 +84,8 @@ function RolesAndPermissionManagement({
   const handleBack = () => {
     if (setOpen) {
       setOpen(false);
+    } else if (window.history.length > 1) {
+      navigate(-1);
     } else {
       navigate("/admin/roles-and-permissions");
     }

@@ -55,7 +55,7 @@ function ArticleSquareCardSkeleton() {
 
 function ArticleSquareHoverCardSkeleton({ hideMeta = false }: { hideMeta?: boolean }) {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-md animate-pulse bg-slate-900">
+    <div className="relative bg-red-900 h-full w-full overflow-hidden rounded-md animate-pulse bg-slate-900">
       {/* Bottom Content Placeholders */}
       <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6 md:p-8 flex flex-col gap-2.5 z-10">
         <div className="h-5 sm:h-6 md:h-7 lg:h-8 w-[85%] rounded bg-slate-700/80" />

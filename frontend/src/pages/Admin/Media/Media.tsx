@@ -19,31 +19,32 @@ import {
   Search,
   Trash,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
 import { usePermission } from "@/features/auth/hooks/usePermission";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
 function Media() {
-  const {hasPermission}=usePermission();
+  const { hasPermission } = usePermission();
   const { control, watch } = useForm({
     defaultValues: {
       category: "all",
     },
   });
-  const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const selectedCategory = watch("category");
   const [openUpload, setOpenUpload] = useState(false);
   const mediaHooks = useMediaHooks();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 12,
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 12,
   });
   const { data, isLoading } = mediaHooks.useFetchMedia({
     search: selectedCategory === "all" ? undefined : selectedCategory,
-    page: pagination.pageIndex + 1,
-    per_page: pagination.pageSize,
+    page,
+    per_page: pageSize,
   });
   const media = data?.data ?? [];
   const lastPage = data?.pagination?.last_page ?? 1;
@@ -52,12 +53,6 @@ function Media() {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [viewOpen, setViewOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  useEffect(() => {
-    setPagination((prev) => ({
-      ...prev,
-      pageIndex: 0,
-    }));
-  }, [searchQuery, selectedCategory]);
   //   const filteredMedia = useMemo(() => {
   //   return media.filter((m) => {
 
@@ -96,7 +91,7 @@ function Media() {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setPagination((prev) => ({
+                setPagination((prev: any) => ({
                   ...prev,
                   pageIndex: 0,
                 }));
@@ -165,7 +160,7 @@ function Media() {
                                 );
                                 toast.success("Copied URL to clipboard");
                               } catch (err) {
-                                toast.error("Failed to copy URL: ", err);
+                                toast.error(`Failed to copy URL: ${err}`);
                               }
                             }}
                           >
@@ -217,7 +212,7 @@ function Media() {
             <div className="shadow-md  relative flex justify-between items-center overflow-hidden w-[150px] h-full border-1 border-[var(--color-primary)] bg-gray-100/90 text-gray-400  cursor-pointer rounded-2xl group">
               <button
                 onClick={() =>
-                  setPagination((prev) => ({
+                  setPagination((prev: any) => ({
                     ...prev,
                     pageIndex: Math.max(0, prev.pageIndex - 1),
                   }))
@@ -232,7 +227,7 @@ function Media() {
               <div className="absolute inset-0 h-[95%] w-[1px] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--color-primary)]" />
               <button
                 onClick={() =>
-                  setPagination((prev) => ({
+                  setPagination((prev: any) => ({
                     ...prev,
                     pageIndex: Math.min(lastPage - 1, prev.pageIndex + 1),
                   }))

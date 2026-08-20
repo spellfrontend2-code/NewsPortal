@@ -21,9 +21,7 @@ function CategoryWithChildrenSkeleton({
     >
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         {/* Main Content */}
-        <div
-          className={`flex flex-col gap-4 ${hasSidebarAds ? "lg:w-3/4 w-full" : "w-full"}`}
-        >
+        <div className="flex-1 min-w-0 flex flex-col gap-4">
           {/* Header: category title + child tabs */}
           <div className="flex flex-wrap items-center justify-between gap-4 w-full pb-2">
             <div className="flex items-center gap-4 flex-wrap">
@@ -54,12 +52,12 @@ function CategoryWithChildrenSkeleton({
 
         {/* Sidebar Ads */}
         {hasSidebarAds && (
-          <div className="lg:w-1/4 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
               {Array.from({ length: 2 }).map((_, i) => (
                 <div
                   key={i}
-                  className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-xl border border-[var(--color-public-border-light)] bg-slate-200"
+                  className="w-full max-w-[300px] aspect-[300/250] mx-auto overflow-hidden rounded-xl bg-slate-200"
                 />
               ))}
             </div>

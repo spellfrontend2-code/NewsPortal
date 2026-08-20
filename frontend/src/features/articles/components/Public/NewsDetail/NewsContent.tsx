@@ -82,13 +82,9 @@ function NewsContent({ Data, commentRef }: any) {
   );
 
   return (
-    <div className="h-full overflow-y-auto flex flex-col lg:flex-row w-full gap-6">
+    <div className="flex flex-col lg:flex-row w-full gap-6 items-start">
       {/* Main Content Area */}
-      <div
-        className={`${
-          hasSidebarAds ? "lg:w-4/5 w-full" : "w-full"
-        } flex flex-col gap-6`}
-      >
+      <div className="flex-1 min-w-0 flex flex-col gap-6">
         {/* Media Block */}
         <div className="w-full rounded-md overflow-hidden shadow-md">
           <div className="w-full aspect-video md:h-[480px] overflow-hidden">
@@ -276,12 +272,12 @@ function NewsContent({ Data, commentRef }: any) {
 
       {/* Right Column Sidebar Advertisements */}
       {hasSidebarAds && (
-        <div className="lg:w-1/5 w-full lg:sticky lg:top-20 self-start">
+        <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
             {sortedSidebarAds.map((ad: any, index: number) => (
               <div
                 key={ad.id ?? index}
-                className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-md shadow-sm border border-[var(--color-public-border-light)] bg-white"
+                className="w-full max-w-[300px] aspect-[300/250] mx-auto overflow-hidden rounded-md"
               >
                 <SidebarAdvertisement Ad={ad} />
               </div>

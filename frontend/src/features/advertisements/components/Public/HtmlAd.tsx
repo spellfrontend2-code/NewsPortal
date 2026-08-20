@@ -40,7 +40,7 @@ export default function HtmlAd({ html }: { html: string }) {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full overflow-hidden flex items-start justify-start"
+      className="w-full h-full overflow-hidden flex items-start justify-center rounded-md" 
     >
       <div
         ref={contentRef}

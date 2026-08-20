@@ -11,30 +11,31 @@ import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
 function Categories() {
-  const {hasPermission}=usePermission();
+  const { hasPermission } = usePermission();
   const categoriesHook = useCategoriesHooks();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
   });
-const [search, setSearch] = useState("");
-const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    setDebouncedSearch(search);
-  }, 500);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-  return () => clearTimeout(timer);
-}, [search]);
-const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
+    return () => clearTimeout(timer);
+  }, [search]);
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
 
-const { data,isLoading,error } = categoriesHook.useFetchCategories({
-  page: pagination.pageIndex + 1,
-  per_page: pagination.pageSize,
-  search: debouncedSearch,
-});
+  const { data, isLoading, error } = categoriesHook.useFetchCategories({
+    page,
+    per_page: pageSize,
+    search: debouncedSearch,
+  });
   const categories = data?.data ?? [];
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);

@@ -4,6 +4,7 @@ import ArticleSquareCard from "@/features/articles/components/Public/cards/Artic
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { scrollToTop } from "@/lib/ScrollToTop";
 
 function NewsList({
   page_headline,
@@ -38,6 +39,7 @@ function NewsList({
       ...prev,
       pageIndex: page - 1,
     }));
+    scrollToTop("smooth");
   };
 
   const getPageNumbers = () => {
@@ -73,10 +75,7 @@ function NewsList({
 
   useEffect(() => {
     if (show !== "list") {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      scrollToTop("smooth");
     }
   }, [pagination?.pageIndex, show]);
 
@@ -158,7 +157,7 @@ function NewsList({
               return (
                 <div
                   key={`art-${articleData?.id ?? idx}-${idx}`}
-                  className="h-[320px] w-full bg-transparent"
+                  className="h-[300px] bg-transparent w-full "
                 >
                   <ArticleSquareCard article={articleData} />
                 </div>

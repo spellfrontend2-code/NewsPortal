@@ -111,7 +111,7 @@ function NewsDetail() {
   };
   const commentRef = useRef<HTMLDivElement>(null);
   return (
-    <div className="flex justify-center w-full ">
+    <div className="flex justify-center w-full py-10">
       {isLoading ? (
         <NewsDetailSkeleton />
       ) : (

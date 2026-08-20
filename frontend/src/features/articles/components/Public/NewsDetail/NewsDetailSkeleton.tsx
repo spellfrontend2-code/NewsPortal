@@ -62,8 +62,8 @@ function NewsDetailSkeleton() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0 order-2 flex flex-col lg:flex-row gap-6">
-          <div className="flex flex-col gap-6 lg:w-4/5 w-full">
+        <div className="flex-1 min-w-0 order-2 flex flex-col lg:flex-row gap-6 items-start">
+          <div className="flex flex-col gap-6 flex-1 min-w-0">
             {/* Media Block */}
             <div className="w-full rounded-md overflow-hidden shadow-sm">
               <div className="w-full aspect-video md:h-[480px] bg-slate-200 rounded-md" />
@@ -111,12 +111,12 @@ function NewsDetailSkeleton() {
           </div>
 
           {/* Right Column Sidebar Ads */}
-          <div className="lg:w-1/5 w-full lg:sticky lg:top-20 self-start">
+          <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
               {Array.from({ length: 2 }).map((_, i) => (
                 <div
                   key={i}
-                  className="w-full max-w-[320px] mx-auto aspect-[300/250] rounded-md border border-[var(--color-public-border-light)] bg-slate-200"
+                  className="w-full max-w-[300px] aspect-[300/250] mx-auto rounded-md bg-slate-200"
                 />
               ))}
             </div>

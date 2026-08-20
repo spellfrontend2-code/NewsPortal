@@ -64,6 +64,8 @@ function AddArticle({ setOpen, article: propArticle, type: propType }: any) {
   const handleBack = () => {
     if (setOpen) {
       setOpen(false);
+    } else if (window.history.length > 1) {
+      navigate(-1);
     } else {
       navigate("/admin/articles");
     }

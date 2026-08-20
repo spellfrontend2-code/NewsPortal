@@ -12,14 +12,15 @@ import { usePermission } from "@/features/auth/hooks/usePermission";
 import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { useNavigate } from "react-router-dom";
 
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
 function Advertisements() {
   const navigate = useNavigate();
   const { hasPermission } = usePermission();
   const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const advertisementHook = useAdvertisementHooks();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
   });
   const [sorting, setSorting] = useState([]);
   const [search, setSearch] = useState("");
@@ -52,8 +53,8 @@ function Advertisements() {
   const [status, setStatus] = useState("");
   const [placement, setPlacement] = useState("");
   const { data, isLoading, error } = advertisementHook.useFetchAdvertisements({
-    page: pagination.pageIndex + 1,
-    per_page: pagination.pageSize,
+    page,
+    per_page: pageSize,
     search,
     status,
     is_approved: approved === "" ? undefined : Number(approved),
@@ -122,7 +123,7 @@ function Advertisements() {
       setSelectedAdvertisement(row);
       switch (action) {
         case "edit":
-          navigate(`/admin/advertisements/${row.slug || row.id}/edit`, {
+          navigate(`/admin/advertisements/${row.id}/edit`, {
             state: { advertisement: row },
           });
           break;

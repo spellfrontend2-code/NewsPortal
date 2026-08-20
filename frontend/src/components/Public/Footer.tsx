@@ -1,6 +1,9 @@
+import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { useSettingHooks } from "@/features/settings/hooks/useSettings";
 // import { useAdvertisementHooks } from "@/features/advertisements/hooks/useAdvertisements";
 import { Mail, MapPin, Phone } from "lucide-react";
+import LazyViewport from "../shared/LazyViewport";
+import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 
 function FooterSkeleton() {
   return (
@@ -68,15 +71,32 @@ function FooterSkeleton() {
 function Footer() {
   const settingHook = useSettingHooks();
   const { data: companyData, isLoading } = settingHook.useFetchPublicSettings();
+  const advertisementHook = useAdvertisementHooks();
+  const { data: advertisements } =
+    advertisementHook.useFetchPublicAdvertisements({
+      page_type: "home",
+    });
+
   const company = companyData?.data ?? companyData;
+  const footerAd = advertisements?.data?.footer;
 
   if (isLoading) return <FooterSkeleton />;
 
   return (
-    <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex flex-col items-center justify-center">
+    <div className="flex flex-col gap-6 pt-6">
+            {footerAd && (
+        <LazyViewport minHeight="100px" rootMargin="200px">
+          <div className="w-[92%] sm:w-[85%] md:w-[80%]  mx-auto  flex items-center justify-center">
+            <div className="w-full overflow-hidden rounded-md ">
+              <BannerAdvertisement Ad={footerAd} />
+            </div>
+          </div>
+        </LazyViewport>
+      )}
+      <div className="w-full bg-[var(--color-public-bg-darker)] text-slate-100 flex flex-col items-center justify-center">
      
 
-      <footer className="w-[80%]">
+      <footer className="w-[92%] sm:w-[85%] md:w-[80%]  mx-auto ">
         {/* Main Footer */}
         <div className="mx-auto grid grid-cols-1 gap-10 py-16 md:grid-cols-2 lg:grid-cols-4">
           {/* Company Info */}
@@ -255,6 +275,7 @@ function Footer() {
           </div>
         </div>
       </footer>
+    </div>
     </div>
   );
 }

@@ -11,8 +11,8 @@ function LatestNewsSkeleton() {
 
       {/* Body */}
       <div className="flex flex-col lg:flex-row w-full gap-6">
-        {/* Left 4/5 — HoverCard + RectangleCards */}
-        <div className="flex flex-col lg:flex-row lg:w-4/5 gap-6">
+        {/* Left main content — HoverCard + RectangleCards */}
+        <div className="flex flex-col lg:flex-row flex-1 min-w-0 gap-6">
           {/* Main square hover card — lg:flex-[2] */}
           <div className="lg:flex-[2] min-w-0 h-[350px] lg:h-auto">
             <ArticleSquareHoverCardSkeleton />
@@ -28,13 +28,13 @@ function LatestNewsSkeleton() {
           </div>
         </div>
 
-        {/* Right 1/5 — Sidebar ads */}
-        <div className="lg:w-1/5 w-full lg:sticky lg:top-20 self-start">
+        {/* Right — Sidebar ads */}
+        <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
             {Array.from({ length: 2 }).map((_, i) => (
               <div
                 key={i}
-                className="w-full max-w-[320px] mx-auto aspect-[300/250] overflow-hidden rounded-md border border-[var(--color-public-border-light)] bg-slate-200"
+                className="w-full max-w-[300px] aspect-[300/250] mx-auto overflow-hidden rounded-md bg-slate-200"
               />
             ))}
           </div>

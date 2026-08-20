@@ -22,7 +22,7 @@ function Headline() {
   const { viewPublicArticle } = useArticleView();
 
   return (
-    <div className="flex flex-col gap-8 h-full w-full justify-center items-center">
+    <div className="flex flex-col gap-8 h-full w-full justify-center items-center pt-10">
       {isLoading
         ? Array.from({ length: 3 }).map((_, index) => (
             <HeadlineSkeleton key={index} />
@@ -47,7 +47,7 @@ function Headline() {
             return (
               <div
                 key={article?.id ?? idx}
-                className="w-full flex flex-col justify-center items-center gap-3 group cursor-pointer"
+                className="w-full  flex flex-col justify-center items-center gap-3 group cursor-pointer"
                 onClick={() => {
                   viewPublicArticle(article?.id);
                   handleNavigation(article?.slug);
