@@ -2,7 +2,7 @@ import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public
 
 function NewsDetailSkeleton() {
   return (
-    <div className="flex flex-col gap-6 w-full max-w-screen-xl animate-pulse">
+    <div className="flex flex-col gap-6 w-full animate-pulse">
       {/* ── Article Header (full width) ── */}
       <div className="flex flex-col gap-6 w-full pb-2">
         {/* Title */}
@@ -31,7 +31,7 @@ function NewsDetailSkeleton() {
       <div className="flex flex-col xl:flex-row gap-5 w-full relative">
         {/* Interaction Bar (Mobile: horizontal row, Desktop: vertical sticky left) */}
         <div className="xl:w-[65px] shrink-0 order-1">
-          <div className="flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 border border-slate-200 xl:border-slate-100 rounded-md shadow-sm w-fit mx-auto xl:w-full">
+          <div className="flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2.5 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 border border-slate-200 xl:border-slate-100 rounded-md shadow-sm w-full sm:w-fit mx-auto xl:w-full">
             {/* Bookmark */}
             <div className="h-8 w-8 rounded-md bg-slate-200" />
             <div className="hidden xl:block w-6 h-px bg-slate-200" />
@@ -62,11 +62,11 @@ function NewsDetailSkeleton() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0 order-2 flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex-1 min-w-0 order-2 flex flex-col xl:flex-row gap-6 items-start">
           <div className="flex flex-col gap-6 flex-1 min-w-0">
             {/* Media Block */}
             <div className="w-full rounded-md overflow-hidden shadow-sm">
-              <div className="w-full aspect-video md:h-[480px] bg-slate-200 rounded-md" />
+              <div className="w-full aspect-video max-h-[500px] bg-slate-200 rounded-md" />
             </div>
 
             {/* Article body lines */}
@@ -111,8 +111,8 @@ function NewsDetailSkeleton() {
           </div>
 
           {/* Right Column Sidebar Ads */}
-          <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+          <div className="w-full xl:w-[300px] shrink-0 xl:sticky xl:top-20 self-start">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-5">
               {Array.from({ length: 2 }).map((_, i) => (
                 <div
                   key={i}

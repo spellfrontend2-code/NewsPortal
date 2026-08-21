@@ -9,7 +9,7 @@ function ColumnViewMultiCategoryNewsSkeleton({
 }) {
   return (
     <div
-      className={`relative w-full flex lg:flex-row flex-col gap-6 animate-pulse ${
+      className={`relative w-full flex xl:flex-row flex-col gap-6 animate-pulse ${
         color && color !== "transparent" ? "py-6" : ""
       }`}
       style={{
@@ -42,10 +42,10 @@ function ColumnViewMultiCategoryNewsSkeleton({
         </div>
       </div>
 
-      {/* Sidebar Ads — lg:w-[300px] */}
+      {/* Sidebar Ads — xl:w-[300px] */}
       {hasSidebarAds && (
-        <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+        <div className="w-full xl:w-[300px] shrink-0 xl:sticky xl:top-20 self-start">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
             {Array.from({ length: 2 }).map((_, index) => (
               <div
                 key={index}

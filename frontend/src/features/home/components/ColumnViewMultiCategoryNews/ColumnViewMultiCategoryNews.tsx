@@ -157,9 +157,9 @@ function ColumnViewMultiCategoryNews({
 
     return (
       <div
-        className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start"
+        className="w-full xl:w-[300px] shrink-0 xl:sticky xl:top-20 self-start"
       >
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
           {sidebarAds.map((ad: any, index: number) => (
             <div
               key={ad.id ?? index}
@@ -175,7 +175,7 @@ function ColumnViewMultiCategoryNews({
 
   return (
     <div
-      className={`relative w-full flex lg:flex-row flex-col gap-6 py-6`}
+      className={`relative w-full flex xl:flex-row flex-col gap-6 py-6`}
       style={{
         backgroundColor: color,
         boxShadow:

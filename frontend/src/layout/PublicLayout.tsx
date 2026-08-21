@@ -59,7 +59,7 @@ function PublicLayout() {
   });
 
   return (
-    <div className="public h-screen w-full overflow-y-auto">
+    <div className="public h-screen w-full overflow-y-auto overflow-x-hidden">
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <NavbarTop />

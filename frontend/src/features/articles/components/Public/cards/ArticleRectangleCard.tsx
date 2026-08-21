@@ -81,7 +81,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
       }}
     >
       {/* Consistent 4:3 Thumbnail matching container height */}
-      <div className="h-full aspect-[4/3] w-[120px] sm:w-[160px] shrink-0 overflow-hidden rounded-md bg-slate-100 relative">
+      <div className="h-full aspect-[4/3] w-[110px] sm:w-[130px] md:w-[150px] shrink-0 overflow-hidden rounded-md bg-slate-100 relative">
         <img
           src={imageSrc}
           alt={article?.title || "News thumbnail"}

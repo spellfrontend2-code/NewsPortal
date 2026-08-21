@@ -82,12 +82,12 @@ function NewsContent({ Data, commentRef }: any) {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row w-full gap-6 items-start">
+    <div className="flex flex-col xl:flex-row w-full gap-6 items-start">
       {/* Main Content Area */}
       <div className="flex-1 min-w-0 flex flex-col gap-6">
         {/* Media Block */}
         <div className="w-full rounded-md overflow-hidden shadow-md">
-          <div className="w-full aspect-video md:h-[480px] overflow-hidden">
+          <div className="w-full aspect-video max-h-[500px] overflow-hidden">
             {articleData?.media_type === "image" &&
             articleData?.featured_image ? (
               <img
@@ -122,15 +122,21 @@ function NewsContent({ Data, commentRef }: any) {
 
         {/* Article Body Content (content_blocks or HtmlParser) */}
         <div
-          className="text-justify prose prose-slate max-w-none text-slate-800 text-lg 
+          className="text-justify prose prose-slate max-w-none text-slate-800 text-lg break-words [overflow-wrap:anywhere]
             [&_p]:my-6 [&_p]:leading-relaxed [&_p]:text-slate-700
-            [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-slate-900 
-            [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-slate-900 
+            [&_h2]:text-2xl sm:[&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:text-slate-900 
+            [&_h3]:text-xl sm:[&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:text-slate-900 
             [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6
             [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6
             [&_li]:mb-2 [&_li]:text-slate-700
             [&_blockquote]:border-l-4 [&_blockquote]:border-slate-800 [&_blockquote]:pl-6 [&_blockquote]:italic
             [&_blockquote]:text-slate-700 [&_blockquote]:text-xl [&_blockquote]:my-8
+            [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-md [&_img]:mx-auto [&_img]:my-4
+            [&_figure]:max-w-full [&_figure]:mx-auto
+            [&_table]:w-full [&_table]:max-w-full [&_table]:overflow-x-auto [&_table]:block
+            [&_iframe]:max-w-full [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-md
+            [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:rounded-md
+            [&_video]:max-w-full [&_video]:h-auto [&_video]:rounded-md
             [&_a]:text-[var(--color-public-newsText)] [&_a]:underline [&_a:hover]:opacity-80"
         >
           {Array.isArray(contentBlocks) && contentBlocks.length > 0 ? (
@@ -272,8 +278,8 @@ function NewsContent({ Data, commentRef }: any) {
 
       {/* Right Column Sidebar Advertisements */}
       {hasSidebarAds && (
-        <div className="w-full lg:w-[300px] shrink-0 lg:sticky lg:top-20 self-start">
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
+        <div className="w-full xl:w-[300px] shrink-0 xl:sticky xl:top-20 self-start">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-5">
             {sortedSidebarAds.map((ad: any, index: number) => (
               <div
                 key={ad.id ?? index}

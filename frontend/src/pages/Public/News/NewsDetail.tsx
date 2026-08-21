@@ -111,12 +111,12 @@ function NewsDetail() {
   };
   const commentRef = useRef<HTMLDivElement>(null);
   return (
-    <div className="flex justify-center w-full py-10">
+    <div className="w-full py-6 md:py-10">
       {isLoading ? (
         <NewsDetailSkeleton />
       ) : (
         Data && (
-          <div className="flex flex-col gap-6 w-full max-w-screen-xl ">
+          <div className="flex flex-col gap-6 w-full">
             <div className="flex flex-col gap-6 w-full ">
               {/* Article Header (Full Width) */}
               <NewsHeader Data={Data} />
@@ -126,7 +126,7 @@ function NewsDetail() {
               <div className="flex flex-col xl:flex-row gap-5 w-full relative ">
                 {/* Responsive Interaction Bar (Mobile: Horizontal under header, Desktop: Vertical sticky left) */}
                 <div className="xl:w-[65px] shrink-0 order-1 z-20">
-                  <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-md shadow-sm text-slate-600 w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
+                  <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2.5 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-md shadow-sm text-slate-600 w-full sm:w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
                     {/* Bookmark */}
                     <button
                       onClick={() => handleBookmark()}

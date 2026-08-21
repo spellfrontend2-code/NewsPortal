@@ -9,7 +9,7 @@ function NewsHeader({ Data }: any) {
     <div className="flex flex-col gap-6 w-full pb-2">
       {/* Category Tag & Title */}
       <div className="flex flex-col gap-4">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-slate-900 leading-[1.15]">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.18] break-words">
           {articleData?.title}
         </h1>
       </div>
