@@ -26,7 +26,6 @@ function SettingsForm({ open, setOpen, settings }: any) {
   const settingsHook = useSettingHooks();
   const updateSettings = settingsHook.useUpdateSettings();
   const iconHook = useIconHooks();
-const [openPopover, setOpenPopover] = useState<number | null>(null);  
 const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 100,
@@ -34,9 +33,7 @@ const [pagination, setPagination] = useState({
   const queryClient = useQueryClient();
 const [searches, setSearches] = useState<Record<number, string>>({});
 const [activeIndex, setActiveIndex] = useState<number | null>(null);  const {
-    data: icons,
-    isLoading,
-    error,
+    data: icons
   } = iconHook.useFetchIcons({
     page: pagination.pageIndex,
     per_page: pagination.pageSize,

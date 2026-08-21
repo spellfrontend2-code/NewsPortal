@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UploadIcon, Plus, X } from "lucide-react";
+import { UploadIcon, X } from "lucide-react";
 import { useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMediaHooks } from "../hooks/useMedia";

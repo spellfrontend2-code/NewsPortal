@@ -1,5 +1,4 @@
 import { useArticleView } from "@/features/articles/hooks/useArticleView";
-import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function ArticleRectangleCard({ article, type = "view" }: any) {
@@ -9,7 +8,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
     article?.media_type === "image"
       ? article?.featured_image
       : article?.featured_image || article?.thumbnail || "/placeholder-news.jpg";
-  const publishedDate = article?.published_at?.split("T")[0] || "";
+  // const publishedDate = article?.published_at?.split("T")[0] || "";
 
   // Detailed Card (Featured Top Banner Variant)
   if (type === "detailed") {

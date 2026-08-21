@@ -1,12 +1,5 @@
-import { Controller, useFormContext } from "react-hook-form";
+import {useFormContext } from "react-hook-form";
 import { inputStyle } from "@/components/shared/styles/inputStyle";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import WordSeparator from "@/components/shared/WordSeparator";
 function ArticleExtraInfo() {
   const { register, watch, setValue } = useFormContext();

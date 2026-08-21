@@ -50,8 +50,6 @@ function CategoryInputForm({
   const [search, setSearch] = useState("");
   const {
     data: icons,
-    isLoading,
-    error,
   } = iconHook.useFetchIcons({
     page: pagination.pageIndex,
     per_page: pagination.pageSize,

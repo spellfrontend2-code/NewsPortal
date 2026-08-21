@@ -46,7 +46,7 @@ function AdvertisementTypeInfo({ setUploadOpen, setUploadType }) {
       icon: FileType,
     },
   ];
-  const { register, watch, setValue,control,formState:{errors} } = useFormContext();
+  const { register, watch, setValue,control } = useFormContext();
   const adType = watch("ad_type");
   const imageUrl = watch("image_url");
   const videoUrl = watch("video_url");

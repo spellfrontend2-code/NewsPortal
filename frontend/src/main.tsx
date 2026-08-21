@@ -2,13 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { RouterProvider } from 'react-router-dom'
-import { router } from './app/routes/router.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './services/queryClient.ts'
 import { Toaster } from 'sonner'
 import { AuthProvider } from './context/useAuthStore.tsx'
-import { PermissionProvider } from './features/roles-and-permissions/hooks/usePermissionStore.tsx'
 import "@fortawesome/fontawesome-free/css/all.min.css";
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

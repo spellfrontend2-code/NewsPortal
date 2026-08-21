@@ -7,7 +7,7 @@ function ArticleSquareHoverCard({ article, hideMeta = false, titleClassName }: a
   const { viewPublicArticle } = useArticleView();
   const imageSrc =
     article?.featured_image || article?.thumbnail || "/placeholder-news.jpg";
-  const publishedDate = article?.published_at?.split("T")[0] || "";
+  // const publishedDate = article?.published_at?.split("T")[0] || "";
 
   return (
     <article

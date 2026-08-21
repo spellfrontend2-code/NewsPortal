@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
 import { usePermissionStore } from "../hooks/usePermissionStore";
 
 interface Permission {

@@ -65,11 +65,9 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
-    fetchPublicHeadlineArticles: async ({ page, per_page }: { page: number; per_page: number }) => {
+    fetchPublicHeadlineArticles: async () => {
       try {
-        const response = await axiosInstance.get("/headline-news",{
-          params: { page, per_page }
-        });
+        const response = await axiosInstance.get("/headline-news");
         return response.data;
       } catch (error: any) {
         throw error?.response?.data;

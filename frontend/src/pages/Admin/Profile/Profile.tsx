@@ -2,9 +2,9 @@ import { inputStyle } from "@/components/shared/styles/inputStyle";
 import { Button } from "@/components/ui/button";
 import PasswordDialogBox from "@/features/profile/components/PasswordDialogBox";
 import { useProfileHooks } from "@/features/profile/hooks/useProfile";
-import { Plus, Shield, Upload, X } from "lucide-react";
+import {  Shield, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const Field = ({
@@ -35,7 +35,7 @@ function Profile() {
   const profileHook = useProfileHooks();
   const [isEditing, setIsEditing] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
-  const { data, isLoading, error } = profileHook.useFetchProfile();
+  const { data} = profileHook.useFetchProfile();
   const updateProfile = profileHook.useUpdateProfile();
   const user = data?.data ?? {};
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -44,6 +44,7 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (err) {
+        console.error(err);
         localStorage.clear();
       }
     }

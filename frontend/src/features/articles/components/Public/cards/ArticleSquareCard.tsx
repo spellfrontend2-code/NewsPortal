@@ -1,5 +1,4 @@
 import { useArticleView } from "@/features/articles/hooks/useArticleView";
-import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function ArticleSquareCard({
@@ -14,7 +13,7 @@ function ArticleSquareCard({
 
   const imageSrc =
     article?.featured_image || article?.thumbnail || "/placeholder-news.jpg";
-  const publishedDate = article?.published_at?.split("T")[0] || "";
+  // const publishedDate = article?.published_at?.split("T")[0] || "";
 
   return (
     <article

@@ -7,10 +7,7 @@ import { useArticleView } from "@/features/articles/hooks/useArticleView";
 
 function Headline() {
   const articleHook = useArticlesHooks();
-  const { data: articles, isLoading } = articleHook.useFetchHeadlineArticles({
-    page: 1,
-    per_page: 10,
-  });
+  const { data: articles, isLoading } = articleHook.useFetchHeadlineArticles();
 
   const rawItems = articles?.data ?? [];
 

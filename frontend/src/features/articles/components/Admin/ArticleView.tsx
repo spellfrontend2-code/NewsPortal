@@ -25,19 +25,12 @@ import {
   User,
   FileText,
   BarChart3,
-  Trash2,
-  Flag,
-  ChevronDown,
-  ChevronUp,
   CalendarDays,
   Link,
   Star,
   Image,
   ArrowLeft,
 } from "lucide-react";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axiosInstance from "@/services/axios";
 import CommentItem from "../CommentUI";
 
 type Article = any;

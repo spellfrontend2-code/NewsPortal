@@ -3,7 +3,6 @@ import SelectMediaDialogBox from "@/features/media/components/SelectMediaDialogB
 import {
   Image as ImageIcon,
   Monitor,
-  Tv,
   Upload,
   Video,
   X,
@@ -17,7 +16,7 @@ const mediaTypeStyle = `
   hover:border-[var(--color-primary)]
 `;
 function ArticleMediaSection({ setUploadType, setUploadOpen }) {
-  const { register, control, watch, setValue } = useFormContext();
+  const { register, watch, setValue } = useFormContext();
   const media_type = watch("media_type");
   const featuredImage = watch("featured_image");
   const thumbnail = watch("thumbnail");

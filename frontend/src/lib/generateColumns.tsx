@@ -1,5 +1,5 @@
 import { usePermission } from "@/features/auth/hooks/usePermission";
-import { Edit, Eye, ToggleLeft, ToggleRight, Trash, View } from "lucide-react";
+import { Edit, Eye, ToggleLeft, ToggleRight, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

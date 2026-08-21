@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Image as ImageIcon, Link} from "lucide-react";
+import { Image as ImageIcon} from "lucide-react";
 import SettingsForm from "@/features/settings/components/SettingsForm";
 import { useSettingHooks } from "@/features/settings/hooks/useSettings";
 import SettingsSkeleton from "@/features/settings/components/SettingSkeleton";

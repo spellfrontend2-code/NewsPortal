@@ -59,14 +59,11 @@ export const useArticlesHooks = () => {
         },
       });
     },
-    useFetchHeadlineArticles: ({ page, per_page }) => {
+    useFetchHeadlineArticles: () => {
       return useQuery({
         queryKey: ["headline_articles"],
         queryFn: () =>
-          articles.fetchPublicHeadlineArticles({
-            page,
-            per_page,
-          }),
+          articles.fetchPublicHeadlineArticles(),
       });
     },
     useFetchPublicFeedArticles: ({

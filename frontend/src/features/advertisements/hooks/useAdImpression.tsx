@@ -30,7 +30,7 @@ export function useAdImpression({
           hasTracked.current = true;
 
           trackAdImpression.mutate(adId, {
-            onSuccess: (res) => {
+            onSuccess: () => {
               // toast.success(res?.message || "Impression tracked successfully");
             },
           });
