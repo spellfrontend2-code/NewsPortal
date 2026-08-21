@@ -16,7 +16,7 @@ function CategoryWithChildren({
 }) {
   const navigate = useNavigate();
   const articleHook = useArticlesHooks();
-  const defaultPageSize = 7;
+  const defaultPageSize = 4;
 
   const { data: allArticles, isLoading: articleLoading } =
     articleHook.useFetchPublicArticlesByCategory({
@@ -65,7 +65,7 @@ function CategoryWithChildren({
     >
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         <div className="flex-1 min-w-0 flex flex-col gap-4">
-          <div className="h-[10%] flex items-center gap-10 w-full">
+          <div className="h-[10%] flex justify-between items-center gap-10 w-full">
             <div className="h-full px-2 w-fit flex items-center gap-3">
               <h1
                 className={`text-2xl pb-2 cursor-pointer uppercase font-bold hover:text-[var(--color-public-text-accent-hover)] text-[var(--color-public-text-accent)] transition-all duration-200 tracking-tight`}
@@ -102,7 +102,7 @@ function CategoryWithChildren({
 
           <div>
             {firstArticle && (
-              <div className="h-auto md:h-[300px] w-full">
+              <div className="h-auto md:h-[400px] w-full">
                 <ArticleRectangleCard article={firstArticle} type="detailed" />
               </div>
             )}
