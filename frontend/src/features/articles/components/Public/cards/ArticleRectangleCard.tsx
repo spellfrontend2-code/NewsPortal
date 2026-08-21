@@ -21,7 +21,7 @@ function ArticleRectangleCard({ article, type = "view" }: any) {
         }}
       >
         {/* Balanced 50% Image Container */}
-        <div className="md:w-1/2 w-full h-48 md:h-full overflow-hidden relative bg-slate-100 shrink-0 rounded-md">
+        <div className="md:w-1/2 w-full h-48 md:h-full overflow-hidden relative bg-slate-100 shrink-0 rounded-l-md">
           <img
             src={imageSrc}
             alt={article?.title || "Featured news"}

@@ -6,16 +6,18 @@ export const usePermissionHooks=()=>{
     const queryClient=useQueryClient()
 
     return{
-        useFetchPermissions:()=>{
+        useFetchPermissions:(options: any = {})=>{
             return useQuery({
                 queryFn:()=>permission.fetchPermissions(),
-                queryKey:["allPermissions"]
+                queryKey:["allPermissions"],
+                ...options,
             })
         },
-        useFetchRoleBasedPermissions:()=>{
+        useFetchRoleBasedPermissions:(options: any = {})=>{
             return useQuery({
                 queryFn:()=>permission.fetchRoleBasedPermissions(),
-                queryKey:["permissions"]
+                queryKey:["permissions"],
+                ...options,
             })
         },
         useAssignRoleBasedPermissions:()=>{

@@ -8,9 +8,9 @@ const initialAuth = {
   role: null,
 };
 
-const AuthContext = createContext({});
+const AuthContext = createContext<any>({});
 
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authData, setAuthDataState] = useState(() => {
     const stored = localStorage.getItem("auth");
     return stored ? JSON.parse(stored) : initialAuth;

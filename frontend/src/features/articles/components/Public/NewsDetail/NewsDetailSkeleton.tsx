@@ -3,34 +3,33 @@ import { ArticleSquareCardSkeleton } from "@/features/articles/components/Public
 function NewsDetailSkeleton() {
   return (
     <div className="flex flex-col gap-6 w-full animate-pulse">
-      {/* ── Article Header (full width) ── */}
-      <div className="flex flex-col gap-6 w-full pb-2">
-        {/* Title */}
-        <div className="flex flex-col gap-3">
-          <div className="h-8 sm:h-12 md:h-14 lg:h-16 w-full rounded-md bg-slate-200" />
-          <div className="h-8 sm:h-12 md:h-14 lg:h-16 w-[80%] rounded-md bg-slate-200" />
-        </div>
-
-        {/* Excerpt */}
-        <div className="h-6 sm:h-8 w-[75%] rounded bg-slate-200/70 border-l-4 border-slate-400 pl-4 my-2" />
-
-        {/* Author & Date Meta */}
-        <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-200/60">
-          <div className="flex items-center gap-3">
-            {/* Avatar */}
-            <div className="h-11 w-11 rounded-full bg-slate-200 shrink-0" />
-            <div className="h-4 w-32 rounded bg-slate-200" />
+      {/* ── Grid Container for Header + Interaction Bar + Content ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-[65px_1fr] gap-x-6 gap-y-6 w-full relative items-start">
+        {/* Article Header (Row 1, Col 2 on desktop; Row 1 on mobile) */}
+        <div className="order-1 xl:order-none xl:col-start-2 xl:row-start-1 flex flex-col gap-6 w-full min-w-0 pb-2">
+          {/* Title */}
+          <div className="flex flex-col gap-3">
+            <div className="h-8 sm:h-12 md:h-14 lg:h-16 w-full rounded-md bg-slate-200" />
+            <div className="h-8 sm:h-12 md:h-14 lg:h-16 w-[80%] rounded-md bg-slate-200" />
           </div>
-          <div className="h-4 w-28 rounded bg-slate-200" />
+
+          {/* Excerpt */}
+          <div className="h-6 sm:h-8 w-[75%] rounded bg-slate-200/70 border-l-4 border-slate-400 pl-4 my-2" />
+
+          {/* Author & Date Meta */}
+          <div className="flex flex-wrap items-center justify-between gap-4 py-5 border-y border-slate-200/60">
+            <div className="flex items-center gap-3">
+              {/* Avatar */}
+              <div className="h-11 w-11 rounded-full bg-slate-200 shrink-0" />
+              <div className="h-4 w-32 rounded bg-slate-200" />
+            </div>
+            <div className="h-4 w-28 rounded bg-slate-200" />
+          </div>
+          <div className="w-full h-px bg-slate-200/60 my-1" />
         </div>
-      </div>
 
-      <div className="w-full h-px bg-slate-200/60 my-1" />
-
-      {/* ── Layout: Interaction bar + Main + Sidebar ── */}
-      <div className="flex flex-col xl:flex-row gap-5 w-full relative">
-        {/* Interaction Bar (Mobile: horizontal row, Desktop: vertical sticky left) */}
-        <div className="xl:w-[65px] shrink-0 order-1">
+        {/* Responsive Interaction Bar (Spans Rows 1-2 on Col 1 on desktop; Row 2 on mobile) */}
+        <div className="order-2 xl:order-none xl:col-start-1 xl:row-start-1 xl:row-span-2 xl:sticky xl:top-24 xl:self-start z-20 w-full xl:w-[65px] shrink-0">
           <div className="flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2.5 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 border border-slate-200 xl:border-slate-100 rounded-md shadow-sm w-full sm:w-fit mx-auto xl:w-full">
             {/* Bookmark */}
             <div className="h-8 w-8 rounded-md bg-slate-200" />
@@ -61,8 +60,8 @@ function NewsDetailSkeleton() {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 min-w-0 order-2 flex flex-col xl:flex-row gap-6 items-start">
+        {/* Main Content (Row 2, Col 2 on desktop; Row 3 on mobile) */}
+        <div className="order-3 xl:order-none xl:col-start-2 xl:row-start-2 flex-1 min-w-0 w-full flex flex-col xl:flex-row gap-6 items-start">
           <div className="flex flex-col gap-6 flex-1 min-w-0">
             {/* Media Block */}
             <div className="w-full rounded-md overflow-hidden shadow-sm">

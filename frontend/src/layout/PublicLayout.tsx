@@ -8,6 +8,7 @@ import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
 import { usePagePopup } from "@/features/advertisements/hooks/usePagePopup";
 import { Outlet, useLocation } from "react-router-dom";
 import { useMemo } from "react";
+import PageTitle from "@/app/routes/pageTitle";
 
 function PublicLayout() {
   const location = useLocation();
@@ -59,7 +60,10 @@ function PublicLayout() {
   });
 
   return (
+    
     <div className="public h-screen w-full overflow-y-auto overflow-x-hidden">
+            <PageTitle />
+
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <NavbarTop />

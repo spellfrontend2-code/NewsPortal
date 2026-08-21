@@ -130,6 +130,33 @@ export const useArticlesHooks = () => {
           }),
       });
     },
+      useFetchPublicArticlesByTags: ({
+      page,
+      per_page,
+      slug,
+    }: {
+      page: number;
+      per_page: number;
+      slug?: string;
+      
+    }) => {
+      return useQuery({
+        queryKey: [
+          "public_articles_by_tags",
+          page,
+          per_page,
+          slug,
+         
+        ],
+        queryFn: () =>
+          articles.fetchPublicArticlesByTags({
+            page,
+            per_page,
+            slug,
+           
+          }),
+      });
+    },
     useFetchPublicSingleArticle: (slug) => {
       return useQuery({
         queryKey: ["public_single_articles", slug],

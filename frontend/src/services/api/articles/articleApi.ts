@@ -114,6 +114,27 @@ export const articleApi = () => {
         throw error?.response?.data;
       }
     },
+    fetchPublicArticlesByTags: async ({
+      page,
+      per_page,
+      slug,
+    
+    }: {
+      page: number;
+      per_page: number;
+      slug?: string;
+  
+    }) => {
+      try {
+      
+        const response = await axiosInstance.get(`/articles/tag/${slug}`, {
+          params: { page, per_page},
+        });
+        return response.data;
+      } catch (error: any) {
+        throw error?.response?.data;
+      }
+    },
     fetchPublicSingleArticle: async (slug: any) => {
       try {
         const response = await axiosInstance.get(`/articles/${slug}`);

@@ -1,5 +1,6 @@
 import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import parse, { domToReact } from "html-react-parser";
+import { isTopAd } from "./NewsHeader";
 
 interface HtmlParserProps {
   content: string;
@@ -16,14 +17,18 @@ const HtmlParser = ({
 }: HtmlParserProps) => {
   let paragraphCount = 0;
 
-  const allParagraphAds = Array.isArray(paragraphAds) ? paragraphAds : [];
-  const allMiddleAds = Array.isArray(middleAds)
-    ? middleAds
-    : Array.isArray(ad)
-    ? ad
-    : ad
-    ? [ad]
-    : [];
+  const allParagraphAds = (Array.isArray(paragraphAds) ? paragraphAds : []).filter(
+    (item: any) => !isTopAd(item)
+  );
+  const allMiddleAds = (
+    Array.isArray(middleAds)
+      ? middleAds
+      : Array.isArray(ad)
+      ? ad
+      : ad
+      ? [ad]
+      : []
+  ).filter((item: any) => !isTopAd(item));
 
   let middleAdIndex = 0;
 

@@ -141,7 +141,7 @@ export function generateColumns(
         }
         if(key==="published_at")
         {
-          return <span>{value.split("T")[0]}</span>
+          return <span>{value?.split("T")[0]}</span>
         }
         if (key === "icon") {
           return <i className={value}></i>;

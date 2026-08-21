@@ -1,9 +1,59 @@
 import BannerAdvertisement from "@/features/advertisements/components/Public/BannerAdvertisement";
 import { Clock } from "lucide-react";
 
+export const isTopAd = (item: any): boolean => {
+  if (!item) return false;
+  const where =
+    item?.where ||
+    item?.placement?.where ||
+    item?.data?.where ||
+    item?.data?.placement?.where ||
+    item?.placement_where ||
+    item?.data?.placement_where ||
+    item?.position_type ||
+    item?.data?.position_type ||
+    "";
+  return where === "article_top" || where === "top";
+};
+
 function NewsHeader({ Data }: any) {
   const articleData = Data?.article;
   const advertisementData = Data?.advertisements;
+  const contentBlocks = Data?.content_blocks;
+
+  const rawTop =
+    advertisementData?.top ||
+    advertisementData?.article_top;
+  const directTopAds = Array.isArray(rawTop)
+    ? rawTop
+    : rawTop
+    ? [rawTop]
+    : [];
+
+  // Also collect any top ads from content_blocks if present
+  const contentTopAds: any[] = [];
+  if (Array.isArray(contentBlocks)) {
+    contentBlocks.forEach((block: any) => {
+      if (block?.type === "advertisement" && isTopAd(block)) {
+        contentTopAds.push(block.data || block);
+      }
+    });
+  }
+
+  // Deduplicate top ads by id
+  const seenIds = new Set<number | string>();
+  const topAds: any[] = [];
+  [...directTopAds, ...contentTopAds].forEach((ad: any) => {
+    const adId = ad?.id || ad?.data?.id;
+    if (adId) {
+      if (!seenIds.has(adId)) {
+        seenIds.add(adId);
+        topAds.push(ad);
+      }
+    } else {
+      topAds.push(ad);
+    }
+  });
 
   return (
     <div className="flex flex-col gap-6 w-full pb-2">
@@ -15,11 +65,11 @@ function NewsHeader({ Data }: any) {
       </div>
 
       {/* Top Banner Advertisement (Takes whole banner width & height without spaces) */}
-      {advertisementData?.top?.length > 0 && (
+      {topAds.length > 0 && (
         <div className="w-full my-3 overflow-hidden rounded-md ">
-          {advertisementData.top.map((ad: any, index: number) => (
-            <div key={ad.id ?? index} className="w-full">
-              <BannerAdvertisement Ad={ad} />
+          {topAds.map((ad: any, index: number) => (
+            <div key={ad?.id ?? index} className="w-full">
+              <BannerAdvertisement Ad={ad?.data || ad} />
             </div>
           ))}
         </div>

@@ -1,11 +1,14 @@
 import { ShieldX, ArrowLeft, LayoutDashboard } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import PageTitle from "@/app/routes/pageTitle";
 
 function Unauthorized() {
 const navigate = useNavigate();
 
 return ( 
-<div className="min-h-screen bg-slate-50 flex items-center justify-center px-6"> <div className="w-full max-w-lg text-center">
+<div className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
+  <PageTitle />
+  <div className="w-full max-w-lg text-center">
  <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-red-100"> <ShieldX className="h-12 w-12 text-red-600" /> </div>
 
     {/* Error Code */}

@@ -1,6 +1,8 @@
 import React, { createContext, useContext } from "react";
 import { usePermissionHooks } from "./usePermissions";
 
+import { useAuthStore } from "@/context/useAuthStore";
+
 interface PermissionContextType {
   PERMISSIONS: Record<string, any>;
   isLoading: boolean;
@@ -17,13 +19,16 @@ export function PermissionProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const { authData } = useAuthStore();
   const permissionHook = usePermissionHooks();
 
   const {
     data: permissions,
     isLoading,
     error,
-  } = permissionHook.useFetchPermissions();
+  } = permissionHook.useFetchPermissions({
+    enabled: Boolean(authData?.accessToken),
+  });
  const PERMISSIONS=permissions?.data ?? {}
 const DEFAULT_ROUTES = [
   {

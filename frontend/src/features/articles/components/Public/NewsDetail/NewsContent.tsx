@@ -7,6 +7,8 @@ import { ClipboardMinus, Tag, ThumbsDown, ThumbsUp } from "lucide-react";
 import { toast } from "sonner";
 import HtmlParser from "./HtmlParser";
 import NewsComment from "./NewsComment";
+import { isTopAd } from "./NewsHeader";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 function NewsContent({ Data, commentRef }: any) {
   const articleData = Data?.article;
@@ -66,21 +68,54 @@ function NewsContent({ Data, commentRef }: any) {
 
   const hasSidebarAds = sortedSidebarAds.length > 0;
 
+  // Set of top ad IDs to prevent rendering article top ads inside content
+  const topAdIds = new Set<number>();
+  const rawTopAds = [
+    ...(Array.isArray(advertisementData?.top)
+      ? advertisementData.top
+      : advertisementData?.top
+      ? [advertisementData.top]
+      : []),
+    ...(Array.isArray(advertisementData?.article_top)
+      ? advertisementData.article_top
+      : advertisementData?.article_top
+      ? [advertisementData.article_top]
+      : []),
+  ];
+  rawTopAds.forEach((ad: any) => {
+    const id = ad?.id || ad?.data?.id;
+    if (id) topAdIds.add(Number(id));
+  });
+
   // Track ad IDs rendered in body to prevent duplicate rendering at the bottom
   const renderedContentAdIds = new Set<number>();
   if (Array.isArray(contentBlocks)) {
     contentBlocks.forEach((block: any) => {
-      if (block?.type === "advertisement" && block?.data?.id) {
-        renderedContentAdIds.add(Number(block.data.id));
+      if (block?.type === "advertisement") {
+        if (isTopAd(block)) {
+          const id = block?.data?.id || block?.id;
+          if (id) topAdIds.add(Number(id));
+        } else if (block?.data?.id) {
+          renderedContentAdIds.add(Number(block.data.id));
+        }
       }
     });
   }
 
-  // Filter bottom ads to exclude any ad already rendered inside content_blocks or paragraph ads
+  // Filter bottom ads to exclude any ad already rendered inside content_blocks or paragraph ads or top ads
   const bottomAdsToRender = (advertisementData?.bottom || []).filter(
-    (ad: any) => !ad?.id || !renderedContentAdIds.has(Number(ad.id))
+    (ad: any) =>
+      !isTopAd(ad) &&
+      (!ad?.id || (!renderedContentAdIds.has(Number(ad.id)) && !topAdIds.has(Number(ad.id))))
   );
 
+  const filteredParagraphAds = (advertisementData?.paragraphs || []).filter(
+    (ad: any) => !isTopAd(ad) && (!ad?.id || !topAdIds.has(Number(ad.id)))
+  );
+  const filteredMiddleAds = (advertisementData?.middle || []).filter(
+    (ad: any) => !isTopAd(ad) && (!ad?.id || !topAdIds.has(Number(ad.id)))
+  );
+const navigate=useNavigate()
   return (
     <div className="flex flex-col xl:flex-row w-full gap-6 items-start">
       {/* Main Content Area */}
@@ -153,6 +188,15 @@ function NewsContent({ Data, commentRef }: any) {
                   );
                 }
                 if (block.type === "advertisement") {
+                  // Article top ads must only be shown in newsheader, not in article content
+                  if (
+                    isTopAd(block) ||
+                    (block.data?.id && topAdIds.has(Number(block.data.id))) ||
+                    (block.id && topAdIds.has(Number(block.id)))
+                  ) {
+                    return null;
+                  }
+
                   return (
                     <div
                       key={`ad-${block.data?.id ?? idx}-${idx}`}
@@ -168,9 +212,9 @@ function NewsContent({ Data, commentRef }: any) {
           ) : (
             <HtmlParser
               content={articleData?.content || ""}
-              paragraphAds={advertisementData?.paragraphs || []}
-              middleAds={advertisementData?.middle || []}
-              ad={advertisementData?.middle}
+              paragraphAds={filteredParagraphAds}
+              middleAds={filteredMiddleAds}
+              ad={filteredMiddleAds}
             />
           )}
         </div>
@@ -196,7 +240,7 @@ function NewsContent({ Data, commentRef }: any) {
               <span
                 key={tag?.id}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-full border border-slate-200/60 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-950 transition-colors duration-150 cursor-pointer"
-              >
+              onClick={()=>navigate(`/news-list/tags/${tag?.slug}`)}>
                 <Tag size={14} className="text-slate-400" />
                 {tag?.name}
               </span>

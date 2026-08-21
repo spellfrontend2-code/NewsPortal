@@ -10,7 +10,7 @@ import UserLogin from "@/features/auth/components/UserLogin";
 import { useAuthChecker } from "@/features/auth/hooks/useAuthChecker";
 import { shareArticle } from "@/lib/shareHandler";
 import { Bookmark, MessageCircle } from "lucide-react";
-import {  useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 const socialMedias = [
@@ -48,6 +48,12 @@ function NewsDetail() {
   const sharePublicArticle = articleHook.useSharePublicArticle();
   const bookmarkPublicArticle = articleHook.useBookmarkPublicArticle();
   const Data = articles?.data ?? [];
+
+  useEffect(() => {
+    if (Data?.article?.title) {
+      document.title = `${Data.article.title} | NewsPortal`;
+    }
+  }, [Data?.article?.title]);
   const { checkAuth, open, setOpen } = useAuthChecker();
   const { data: relatedNewsList, isLoading: relatednewsLoading } =
     articleHook.useFetchRelatedArticles(slug);
@@ -117,88 +123,88 @@ function NewsDetail() {
       ) : (
         Data && (
           <div className="flex flex-col gap-6 w-full">
-            <div className="flex flex-col gap-6 w-full ">
-              {/* Article Header (Full Width) */}
-              <NewsHeader Data={Data} />
-              <div className="w-full h-px bg-slate-200/60 my-1"></div>
+            {/* Grid Container for Header + Interaction Bar + Content */}
+            <div className="grid grid-cols-1 xl:grid-cols-[65px_1fr] gap-x-6 gap-y-6 w-full relative items-start">
+              {/* Article Header (Row 1, Col 2 on desktop; Row 1 on mobile) */}
+              <div className="order-1 xl:order-none xl:col-start-2 xl:row-start-1 flex flex-col gap-6 w-full min-w-0">
+                <NewsHeader Data={Data} />
+                <div className="w-full h-px bg-slate-200/60 my-1"></div>
+              </div>
 
-              {/* Layout: Sidebar + Main Content */}
-              <div className="flex flex-col xl:flex-row gap-5 w-full relative ">
-                {/* Responsive Interaction Bar (Mobile: Horizontal under header, Desktop: Vertical sticky left) */}
-                <div className="xl:w-[65px] shrink-0 order-1 z-20">
-                  <div className="sticky top-20 xl:top-24 flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2.5 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-md shadow-sm text-slate-600 w-full sm:w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
-                    {/* Bookmark */}
-                    <button
-                      onClick={() => handleBookmark()}
-                      className="group flex items-center justify-center p-2 rounded-md hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
-                    >
-                      <Bookmark
-                        size={22}
-                        className={`transition-all duration-200 ${
-                          Data?.article?.user_interactions?.has_bookmarked ===
-                          true
-                            ? "fill-amber-400 text-amber-400"
-                            : "text-slate-400 group-hover:text-amber-500"
-                        }`}
-                      />
-                    </button>
+              {/* Responsive Interaction Bar (Spans Rows 1-2 on Col 1 on desktop; Row 2 on mobile) */}
+              <div className="order-2 xl:order-none xl:col-start-1 xl:row-start-1 xl:row-span-2 xl:sticky xl:top-24 xl:self-start z-20 w-full xl:w-[65px] shrink-0">
+                <div className="sticky top-20 xl:static flex xl:flex-col flex-row items-center justify-center xl:justify-start gap-3 xl:gap-6 py-2.5 xl:py-6 px-4 xl:px-2 bg-white/95 xl:bg-slate-50 backdrop-blur-sm border border-slate-200 xl:border-slate-100 rounded-md shadow-sm text-slate-600 w-full sm:w-fit mx-auto xl:w-full overflow-x-auto flex-wrap transition-all">
+                  {/* Bookmark */}
+                  <button
+                    onClick={() => handleBookmark()}
+                    className="group flex items-center justify-center p-2 rounded-md hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                  >
+                    <Bookmark
+                      size={22}
+                      className={`transition-all duration-200 ${
+                        Data?.article?.user_interactions?.has_bookmarked ===
+                        true
+                          ? "fill-amber-400 text-amber-400"
+                          : "text-slate-400 group-hover:text-amber-500"
+                      }`}
+                    />
+                  </button>
 
-                    <div className="hidden xl:block w-6 h-px bg-slate-200"></div>
-                    <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
+                  <div className="hidden xl:block w-6 h-px bg-slate-200"></div>
+                  <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
 
-                    {/* Comments Count */}
-                    <div
-                      className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0"
-                      onClick={() =>
-                        commentRef.current?.scrollIntoView({
-                          behavior: "smooth",
-                        })
-                      }
-                    >
-                      <MessageCircle
-                        size={18}
-                        className="text-slate-450 xl:w-5 xl:h-5"
-                      />
-                      <p className="font-bold text-xs xl:text-sm text-slate-700 xl:mt-0.5">
-                        {Data?.article?.comment_count}
-                      </p>
-                    </div>
+                  {/* Comments Count */}
+                  <div
+                    className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0 cursor-pointer"
+                    onClick={() =>
+                      commentRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                      })
+                    }
+                  >
+                    <MessageCircle
+                      size={18}
+                      className="text-slate-450 xl:w-5 xl:h-5"
+                    />
+                    <p className="font-bold text-xs xl:text-sm text-slate-700 xl:mt-0.5">
+                      {Data?.article?.comment_count}
+                    </p>
+                  </div>
 
-                    {/* Shares Count */}
-                    <div className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0">
-                      <p className="font-bold text-xs xl:text-sm text-slate-700">
-                        {Data?.article?.share_count}
-                      </p>
-                      <p className="uppercase tracking-widest text-[10px] xl:text-[9px] font-bold text-slate-400">
-                        shares
-                      </p>
-                    </div>
+                  {/* Shares Count */}
+                  <div className="flex xl:flex-col items-center justify-center gap-1 xl:gap-0 shrink-0">
+                    <p className="font-bold text-xs xl:text-sm text-slate-700">
+                      {Data?.article?.share_count}
+                    </p>
+                    <p className="uppercase tracking-widest text-[10px] xl:text-[9px] font-bold text-slate-400">
+                      shares
+                    </p>
+                  </div>
 
-                    <div className="hidden xl:block w-6 h-px bg-slate-200"></div>
-                    <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
+                  <div className="hidden xl:block w-6 h-px bg-slate-200"></div>
+                  <div className="xl:hidden h-5 w-px bg-slate-200 mx-1"></div>
 
-                    {/* Social Actions */}
-                    <div className="flex flex-row xl:flex-col gap-2 xl:gap-4 items-center shrink-0 ">
-                      {socialMedias?.map((media, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleSocialShare(media)}
-                          className="cursor-pointer hover:scale-110 transition-transform duration-150 p-1.5 rounded-md hover:bg-slate-100"
-                        >
-                          <i
-                            className={`${media?.icon_class} text-base xl:text-lg`}
-                            style={{ color: media?.color }}
-                          ></i>
-                        </button>
-                      ))}
-                    </div>
+                  {/* Social Actions */}
+                  <div className="flex flex-row xl:flex-col gap-2 xl:gap-4 items-center shrink-0 ">
+                    {socialMedias?.map((media, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSocialShare(media)}
+                        className="cursor-pointer hover:scale-110 transition-transform duration-150 p-1.5 rounded-md hover:bg-slate-100"
+                      >
+                        <i
+                          className={`${media?.icon_class} text-base xl:text-lg`}
+                          style={{ color: media?.color }}
+                        ></i>
+                      </button>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                {/* Main Content */}
-                <div className="flex-1 min-w-0 order-2">
-                  <NewsContent Data={Data} commentRef={commentRef} />
-                </div>
+              {/* Main Content (Row 2, Col 2 on desktop; Row 3 on mobile) */}
+              <div className="order-3 xl:order-none xl:col-start-2 xl:row-start-2 flex-1 min-w-0 w-full">
+                <NewsContent Data={Data} commentRef={commentRef} />
               </div>
             </div>
             {relatedNews?.length>0 && <div className=" ">

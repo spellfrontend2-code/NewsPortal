@@ -28,6 +28,7 @@ import CategoryBasedNewsList from "@/features/articles/components/Public/NewsLis
 import ErrorPage from "@/pages/Error/ErrorPage";
 import { PermissionProvider } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import ContactUs from "@/pages/Public/ContactUs/ContactUs";
+import TagsBasedNewsListPage from "@/features/articles/components/Public/NewsList/TagsBasedNewsListPage";
 const publicLayoutLoader = (queryClient: QueryClient) => async () => {
   await queryClient.ensureQueryData(publicCategoriesQuery({ page: 1, per_page: 5 }));
 
@@ -37,11 +38,13 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-    <PermissionProvider>
-      <ProtectedRoute navigateRoute="/admin/login" />
-    </PermissionProvider>
-  ),
+      <PermissionProvider>
+        <ProtectedRoute navigateRoute="/admin/login" />
+      </PermissionProvider>
+    ),
     errorElement: <ErrorPage />,
+    handle: { title: "Admin" },
+
     children: [
       {
         element: <AdminLayout />,
@@ -49,121 +52,147 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <Dashboard />,
+            handle: { title: "Dashboard" },
           },
           {
             path: "articles",
             element: <Articles />,
+            handle: { title: "Articles" },
           },
           {
             path: "articles/create",
             element: <AddArticle type="add" />,
+            handle: { title: "Create Article" },
           },
           {
             path: "articles/:slug/edit",
             element: <AddArticle type="edit" />,
-          },
-          {
-            path: "articles/edit/:slug",
-            element: <AddArticle type="edit" />,
+            handle: { title: "Edit Article" },
           },
           {
             path: "categories",
             element: <Categories />,
+            handle: { title: "Categories" },
           },
           {
             path: "media",
             element: <Media />,
+            handle: { title: "Media" },
           },
           {
             path: "tags",
             element: <Tags />,
+            handle: { title: "Tags" },
           },
           {
             path: "advertisements",
             element: <Advertisements />,
+            handle: { title: "Advertisements" },
           },
           {
             path: "advertisements/create",
             element: <AddAdvertisement type="add" />,
+            handle: { title: "Create Advertisement" },
           },
           {
-            path: "advertisements/:slug/edit",
+            path: "advertisements/:id/edit",
             element: <AddAdvertisement type="edit" />,
-          },
-          {
-            path: "advertisements/edit/:slug",
-            element: <AddAdvertisement type="edit" />,
+            handle: { title: "Edit Advertisement" },
           },
           {
             path: "settings",
             element: <Settings />,
+            handle: { title: "Settings" },
           },
           {
             path: "roles-and-permissions",
             element: <RolesAndPermissions />,
+            handle: { title: "Roles & Permissions" },
           },
           {
             path: "roles-and-permissions/create",
             element: <RolesAndPermissionManagement type="add" />,
+            handle: { title: "Create Role" },
           },
           {
-            path: "roles-and-permissions/:slug/edit",
+            path: "roles-and-permissions/:id/edit",
             element: <RolesAndPermissionManagement type="edit" />,
+            handle: { title: "Edit Role" },
           },
           {
-            path: "roles-and-permissions/edit/:slug",
-            element: <RolesAndPermissionManagement type="edit" />,
+            path: "authors",
+            element: <Authors />,
+            handle: { title: "Authors" },
           },
-          { path: "authors", element: <Authors /> },
           {
             path: "profile",
             element: <Profile />,
+            handle: { title: "Profile" },
           },
         ],
       },
     ],
   },
+
   {
     path: "/admin/login",
-    element:(<PermissionProvider><PublicRoute /></PermissionProvider> ),
+    element: (
+      <PermissionProvider>
+        <PublicRoute />
+      </PermissionProvider>
+    ),
     children: [
       {
         index: true,
         element: <AdminLogin />,
+        handle: { title: "Admin Login" },
       },
     ],
   },
+
   {
     path: "/",
     element: <PublicLayout />,
     errorElement: <ErrorPage />,
     loader: publicLayoutLoader(queryClient),
+
     children: [
       {
         index: true,
         element: <Home />,
+        handle: { title: "Home" },
       },
       {
         path: "news/:slug",
         element: <NewsDetail />,
+        handle: { title: "News" },
       },
       {
         path: "news-list/latest-news",
-
         element: <LatestNewsList />,
+        handle: { title: "Latest News" },
       },
       {
         path: "news-list/category/:slug",
         element: <CategoryBasedNewsList />,
+        handle: { title: "Category News" },
+      },
+        {
+        path: "news-list/tags/:slug",
+        element: <TagsBasedNewsListPage/>,
+        handle: { title: "Tags News" },
       },
       {
-        path:"/contact-us",
-        element:<ContactUs/>
-      }
+        path: "contact-us",
+        element: <ContactUs />,
+        handle: { title: "Contact Us" },
+      },
     ],
   },
+
   {
     path: "/unauthorized",
     element: <Unauthorized />,
+    handle: { title: "Unauthorized" },
   },
 ]);
