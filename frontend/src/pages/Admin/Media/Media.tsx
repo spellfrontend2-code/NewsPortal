@@ -11,28 +11,40 @@ import MediaSkeleton from "@/features/media/components/MediaSkeleton";
 import MediaViewDialogBox from "@/features/media/components/MediaViewDialogBox";
 import UploadDialogBox from "@/features/media/components/UploadDialogBox";
 import { useMediaHooks } from "@/features/media/hooks/useMedia";
-import { Copy, Plus, Search, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Plus,
+  Search,
+  Trash,
+} from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
+import { useAdminPagination } from "@/hooks/useAdminPagination";
 
 function Media() {
+  const { hasPermission } = usePermission();
   const { control, watch } = useForm({
     defaultValues: {
       category: "all",
     },
   });
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
   const selectedCategory = watch("category");
   const [openUpload, setOpenUpload] = useState(false);
   const mediaHooks = useMediaHooks();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 12,
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 12,
   });
   const { data, isLoading } = mediaHooks.useFetchMedia({
     search: selectedCategory === "all" ? undefined : selectedCategory,
-    page: pagination.pageIndex + 1,
-    per_page: pagination.pageSize,
+    page,
+    per_page: pageSize,
   });
   const media = data?.data ?? [];
   const lastPage = data?.pagination?.last_page ?? 1;
@@ -41,12 +53,6 @@ function Media() {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [viewOpen, setViewOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-useEffect(() => {
-  setPagination((prev) => ({
-    ...prev,
-    pageIndex: 0, 
-  }));
-}, [searchQuery,selectedCategory]);
   //   const filteredMedia = useMemo(() => {
   //   return media.filter((m) => {
 
@@ -58,35 +64,41 @@ useEffect(() => {
   //   });
   // }, [media, searchQuery]);
   return (
-    <div className="w-full h-full p-20 flex flex-col gap-5">
-      <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)] text-center">
+    <div className="w-full h-full px-20 py-10 flex flex-col gap-5">
+                <div className="flex justify-between items-end rounded-xl ">
+        <div className="flex flex-col  text-gray-800 ">
+          <p className="text-3xl font-bold ">
           Media Gallery
         </p>
-        <Button
+        <p className="text-gray-500">Manage your medias</p>
+        </div>
+       {hasPermission(PERMISSIONS?.MEDIA?.CREATE?.name) && <Button
           variant="submit"
-          className="mt-5"
-          onClick={() => {
-            setOpenUpload(true);
-          }}
+          className="h-10 flex items-center gap-2"
+          onClick={() => setOpenUpload(true)}
         >
           <Plus />
-          Upload Files
-        </Button>
+          Add Media
+        </Button>}
       </div>
       <div className="w-full h-full flex justify-center items-center">
-        <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
+         <div className="border border-[var(--color-secondary)] w-full h-full rounded-xl p-5 flex flex-col justify-between">
           <div className="w-full flex justify-between items-center pb-3 mb-5 border-b border-[var(--color-secondary)]">
-            <div className="w-[45%] flex items-center gap-1 border border-[var(--color-secondary)] rounded-md px-2">
-              <Search size={20} color="gray" />
+            <div className={`${inputStyle} flex items-center gap-2 max-w-[30%] `}>
+              <Search strokeWidth={1.5} size={20}/>
               <input
-                type="text"
-                placeholder="Search media..."
-                className="focus:outline-none px-3 py-1 w-full"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPagination((prev: any) => ({
+                  ...prev,
+                  pageIndex: 0,
+                }));
+              }}
+              placeholder="Search Medias..."
+              className="bg-transparent outline-none focus:outline-none w-full "
+            /> </div> 
             <div className="w-[45%] flex justify-end">
               <Controller
                 name="category"
@@ -97,7 +109,7 @@ useEffect(() => {
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
 
-                    <SelectContent className="bg-white w-[200px]">
+                    <SelectContent className={`${inputStyle} bg-white w-[200px]`}>
                       <SelectItem value="all">All</SelectItem>
                       <SelectItem value="advertisements">
                         Advertisement
@@ -109,122 +121,135 @@ useEffect(() => {
               />
             </div>
           </div>
-          {isLoading ? (
+          {(isLoading||permissionLoading) ? (
             <MediaSkeleton />
-          ) : media.length > 0 ? (
+          ) : (hasPermission(PERMISSIONS?.MEDIA?.VIEW?.name) && media.length > 0) ? (
             <div className="w-full h-full flex justify-center items-center">
-            <div className="w-full h-[90%]  items-start">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                {media.map((m) => (
-                  <div
-                    key={m.id}
-                    className="h-[220px] w-full border border-[var(--color-secondary)] rounded-xl  hover:scale-105 transition-all duration-300"
-                    onClick={() => {
-                      setSelectedMedia(m);
-                      setViewOpen(true);
-                    }}
-                  >
-                    <div className="relative w-full h-2/3 flex justify-center items-center ">
-                      {m.file_type === "video" ? (
-                        <video
-                          src={m.file_url}
-                          disablePictureInPicture
-                          className="w-full h-full rounded-t-xl"
-                        />
-                      ) : (
-                        <img
-                          src={m.file_url}
-                          className="w-full h-full rounded-t-xl"
-                        />
-                      )}
-                      <div className="absolute top-2 right-2 flex gap-1">
-                        <div
-                          className="flex items-center h-[30px] w-[30px] text-gray-500 z-50  cursor-pointer"
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            try {
-                              await navigator.clipboard.writeText(m.file_path);
-                              toast.success("Copied URL to clipboard");
-                            } catch (err) {
-                              toast.error("Failed to copy URL: ", err);
-                            }
-                          }}
-                        >
-                          <Copy
-                            strokeWidth={1.5}
-                            size={20}
-                            className="text-white hover:text-[var(--color-primary)]  h-full w-full p-1 bg-[rgb(var(--color-primary-rgb)/0.3)] rounded-md"
+              <div className="w-full h-[90%]  items-start">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                  {media.map((m) => (
+                    <div
+                      key={m.id}
+                      className="h-[220px] w-full border border-[var(--color-secondary)] rounded-xl  hover:scale-105 transition-all duration-300"
+                      onClick={() => {
+                        setSelectedMedia(m);
+                        setViewOpen(true);
+                      }}
+                    >
+                      <div className="relative w-full h-2/3 flex justify-center items-center ">
+                        {m.file_type === "video" ? (
+                          <video
+                            src={m.file_url}
+                            disablePictureInPicture
+                            className="w-full h-full rounded-t-xl"
                           />
+                        ) : (
+                          <img
+                            src={m.file_url}
+                            className="w-full h-full rounded-t-xl"
+                          />
+                        )}
+                        <div className="absolute top-2 right-2 flex gap-1">
+                          <div
+                            className="flex items-center h-[30px] w-[30px] text-gray-500 z-50  cursor-pointer"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                await navigator.clipboard.writeText(
+                                  m.file_path,
+                                );
+                                toast.success("Copied URL to clipboard");
+                              } catch (err) {
+                                toast.error(`Failed to copy URL: ${err}`);
+                              }
+                            }}
+                          >
+                            <Copy
+                              strokeWidth={1.5}
+                              size={20}
+                              className="text-white hover:text-[var(--color-primary)]  h-full w-full p-1 bg-[rgb(var(--color-primary-rgb)/0.3)] rounded-md"
+                            />
+                          </div>
+                          {hasPermission(PERMISSIONS.MEDIA.DELETE?.name) && <div
+                            className="flex items-center h-[30px] w-[30px] z-50 text-red-800 hover:text-red-500 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedMedia(m);
+                              setDeleteOpen(true);
+                            }}
+                          >
+                            <Trash
+                              strokeWidth={1.5}
+                              size={20}
+                              className="h-full w-full bg-red-100 p-1 rounded-md"
+                            />
+                          </div>}
                         </div>
-                        <div
-                          className="flex items-center h-[30px] w-[30px] z-50 text-red-800 hover:text-red-500 cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedMedia(m);
-                            setDeleteOpen(true);
-                          }}
-                        >
-                          <Trash
-                            strokeWidth={1.5}
-                            size={20}
-                            className="h-full w-full bg-red-100 p-1 rounded-md"
-                          />
+                        <div className="flex justify-center items-center h-[20px] w-[110px] absolute bottom-1  bg-[var(--color-primary)] px-2 py-1 rounded-full text-white text-sm ">
+                          {m.category}
                         </div>
                       </div>
-                      <div className="flex justify-center items-center h-[20px] w-[110px] absolute bottom-1  bg-[var(--color-primary)] px-2 py-1 rounded-full text-white text-sm ">
-                        {m.category}
+                      <div className="h-1/3 w-full flex flex-col justify-between items-center p-2 overflow-hidden">
+                        <div className="text-gray-800 w-full rounded-b-xl text-sm font-semibold text-center">
+                          {m.file_name.split(".")[0]}
+                        </div>
                       </div>
                     </div>
-                    <div className="h-1/3 w-full flex flex-col justify-between items-center p-2 overflow-hidden">
-                      <div className="text-gray-800 w-full rounded-b-xl text-sm font-semibold text-center">
-                        {m.file_name.split(".")[0]}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
             </div>
           ) : (
             <div className="w-full h-full flex justify-center items-center text-2xl font-bold text-[var(--color-primary)]">
               No Media Found
             </div>
           )}
-          <div className="flex items-center justify-between mt-4">
-            <button
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  pageIndex: Math.max(0, prev.pageIndex - 1),
-                }))
-              }
-              disabled={pagination.pageIndex <= 0}
-              className="px-3 py-1 border rounded"
-            >
-              Prev
-            </button>
 
-            <span className="text-sm">
-              Page {isLoading ? "..." : pagination.pageIndex + 1} of{" "}
-              {isLoading ? "..." : lastPage}
+          <div className="flex items-center justify-between mt-4 w-full h-[40px]">
+            <span className="shadow-md flex items-center justify-center w-[150px] h-full text-base text-[var(--color-primary)] font-semibold border-1 border-[var(--color-primary)] bg-gray-100/90 px-3 py-1 rounded-2xl">
+              Page {pagination.pageIndex + 1} of {lastPage}
             </span>
-
-            <button
-              onClick={() =>
-                setPagination((prev) => ({
-                  ...prev,
-                  pageIndex: Math.min(lastPage-1, prev.pageIndex + 1),
-                }))
-              }
-              disabled={pagination.pageIndex >= lastPage-1}
-              className="px-3 py-1 border rounded"
-            >
-              Next
-            </button>
+            <div className="shadow-md  relative flex justify-between items-center overflow-hidden w-[150px] h-full border-1 border-[var(--color-primary)] bg-gray-100/90 text-gray-400  cursor-pointer rounded-2xl group">
+              <button
+                onClick={() =>
+                  setPagination((prev: any) => ({
+                    ...prev,
+                    pageIndex: Math.max(0, prev.pageIndex - 1),
+                  }))
+                }
+                disabled={pagination.pageIndex <= 0}
+                className={`h-full w-1/2 flex justify-start items-center ${pagination.pageIndex > 0 ? "text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.2)]" : "text-gray-400"}  text-base cursor-pointer font-semibold disabled:cursor-not-allowed
+`}
+              >
+                <ChevronLeft strokeWidth={3} className="h-10 w-5" />
+                Prev
+              </button>
+              <div className="absolute inset-0 h-[95%] w-[1px] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--color-primary)]" />
+              <button
+                onClick={() =>
+                  setPagination((prev: any) => ({
+                    ...prev,
+                    pageIndex: Math.min(lastPage - 1, prev.pageIndex + 1),
+                  }))
+                }
+                disabled={pagination.pageIndex >= lastPage - 1}
+                className={`h-full w-1/2 flex justify-end items-center ${pagination.pageIndex < lastPage - 1 ? "text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.2)]" : " text-gray-400"} text-base cursor-pointer font-semibold disabled:cursor-not-allowed
+`}
+              >
+                Next
+                <ChevronRight strokeWidth={3} className="h-10 w-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <UploadDialogBox openUpload={openUpload} setOpenUpload={setOpenUpload} />
+      <UploadDialogBox
+        openUpload={openUpload}
+        setOpenUpload={setOpenUpload}
+        quantity="multiple"
+        type=""
+        
+      />
       {deleteOpen && (
         <DeleteDialogBox
           deleteOpen={deleteOpen}

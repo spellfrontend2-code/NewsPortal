@@ -2,15 +2,27 @@ import axiosInstance from "@/services/axios";
 
 export const tagsApi = () => {
   return {
-    fetchTags: async ({ page, per_page }: { page: number; per_page: number }) => {
+    fetchTags: async ({ page, per_page,search }: { page: number; per_page: number,search?:string }) => {
       try {
         const response = await axiosInstance.get("/admin/tags", {
-          params: { page, per_page },
+          params: { page, per_page,search },
         });
         return response.data;
       } catch (error: any) {
-        throw error?.response?.data;
-      }
+    if (error.response) {
+      throw error.response.data;
+    }
+
+    if (error.request) {
+      throw {
+        message: "Unable to connect to the server. Please try again later.",
+      };
+    }
+
+    throw {
+      message: error.message || "Something went wrong.",
+    };
+  }
     },
     createTag: async (data: any) => {
       try {
@@ -19,6 +31,14 @@ export const tagsApi = () => {
         return response.data;
       } catch (error: any) {
         console.log(error)
+        throw error?.response?.data;
+      }
+  },
+  updateTag: async (id: any, data: any) => {
+    try{
+        const response = await axiosInstance.put(`/admin/tags/${id}`, data);
+        return response.data;
+      } catch (error: any) {
         throw error?.response?.data;
       }
   },

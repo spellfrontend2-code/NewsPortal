@@ -1,28 +1,48 @@
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
 import DataTable from "@/components/Admin/table/DataTable";
-import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton";
 import { Button } from "@/components/ui/button";
-import CategoryInput from "@/features/categories/components/CategoryInput";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import CategoryInputForm from "@/features/categories/components/CategoryInputForm";
+import CategoryView from "@/features/categories/components/CategoryView";
 import { useCategoriesHooks } from "@/features/categories/hooks/useCategories";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { generateColumns } from "@/lib/generateColumns";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { useAdminPagination } from "@/hooks/useAdminPagination";
 
 function Categories() {
+  const { hasPermission } = usePermission();
   const categoriesHook = useCategoriesHooks();
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
+  const { page, pageSize, pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
   });
-  const { data, isLoading } = categoriesHook.useFetchCategories({
-    page: pagination.pageIndex + 1,
-    limit: pagination.pageSize,
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
+
+  const { data, isLoading, error } = categoriesHook.useFetchCategories({
+    page,
+    per_page: pageSize,
+    search: debouncedSearch,
   });
   const categories = data?.data ?? [];
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [viewOpen, setViewOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const deleteCategory = categoriesHook.useDeleteCategories();
+  const [sorting, setSorting] = useState([]);
   const columns = generateColumns(
     categories,
     [
@@ -45,24 +65,32 @@ function Categories() {
           setAddCategory(true);
           setEdit(true);
           break;
+        case "view":
+          setViewOpen(true);
+          break;
       }
     },
+     undefined, 
+  undefined, 
+    PERMISSIONS.CATEGORY
   );
   const [addCategory, setAddCategory] = useState(false);
+
   return (
-    <div className="w-full h-full p-20 flex flex-col gap-5">
-      <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)] text-center">
-          Categories
-        </p>
-        <Button
+    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5 ">
+      <div className="flex justify-between items-end rounded-xl">
+        <div className="flex flex-col  text-gray-800 ">
+          <p className="text-3xl font-bold ">Categories</p>
+          <p className="text-gray-500">Manage your categories</p>
+        </div>
+        {hasPermission(PERMISSIONS?.CATEGORY?.CREATE?.name) && <Button
           variant="submit"
-          className="mt-5"
+          className="h-10 flex items-center gap-2"
           onClick={() => setAddCategory(true)}
         >
           <Plus />
           Add Category
-        </Button>
+        </Button>}
       </div>
       <DeleteDialogBox
         deleteOpen={deleteOpen}
@@ -71,21 +99,31 @@ function Categories() {
         deleteField={deleteCategory}
       />
 
-      {isLoading ? (
-        <DataTableSkeleton />
-      ) : categories?.length > 0 ? (
-        <DataTable
-          data={categories}
-          columns={columns}
-          pagination={pagination}
-          setPagination={setPagination}
-          pageCount={data?.pagination?.last_page}
-        />
-      ) : (
-        <div>No categories found</div>
-      )}
+     
+    {(
+  error ? (
+    <p>No Categories found.</p>
+  ) : (
+    <DataTable
+      data={categories}
+      columns={columns}
+      pagination={pagination}
+      setPagination={setPagination}
+      pageCount={data?.pagination?.last_page}
+      sorting={sorting}
+      setSorting={setSorting}
+      search={search}
+      setSearch={setSearch}
+      isLoading={isLoading}
+      placeholder="Categories"
+      permission={PERMISSIONS?.CATEGORY?.VIEW?.name}
+      permissionLoading={permissionLoading}
+    />
+  )
+)}
+     
       {addCategory && (
-        <CategoryInput
+        <CategoryInputForm
           setAddCategory={setAddCategory}
           addCategory={addCategory}
           categories={categories}
@@ -94,6 +132,11 @@ function Categories() {
           category={selectedCategory}
         />
       )}
+      <Dialog open={viewOpen} onOpenChange={setViewOpen}>
+        <DialogContent className="flex flex-col  !max-w-none p-10 max-h-[80vh] !max-w-[30vw] overflow-y-auto bg-gray-100 scrollbar-thin scrollbar-thumb-[var(--color-secondary)]">
+          <CategoryView category={selectedCategory} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

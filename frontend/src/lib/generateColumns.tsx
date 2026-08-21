@@ -1,46 +1,267 @@
-import {  Edit, Eye, Trash } from "lucide-react";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { Edit, Eye, ToggleLeft, ToggleRight, Trash } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-export function generateColumns(data = [],hiddenColumns=[],  onAction?: (action: string, row: any) => void
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import { inputStyle } from "@/components/shared/styles/inputStyle";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
+export function generateColumns(
+  data = [],
+  hiddenColumns = [],
+  onAction?: (action: string, row: any) => void,
+  onToggleApproved?: (row: any) => void,
+  updatingApprovalId?: number,
+  modulePermission?: { CREATE?: any; VIEW?: any; UPDATE?: any; DELETE?: any },
+  module?: string,
+  onChangeStatus?: (
+    row: any,
+    status: "active" | "suspended" | "banned",
+  ) => void,
+  updatingStatusId?: number,
 ) {
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
+  const { hasPermission } = usePermission();
   if (!data.length) return [];
   const sample = data[0];
 
-const dynamicColumns = Object.keys(sample)
-  .filter((key) => !hiddenColumns.includes(key)).map((key) => ({
-    accessorKey: key,
-    header: key.toUpperCase(),
-    cell: (info) => {
-      const value = info.getValue();
+  const dynamicColumns = Object.keys(sample)
+    .filter((key) => !hiddenColumns.includes(key))
+    .map((key) => ({
+      accessorKey: key,
+      header: key.toUpperCase(),
+      enableColumnFilter: true,
+      enableSorting: true,
+      cell: (info) => {
+        const value = info.getValue();
+        const row = info.row.original;
+        if(key==="headline")
+        {
+          return <div className="flex gap-2">
+           {value?.display_type? <span className="bg-green-100 border border-green-500 text-green-500 p-1 rounded-lg">{value?.display_type}</span>:"-"}
+           {value?.order? <span className="bg-blue-100 border border-blue-500 text-blue-500 p-1 rounded-lg">order:{value?.order}</span>:""}</div>
+        }
+        if (module === "authors" && key === "status") {
+          const row = info.row.original;
+          const isUpdating = updatingStatusId === row.id;
+          if (permissionLoading) return null;
+          const canActivate = hasPermission(PERMISSIONS.USER.ACTIVATE.name);
+          const canSuspend = hasPermission(PERMISSIONS.USER.SUSPEND.name);
+          const canBan = hasPermission(PERMISSIONS.USER.BAN.name);
 
-      if (typeof value === "object" && value !== null) {
-        return JSON.stringify(value);
-      }
+          const canChangeStatus = canActivate || canSuspend || canBan;
 
-      return value ?? "-";
-    },
-  }))
+          if (!canChangeStatus) {
+            return (
+              <p
+                className={`capitalize ${
+                  value === "active"
+                    ? "text-green-600"
+                    : value === "suspended"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                }`}
+              >
+                {value}
+              </p>
+            );
+          }
+
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isUpdating}
+                  className={`capitalize h-8 gap-2 ${inputStyle} rounded-2xl border-[var(--color-secondary)] w-[130px] ${
+                    isUpdating ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {isUpdating ? (
+                    <>
+                      <span className="h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <span
+                        className={
+                          value === "active"
+                            ? "text-green-600"
+                            : value === "suspended"
+                              ? "text-yellow-600"
+                              : "text-red-600"
+                        }
+                      >
+                        {value}
+                      </span>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align="end"
+                className="bg-white border border-[var(--color-secondary)]"
+              >
+                {value !== "active" && canActivate && (
+                  <DropdownMenuItem
+                    onClick={() => onChangeStatus?.(row, "active")}
+                  >
+                    Active
+                  </DropdownMenuItem>
+                )}
+
+                {value !== "suspended" && canSuspend && (
+                  <DropdownMenuItem
+                    onClick={() => onChangeStatus?.(row, "suspended")}
+                  >
+                    Suspended
+                  </DropdownMenuItem>
+                )}
+
+                {value !== "banned" && canBan && (
+                  <DropdownMenuItem
+                    className="text-red-600"
+                    onClick={() => onChangeStatus?.(row, "banned")}
+                  >
+                    Banned
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        }
+        if(key==="published_at")
+        {
+          return <span>{value.split("T")[0]}</span>
+        }
+        if (key === "icon") {
+          return <i className={value}></i>;
+        }
+        if (key === "permissions") {
+          return (
+            <div className="flex flex-wrap justify-start items-center gap-2">
+              {Array.isArray(value) &&
+                value.map((permission: string) => (
+                  <span
+                    key={permission}
+                    className="px-2 py-1 rounded-full text-xs bg-[rgb(var(--color-primary-rgb)/0.07)] text-[var(--color-primary)]"
+                  >
+                    {permission}
+                  </span>
+                ))}
+            </div>
+          );
+        }
+
+        if (key === "approved") {
+  const canUpdateApproval = hasPermission(
+    PERMISSIONS.ADS.UPDATE_STATUS?.name
+  );
+
+  const toggleIcon = updatingApprovalId === row.id ? (
+    <div className="h-7 w-7 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+  ) : value ? (
+    <ToggleRight
+      className="text-green-500 fill-green-300/20"
+      size={30}
+    />
+  ) : (
+    <ToggleLeft
+      className="text-red-500 fill-red-300/20"
+      size={30}
+    />
+  );
+
+  return (
+    <div className="flex items-center justify-center">
+      {canUpdateApproval ? (
+        <button
+          type="button"
+          disabled={updatingApprovalId === row.id}
+          onClick={() => onToggleApproved?.(row)}
+          className={
+            updatingApprovalId === row.id
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer"
+          }
+        >
+          {toggleIcon}
+        </button>
+      ) : (
+        toggleIcon
+      )}
+    </div>
+  );
+}
+        if (key === "is_headline_news") {
+          return value ? "Yes" : "No";
+        }
+
+        if (typeof value === "object" && value !== null) {
+          return JSON.stringify(value);
+        }
+
+        return value ?? "-";
+      },
+    }));
   const actionsColumn = {
     id: "actions",
     header: "ACTIONS",
+    enableColumnFilter: false,
+    enableSorting: false,
 
     cell: ({ row }) => {
       const original = row.original;
 
       return (
         <div className="flex justify-center gap-3">
-          <div onClick={() => {onAction?.("view",original)}} className="cursor-pointer text-xs font-semibold text-[var(--primary-color)] hover:text-[rgb(var(--primary-rgb)/0.7)] flex gap-1 border-[1.5px] p-1 rounded-xl uppercase border-[var(--primary-color)]"><Eye className="" strokeWidth={1.5} size={15} />
-          view</div>
-          <div className="cursor-pointer text-xs font-semibold text-blue-300 hover:text-blue-500 flex gap-1 border-[1.5px] p-1 rounded-xl uppercase border-blue-300 hover:border-blue-500" onClick={() => {onAction?.("edit",original)}}>
-            <Edit  strokeWidth={1.5}  size={15} />
-          Edit
-          </div>
-          <div className="cursor-pointer text-xs font-semibold text-red-300 hover:text-red-500 flex gap-1 border-[1.5px] p-1 rounded-xl uppercase border-red-300 hover:border-red-500" onClick={() => {onAction?.("delete",original)}}><Trash  strokeWidth={1.5} size={15} />
-    Delete
-    </div>
+          {hasPermission(modulePermission?.VIEW?.name) &&
+            module !== "roles" &&
+            module !== "tags" && (
+              <div
+                className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-[var(--color-primary)] hover:bg-[rgb(var(--color-primary-rgb)/0.1)] hover:border-[var(--color-primary)]"
+                title={"View"}
+                onClick={() => {
+                  onAction?.("view", original);
+                }}
+              >
+                <Eye strokeWidth={1.5} size={20} />
+              </div>
+            )}
+          {hasPermission(modulePermission?.UPDATE?.name) && (
+            <div
+              className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-blue-500 hover:bg-blue-500/10 hover:border-blue-500"
+              title={"Edit"}
+              onClick={() => {
+                onAction?.("edit", original);
+              }}
+            >
+              <Edit strokeWidth={1.5} size={20} />
+            </div>
+          )}
+          {hasPermission(modulePermission?.DELETE?.name) && (
+            <div
+              className="p-1 border border-transparent rounded-lg cursor-pointer text-gray-600 hover:text-red-500 hover:bg-red-500/10 hover:border-red-500"
+              title={"Delete"}
+              onClick={() => {
+                onAction?.("delete", original);
+              }}
+            >
+              <Trash strokeWidth={1.5} size={20} />
+            </div>
+          )}
         </div>
-
       );
     },
   };
-  return [...dynamicColumns,actionsColumn];
+  return [...dynamicColumns, actionsColumn];
 }

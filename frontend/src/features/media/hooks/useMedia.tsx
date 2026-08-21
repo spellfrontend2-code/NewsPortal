@@ -5,18 +5,26 @@ const media = mediaApi();
 export const useMediaHooks = () => {
   const queryCLient = useQueryClient();
   return {
-    useAddMedia: () => {
+    useAddBulkMedia: () => {
       return useMutation({
-        mutationFn: (data: any) => media.addMedia(data),
+        mutationFn: (data: any) => media.addBulkMedia(data),
         onSuccess: () => {
           queryCLient.invalidateQueries(["media"]);
         },
       });
     },
-    useFetchMedia: ({ search, page, per_page }: { search?: string; page?: number; per_page?: number }) => {
+    useCreateMedia: () => {
+      return useMutation({
+        mutationFn: (data: any) => media.createMedia(data),
+        onSuccess: () => {
+          queryCLient.invalidateQueries(["media"]);
+        },
+      });
+    },
+    useFetchMedia: ({ search, page, per_page,file_type }: { search?: string; page?: number; per_page?: number,file_type?:string }) => {
       return useQuery({
-        queryFn: () => media.fetchMedia({ search, page, per_page }),
-        queryKey: ["media", search, page, per_page],
+        queryFn: () => media.fetchMedia({ search, page, per_page,file_type }),
+        queryKey: ["media", search, page, per_page,file_type],
       });
     },
     useDeleteMedia: () => {

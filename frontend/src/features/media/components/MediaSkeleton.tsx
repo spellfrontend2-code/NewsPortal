@@ -6,16 +6,18 @@ function MediaSkeleton() {
           key={index}
           className="h-[220px] w-full border border-[var(--color-secondary)] rounded-xl overflow-hidden animate-pulse"
         >
-          {/* Image Skeleton */}
+          {/* Image / Video area */}
           <div className="relative h-2/3 w-full bg-gray-200">
-            {/* Action Icons */}
+            {/* Action icons */}
             <div className="absolute top-2 right-2 flex gap-1">
               <div className="h-[30px] w-[30px] rounded-md bg-gray-300" />
               <div className="h-[30px] w-[30px] rounded-md bg-gray-300" />
             </div>
+            {/* Category badge */}
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[20px] w-[110px] rounded-full bg-gray-300" />
           </div>
 
-          {/* File Name */}
+          {/* File name area */}
           <div className="h-1/3 flex items-center justify-center px-3">
             <div className="h-4 w-3/4 rounded bg-gray-200" />
           </div>

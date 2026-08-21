@@ -1,0 +1,78 @@
+import { useArticleView } from "@/features/articles/hooks/useArticleView";
+import { useNavigate } from "react-router-dom";
+
+function ArticleSquareCard({
+  article,
+  titleClassName,
+}: {
+  article: any;
+  titleClassName?: string;
+}) {
+  const navigate = useNavigate();
+  const { viewPublicArticle } = useArticleView();
+
+  const imageSrc =
+    article?.featured_image || article?.thumbnail || "/placeholder-news.jpg";
+  // const publishedDate = article?.published_at?.split("T")[0] || "";
+
+  return (
+    <article
+      className=" group flex flex-col h-full w-full cursor-pointer bg-transparent overflow-hidden transition-all duration-200"
+      onClick={() => {
+        if (article?.id) viewPublicArticle(article.id);
+        if (article?.slug) navigate(`/news/${article.slug}`);
+      }}
+    >
+      {/* Image Container */}
+      <div className="relative h-[85%] sm:h-[82%] w-full overflow-hidden rounded-md bg-slate-100 shrink-0">
+        <img
+          src={imageSrc}
+          alt={article?.title || "News article"}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 group-hover:brightness-95"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="h-auto pt-2.5 pb-1 flex flex-col  flex-1 gap-1.5 min-w-0 ">
+        <h3
+          className={`font-bold text-slate-900 line-clamp-2 leading-snug transition-colors duration-200 group-hover:text-[var(--color-public-text-accent)] ${
+            titleClassName || "text-base sm:text-lg md:text-xl"
+          }`}
+        >
+          {article?.title}
+        </h3>
+
+        {/* Metadata Footer */}
+      {/* <div className="flex gap-4 items-center text-sm font-semibold text-[var(--color-public-text-muted)]">
+                          <p className="flex items-center gap-1.5">
+                            {article?.author?.image && (
+                              <img
+                                src={article?.author?.image}
+                                alt={article?.author?.name}
+                                className="h-6 w-6 rounded-full object-cover border border-[var(--color-public-border-main)]"
+                              />
+                            )}
+                            <span className="text-slate-500">
+                              {article?.author?.name}
+                            </span>
+                          </p>
+                          <span className="text-slate-500">•</span>
+                          <div className="flex items-center text-sm gap-2 text-slate-500">
+                            <Clock
+                              size={15}
+                              className="text-slate-500"
+                              strokeWidth={3}
+                            />
+                            <span className="font-semibold tracking-wider uppercase">
+                              {article?.published_at?.split("T")[0]}
+                            </span>
+                          </div>
+                        </div> */}
+      </div>
+    </article>
+  );
+}
+
+export default ArticleSquareCard;
+

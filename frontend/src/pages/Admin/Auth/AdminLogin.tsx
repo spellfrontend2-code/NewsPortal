@@ -1,25 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/context/useAuthStore";
 import { useAuthHooks } from "@/features/auth/hooks/useAuth";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function AdminLogin() {
   const navigate = useNavigate();
-const {setAuthData}=useAuthStore()
+  const { setAuthData } = useAuthStore();
   const authHook = useAuthHooks();
-  const adminLogin = authHook.useAdminLogin();
+  const adminLogin = authHook.useLogin();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
   });
+  const { getDefaultRoute } = usePermissionStore();
   const onSubmit = (data) => {
     adminLogin.mutate(data, {
       onSuccess: (response) => {
-        const res=response.data
+        const res = response.data;
+        const route = getDefaultRoute(res?.permissions);
+        console.log(route)
         const authData = {
           accessToken: res.access_token,
           expiresIn: res.expires_in,
@@ -29,10 +33,11 @@ const {setAuthData}=useAuthStore()
         };
         setAuthData(authData);
         toast.success(response?.message);
-        navigate("/admin");
+        navigate(route);
       },
       onError: (e) => {
-toast.error(e?.message);},
+        toast.error(e?.message);
+      },
     });
   };
   return (
@@ -61,7 +66,12 @@ toast.error(e?.message);},
           />
         </div>
         <div className="flex items-center justify-center">
-          <Button type="submit"variant="submit" className="w-1/2 h-[40px] text-lg" disabled={adminLogin?.isPending}>
+          <Button
+            type="submit"
+            variant="submit"
+            className="w-1/2 h-[40px] text-lg"
+            disabled={adminLogin?.isPending}
+          >
             {adminLogin?.isPending ? "Logging In..." : "Log In"}
           </Button>
         </div>

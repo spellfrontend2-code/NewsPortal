@@ -1,0 +1,107 @@
+import DataTable from "@/components/Admin/table/DataTable";
+import { Button } from "@/components/ui/button";
+import { usePermission } from "@/features/auth/hooks/usePermission";
+import { usePermissionHooks } from "@/features/roles-and-permissions/hooks/usePermissions";
+import { generateColumns } from "@/lib/generateColumns";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox";
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore";
+import { useNavigate } from "react-router-dom";
+
+import { useAdminPagination } from "@/hooks/useAdminPagination";
+
+function RolesAndPermissions() {
+  const navigate = useNavigate();
+  const permissionHook = usePermissionHooks();
+  const { PERMISSIONS, isLoading: permissionLoading } = usePermissionStore();
+  const { pagination, setPagination } = useAdminPagination({
+    defaultPageSize: 10,
+  });
+  const { data, isLoading } = permissionHook.useFetchRoleBasedPermissions();
+  const roleBasedPermissions = data?.data ?? [];
+  const deleteRole = permissionHook.useDeleteRole();
+  const [sorting, setSorting] = useState([]);
+  const [search, setSearch] = useState("");
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const filteredRoleBasedPermissions = roleBasedPermissions.filter(
+    (roleBasedPermission) =>
+      !roleBasedPermission.name.toLowerCase().includes("admin")
+  );
+  const [selectedRole, setSelectedRole] = useState<{
+    name: string;
+    permissions: string[];
+  } | null>(null);
+  const columns = generateColumns(
+    filteredRoleBasedPermissions,
+    [],
+    (action, row) => {
+      setSelectedRole(row);
+      switch (action) {
+        case "delete":
+          setDeleteOpen(true);
+          break;
+        case "edit":
+          navigate(
+            `/admin/roles-and-permissions/${encodeURIComponent(
+              row.slug || row.name || row.id
+            )}/edit`,
+            {
+              state: { role: row },
+            }
+          );
+          break;
+      }
+    },
+    undefined,
+    undefined,
+    PERMISSIONS.ROLE,
+    "roles"
+  );
+
+  const { hasPermission } = usePermission();
+
+  return (
+    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5">
+      <div className="flex justify-between items-end rounded-xl">
+        <div className="flex flex-col text-gray-800">
+          <p className="text-3xl font-bold">Roles and Permissions</p>
+          <p className="text-gray-500">Manage your roles and permissions</p>
+        </div>
+        {hasPermission(PERMISSIONS?.PERMISSION?.ASSIGN?.name) && (
+          <Button
+            variant="submit"
+            className="h-10 flex items-center gap-2"
+            onClick={() => navigate("/admin/roles-and-permissions/create")}
+          >
+            <Plus />
+            Add Role
+          </Button>
+        )}
+      </div>
+      <DataTable
+        data={filteredRoleBasedPermissions}
+        columns={columns}
+        pagination={pagination}
+        setPagination={setPagination}
+        isLoading={isLoading}
+        placeholder=" roles "
+        pageCount={data?.pagination?.last_page}
+        sorting={sorting}
+        setSorting={setSorting}
+        search={search}
+        setSearch={setSearch}
+        permissionLoading={permissionLoading}
+        permission={PERMISSIONS?.PERMISSION?.VIEW?.name}
+      />
+      <DeleteDialogBox
+        deleteOpen={deleteOpen}
+        setDeleteOpen={setDeleteOpen}
+        selectedField={selectedRole}
+        deleteField={deleteRole}
+      />
+    </div>
+  );
+}
+
+export default RolesAndPermissions;

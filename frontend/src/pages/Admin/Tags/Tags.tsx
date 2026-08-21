@@ -1,25 +1,36 @@
 import DeleteDialogBox from "@/components/Admin/dialogbox/DeleteDialogBox"
 import DataTable from "@/components/Admin/table/DataTable"
-import DataTableSkeleton from "@/components/Admin/table/DataTableSkeleton"
 import { Button } from "@/components/ui/button"
+import { usePermission } from "@/features/auth/hooks/usePermission"
+import { usePermissionStore } from "@/features/roles-and-permissions/hooks/usePermissionStore"
 import AddTag from "@/features/tags/components/AddTag"
 import { useTagsHooks } from "@/features/tags/hooks/useTags"
 import { generateColumns } from "@/lib/generateColumns"
 import { Plus } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
+import { useAdminPagination } from "@/hooks/useAdminPagination"
 
 function Tags(){
+  const {hasPermission}=usePermission()
+  const {PERMISSIONS,isLoading:permissionLoading}=usePermissionStore()
     const tagsHook=useTagsHooks()
-    const {data,isLoading}=tagsHook.useFetchTags({page:1,per_page:10})
+        const [search,setSearch]=useState("")
+    const { page, pageSize, pagination, setPagination } = useAdminPagination({
+      defaultPageSize: 10,
+    })
+    const {data,isLoading,error}=tagsHook.useFetchTags({
+      page,
+      per_page: pageSize,
+      search,
+    })
     const tagsData=data?.data??[]
     const [selectedTag,setSelectedTag]=useState(null)
     const [deleteOpen,setDeleteOpen]=useState(false)
     const [addTag,setAddTag]=useState(false)
+    const [isEdit,setIsEdit]=useState(false)
     const deleteTag=tagsHook.useDeleteTag()
-    const [pagination,setPagination]=useState({
-        pageIndex:0,
-        pageSize:10
-    })
+    const [sorting,setSorting]=useState([])
     const columns=generateColumns(
         tagsData,
         [],(action,row)=>{
@@ -29,23 +40,36 @@ function Tags(){
                     setDeleteOpen(true)
                     break;
                 case "edit":
+                  setAddTag(true)
+                    setIsEdit(true)
                     break;
             }
-        })
+        },
+      undefined,
+      undefined,
+      PERMISSIONS.TAG,
+      "tags"
+      )
+        if(error){
+          toast.error(error?.message)
+        }
       return (
-    <div className="w-full h-full p-20 flex flex-col gap-5">
-      <div className="flex justify-between">
-        <p className="text-4xl font-bold text-[var(--color-primary)] text-center">
+    <div className="w-full h-screen overflow-y-auto px-20 py-10 flex flex-col gap-5">
+       <div className="flex justify-between items-end rounded-xl ">
+        <div className="flex flex-col  text-gray-800 ">
+          <p className="text-3xl font-bold ">
           Tags
         </p>
-        <Button
+        <p className="text-gray-500">Manage your tags</p>
+        </div>
+        {hasPermission(PERMISSIONS?.TAG?.CREATE?.name) &&<Button
           variant="submit"
-          className="mt-5"
+          className="h-10 flex items-center gap-2"
           onClick={() => setAddTag(true)}
         >
           <Plus />
           Add Tag
-        </Button>
+        </Button>}
       </div>
       <DeleteDialogBox
         deleteOpen={deleteOpen}
@@ -53,19 +77,22 @@ function Tags(){
         selectedField={selectedTag}
         deleteField={deleteTag}
       />
-    {addTag && <AddTag open={addTag} setOpen={setAddTag} />}
-      {isLoading ? (
-        <DataTableSkeleton />
-      ) : tagsData?.length > 0 ? (
-        <DataTable
+    {addTag && <AddTag setIsEdit={setIsEdit} open={addTag} setOpen={setAddTag} tag={selectedTag} type={isEdit?"edit":"add"}/>}
+      {error?<p>No tags found.</p>:(<DataTable
           data={tagsData}
           columns={columns}
           pagination={pagination}
           setPagination={setPagination}
           pageCount={data?.pagination?.last_page}
+          sorting={sorting}
+          setSorting={setSorting}
+          isLoading={isLoading}
+          search={search}
+          setSearch={setSearch}
+          placeholder="Tags"
+          permission={PERMISSIONS?.TAG?.VIEW?.name}
+          permissionLoading={permissionLoading}
         />
-      ) : (
-        <div>No tags found</div>
       )}</div>)
 }
 

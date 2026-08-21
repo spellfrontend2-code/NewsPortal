@@ -1,12 +1,12 @@
-import { useState } from 'react'
 import './App.css'
+import { router } from './app/routes/router'
+import { RouterProvider } from 'react-router-dom'
 
 function App() {
 
   return (
-  <>
-  hi
-  </>
+      <RouterProvider router={router}/>   
+
   )
 }
 

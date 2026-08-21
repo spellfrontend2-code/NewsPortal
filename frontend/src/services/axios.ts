@@ -1,15 +1,20 @@
 import axios from "axios";
+
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-//   withCredentials: true,
 });
+
 axiosInstance.interceptors.request.use((config) => {
-const auth = localStorage.getItem("auth");
-const token = auth ? JSON.parse(auth).accessToken : null;  if (token) {
+  const auth = localStorage.getItem("auth");
+  const token = auth ? JSON.parse(auth).accessToken : null;
+
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
+
 axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -20,7 +25,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const auth = localStorage.getItem("auth");
-        const refreshToken = auth ? JSON.parse(auth).refreshToken : null; 
+        const refreshToken = auth ? JSON.parse(auth).refreshToken : null;
 
         const res = await axios.post("/refresh-token", {
           refresh_token: refreshToken,
@@ -39,12 +44,13 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (err) {
+        console.error(err);
         localStorage.clear();
-        window.location.href = "/login";
       }
     }
 
     return Promise.reject(error);
   },
 );
+
 export default axiosInstance;

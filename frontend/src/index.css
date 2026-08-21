@@ -1,13 +1,85 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+/* @import "@fontsource-variable/geist"; */
+/* @import "@fontsource/noto-sans-devanagari"; */
+@import "@fontsource/mukta";
+:root {
+  --color-primary: #4f46e5;
+  /* Indigo */
+  --color-gray-text: #64748b;
+  /* Slate-500 */
+  --color-secondary: #e2e8f0;
+  /* Slate-200 */
+  --color-gray-rgb: 15 23 42;
+  --color-secondary-rgb: 100 116 139;
+  --color-primary-rgb: 79 70 229;
 
-:root{
-    --color-primary:#7c3aed;
-    --color-secondary:#d0d5dd;
-    --color-gray-rgb:17 24 39;
-  --color-secondary-rgb: 75 85 99;
-  --color-primary-rgb: 124 58 237;
+  /* --- Public Pages Semantic Colors --- */
+  /* Backgrounds */
+  --color-public-bg-main: #F5F5F5;
+  --color-public-bg-secondary: #f8fafc;
+  --color-public-bg-tertiary: #f1f5f9;
+  --color-public-bg-muted: #e2e8f0;
+  --color-public-bg-skeleton: #cbd5e1;
+  --color-public-bg-dark-secondary: #2261bf;
+  --color-public-bg-darker: #2260BF;
+  --color-public-bg-dark: #2261bf;
+  --color-public-bg-accent: #2261bf;
+  --color-public-bg-accent-hover: #2261bf;
+  --color-public-bg-tint-one: #E3EEFD;  /* Light powder blue (matches #D2E7FE in ColoredCategoryNews) */
+  --color-public-bg-tint-two: #F0F6FF;  /* Very soft sky mist */
+ 
+
+  /* Text */
+  --color-public-text-main: #161A25;
+  --color-public-text-secondary: #1e293b;
+  --color-public-text-tertiary: #334155;
+  --color-public-text-muted: #b9d2f5;
+  --color-public-text-lighter: #e6eefa;
+  --color-public-text-lightest: #70C9FF;
+  --color-public-text-inverse: #ffffff;
+  --color-public-text-accent: #2260BF;
+  --color-public-text-accent-hover: #5f98e9;
+  --color-public-text-danger: #e11d48;
+  
+  /* Borders */
+  --color-public-border-light: #f1f5f9;
+  --color-public-border-main: #e2e8f0;
+  --color-public-border-strong: #cbd5e1;
+  --color-public-border-dark: #d3e2f7;
+  --color-public-border-darker: #ffffff;
+  --color-public-border-accent: #70C9FF;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+  overflow:hidden
+}
+
+.admin {
+font-family:sans-serif;
+
+}
+
+/* ── Breaking news ticker scroll animation ── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker 35s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+.public{
+    background-color: var(--color-public-bg-secondary);
+  color: var(--color-public-text-secondary);
+  font-family:"Mukta", sans-serif;;
+}
